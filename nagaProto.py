@@ -181,7 +181,7 @@ class ProtocopRank:
             'hit_time':hitting_times[i]}\
             for i in sorted_inds]
 
-        return (scoring_info, ranked_sub_graph_list)
+        return (scoring_info, ranked_sub_graph_list, sorted_inds)
 
     def compute_hitting_time(self, sub_graph):
         # sub_graph is a list of dicts with fields 'id' and 'bound'
@@ -324,8 +324,8 @@ class ProtocopRank:
                 path_str = path_str + str(n)
             print("{0:f}".format(scores[i]) + ", " + path_str)
 
-    def report_scores_dict(self, sub_graphs):
-        scoring_info, sub_graphs = self.rank(sub_graphs)
+    def report_scores_dict(self, node_sets):
+        scoring_info, sub_graphs, idx = self.rank(node_sets)
 
         report = []
         for i, sg in enumerate(sub_graphs):
@@ -336,7 +336,9 @@ class ProtocopRank:
 
             report.append(sgr)
 
-        return report
+        sorted_node_sets = [node_sets[i] for i in idx]
+
+        return (report, sorted_node_sets)
 
     def report_scores(self, sub_graphs):
         return json.dumps(self.report_scores_dict(sub_graphs))
