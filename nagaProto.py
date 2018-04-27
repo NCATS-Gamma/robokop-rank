@@ -129,7 +129,7 @@ class ProtocopRank:
         # sub_graph_list is a list of lists of dicts with fields 'id' and 'bound'
 
         if not sub_graph_list:
-            return ([],[])
+            return ([],[],[])
 
         min_nodes = max(0, min([len(sg) for sg in sub_graph_list])-1)
         
