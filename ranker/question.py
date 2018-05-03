@@ -134,7 +134,7 @@ class Question():
 
         nodes, edges = self.nodes, self.edges
 
-        edge_types = ['Result' for e in edges]
+        # edge_types = ['Result' for e in edges]
 
         node_count = len(nodes)
         edge_count = len(edges)
@@ -154,7 +154,8 @@ class Question():
 
         # generate MATCH command string to get paths of the appropriate size
         match_strings = ['MATCH '+'({})'.format(node_names[0])]
-        match_strings += ['MATCH '+'({})-'.format(node_names[i])+'[{0}:{2}*{3}..{4}]-({1})'.format(edge_names[i], node_names[i+1], edge_types[i], edges[i]['length'][0], edges[i]['length'][-1]) for i in range(edge_count)]
+        # match_strings += ['MATCH '+'({})-'.format(node_names[i])+'[{0}:{2}*{3}..{4}]-({1})'.format(edge_names[i], node_names[i+1], edge_types[i], edges[i]['length'][0], edges[i]['length'][-1]) for i in range(edge_count)]
+        match_strings += [f"MATCH ({node_names[i]})-[{edge_names[i]}*{edges[i]['length'][0]}..{edges[i]['length'][-1]}]-({node_names[i+1]})" for i in range(edge_count)]
         with_strings = ['WITH DISTINCT '+', '.join(node_names[:i+1]) for i in range(edge_count)]
 
         # generate WHERE command string to prune paths to those containing the desired nodes/node types

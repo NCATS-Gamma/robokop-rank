@@ -51,7 +51,7 @@ class ProtocopRank:
             Currently just counts # of publications and applies a hand tuned logistic.
         """
         
-        pmids = nx.get_edge_attributes(self.G, 'pmids')
+        pmids = nx.get_edge_attributes(self.G, 'publications')
         # pub_counts = {edge:max(len(pmids[edge]),1) for edge in pmids}
         pub_counts = {edge:len(pmids[edge]) for edge in pmids}
         
@@ -282,7 +282,7 @@ class ProtocopRank:
     def count_result_templates(self):
         if self._result_count < 0:
             edge_types = nx.get_edge_attributes(self.G,'type')
-            self._result_count = list(edge_types.values()).count('Result')
+            self._result_count = len([t for t in edge_types.values() if not t == 'Support'])
 
         return self._result_count
 
@@ -297,11 +297,11 @@ class ProtocopRank:
             cond = lambda e: ((template[0] is None or template[0] == e[0])
                 and  (template[1] is None or template[1] == e[1])
                 and  (template[2] is None or template[2] == e[2])
-                and e[-1]['type']=='Result' or e[-1]['type']=='Lookup')
+                and not e[-1]['type']=='Support')
 
             edge_weights = [e[-1]['scoring'][field] for e in edges if cond(e)]
 
-            self._evaluated_templates[template] = (len(edge_weights),max(edge_weights))
+            self._evaluated_templates[template] = (len(edge_weights), max(edge_weights) if edge_weights else 0)
 
         return self._evaluated_templates[template]
 
