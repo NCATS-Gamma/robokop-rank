@@ -64,7 +64,6 @@ class Question():
         # replace input node names with identifiers
         for n in self.nodes:
             if n['nodeSpecType'] == 'Named Node':
-                # identifiers = lookup_identifier(n['label'], n['type'], rosetta.core)
                 identifiers = [n['meta']['identifier']]
                 n['identifiers'] = identifiers
             else:
