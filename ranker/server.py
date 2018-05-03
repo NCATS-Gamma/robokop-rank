@@ -13,10 +13,13 @@ from ranker_tasks import answer_question
 @api.doc(params={'question': 'A question specification'})
 class AnswerQuestion(Resource):
     @api.response(200, 'Success')
+    @api.response(204, 'No answers')
     def post(self):
         """Get answer for question"""
         question = Question(request.json)
         answer = answer_question.apply(args=[question]).result
+        if isinstance(answer, BaseException):
+            return "No answers", 204
         return answer.toJSON(), 200
 
 if __name__ == '__main__':
