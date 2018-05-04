@@ -30,5 +30,5 @@ if __name__ == '__main__':
 
     app.run(host=server_host,\
         port=server_port,\
-        debug=False,\
-        use_reloader=False)
+        debug=True,\
+        use_reloader=True)
