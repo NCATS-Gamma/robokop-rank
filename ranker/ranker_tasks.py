@@ -10,12 +10,9 @@ from kombu import Queue
 from setup import app
 from logging_config import logger
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..', 'robokop-build', 'builder'))
-from builder import tokenize_path, run_query, generate_query
-
 # set up Celery
-app.config['broker_url'] = os.environ["CELERY_BROKER_URL"]
-app.config['result_backend'] = os.environ["CELERY_RESULT_BACKEND"]
+app.config['broker_url'] = f'redis://{os.environ["REDIS_HOST"]}:{os.environ["REDIS_PORT"]}/{os.environ["MANAGER_REDIS_DB"]}'
+app.config['result_backend'] = f'redis://{os.environ["REDIS_HOST"]}:{os.environ["REDIS_PORT"]}/{os.environ["MANAGER_REDIS_DB"]}'
 celery = Celery(app.name, broker=app.config['broker_url'])
 celery.conf.update(app.config)
 celery.conf.task_queues = (
