@@ -11,9 +11,6 @@ services:
       - ROBOKOP_HOME=/home/murphy
       - NEO4J_HOST=neo4j
       - REDIS_HOST=redis
-      - ROBOKOP_HOST=0.0.0.0
-      - FLOWER_ADDRESS=0.0.0.0
-      - SUPERVISOR_HOST=0.0.0.0
     ports:
       - "${RANKER_PORT}:${RANKER_PORT}"
       - "${FLOWER_PORT}:${FLOWER_PORT}"

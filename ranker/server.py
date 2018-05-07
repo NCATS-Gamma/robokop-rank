@@ -22,10 +22,23 @@ class AnswerQuestion(Resource):
             return "No answers", 204
         return answer.toJSON(), 200
 
+@api.route('/subgraph')
+@api.doc(params={'question': 'A question specification'})
+class QuestionSubgraph(Resource):
+    @api.response(200, 'Success')
+    def post(self):
+        """Get question subgraph"""
+
+        question = Question(request.json)
+            
+        subgraph = question.relevant_subgraph()
+
+        return subgraph, 200
+
 if __name__ == '__main__':
 
     # Get host and port from environmental variables
-    server_host = os.environ['ROBOKOP_HOST']
+    server_host = '0.0.0.0' #os.environ['ROBOKOP_HOST']
     server_port = int(os.environ['RANKER_PORT'])
 
     app.run(host=server_host,\
