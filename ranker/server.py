@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
     # Get host and port from environmental variables
     server_host = os.environ['ROBOKOP_HOST']
-    server_port = 6010
+    server_port = int(os.environ['RANKER_PORT'])
 
     app.run(host=server_host,\
         port=server_port,\

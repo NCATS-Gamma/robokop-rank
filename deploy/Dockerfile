@@ -3,7 +3,7 @@
 FROM python:3
 
 LABEL maintainer="patrick@covar.com"
-ENV REFRESHED_AT 2018-05-02
+ENV REFRESHED_AT 2018-05-07
 
 ENV LANG=C.UTF-8 \
     LC_ALL=C.UTF-8
@@ -28,13 +28,10 @@ WORKDIR /home/murphy/robokop-rank
 ## Install all requirements
 RUN pip install -r ./requirements.txt
 RUN pip install git+https://github.com/Supervisor/supervisor@master
-RUN pip install \
-    celery \
-    flask_restful \
-    flower
 
 ## Finish up
 ENV HOME=/home/murphy
+ENV USER=murphy
 COPY ./startup.sh /home/murphy/startup.sh
 COPY ./supervisord.conf /home/murphy/supervisord.conf
 

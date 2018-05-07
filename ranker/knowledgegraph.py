@@ -3,9 +3,6 @@ import os
 import sys
 from neo4j.v1 import GraphDatabase, basic_auth
 from universalgraph import UniversalGraph
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..', 'robokop-interfaces'))
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..', 'robokop-build', 'builder'))
-from greent import node_types
 
 class KnowledgeGraph:
 
