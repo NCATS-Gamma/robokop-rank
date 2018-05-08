@@ -8,6 +8,7 @@ import sys
 import json
 import hashlib
 import warnings
+import logging
 
 # our modules
 from universalgraph import UniversalGraph
@@ -103,6 +104,8 @@ class Question():
         # get all subgraphs relevant to the question from the knowledge graph
         database = KnowledgeGraph()
         subgraphs = database.query(self) # list of lists of nodes with 'id' and 'bound'
+        # drop subgraphs with "null" nodes, for now
+        subgraphs = [g for g in subgraphs if not [n['id'] for n in g if n['id'] is None]]
         answer_set_subgraph = database.queryToGraph(self.subgraph_with_support())
         del database
 
@@ -153,9 +156,7 @@ class Question():
 
         # generate MATCH command string to get paths of the appropriate size
         match_strings = ['MATCH '+'({})'.format(node_names[0])]
-        # match_strings += ['MATCH '+'({})-'.format(node_names[i])+'[{0}:{2}*{3}..{4}]-({1})'.format(edge_names[i], node_names[i+1], edge_types[i], edges[i]['length'][0], edges[i]['length'][-1]) for i in range(edge_count)]
-        match_strings += [f"MATCH ({node_names[i]})-[{edge_names[i]}*{edges[i]['length'][0]}..{edges[i]['length'][-1]}]-({node_names[i+1]})" for i in range(edge_count)]
-        with_strings = ['WITH DISTINCT '+', '.join(node_names[:i+1]) for i in range(edge_count)]
+        match_strings += [f"OPTIONAL MATCH ({node_names[i]})-[{edge_names[i]}*{edges[i]['length'][0]}..{edges[i]['length'][-1]}]-({node_names[i+1]})" for i in range(edge_count)]
 
         # generate WHERE command string to prune paths to those containing the desired nodes/node types
         node_conditions = [
@@ -175,7 +176,7 @@ class Question():
             for d in conds]\
             for i, conds in enumerate(node_conditions)]
         where_strings = ['WHERE '+' AND '.join(c) for c in node_cond_strings]
-        match_string = match_strings[0]+' '+where_strings[0]+' '+' '.join([w+' '+m+' '+d for w, m, d in zip(with_strings, match_strings[1:], where_strings[1:])])
+        match_string = match_strings[0]+' '+where_strings[0]+' '+' '.join([m+' '+w for m, w in zip(match_strings[1:], where_strings[1:])])
         return match_string
 
     def cypher(self):
