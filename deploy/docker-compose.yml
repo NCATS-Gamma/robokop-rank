@@ -16,6 +16,7 @@ services:
       - "${FLOWER_PORT}:${FLOWER_PORT}"
       - "${SUPERVISOR_PORT}:${SUPERVISOR_PORT}"
     volumes:
+      - ../../shared:/home/murphy/shared
       - ..:/home/murphy/robokop-rank
     # stdin_open: true
     # tty: true
