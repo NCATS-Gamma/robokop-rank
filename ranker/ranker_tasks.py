@@ -31,7 +31,7 @@ def answer_question(self, question):
     try:
         answerset = question.answer()
     except Exception as err:
-        logger.exception("Something went wrong with question answering.")
+        logger.exception(f"Something went wrong with question answering: {err}")
         raise err
     if answerset.answers:
         self.update_state(state='ANSWERS FOUND')
