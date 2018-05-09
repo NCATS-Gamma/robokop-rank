@@ -6,8 +6,9 @@ import os
 from flask_restplus import Resource
 from flask import request
 from setup import app, api
-from question import Question
-from ranker_tasks import answer_question
+from logging_config import logger
+from ranker.question import Question
+from ranker.tasks import answer_question
 
 @api.route('/')
 @api.doc(params={'question': 'A question specification'})

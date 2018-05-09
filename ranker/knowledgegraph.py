@@ -2,7 +2,7 @@ import time
 import os
 import sys
 from neo4j.v1 import GraphDatabase, basic_auth
-from universalgraph import UniversalGraph
+from ranker.universalgraph import UniversalGraph
 
 class KnowledgeGraph:
 

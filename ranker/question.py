@@ -11,9 +11,9 @@ import warnings
 import logging
 
 # our modules
-from universalgraph import UniversalGraph
-from knowledgegraph import KnowledgeGraph
-from answer import Answer, Answerset
+from ranker.universalgraph import UniversalGraph
+from ranker.knowledgegraph import KnowledgeGraph
+from ranker.answer import Answer, Answerset
 
 # robokop-rank modules
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..', 'robokop-rank'))

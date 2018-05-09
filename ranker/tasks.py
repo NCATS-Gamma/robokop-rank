@@ -4,11 +4,11 @@ Tasks for Celery workers
 
 import os
 import sys
-from celery import Celery
+import logging
+from celery import Celery, signals
 from kombu import Queue
 
-from setup import app
-from logging_config import logger
+from ranker.api.setup import app
 
 # set up Celery
 app.config['broker_url'] = f'redis://{os.environ["REDIS_HOST"]}:{os.environ["REDIS_PORT"]}/{os.environ["MANAGER_REDIS_DB"]}'
@@ -18,6 +18,13 @@ celery.conf.update(app.config)
 celery.conf.task_queues = (
     Queue('answer', routing_key='answer'),
 )
+# Tell celery not to mess with logging at all
+@signals.setup_logging.connect
+def setup_celery_logging(**kwargs):
+    pass
+celery.log.setup()
+
+logger = logging.getLogger(__name__)
 
 @celery.task(bind=True, queue='answer')
 def answer_question(self, question):
