@@ -7,7 +7,8 @@ import os
 import sys
 
 from flask import Flask, Blueprint
-from flask_restplus import Api
+from flask_restful import Api
+from flasgger import Swagger
 
 app = Flask(__name__, static_folder='../pack', template_folder='../templates')
 # Set default static folder to point to parent static folder where all
@@ -15,8 +16,30 @@ app = Flask(__name__, static_folder='../pack', template_folder='../templates')
 # app.config.from_pyfile('robokop_flask_config.py')
 
 api_blueprint = Blueprint('api', __name__, url_prefix='/api')
-api = Api(api_blueprint,
-          version='1.0',
-          title='ROBOKOP Ranker API',
-          description='An API for answering biomedical questions.')
+api = Api(api_blueprint)
 app.register_blueprint(api_blueprint)
+
+template = {
+    "openapi": "2.0", #3.0.1",
+    "info": {
+        "title": "ROBOKOP Ranker",
+        "description": "An API for answering biomedical questions",
+        "contact": {
+            "responsibleOrganization": "CoVar Applied Technologies",
+            "responsibleDeveloper": "patrick@covar.com",
+            "email": "patrick@covar.com",
+            "url": "www.covar.com",
+        },
+        "termsOfService": "<url>",
+        "version": "0.0.1"
+    },
+    "schemes": [
+        "http",
+        "https"
+    ]
+}
+app.config['SWAGGER'] = {
+    'title': 'ROBOKOP Ranker API',
+    'uiversion': 2 #3
+}
+swagger = Swagger(app, template=template)

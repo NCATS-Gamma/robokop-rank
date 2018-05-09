@@ -3,38 +3,97 @@
 """Flask REST API server for ranker"""
 
 import os
-from flask_restplus import Resource
+import logging
+from flask_restful import Resource
 from flask import request
-from setup import app, api
-from logging_config import logger
+from ranker.api.setup import app, api
+from ranker.api.logging_config import logger
 from ranker.question import Question
 from ranker.tasks import answer_question
+import ranker.api.definitions
 
-@api.route('/')
-@api.doc(params={'question': 'A question specification'})
+logger = logging.getLogger(__name__)
+
 class AnswerQuestion(Resource):
-    @api.response(200, 'Success')
-    @api.response(204, 'No answers')
     def post(self):
-        """Get answer for question"""
+        """
+        Get answers to a question
+        ---
+        parameters:
+          - in: body
+            name: question
+            description: The machine-readable question graph.
+            schema:
+                $ref: '#/definitions/Question'
+            required: true
+        responses:
+            200:
+                description: Answer
+                schema:
+                    type: object
+                    required:
+                      - thingsandstuff
+                    properties:
+                        thingsandstuff:
+                            type: string
+                            description: all the things and stuff
+        """
+        # replace `parameters` with this when OAS 3.0 is fully supported by Swagger UI
+        # https://github.com/swagger-api/swagger-ui/issues/3641
+        """
+        requestBody:
+            description: The machine-readable question graph.
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/definitions/Question'
+        """
         question = Question(request.json)
+        logger.debug(question.cypher_match_string())
         answer = answer_question.apply(args=[question]).result
         if isinstance(answer, BaseException):
             return "No answers", 204
         return answer.toJSON(), 200
 
-@api.route('/subgraph')
-@api.doc(params={'question': 'A question specification'})
+api.add_resource(AnswerQuestion, '/')
+
 class QuestionSubgraph(Resource):
-    @api.response(200, 'Success')
     def post(self):
-        """Get question subgraph"""
+        """
+        Get question subgraph
+        ---
+        parameters:
+          - in: body
+            name: question
+            description: The machine-readable question graph.
+            schema:
+                $ref: '#/definitions/Question'
+            required: true
+        responses:
+            200:
+                description: Knowledge subgraph
+                schema:
+                    $ref: '#/definitions/Question'
+        """
+        # https://github.com/swagger-api/swagger-ui/issues/3641
+        """
+        requestBody:
+            description: The machine-readable question graph.
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/definitions/Question'
+        """
 
         question = Question(request.json)
             
         subgraph = question.relevant_subgraph()
 
         return subgraph, 200
+
+api.add_resource(QuestionSubgraph, '/subgraph')
 
 if __name__ == '__main__':
 

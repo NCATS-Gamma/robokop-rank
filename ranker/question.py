@@ -64,11 +64,14 @@ class Question():
 
         # replace input node names with identifiers
         for n in self.nodes:
-            if n['nodeSpecType'] == 'Named Node':
+            if 'nodeSpecType' in n and n['nodeSpecType'] == 'Named Node':
                 identifiers = [n['meta']['identifier']]
                 n['identifiers'] = identifiers
             else:
                 n['identifiers'] = None
+        for e in self.edges:
+            if not 'length' in e:
+                e['length'] = [1, 1]
 
     def compute_hash(self):
         '''
