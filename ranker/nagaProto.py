@@ -8,6 +8,7 @@ The most typical use case is:
 """
 
 import random
+import logging
 import networkx as nx
 import numpy as np
 import json
@@ -15,6 +16,8 @@ import os
 import time
 import scipy.sparse as sparse
 from scipy.sparse.linalg.eigen.arpack import ArpackNoConvergence
+
+logger = logging.getLogger(__name__)
 
 class ProtocopRank:
     G = nx.MultiDiGraph() # a networkx Digraph() with weights
@@ -87,7 +90,7 @@ class ProtocopRank:
             vecs = vecs[:,1:]
         except ArpackNoConvergence as err:
             k = len(err.eigenvalues)
-            print('Warning: ARPACK did not converge.')
+            logger.warning('ARPACK did not converge.')
             if k<=1:
                 vals = np.array([1])
                 vecs = np.reshape(np.array(range(len(nodes))),(len(nodes),1))
@@ -133,30 +136,30 @@ class ProtocopRank:
 
         min_nodes = max(0, min([len(sg) for sg in sub_graph_list])-1)
         
-        print('set_weights()... ', end='')
+        logger.debug('set_weights()... ')
         start = time.time()
         self.set_weights()
-        print(time.time()-start, ' seconds elapsed.')
+        logger.debug(f"{time.time()-start} seconds elapsed.")
 
-        print("score(method='prod')... ", end='')
+        logger.debug("score(method='prod')... ")
         start = time.time()
         scores_prod = [self.score(sg, method='prod')**(1/min_nodes) for sg in sub_graph_list]
-        print(time.time()-start, ' seconds elapsed.')
+        logger.debug(f"{time.time()-start} seconds elapsed.")
 
-        print("compute_hitting_times()... ", end='')
+        logger.debug("compute_hitting_times()... ")
         start = time.time()
         hitting_times = [self.compute_hitting_time(sg) for sg in sub_graph_list]
-        print(time.time()-start, ' seconds elapsed.')
+        logger.debug(f"{time.time()-start} seconds elapsed.")
 
-        print("modify_weights()... ", end='')
+        logger.debug("modify_weights()... ")
         start = time.time()
         self.modify_weights()
-        print(time.time()-start, ' seconds elapsed.')
+        logger.debug(f"{time.time()-start} seconds elapsed.")
 
-        print("score(method='naga')... ", end='')
+        logger.debug("score(method='naga')... ")
         start = time.time()
         scores_naga = [self.score(sg, method='naga')**(1/min_nodes) for sg in sub_graph_list]
-        print(time.time()-start, ' seconds elapsed.')
+        logger.debug(f"{time.time()-start} seconds elapsed.")
         
         min_hit = min(hitting_times)
         scores_hit = [min_hit/h for h in hitting_times]
@@ -168,10 +171,10 @@ class ProtocopRank:
         ranked_sub_graph_list = [sub_graph_list[i] for i in sorted_inds]
 
         # add extra computed metadata in self.G to subgraph for display
-        print("Extracting subgraphs... ", end='')
+        logger.debug("Extracting subgraphs... ")
         start = time.time()
         ranked_sub_graph_list = [self.G.subgraph([s['id'] for s in sub_graph]) for sub_graph in ranked_sub_graph_list]
-        print(time.time()-start, ' seconds elapsed.')
+        logger.debug(f"{time.time()-start} seconds elapsed.")
 
         scoring_info = [{\
             'rank_score':ranking_scores[i],\

@@ -1,8 +1,11 @@
 import time
 import os
 import sys
+import logging
 from neo4j.v1 import GraphDatabase, basic_auth
 from ranker.universalgraph import UniversalGraph
+
+logger = logging.getLogger(__name__)
 
 class KnowledgeGraph:
 
@@ -10,7 +13,7 @@ class KnowledgeGraph:
         # connect to neo4j database
         self.driver = GraphDatabase.driver("bolt://"+os.environ["NEO4J_HOST"]+":"+os.environ["NEO4J_BOLT_PORT"], auth=basic_auth("neo4j", os.environ["NEO4J_PASSWORD"]))
         self.session = self.driver.session()
-        print('Connected to neo4j.')
+        logger.debug('Connected to neo4j.')
 
     def queryToGraph(self, query_string):
         result = list(self.session.run(query_string))
@@ -25,16 +28,16 @@ class KnowledgeGraph:
         else:
             query_string = question.cypher()
 
-        print('Running query... ', end='')
+        logger.debug('Running query... ')
         start = time.time()
         result = self.session.run(query_string)
         records = [r['nodes'] for r in result]
-        print(time.time()-start, 'seconds elapsed')
+        logger.debug(f"{time.time()-start} seconds elapsed")
 
-        print("\n", len(records), "subgraphs returned.")
+        logger.debug(f"{len(records)} subgraphs returned.")
 
         return records
 
     def __del__(self):
         self.session.close()
-        print('Disconnected from database.')
+        logger.debug('Disconnected from database.')

@@ -17,7 +17,7 @@ from ranker.answer import Answer, Answerset
 
 # robokop-rank modules
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..', 'robokop-rank'))
-from nagaProto import ProtocopRank
+from ranker.nagaProto import ProtocopRank
 
 class Question():
     '''
