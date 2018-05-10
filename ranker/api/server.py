@@ -54,7 +54,7 @@ class AnswerQuestion(Resource):
         answer = answer_question.apply(args=[question]).result
         if isinstance(answer, BaseException):
             return "No answers", 204
-        return answer.toJSON(), 200
+        return answer.toStandard(), 200
 
 api.add_resource(AnswerQuestion, '/')
 
