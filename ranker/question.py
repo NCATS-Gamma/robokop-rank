@@ -41,7 +41,6 @@ class Question():
         self.notes = None
         self.name = None
         self.natural_question = None
-        self.name = None
         self.nodes = [] # list of nodes
         self.edges = [] # list of edges
 
@@ -116,7 +115,11 @@ class Question():
         pr = ProtocopRank(answer_set_subgraph)
         score_struct, subgraphs = pr.report_scores_dict(subgraphs) # returned subgraphs are sorted by rank
 
-        aset = Answerset(question_hash=self.compute_hash())
+        question_info = {
+            'question_hash': self.compute_hash(),
+            'natural_question': self.natural_question
+        }
+        aset = Answerset(question_info=question_info)
         for substruct, subgraph in zip(score_struct, subgraphs):
             graph = UniversalGraph(nodes=substruct['nodes'], edges=substruct['edges'])
             graph.merge_multiedges()
