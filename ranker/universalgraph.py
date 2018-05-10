@@ -24,14 +24,13 @@ class UniversalGraph:
         nodes = []
         for i, g in enumerate(graph_idx):
             node = dict(self.nodes[g]) # this just creates a pointer otherwise
-            node['id'] += '_{:02d}'.format(i)
             nodes += [node,]
         self.nodes = nodes
         node_ids = [node['id'] for node in self.nodes]
         edges = []
         for edge in self.edges:
-            start_node_ids = [node_id for node_id in node_ids if node_id[:-3]==edge['start']]
-            end_node_ids = [node_id for node_id in node_ids if node_id[:-3]==edge['end']]
+            start_node_ids = [node_id for node_id in node_ids if node_id==edge['start']]
+            end_node_ids = [node_id for node_id in node_ids if node_id==edge['end']]
             node_pairs = [(start_node_id, end_node_id)\
                 for end_node_id in end_node_ids\
                 for start_node_id in start_node_ids]

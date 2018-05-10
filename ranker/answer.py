@@ -164,9 +164,37 @@ class Answer():
                 'node_list': [standardize_node(n) for n in json['nodes']],
                 'edge_list': [standardize_edge(e) for e in json['edges']]
             },
-            'text': 'short answer name here'
+            'text': generate_summary(json['nodes'], json['edges'])
         }
         return output
+
+def generate_summary(nodes, edges):
+    # assume that the first node is at one end
+    summary = nodes[0]['name']
+    latest_node_id = nodes[0]['id']
+    node_ids = [n['id'] for n in nodes]
+    edge_starts = [e['start'] for e in edges]
+    edge_ends = [e['end'] for e in edges]
+    while True:
+        if latest_node_id in edge_starts:
+            idx = edge_starts.index(latest_node_id)
+            edge_starts.pop(idx)
+            edge_ends.pop(idx)
+            edge = edges.pop(idx)
+            latest_node_id = edge['end']
+            latest_node = nodes[node_ids.index(latest_node_id)]
+            summary += f" -{edge['predicate']}-> {latest_node['name']}"
+        elif latest_node_id in edge_ends:
+            idx = edge_ends.index(latest_node_id)
+            edge_starts.pop(idx)
+            edge_ends.pop(idx)
+            edge = edges.pop(idx)
+            latest_node_id = edge['start']
+            latest_node = nodes[node_ids.index(latest_node_id)]
+            summary += f" <-{edge['predicate']}- {latest_node['name']}"
+        else:
+            break
+    return summary
 
 def standardize_edge(edge):
     '''
