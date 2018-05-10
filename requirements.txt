@@ -1,11 +1,6 @@
-
-bcrypt
 celery
 eventlet
 flask
-flask-mail
-flask-security
-flask-sqlalchemy
 flask-restful
 flasgger
 flower
@@ -14,7 +9,5 @@ kombu
 neo4j-driver
 networkx==1.11
 numpy>=1.8.0
-psycopg2
-psycopg2-binary
 redis
 scipy
