@@ -19,6 +19,8 @@ from ranker.answer import Answer, Answerset
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..', 'robokop-rank'))
 from ranker.nagaProto import ProtocopRank
 
+logger = logging.getLogger(__name__)
+
 class Question():
     '''
     Represents a question such as "What genetic condition provides protection against disease X?"
@@ -142,8 +144,6 @@ class Question():
 
         nodes, edges = self.nodes, self.edges
 
-        # edge_types = ['Result' for e in edges]
-
         node_count = len(nodes)
         edge_count = len(edges)
 
@@ -151,38 +151,42 @@ class Question():
         node_names = ['n{:d}'.format(i) for i in range(node_count)]
         edge_names = ['r{0:d}{1:d}'.format(i, i+1) for i in range(edge_count)]
 
-        node_conditions = []
+        nodes_conditions = []
         for node in nodes:
-            node_conds = []
+            node_conditions = []
             if 'identifiers' in node and node['identifiers']:
-                node_conds.append([{'prop':'id', 'val':l, 'op':'=', 'cond':True} for l in node['identifiers']])
+                node_conditions.append([{'prop':'id', 'val':node_id, 'op':'=', 'cond':True} for node_id in node['identifiers']])
             if 'type' in node and node['type']:
-                node_conds += [[{'prop':'node_type', 'val':node['type'].replace(' ', ''), 'op':'=', 'cond':True}]]
-            node_conditions += [node_conds]
+                node_conditions.append([{'prop':'node_type', 'val':node['type'].replace(' ', ''), 'op':'=', 'cond':True}])
+            nodes_conditions += [node_conditions]
 
         # generate MATCH command string to get paths of the appropriate size
-        match_strings = ['MATCH '+'({})'.format(node_names[0])]
-        match_strings += [f"OPTIONAL MATCH ({node_names[i]})-[{edge_names[i]}*{edges[i]['length'][0]}..{edges[i]['length'][-1]}]-({node_names[i+1]})" for i in range(edge_count)]
+        match_strings = [f"MATCH ({node_names[0]})"]
+        match_strings += [
+            f"OPTIONAL MATCH ({node_names[i]})-[{edge_names[i]}*{edges[i]['length'][0]}..{edges[i]['length'][-1]}]-({node_names[i+1]})" if not edges[i]['length'][0]==edges[i]['length'][1] \
+            else f"OPTIONAL MATCH ({node_names[i]})-[{edge_names[i]}]-({node_names[i+1]})" \
+            for i in range(edge_count)]
 
         # generate WHERE command string to prune paths to those containing the desired nodes/node types
-        node_conditions = [
+        nodes_conditions = [
             [
                 [
                     {
-                        k:(c[k] if k != 'cond'\
-            else '' if c[k]\
+                        k:(node_condition[k] if k != 'cond'\
+                        else '' if node_condition[k]\
                         else 'NOT ')\
-                        for k in c
-                    } for c in d
-                ] for d in conds
-            ] for conds in node_conditions
+                        for k in node_condition
+                    } for node_condition in node_conditions_union
+                ] for node_conditions_union in node_conditions_intersection
+            ] for node_conditions_intersection in nodes_conditions
         ]
-        node_cond_strings = [['('+' OR '.join(['{0}{1}.{2}{3}\'{4}\''.format(c['cond'], node_names[i], c['prop'], c['op'], c['val'])\
-            for c in d])+')'\
-            for d in conds]\
-            for i, conds in enumerate(node_conditions)]
-        where_strings = ['WHERE '+' AND '.join(c) for c in node_cond_strings]
-        match_string = match_strings[0]+' '+where_strings[0]+' '+' '.join([m+' '+w for m, w in zip(match_strings[1:], where_strings[1:])])
+        node_cond_strings = [['('+' OR '.join([f"{node_condition['cond']}{node_names[node_idx]}.{node_condition['prop']}{node_condition['op']}'{node_condition['val']}'"\
+            for node_condition in node_conditions_union])+')'\
+            for node_conditions_union in node_conditions_intersection]\
+            for node_idx, node_conditions_intersection in enumerate(nodes_conditions)]
+        edge_cond_strings = [f"NOT {e}.predicate_id='omnicorp:1'" for e in edge_names]
+        where_strings = [f"WHERE {node_cond_strings[0][0]}"] + [f"WHERE {' AND '.join([e]+c)}" for e, c in zip(edge_cond_strings, node_cond_strings[1:])]
+        match_string = ' '.join([f"{m} {w}" for m, w in zip(match_strings, where_strings)])
         return match_string
 
     def cypher(self):
@@ -208,7 +212,7 @@ class Question():
         # return subgraphs matching query
         query_string = ' '.join([match_string, answer_return_string])
 
-        # print(query_string)
+        logger.debug(query_string)
         return query_string
 
     def subgraph_with_support(self):
