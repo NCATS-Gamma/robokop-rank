@@ -4,6 +4,9 @@ Answer class
 
 import warnings
 import datetime
+import logging
+
+logger = logging.getLogger(__name__)
 
 class Answerset():
     '''
