@@ -56,13 +56,14 @@ class Answerset():
         result_list
         '''
         json = self.toJSON()
+        natural_question = json['question_info']['natural_question']
         output = {
             'context': 'context',
             'datetime': json['timestamp'],
             'id': 'uid',
             'message': f"{len(self.answers)} potential answers found.",
-            'original_question_text': json['question_info']['natural_question'],
-            'restated_question_text': f'An improved version of "{json['question_info']['natural_question']}"?',
+            'original_question_text': natural_question,
+            'restated_question_text': f"An improved version of '{natural_question}'?",
             'result_code': 'OK' if self.answers else 'EMPTY',
             'result_list': [a.toStandard() for a in self.answers]
         }
