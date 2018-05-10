@@ -11,3 +11,4 @@ networkx==1.11
 numpy>=1.8.0
 redis
 scipy
+-e git+https://github.com/Supervisor/supervisor@master
