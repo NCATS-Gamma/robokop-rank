@@ -88,7 +88,7 @@ class Question(FromDictMixin):
             nodes:
               - id: 0
                 type: disease
-                identifiers: ["MONDO:0008753"]
+                identifiers: ["MONDO:0005737"]
               - id: 1
                 type: gene
               - id: 2
