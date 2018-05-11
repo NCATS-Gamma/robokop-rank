@@ -73,6 +73,8 @@ class Question():
         for e in self.edges:
             if not 'length' in e:
                 e['length'] = [1, 1]
+            if len(e['length'])==1:
+                e['length'] += e['length']
 
     def compute_hash(self):
         '''
