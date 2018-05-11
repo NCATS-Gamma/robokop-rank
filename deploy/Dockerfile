@@ -22,7 +22,7 @@ RUN git clone https://github.com/NCATS-Gamma/robokop-rank.git
 WORKDIR /home/murphy/robokop-rank
 
 ## Install all requirements
-RUN pip install -r ./requirements.txt
+RUN pip install -r ./requirements.txt --src /usr/local/src
 
 ## Finish up
 ENV HOME=/home/murphy
