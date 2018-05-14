@@ -89,7 +89,12 @@ class Ranker:
             logger.error("Node None already exists in G. This could cause incorrect ranking results.")
         else:
             self.G.add_node('None') # must add the none node to correspond to None id's
-
+        
+        for sg in sub_graph_list:
+            for e in sg:
+                if e['id'] is None:
+                    e['id'] = 'None'
+                    
         hitting_times = [self.compute_hitting_time(sg) for sg in sub_graph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
@@ -109,7 +114,7 @@ class Ranker:
         # add extra computed metadata in self.G to subgraph for display
         logger.debug("Extracting subgraphs... ")
         start = time.time()
-        sub_graphs_meta = [self.G.subgraph([s['id'] for s in sub_graph]) for sub_graph in sub_graph_list]
+        sub_graphs_meta = [self.G.subgraph([s['id'] if s['id'] is not None else 'None' for s in sub_graph]) for sub_graph in sub_graph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
         
         scoring_info = [{'rank_score':ranking_scores[i],'pre_score':prescreen_scores_sorted[i]} for i in ranking_sorting]
@@ -122,7 +127,6 @@ class Ranker:
 
         # get updated weights
         node_ids = [s['id'] for s in sub_graph]
-        node_ids = [id if id is not None else 'None' for id in node_ids]
         sub_graph_update = self.G.subgraph(node_ids)
         
         sg_nodes = sub_graph_update.nodes(data=True)
