@@ -17,7 +17,7 @@ from ranker.answer import Answer, Answerset
 
 # robokop-rank modules
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..', 'robokop-rank'))
-from ranker.nagaProto import ProtocopRank
+from ranker.ranker import Ranker
 
 logger = logging.getLogger(__name__)
 
@@ -116,9 +116,9 @@ class Question():
         del database
 
         # compute scores with NAGA, export to json
-        pr = ProtocopRank(answer_set_subgraph)
+        pr = Ranker(answer_set_subgraph)
         score_struct, subgraphs = pr.report_scores_dict(subgraphs) # returned subgraphs are sorted by rank
-
+        
         question_info = {
             'question_hash': self.compute_hash(),
             'natural_question': self.natural_question

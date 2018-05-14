@@ -16,13 +16,17 @@ import os
 import time
 import scipy.sparse as sparse
 from scipy.sparse.linalg.eigen.arpack import ArpackNoConvergence
+import numpy.linalg
+import scipy.linalg
 
 logger = logging.getLogger(__name__)
 
-class ProtocopRank:
+class Ranker:
     G = nx.MultiDiGraph() # a networkx Digraph() with weights
     graphInfo = {} # will be populated on construction
     naga_parameters = {'alpha':.9, 'beta':.9}
+    prescreen_count = 2000 # only look at this many graphs more in depth
+    teleport_weight = 0.001 # probability to teleport along graph (make random inference)
 
     def __init__(self, G=nx.MultiDiGraph()):
         self.G = G
@@ -31,29 +35,12 @@ class ProtocopRank:
 
     def set_weights(self):
         self.set_weights_pubs()
-        # self.set_weights_symm() # Uncomment this to make initial weight based on chemotext2 instead of publications
-
-    def set_weights_symm(self):
-        """ Initialize weights on the graph based on metadata.
-            Uses chemotext2 edge similarity.
-        """
-        
-        symm = nx.get_edge_attributes(self.G, 'similarity')
-        
-        # apply logistic function to publications to get weights
-        # weights = {edge:1/(1 + np.exp((0.25-symm[edge])/(0.125))) for edge in symm}
-        weights = {edge:1/(1 + np.exp((0.25-symm[edge])/(0.125))) for edge in symm}
-        nx.set_edge_attributes(self.G, values=weights, name='weight')
-        
-        # initialize scoring info
-        # scoring_info = {edge:{'num_pubs':pub_counts[edge], 'pub_weight': weights[edge]} for edge in pub_counts}
-        # nx.set_edge_attributes(self.G, values=scoring_info, name = 'scoring')
 
     def set_weights_pubs(self):
         """ Initialize weights on the graph based on metadata.
             Currently just counts # of publications and applies a hand tuned logistic.
         """
-        
+
         pmids = nx.get_edge_attributes(self.G, 'publications')
         # pub_counts = {edge:max(len(pmids[edge]),1) for edge in pmids}
         pub_counts = {edge:len(pmids[edge]) for edge in pmids}
@@ -66,66 +53,10 @@ class ProtocopRank:
         scoring_info = {edge:{'num_pubs':pub_counts[edge], 'pub_weight': weights[edge]} for edge in pub_counts}
         nx.set_edge_attributes(self.G, values=scoring_info, name = 'scoring')
         
-    def modify_weights(self,t=1,d=1,k=8):
-        """ Run graph diffusion for time t to update weights based on supporting edges.
-        For now, this results in down-grading the graph to a standard networkx Graph.
-        Inputs:
-            t - time scaling on how long to diffuse from time zero. Scaled by the first non-trivial eigenvalue
-            d - distance scaling on node similarity in spectral domain. Scaled by mean distance between all edge nodes.
-            k - dimensionality of spectral space (# of eigenvectors to compute)
-        """
-
-        # Get laplacian of the symmetric graph and eigen decomposition
-        # In the future we could consider doing SVD instead of eigs that way we could keep assymetry
-        # Multiple paths along the same edge have weights which are added
-
-        L = nx.laplacian_matrix(self.G.to_undirected())
-        k = min(k,L.shape[0]-1)
-
-        nodes = list(self.G.nodes())
-        
-        try:
-            vals, vecs = sparse.linalg.eigsh(L.astype(float), k=k, which='SM')
-            vals = vals[1:] # zeroth eigenvalue is 1 and eigenvector is constant
-            vecs = vecs[:,1:]
-        except ArpackNoConvergence as err:
-            k = len(err.eigenvalues)
-            logger.warning('ARPACK did not converge.')
-            if k<=1:
-                vals = np.array([1])
-                vecs = np.reshape(np.array(range(len(nodes))),(len(nodes),1))
-            else:
-                vals = err.eigenvalues[1:]
-                vecs = err.eigenvectors[:,1:]
-            
-        # Scale spectral dimensions by t random walk steps relative to the 1st non-trivial eigen value
-        # Used in distance calculation below. This corresponds to the decay rate of each eigenvector
-        scaling = np.exp(-vals*t/vals[0])
-        scaling = np.ones(scaling.shape)
-
-        # get list of edges between unique node pairs (order matters)
-        edges = list(nx.DiGraph(self.G).edges())
-        
-        # Calculate the squared distance between all node pairs for each edge (with each dimension weighted by scaling)
-        # Calculating this for only existing edges keeps things sparse
-        spect_distq = np.array([np.dot((vecs[nodes.index(edge[0]),:] - vecs[nodes.index(edge[1]),:])**2,scaling) for edge in edges])
-
-        # Normalize distances by average squared distance
-        # This yields a similartiy metric between nodes, calculated at each edge 
-        spect_dist = np.sqrt(spect_distq)
-        distance_scaling = (np.mean(spect_dist)*d)**2
-        spect_weight = np.exp(-spect_distq/2/distance_scaling)
-        
-        for (idx, edge) in enumerate(edges):
-
-            # get all edges between these nodes, spread weight evenly among them to preserve the multigraph structure
-            # also update scoring structure with metadata from this process
-            cur_edges = self.G[edge[0]][edge[1]]
-            n = len(cur_edges)
-            for key in cur_edges:
-                single_edge = cur_edges[key]
-                single_edge['weight'] = spect_weight[idx]/n
-                single_edge['scoring'].update({'spect_dist':spect_dist[idx],'spect_weight':spect_weight[idx]})
+    def sum_edge_weights(self, sub_graph):
+        sub_graph_update = self.G.subgraph([s['id'] for s in sub_graph])
+        edges = sub_graph_update.edges(data='weight')
+        return sum([edge[-1] for edge in edges])
 
     def rank(self, sub_graph_list):
         """ Primary method to generate a sorted list and scores for a set of subgraphs """
@@ -141,19 +72,20 @@ class ProtocopRank:
         self.set_weights()
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
-        logger.debug("score(method='prod')... ")
+        logger.debug("Prescreening sub_graph_list... ")
         start = time.time()
-        scores_prod = [self.score(sg, method='prod')**(1/min_nodes) for sg in sub_graph_list]
+        prescreen_scores = [self.sum_edge_weights(sg) for sg in sub_graph_list]
+        prescreen_sorting, prescreen_scores_sorted = zip(*sorted(enumerate(prescreen_scores), key = lambda elem: elem[1], reverse=True))
+        
+        if len(prescreen_sorting) > self.prescreen_count:
+            prescreen_sorting = prescreen_sorting[0:self.prescreen_count]
+
+        sub_graph_list = [sub_graph_list[i] for i in prescreen_sorting]
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
         logger.debug("compute_hitting_times()... ")
         start = time.time()
         hitting_times = [self.compute_hitting_time(sg) for sg in sub_graph_list]
-        logger.debug(f"{time.time()-start} seconds elapsed.")
-
-        logger.debug("modify_weights()... ")
-        start = time.time()
-        self.modify_weights()
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
         logger.debug("score(method='naga')... ")
@@ -163,28 +95,22 @@ class ProtocopRank:
         
         min_hit = min(hitting_times)
         scores_hit = [min_hit/h for h in hitting_times]
-        ranking_scores = [sn*sh for (sn,sh) in zip(scores_naga, scores_hit)]
-
-        ranked_sub_graph_list = sub_graph_list
-
-        sorted_inds, sorted_scores = zip(*sorted(enumerate(ranking_scores), key = lambda elem: elem[1], reverse=True))
-        ranked_sub_graph_list = [sub_graph_list[i] for i in sorted_inds]
+        
+        ranking_scores = [np.sqrt(sn*sh) for (sn,sh) in zip(scores_naga, scores_hit)]
+        
+        ranking_sorting, ranking_scores_sorted = zip(*sorted(enumerate(ranking_scores), key = lambda elem: elem[1], reverse=True))
+        sub_graph_list = [sub_graph_list[i] for i in ranking_sorting]
 
         # add extra computed metadata in self.G to subgraph for display
         logger.debug("Extracting subgraphs... ")
         start = time.time()
-        ranked_sub_graph_list = [self.G.subgraph([s['id'] for s in sub_graph]) for sub_graph in ranked_sub_graph_list]
+        sub_graphs_meta = [self.G.subgraph([s['id'] for s in sub_graph]) for sub_graph in sub_graph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
-
-        scoring_info = [{\
-            'rank_score':ranking_scores[i],\
-            'score_hit':scores_hit[i],\
-            'score_naga':scores_naga[i],\
-            'score_prod':scores_prod[i],\
-            'hit_time':hitting_times[i]}\
-            for i in sorted_inds]
-
-        return (scoring_info, ranked_sub_graph_list, sorted_inds)
+        
+        scoring_info = [{'rank_score':ranking_scores[i],'pre_score':prescreen_scores_sorted[i]} for i in ranking_sorting]
+        
+        sorted_inds = [prescreen_sorting[i] for i in ranking_sorting]
+        return (scoring_info, sub_graphs_meta, sorted_inds)
 
     def compute_hitting_time(self, sub_graph):
         # sub_graph is a list of dicts with fields 'id' and 'bound'
@@ -193,7 +119,6 @@ class ProtocopRank:
         sub_graph_update = self.G.subgraph([s['id'] for s in sub_graph])
         
         sg_nodes = sub_graph_update.nodes(data=True)
-        sg_nodes = [n for n in sg_nodes if n[-1]['node_type'][0:5]!='NAME.']
 
         # get updated weights
         sub_graph_update = sub_graph_update.subgraph([s[0] for s in sg_nodes])
@@ -208,7 +133,7 @@ class ProtocopRank:
         hitting_time = max(x)
         
         return hitting_time
-        
+
     def score(self, sub_graph, method='naga'):
         """ Assign a score to a specific subGraph
         sub_graph is a sub_graph of self.G with specification of bounded and unbounded nodes."""
@@ -228,7 +153,7 @@ class ProtocopRank:
             from_node = edge[0]
             to_node = edge[1]
             
-            # support edges influence weights only in spectral graph decomposition
+            # support edges influence weights only in full graph transition matrix
             if edge[-1]['type']=='Support' or edge[-1]['type']=='Lookup':
                 continue
 
@@ -264,15 +189,7 @@ class ProtocopRank:
                 
                 edge_proba = (1-self.naga_parameters['alpha']) * proba_query + self.naga_parameters['alpha'] * (
                     (1-self.naga_parameters['beta']) * proba_info + self.naga_parameters['beta'] * proba_conf)
-                    
-                # add info to scoring
-                edge[-1]['scoring']['template_count'] = template_count
-                edge[-1]['scoring']['template_weight'] = template_weight
-                edge[-1]['scoring']['result_count'] = result_count
-                edge[-1]['scoring']['proba_query'] = proba_query
-                edge[-1]['scoring']['proba_info'] = proba_info
-                edge[-1]['scoring']['edge_proba'] = edge_proba
-
+                
             else:
                 raise ValueError
 
@@ -315,17 +232,6 @@ class ProtocopRank:
         nx.draw_networkx_edges(self.G, pos, alpha=np.array(plot_weights))
 
         plt.show()
-
-    def print_scores(self, sub_graphs):
-        scores, sub_graphs = self.rank(sub_graphs)
-
-        for i, sg in enumerate(sub_graphs):
-            path_str = ""
-            for j, n in enumerate(sg):
-                if j > 0:
-                    path_str = path_str + " -> "
-                path_str = path_str + str(n)
-            print("{0:f}".format(scores[i]) + ", " + path_str)
 
     def report_scores_dict(self, node_sets):
         scoring_info, sub_graphs, idx = self.rank(node_sets)
