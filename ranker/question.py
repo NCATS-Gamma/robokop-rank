@@ -110,8 +110,6 @@ class Question():
         # get all subgraphs relevant to the question from the knowledge graph
         database = KnowledgeGraph()
         subgraphs = database.query(self) # list of lists of nodes with 'id' and 'bound'
-        # drop subgraphs with "null" nodes, for now
-        subgraphs = [g for g in subgraphs if not [n['id'] for n in g if n['id'] is None]]
         answer_set_subgraph = database.queryToGraph(self.subgraph_with_support())
         del database
 
