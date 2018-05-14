@@ -26,7 +26,7 @@ class Ranker:
     graphInfo = {} # will be populated on construction
     naga_parameters = {'alpha':.9, 'beta':.9}
     prescreen_count = 2000 # only look at this many graphs more in depth
-    teleport_weight = 0.001 # probability to teleport along graph (make random inference)
+    teleport_weight = 0.001 # probability to teleport along graph (make random inference) in hitting time calculation
 
     def __init__(self, G=nx.MultiDiGraph()):
         self.G = G
@@ -85,6 +85,11 @@ class Ranker:
 
         logger.debug("compute_hitting_times()... ")
         start = time.time()
+        if 'None' in self.G:
+            logger.error("Node None already exists in G. This could cause incorrect ranking results.")
+        else:
+            self.G.add_node('None') # must add the none node to correspond to None id's
+
         hitting_times = [self.compute_hitting_time(sg) for sg in sub_graph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
@@ -116,7 +121,9 @@ class Ranker:
         # sub_graph is a list of dicts with fields 'id' and 'bound'
 
         # get updated weights
-        sub_graph_update = self.G.subgraph([s['id'] for s in sub_graph])
+        node_ids = [s['id'] for s in sub_graph]
+        node_ids = [id if id is not None else 'None' for id in node_ids]
+        sub_graph_update = self.G.subgraph(node_ids)
         
         sg_nodes = sub_graph_update.nodes(data=True)
 
@@ -124,8 +131,13 @@ class Ranker:
         sub_graph_update = sub_graph_update.subgraph([s[0] for s in sg_nodes])
         
         # calculate hitting time of last node from first node
-        L = nx.laplacian_matrix(sub_graph_update.to_undirected())
+        L = nx.laplacian_matrix(sub_graph_update.to_undirected(),nodelist = node_ids)
         L = np.array(L.todense())
+        
+        # add teleportation to allow leaps of faith
+        n = len(node_ids)
+        L = L + self.teleport_weight * (n*np.eye(n)-np.ones((n,n)))
+        
         L[-1,:] = 0
         L[-1,-1] = 1
         b = np.transpose(1 - L[-1,:])
