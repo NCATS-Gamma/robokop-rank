@@ -142,6 +142,12 @@ class Question():
 
         return aset
 
+    def edge_match_string(self, edge_struct, var_name):
+        if not edge_struct['length'][0]==edge_struct['length'][1]:
+            return f"[{var_name}*{edge_struct['length'][0]}..{edge_struct['length'][-1]}]"
+        else:
+            return f"[{var_name}]"
+
     def cypher_match_string(self):
 
         nodes, edges = self.nodes, self.edges
@@ -165,9 +171,16 @@ class Question():
         # generate MATCH command string to get paths of the appropriate size
         match_strings = [f"MATCH ({node_names[0]})"]
         match_strings += [
-            f"OPTIONAL MATCH ({node_names[i]})-[{edge_names[i]}*{edges[i]['length'][0]}..{edges[i]['length'][-1]}]-({node_names[i+1]})" if not edges[i]['length'][0]==edges[i]['length'][1] \
-            else f"OPTIONAL MATCH ({node_names[i]})-[{edge_names[i]}]-({node_names[i+1]})" \
+            f"OPTIONAL MATCH ({node_names[i]})-{self.edge_match_string(edges[i], edge_names[i])}-({node_names[i+1]})" \
             for i in range(edge_count)]
+        if 'identifiers' in nodes[-1] and nodes[-1]['identifiers']:
+            match_strings.insert(1,f"MATCH ({node_names[-1]})")
+            match_strings.extend([
+                f"OPTIONAL MATCH ({node_names[i]})-{self.edge_match_string(edges[i], edge_names[i])}-({node_names[i-1]})" \
+                for i in range(edge_count-1, -1, -1)])
+            case_strings = [f"case when {e} is null then {e}2 when {e}2 is null then {e} else null" for e in edge_names]
+            with_string = f"with {' '.join(case_strings)}"
+            match_strings.append(with_string)
 
         # generate WHERE command string to prune paths to those containing the desired nodes/node types
         nodes_conditions = [
