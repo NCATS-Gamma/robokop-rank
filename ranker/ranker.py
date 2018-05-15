@@ -25,7 +25,7 @@ class Ranker:
     G = nx.MultiDiGraph() # a networkx Digraph() with weights
     graphInfo = {} # will be populated on construction
     naga_parameters = {'alpha':.9, 'beta':.9}
-    prescreen_count = 5 # only look at this many graphs more in depth
+    prescreen_count = 2000 # only look at this many graphs more in depth
     teleport_weight = 0.001 # probability to teleport along graph (make random inference) in hitting time calculation
 
     def __init__(self, G=nx.MultiDiGraph()):
@@ -136,19 +136,23 @@ class Ranker:
         start = time.time()
         sub_graphs_meta = [self.G.subgraph([s['id'] if s['id'] is not None else 'None' for s in sub_graph]) for sub_graph in sub_graph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
-
+        
         report = []
         for i, sg in enumerate(sub_graphs_meta):
-            # re-sort the nodes in the sub-graph according to the node_list
+
+            # re-sort the nodes in the sub-graph according to the node_list and remove None nodes
             node_list = sub_graph_list[i]
             nodes = list(sg.nodes(data=True))
             ids = [n[0] for n in nodes]
-            nodes = [nodes[ids.index(n['id'])] for n in node_list]
+            nodes = [nodes[ids.index(n['id'])][-1] for n in node_list if n['id'] is not 'None']
+            
+            edges = list(sg.edges(data=True))
+            edges = [e[-1] for e in edges]
 
             sgr = dict()
             sgr['score'] = sub_graph_scores[i]
             sgr['nodes'] = nodes
-            sgr['edges'] = list(sg.edges(data=True))
+            sgr['edges'] = edges
             
             report.append(sgr)
 
