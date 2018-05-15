@@ -67,6 +67,21 @@ class Ranker:
         if not sub_graph_list:
             return ([],[],[])
 
+        # add the none node to G 
+        if 'None' in self.G:
+            logger.error("Node None already exists in G. This could cause incorrect ranking results.")
+        else:
+            self.G.add_node('None') # must add the none node to correspond to None id's
+        
+        # convert None nodes to string None and check that all the subgraph nodes are in G
+        for sg in sub_graph_list:
+            for node in sg:
+                if node['id'] is None:
+                    node['id'] = 'None'
+                if node['id'] not in self.G:
+                    raise KeyError('Node id:' + node['id'] + ' does not exist in the graph G')
+
+
         min_nodes = max(0, min([len(sg) for sg in sub_graph_list])-1)
         
         logger.debug('set_weights()... ')
@@ -88,16 +103,7 @@ class Ranker:
 
         logger.debug("compute_hitting_times()... ")
         start = time.time()
-        if 'None' in self.G:
-            logger.error("Node None already exists in G. This could cause incorrect ranking results.")
-        else:
-            self.G.add_node('None') # must add the none node to correspond to None id's
         
-        for sg in sub_graph_list:
-            for e in sg:
-                if e['id'] is None:
-                    e['id'] = 'None'
-
         hitting_times = [self.compute_hitting_time(sg) for sg in sub_graph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
@@ -133,9 +139,15 @@ class Ranker:
 
         report = []
         for i, sg in enumerate(sub_graphs_meta):
+            # re-sort the nodes in the sub-graph according to the node_list
+            node_list = sub_graph_list[i]
+            nodes = list(sg.nodes(data=True))
+            ids = [n[0] for n in nodes]
+            nodes = [nodes[ids.index(n['id'])] for n in node_list]
+
             sgr = dict()
             sgr['score'] = sub_graph_scores[i]
-            sgr['nodes'] = list(sg.nodes(data=True))
+            sgr['nodes'] = nodes
             sgr['edges'] = list(sg.edges(data=True))
             
             report.append(sgr)
