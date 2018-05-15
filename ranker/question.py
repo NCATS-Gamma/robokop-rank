@@ -110,7 +110,7 @@ class Question():
         # get all subgraphs relevant to the question from the knowledge graph
         database = KnowledgeGraph()
         subgraphs = database.query(self) # list of lists of nodes with 'id' and 'bound'
-        answer_set_subgraph = database.queryToGraph(self.subgraph_with_support())
+        answer_set_subgraph = database.queryToGraph(self.subgraph_with_support(database))
         del database
 
         # compute scores with NAGA, export to json
@@ -141,7 +141,20 @@ class Question():
 
         return aset
 
-    def cypher_match_string(self):
+    def node_match_string(self, node_struct, var_name, db):
+        concept = node_struct['type'] if not node_struct['type'] == 'biological_process' else 'biological_process_or_molecular_activity'
+        if 'identifiers' in node_struct and node_struct['identifiers']:
+            if db:
+                id_map = db.get_map_for_type(concept)
+                id = id_map[node_struct['identifiers'][0]]
+            else:
+                id = node_struct['identifiers'][0]
+            prop_string = f" {{id:'{id}'}}"
+        else:
+            prop_string = ''
+        return f"({var_name}:{concept}{prop_string})"
+
+    def cypher_match_string(self, db=None):
 
         nodes, edges = self.nodes, self.edges
 
@@ -151,6 +164,8 @@ class Question():
         # generate internal node and edge variable names
         node_names = ['n{:d}'.format(i) for i in range(node_count)]
         edge_names = ['r{0:d}{1:d}'.format(i, i+1) for i in range(edge_count)]
+
+        node_strings = [self.node_match_string(node, name, db) for node, name in zip(nodes, node_names)]
 
         nodes_conditions = []
         for node in nodes:
@@ -162,10 +177,10 @@ class Question():
             nodes_conditions += [node_conditions]
 
         # generate MATCH command string to get paths of the appropriate size
-        match_strings = [f"MATCH ({node_names[0]})"]
+        match_strings = [f"MATCH {node_strings[0]}"]
         match_strings += [
-            f"OPTIONAL MATCH ({node_names[i]})-[{edge_names[i]}*{edges[i]['length'][0]}..{edges[i]['length'][-1]}]-({node_names[i+1]})" if not edges[i]['length'][0]==edges[i]['length'][1] \
-            else f"OPTIONAL MATCH ({node_names[i]})-[{edge_names[i]}]-({node_names[i+1]})" \
+            f"OPTIONAL MATCH ({node_names[i]})-[{edge_names[i]}*{edges[i]['length'][0]}..{edges[i]['length'][-1]}]-{node_strings[i+1]}" if not edges[i]['length'][0]==edges[i]['length'][1] \
+            else f"OPTIONAL MATCH ({node_names[i]})-[{edge_names[i]}]-{node_strings[i+1]}" 
             for i in range(edge_count)]
 
         # generate WHERE command string to prune paths to those containing the desired nodes/node types
@@ -186,18 +201,18 @@ class Question():
             for node_conditions_union in node_conditions_intersection]\
             for node_idx, node_conditions_intersection in enumerate(nodes_conditions)]
         edge_cond_strings = [f"NOT {e}.predicate_id='omnicorp:1'" for e in edge_names]
-        where_strings = [f"WHERE {node_cond_strings[0][0]}"] + [f"WHERE {' AND '.join([e]+c)}" for e, c in zip(edge_cond_strings, node_cond_strings[1:])]
+        where_strings = [""] + [f"WHERE {e}" for e in edge_cond_strings]
         match_string = ' '.join([f"{m} {w}" for m, w in zip(match_strings, where_strings)])
         return match_string
 
-    def cypher(self):
+    def cypher(self, db):
         '''
         Generate a Cypher query to extract the portion of the Knowledge Graph necessary to answer the question.
 
         Returns the query as a string.
         '''
 
-        match_string = self.cypher_match_string()
+        match_string = self.cypher_match_string(db)
 
         # generate internal node and edge variable names
         node_names = ['n{:d}'.format(i) for i in range(len(self.nodes))]
@@ -213,11 +228,10 @@ class Question():
         # return subgraphs matching query
         query_string = ' '.join([match_string, answer_return_string])
 
-        logger.debug(query_string)
         return query_string
 
-    def subgraph_with_support(self):
-        match_string = self.cypher_match_string()
+    def subgraph_with_support(self, db):
+        match_string = self.cypher_match_string(db)
 
         # generate internal node and edge variable names
         node_names = ['n{:d}'.format(i) for i in range(len(self.nodes))]

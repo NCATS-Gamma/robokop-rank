@@ -21,12 +21,18 @@ class KnowledgeGraph:
 
         return query_graph
 
+    def get_map_for_type(self, type):
+        result = self.session.run(f"MATCH (n:{type}) WHERE NOT 'Concept' IN labels(n) AND NOT 'Type' in labels(n) RETURN n")
+        records = list(result)
+        ids = [r['n'].properties['id'] for r in records]
+        synsets = [r['n'].properties['equivalent_identifiers'] for r in records]
+        return {syn:id for id, synset in zip(ids,synsets) for syn in synset}
 
     def query(self, question):
         if isinstance(question, str):
             query_string = question
         else:
-            query_string = question.cypher()
+            query_string = question.cypher(self)
 
         logger.debug('Running query... ')
         start = time.time()
