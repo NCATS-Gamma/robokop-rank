@@ -115,7 +115,7 @@ class Question():
 
         # compute scores with NAGA, export to json
         pr = Ranker(answer_set_subgraph)
-        score_struct, subgraphs = pr.report_scores_dict(subgraphs) # returned subgraphs are sorted by rank
+        score_struct, subgraphs = pr.report_ranking(subgraphs) # returned subgraphs are sorted by rank
         
         question_info = {
             'question_hash': self.compute_hash(),
@@ -124,7 +124,7 @@ class Question():
         aset = Answerset(question_info=question_info)
         for substruct, subgraph in zip(score_struct, subgraphs):
             graph = UniversalGraph(nodes=substruct['nodes'], edges=substruct['edges'])
-            graph.merge_multiedges()
+            #graph.merge_multiedges()
             graph.to_answer_walk(subgraph)
 
             answer = Answer(nodes=graph.nodes,\

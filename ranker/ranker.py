@@ -25,7 +25,7 @@ class Ranker:
     G = nx.MultiDiGraph() # a networkx Digraph() with weights
     graphInfo = {} # will be populated on construction
     naga_parameters = {'alpha':.9, 'beta':.9}
-    prescreen_count = 2000 # only look at this many graphs more in depth
+    prescreen_count = 5 # only look at this many graphs more in depth
     teleport_weight = 0.001 # probability to teleport along graph (make random inference) in hitting time calculation
 
     def __init__(self, G=nx.MultiDiGraph()):
@@ -47,10 +47,12 @@ class Ranker:
         
         # apply logistic function to publications to get weights
         weights = {edge:1/(1 + np.exp((5-pub_counts[edge])/2)) for edge in pub_counts}
+        
         nx.set_edge_attributes(self.G, values=weights, name='weight')
         
         # initialize scoring info
         scoring_info = {edge:{'num_pubs':pub_counts[edge], 'pub_weight': weights[edge]} for edge in pub_counts}
+        
         nx.set_edge_attributes(self.G, values=scoring_info, name = 'scoring')
         
     def sum_edge_weights(self, sub_graph):
@@ -79,6 +81,7 @@ class Ranker:
         
         if len(prescreen_sorting) > self.prescreen_count:
             prescreen_sorting = prescreen_sorting[0:self.prescreen_count]
+            prescreen_scores_sorted = prescreen_scores_sorted[0:self.prescreen_count]
 
         sub_graph_list = [sub_graph_list[i] for i in prescreen_sorting]
         logger.debug(f"{time.time()-start} seconds elapsed.")
@@ -94,7 +97,7 @@ class Ranker:
             for e in sg:
                 if e['id'] is None:
                     e['id'] = 'None'
-                    
+
         hitting_times = [self.compute_hitting_time(sg) for sg in sub_graph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
@@ -110,17 +113,34 @@ class Ranker:
         
         ranking_sorting, ranking_scores_sorted = zip(*sorted(enumerate(ranking_scores), key = lambda elem: elem[1], reverse=True))
         sub_graph_list = [sub_graph_list[i] for i in ranking_sorting]
+        
+        sub_graph_scores = [{'rank_score':ranking_scores[i],'pre_score':prescreen_scores_sorted[i]} for i in ranking_sorting]
+        
+        sorted_inds = [prescreen_sorting[i] for i in ranking_sorting]
+
+        return (sub_graph_scores, sub_graph_list)
+
+    def report_ranking(self,sub_graph_list):
+        # construct the output that question.py expects
+
+        (sub_graph_scores, sub_graph_list) = self.rank(sub_graph_list)
 
         # add extra computed metadata in self.G to subgraph for display
         logger.debug("Extracting subgraphs... ")
         start = time.time()
         sub_graphs_meta = [self.G.subgraph([s['id'] if s['id'] is not None else 'None' for s in sub_graph]) for sub_graph in sub_graph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
-        
-        scoring_info = [{'rank_score':ranking_scores[i],'pre_score':prescreen_scores_sorted[i]} for i in ranking_sorting]
-        
-        sorted_inds = [prescreen_sorting[i] for i in ranking_sorting]
-        return (scoring_info, sub_graphs_meta, sorted_inds)
+
+        report = []
+        for i, sg in enumerate(sub_graphs_meta):
+            sgr = dict()
+            sgr['score'] = sub_graph_scores[i]
+            sgr['nodes'] = list(sg.nodes(data=True))
+            sgr['edges'] = list(sg.edges(data=True))
+            
+            report.append(sgr)
+
+        return (report, sub_graph_list)
 
     def compute_hitting_time(self, sub_graph):
         # sub_graph is a list of dicts with fields 'id' and 'bound'
@@ -129,24 +149,38 @@ class Ranker:
         node_ids = [s['id'] for s in sub_graph]
         sub_graph_update = self.G.subgraph(node_ids)
         
-        sg_nodes = sub_graph_update.nodes(data=True)
+        nodes = sub_graph_update.nodes(data=True)
 
         # get updated weights
-        sub_graph_update = sub_graph_update.subgraph([s[0] for s in sg_nodes])
-        
+        sub_graph_update = sub_graph_update.subgraph([s[0] for s in nodes])
+        sub_graph_update = sub_graph_update.to_undirected()
+
         # calculate hitting time of last node from first node
-        L = nx.laplacian_matrix(sub_graph_update.to_undirected(),nodelist = node_ids)
-        L = np.array(L.todense())
-        
-        # add teleportation to allow leaps of faith
+        #logger.debug(json.dumps(node_ids))
+        #L = nx.laplacian_matrix(sub_graph_update.to_undirected(),nodelist = node_ids)
+        #L = np.array(L.todense())
+
+        # compute graph laplacian for this case with potentially duplicated nodes (None may be duplicated)
         n = len(node_ids)
+        L = np.zeros((n,n))
+        index = {id:node_ids.index(id) for id in node_ids}
+        for u,v,w in sub_graph_update.edges_iter(data='weight'):
+            if u is not v and (u in node_ids) and (v in node_ids):
+                i, j = index[u], index[v]
+                L[i,j] = -w
+                L[j,i] = -w
+                L[i,i] = L[i,i] + w
+                L[j,j] = L[j,j] + w
+
+        # add teleportation to allow leaps of faith
         L = L + self.teleport_weight * (n*np.eye(n)-np.ones((n,n)))
         
         L[-1,:] = 0
         L[-1,-1] = 1
-        b = np.transpose(1 - L[-1,:])
+        b = np.zeros(n)
+        b[0] = 1
         x = np.linalg.solve(L,b)
-        hitting_time = max(x)
+        hitting_time = x[1]
         
         return hitting_time
 
@@ -240,39 +274,6 @@ class Ranker:
             self._evaluated_templates[template] = (len(edge_weights), max(edge_weights) if edge_weights else 0)
 
         return self._evaluated_templates[template]
-
-    def plot(self):
-        pos = nx.nx_agraph.graphviz_layout(self.G, prog='dot')
-        nx.draw(self.G, pos=pos, with_labels=True, font_weight='normal', node_color=[0,.5,1], node_size=700, node_shape='s')
-        plot_weights = [e[3]['weight'] for e in self.G.edges(data=True,keys=True)]
-        nx.draw_networkx_edges(self.G, pos, alpha=np.array(plot_weights))
-
-        plt.show()
-
-    def report_scores_dict(self, node_sets):
-        scoring_info, sub_graphs, idx = self.rank(node_sets)
-
-        report = []
-        for i, sg in enumerate(sub_graphs):
-            sgr = dict()
-            sgr['score'] = scoring_info[i]
-            sgr['nodes'] = list(sg.nodes(data=True))
-            sgr['edges'] = list(sg.edges(data=True))
-
-            report.append(sgr)
-
-        sorted_node_sets = [node_sets[i] for i in idx]
-
-        return (report, sorted_node_sets)
-
-    def report_scores(self, sub_graphs):
-        return json.dumps(self.report_scores_dict(sub_graphs))
-
-    def report_scores_write(self, sub_graphs, output_file):
-        json_dump = self.report_scores(sub_graphs)
-
-        with open(output_file, 'wt') as json_out:
-            json_out.write(json_dump)
 
     def factTemplate(self, fact, bound):
         """ Convert queried fact into its corresponding template. A template is
