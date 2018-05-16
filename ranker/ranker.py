@@ -25,7 +25,7 @@ class Ranker:
     G = nx.MultiDiGraph() # a networkx Digraph() with weights
     graphInfo = {} # will be populated on construction
     naga_parameters = {'alpha':.9, 'beta':.9}
-    prescreen_count = 5 # only look at this many graphs more in depth
+    prescreen_count = 2000 # only look at this many graphs more in depth
     teleport_weight = 0.001 # probability to teleport along graph (make random inference) in hitting time calculation
 
     def __init__(self, G=nx.MultiDiGraph()):
@@ -33,28 +33,60 @@ class Ranker:
         self._evaluated_templates = {}
         self._result_count = -1
 
-    def set_weights(self):
-        self.set_weights_pubs()
-
-    def set_weights_pubs(self):
+    def set_weights(self,method='logistic'):
         """ Initialize weights on the graph based on metadata.
             Currently just counts # of publications and applies a hand tuned logistic.
         """
-
-        pmids = nx.get_edge_attributes(self.G, 'publications')
-        # pub_counts = {edge:max(len(pmids[edge]),1) for edge in pmids}
-        pub_counts = {edge:len(pmids[edge]) for edge in pmids}
+        # notation: edge contains metadata, e is edge without metadata
+        edges = self.G.edges(data=True,keys=True)
+        pub_counts = {edge[:-1]:len(edge[-1]['publications']) for edge in edges}
         
-        # apply logistic function to publications to get weights
-        weights = {edge:1/(1 + np.exp((5-pub_counts[edge])/2)) for edge in pub_counts}
-        
-        nx.set_edge_attributes(self.G, values=weights, name='weight')
-        
-        # initialize scoring info
-        scoring_info = {edge:{'num_pubs':pub_counts[edge], 'pub_weight': weights[edge]} for edge in pub_counts}
-        
+        # initialize scoring info - ngd initializes to Inf so that weight becomes zero
+        scoring_info = {e:{'num_pubs':pub_counts[e],'ngd':np.Inf} for e in pub_counts}
         nx.set_edge_attributes(self.G, values=scoring_info, name = 'scoring')
-        
+
+        if method == 'logistic':
+            # apply logistic function to publications to get weights
+            weights = {e:1/(1 + np.exp((5-pub_counts[e])/2)) for e in pub_counts}
+
+        elif method == 'ngd':
+            # this method assumes a format on the omni-corp edges
+            # it likely will set all the weights to zeros if something goes wrong
+            N = 1e8
+            omni_edges = [edge for edge in edges if 'edge_source' in edge[-1] and edge[-1]['edge_source'] == 'omnicorp.term_to_term']
+            mean_ngd = 1e-8
+            if len(omni_edges)==0:
+                logger.warning("Zero omni edges found for sub-graph. Weights will be zeros")
+
+            for edge in omni_edges:
+                count0 = int(self.G.node[edge[0]]['omnicorp_article_count'])
+                count1 = int(self.G.node[edge[1]]['omnicorp_article_count'])
+                edge_count = edge[-1]['scoring']['num_pubs']
+
+                # formula for normalized google distance
+                ngd = (np.log(min(count0,count1)) - np.log(edge_count))/ \
+                    (np.log(N) - np.log(max(count0,count1)))
+                
+                # this shouldn't happen but theoretically could
+                if ngd < 0:
+                    ngd = 0
+
+                edge[-1]['scoring']['ngd'] = ngd
+                mean_ngd = mean_ngd + ngd
+
+            mean_ngd = mean_ngd/len(edges)
+            logger.debug(f"Mean ngd: {mean_ngd}")
+
+            # ngd is like a metric, we need a similarity
+            # common way to do this is with a gaussian kernel
+            weights = {edge[:-1]:np.exp(-(edge[-1]['scoring']['ngd']/mean_ngd)**2/2) for edge in edges}
+
+        else:
+            raise Exception('Method ' + method + ' has not been implemented.')
+
+        # set the weights on the edges
+        nx.set_edge_attributes(self.G, values=weights, name='weight')
+
     def sum_edge_weights(self, sub_graph):
         sub_graph_update = self.G.subgraph([s['id'] for s in sub_graph])
         edges = sub_graph_update.edges(data='weight')
@@ -67,11 +99,26 @@ class Ranker:
         if not sub_graph_list:
             return ([],[],[])
 
+        # add the none node to G 
+        if 'None' in self.G:
+            logger.error("Node None already exists in G. This could cause incorrect ranking results.")
+        else:
+            self.G.add_node('None') # must add the none node to correspond to None id's
+        
+        # convert None nodes to string None and check that all the subgraph nodes are in G
+        for sg in sub_graph_list:
+            for node in sg:
+                if node['id'] is None:
+                    node['id'] = 'None'
+                if node['id'] not in self.G:
+                    raise KeyError('Node id:' + node['id'] + ' does not exist in the graph G')
+
+
         min_nodes = max(0, min([len(sg) for sg in sub_graph_list])-1)
         
         logger.debug('set_weights()... ')
         start = time.time()
-        self.set_weights()
+        self.set_weights(method='ngd')
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
         logger.debug("Prescreening sub_graph_list... ")
@@ -88,28 +135,15 @@ class Ranker:
 
         logger.debug("compute_hitting_times()... ")
         start = time.time()
-        if 'None' in self.G:
-            logger.error("Node None already exists in G. This could cause incorrect ranking results.")
-        else:
-            self.G.add_node('None') # must add the none node to correspond to None id's
         
-        for sg in sub_graph_list:
-            for e in sg:
-                if e['id'] is None:
-                    e['id'] = 'None'
-
         hitting_times = [self.compute_hitting_time(sg) for sg in sub_graph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
-        logger.debug("score(method='naga')... ")
-        start = time.time()
-        scores_naga = [self.score(sg, method='naga')**(1/min_nodes) for sg in sub_graph_list]
-        logger.debug(f"{time.time()-start} seconds elapsed.")
+        #min_hit = min(hitting_times)
+        hit_comparison = self.compute_hitting_time_comparison(sub_graph_list)
+        ranking_scores = [hit_comparison/h for h in hitting_times]
         
-        min_hit = min(hitting_times)
-        scores_hit = [min_hit/h for h in hitting_times]
-        
-        ranking_scores = [np.sqrt(sn*sh) for (sn,sh) in zip(scores_naga, scores_hit)]
+        #ranking_scores = [np.sqrt(sn*sh) for (sn,sh) in zip(scores_naga, scores_hit)]
         
         ranking_sorting, ranking_scores_sorted = zip(*sorted(enumerate(ranking_scores), key = lambda elem: elem[1], reverse=True))
         sub_graph_list = [sub_graph_list[i] for i in ranking_sorting]
@@ -130,19 +164,33 @@ class Ranker:
         start = time.time()
         sub_graphs_meta = [self.G.subgraph([s['id'] if s['id'] is not None else 'None' for s in sub_graph]) for sub_graph in sub_graph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
-
+        
         report = []
         for i, sg in enumerate(sub_graphs_meta):
+
+            # re-sort the nodes in the sub-graph according to the node_list and remove None nodes
+            node_list = sub_graph_list[i]
+            nodes = list(sg.nodes(data=True))
+            ids = [n[0] for n in nodes]
+            nodes = [nodes[ids.index(n['id'])][-1] for n in node_list if n['id'] is not 'None']
+            
+            edges = list(sg.edges(data=True))
+            edges = [e[-1] for e in edges]
+
             sgr = dict()
             sgr['score'] = sub_graph_scores[i]
-            sgr['nodes'] = list(sg.nodes(data=True))
-            sgr['edges'] = list(sg.edges(data=True))
+            sgr['nodes'] = nodes
+            sgr['edges'] = edges
             
             report.append(sgr)
 
         return (report, sub_graph_list)
 
-    def compute_hitting_time(self, sub_graph):
+    def compute_hitting_time(self,sub_graph):
+        L = self.compute_graph_laplacian(sub_graph)
+        return self.compute_hitting_time_from_laplacian(L)
+
+    def compute_graph_laplacian(self, sub_graph):
         # sub_graph is a list of dicts with fields 'id' and 'bound'
 
         # get updated weights
@@ -174,15 +222,24 @@ class Ranker:
 
         # add teleportation to allow leaps of faith
         L = L + self.teleport_weight * (n*np.eye(n)-np.ones((n,n)))
+        return L
+
+    def compute_hitting_time_comparison(self, sub_graph_list):
+        """ create a prototypical graph to compare hitting times against.
+        For now, we use a fully connected graph with weights 1/2
+        """
+        w = 0.5
+        n = int(np.round(np.mean([len(s) for s in sub_graph_list])))
+        L = w * (n*np.eye(n) - np.ones((n,n)))
+        return self.compute_hitting_time_from_laplacian(L)
         
+    def compute_hitting_time_from_laplacian(self,L):
         L[-1,:] = 0
         L[-1,-1] = 1
-        b = np.zeros(n)
+        b = np.zeros(L.shape[0])
         b[0] = 1
         x = np.linalg.solve(L,b)
-        hitting_time = x[1]
-        
-        return hitting_time
+        return x[1]
 
     def score(self, sub_graph, method='naga'):
         """ Assign a score to a specific subGraph
