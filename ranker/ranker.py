@@ -17,7 +17,6 @@ import time
 import scipy.sparse as sparse
 from scipy.sparse.linalg.eigen.arpack import ArpackNoConvergence
 import numpy.linalg
-import scipy.linalg
 
 logger = logging.getLogger(__name__)
 
@@ -39,10 +38,10 @@ class Ranker:
         """
         # notation: edge contains metadata, e is edge without metadata
         edges = self.G.edges(data=True,keys=True)
-        pub_counts = {edge[:-1]:len(edge[-1]['publications']) for edge in edges}
+        pub_counts = {edge[:-1]:len(edge[-1]['publications']) if 'publications' in edge[-1] else 0 for edge in edges}
         
-        # initialize scoring info - ngd initializes to Inf so that weight becomes zero
-        scoring_info = {e:{'num_pubs':pub_counts[e],'ngd':np.Inf} for e in pub_counts}
+        # initialize scoring info - ngd initializes to big number (np.inf not well-liked) so that weight becomes zero
+        scoring_info = {e:{'num_pubs':pub_counts[e],'ngd':1e6} for e in pub_counts}
         nx.set_edge_attributes(self.G, values=scoring_info, name = 'scoring')
 
         if method == 'logistic':
@@ -50,22 +49,32 @@ class Ranker:
             weights = {e:1/(1 + np.exp((5-pub_counts[e])/2)) for e in pub_counts}
 
         elif method == 'ngd':
-            # this method assumes a format on the omni-corp edges
-            # it likely will set all the weights to zeros if something goes wrong
-            N = 1e8
-            omni_edges = [edge for edge in edges if 'edge_source' in edge[-1] and edge[-1]['edge_source'] == 'omnicorp.term_to_term']
-            mean_ngd = 1e-8
-            if len(omni_edges)==0:
-                logger.warning("Zero omni edges found for sub-graph. Weights will be zeros")
+            # this method tries to use omnicorp's article counts to normalize probabilities in a meaningful way
+            nodes = self.G.nodes()
+            node_pub_sum = {n:sum([edge[-1]['scoring']['num_pubs'] for edge in self.G.edges(n,data=True)]) for n in nodes}
+            
+            N = 1e8 # approximate number of articles in corpus * typical number of keywords
+            default_article_node_count = 25000 # large but typical number of article counts for a node
 
-            for edge in omni_edges:
-                count0 = int(self.G.node[edge[0]]['omnicorp_article_count'])
-                count1 = int(self.G.node[edge[1]]['omnicorp_article_count'])
+            mean_ngd = 1e-8
+            node_count = [0, 0]
+            for edge in edges:
+                for i in range(2):
+                    if 'omnicorp_article_count' in self.G.node[edge[i]]:
+                        node_count[i] = int(self.G.node[edge[i]]['omnicorp_article_count'])
+                    else:
+                        node_count[i] = default_article_node_count
+                
+                # make sure the node counts are at least as great as the sum of pubs along the edges we have
+                node_count[i] = max(node_count[i],node_pub_sum[edge[i]])
+
                 edge_count = edge[-1]['scoring']['num_pubs']
+                if edge_count < 1:
+                    edge_count = 1
 
                 # formula for normalized google distance
-                ngd = (np.log(min(count0,count1)) - np.log(edge_count))/ \
-                    (np.log(N) - np.log(max(count0,count1)))
+                ngd = (np.log(min(node_count)) - np.log(edge_count))/ \
+                    (np.log(N) - np.log(max(node_count)))
                 
                 # this shouldn't happen but theoretically could
                 if ngd < 0:
@@ -98,6 +107,11 @@ class Ranker:
 
         if not sub_graph_list:
             return ([],[],[])
+        
+        logger.debug('set_weights()... ')
+        start = time.time()
+        self.set_weights(method='logistic')
+        logger.debug(f"{time.time()-start} seconds elapsed.")
 
         # add the none node to G 
         if 'None' in self.G:
@@ -113,14 +127,6 @@ class Ranker:
                 if node['id'] not in self.G:
                     raise KeyError('Node id:' + node['id'] + ' does not exist in the graph G')
 
-
-        min_nodes = max(0, min([len(sg) for sg in sub_graph_list])-1)
-        
-        logger.debug('set_weights()... ')
-        start = time.time()
-        self.set_weights(method='ngd')
-        logger.debug(f"{time.time()-start} seconds elapsed.")
-
         logger.debug("Prescreening sub_graph_list... ")
         start = time.time()
         prescreen_scores = [self.sum_edge_weights(sg) for sg in sub_graph_list]
@@ -133,17 +139,18 @@ class Ranker:
         sub_graph_list = [sub_graph_list[i] for i in prescreen_sorting]
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
-        logger.debug("compute_hitting_times()... ")
+        logger.debug("Calculating subgraph statistics()... ")
         start = time.time()
         
-        hitting_times = [self.compute_hitting_time(sg) for sg in sub_graph_list]
+        graph_stat = [self.subgraph_statistic(sg,type='mix') for sg in sub_graph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
-        #min_hit = min(hitting_times)
-        hit_comparison = self.compute_hitting_time_comparison(sub_graph_list)
-        ranking_scores = [hit_comparison/h for h in hitting_times]
-        
-        #ranking_scores = [np.sqrt(sn*sh) for (sn,sh) in zip(scores_naga, scores_hit)]
+        graph_comparison = self.comparison_statistic(sub_graph_list,type='mix')
+        logger.debug(f"Comparison graph statistic: {graph_comparison}")
+
+        # larger hitting/mixing times are worse
+        logger.debug(graph_stat)
+        ranking_scores = [graph_comparison/s for s in graph_stat]
         
         ranking_sorting, ranking_scores_sorted = zip(*sorted(enumerate(ranking_scores), key = lambda elem: elem[1], reverse=True))
         sub_graph_list = [sub_graph_list[i] for i in ranking_sorting]
@@ -151,7 +158,7 @@ class Ranker:
         sub_graph_scores = [{'rank_score':ranking_scores[i],'pre_score':prescreen_scores_sorted[i]} for i in ranking_sorting]
         
         sorted_inds = [prescreen_sorting[i] for i in ranking_sorting]
-
+        
         return (sub_graph_scores, sub_graph_list)
 
     def report_ranking(self,sub_graph_list):
@@ -186,11 +193,31 @@ class Ranker:
 
         return (report, sub_graph_list)
 
-    def compute_hitting_time(self,sub_graph):
-        L = self.compute_graph_laplacian(sub_graph)
-        return self.compute_hitting_time_from_laplacian(L)
+    def subgraph_statistic(self,sub_graph,type='hit'):
+        L = self.graph_laplacian(sub_graph)
+        if type=='hit':
+            x = self.hitting_time_from_laplacian(L)
+        elif type=='mix':
+            x = self.mixing_time_from_laplacian(L)
+        
+        return x
+        
+    def comparison_statistic(self, sub_graph_list, type='hit'):
+        """ create a prototypical graph to compare hitting times against.
+        For now, we use a fully connected graph with weights 1/2
+        """
+        w = 0.5
+        n = int(np.round(np.mean([len(s) for s in sub_graph_list])))
+        L = w * (n*np.eye(n) - np.ones((n,n)))
 
-    def compute_graph_laplacian(self, sub_graph):
+        if type=='hit':
+            x = self.hitting_time_from_laplacian(L)
+        elif type=='mix':
+            x = self.mixing_time_from_laplacian(L)
+        
+        return x
+
+    def graph_laplacian(self, sub_graph):
         # sub_graph is a list of dicts with fields 'id' and 'bound'
 
         # get updated weights
@@ -223,23 +250,38 @@ class Ranker:
         # add teleportation to allow leaps of faith
         L = L + self.teleport_weight * (n*np.eye(n)-np.ones((n,n)))
         return L
-
-    def compute_hitting_time_comparison(self, sub_graph_list):
-        """ create a prototypical graph to compare hitting times against.
-        For now, we use a fully connected graph with weights 1/2
-        """
-        w = 0.5
-        n = int(np.round(np.mean([len(s) for s in sub_graph_list])))
-        L = w * (n*np.eye(n) - np.ones((n,n)))
-        return self.compute_hitting_time_from_laplacian(L)
         
-    def compute_hitting_time_from_laplacian(self,L):
+    def hitting_time_from_laplacian(self,L):
+        # assume L is square
         L[-1,:] = 0
         L[-1,-1] = 1
         b = np.zeros(L.shape[0])
         b[0] = 1
         x = np.linalg.solve(L,b)
         return x[1]
+
+    def mixing_time_from_laplacian(self,L):
+        # assume L is square
+        n = L.shape[0]
+        g = max(np.diag(L))
+        if g < 1e-8 or not np.isfinite(g):
+            return np.Inf
+
+        # uniformitization into discrete time chain
+        P = np.eye(n) - L/g
+        try: # always put other people's code inside a try catch loop
+            ev = numpy.linalg.eigvals(P)
+        except:
+            # this should never happen for nonzero teleportation
+            logger.debug("Eigenvalue computation failed for P:")
+            for i in range(n):
+                logger.debug(P[i,:])
+            return np.Inf
+
+        ev = np.abs(ev)
+        ev.sort() # sorts ascending
+
+        return 1/(1 - ev[-2])/g
 
     def score(self, sub_graph, method='naga'):
         """ Assign a score to a specific subGraph
