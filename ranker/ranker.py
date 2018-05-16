@@ -33,28 +33,60 @@ class Ranker:
         self._evaluated_templates = {}
         self._result_count = -1
 
-    def set_weights(self):
-        self.set_weights_pubs()
-
-    def set_weights_pubs(self):
+    def set_weights(self,method='logistic'):
         """ Initialize weights on the graph based on metadata.
             Currently just counts # of publications and applies a hand tuned logistic.
         """
-
-        pmids = nx.get_edge_attributes(self.G, 'publications')
-        # pub_counts = {edge:max(len(pmids[edge]),1) for edge in pmids}
-        pub_counts = {edge:len(pmids[edge]) for edge in pmids}
+        # notation: edge contains metadata, e is edge without metadata
+        edges = self.G.edges(data=True,keys=True)
+        pub_counts = {edge[:-1]:len(edge[-1]['publications']) for edge in edges}
         
-        # apply logistic function to publications to get weights
-        weights = {edge:1/(1 + np.exp((5-pub_counts[edge])/2)) for edge in pub_counts}
-        
-        nx.set_edge_attributes(self.G, values=weights, name='weight')
-        
-        # initialize scoring info
-        scoring_info = {edge:{'num_pubs':pub_counts[edge], 'pub_weight': weights[edge]} for edge in pub_counts}
-        
+        # initialize scoring info - ngd initializes to Inf so that weight becomes zero
+        scoring_info = {e:{'num_pubs':pub_counts[e],'ngd':np.Inf} for e in pub_counts}
         nx.set_edge_attributes(self.G, values=scoring_info, name = 'scoring')
-        
+
+        if method == 'logistic':
+            # apply logistic function to publications to get weights
+            weights = {e:1/(1 + np.exp((5-pub_counts[e])/2)) for e in pub_counts}
+
+        elif method == 'ngd':
+            # this method assumes a format on the omni-corp edges
+            # it likely will set all the weights to zeros if something goes wrong
+            N = 1e8
+            omni_edges = [edge for edge in edges if 'edge_source' in edge[-1] and edge[-1]['edge_source'] == 'omnicorp.term_to_term']
+            mean_ngd = 1e-8
+            if len(omni_edges)==0:
+                logger.warning("Zero omni edges found for sub-graph. Weights will be zeros")
+
+            for edge in omni_edges:
+                count0 = int(self.G.node[edge[0]]['omnicorp_article_count'])
+                count1 = int(self.G.node[edge[1]]['omnicorp_article_count'])
+                edge_count = edge[-1]['scoring']['num_pubs']
+
+                # formula for normalized google distance
+                ngd = (np.log(min(count0,count1)) - np.log(edge_count))/ \
+                    (np.log(N) - np.log(max(count0,count1)))
+                
+                # this shouldn't happen but theoretically could
+                if ngd < 0:
+                    ngd = 0
+
+                edge[-1]['scoring']['ngd'] = ngd
+                mean_ngd = mean_ngd + ngd
+
+            mean_ngd = mean_ngd/len(edges)
+            logger.debug(f"Mean ngd: {mean_ngd}")
+
+            # ngd is like a metric, we need a similarity
+            # common way to do this is with a gaussian kernel
+            weights = {edge[:-1]:np.exp(-(edge[-1]['scoring']['ngd']/mean_ngd)**2/2) for edge in edges}
+
+        else:
+            raise Exception('Method ' + method + ' has not been implemented.')
+
+        # set the weights on the edges
+        nx.set_edge_attributes(self.G, values=weights, name='weight')
+
     def sum_edge_weights(self, sub_graph):
         sub_graph_update = self.G.subgraph([s['id'] for s in sub_graph])
         edges = sub_graph_update.edges(data='weight')
@@ -86,7 +118,7 @@ class Ranker:
         
         logger.debug('set_weights()... ')
         start = time.time()
-        self.set_weights()
+        self.set_weights(method='ngd')
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
         logger.debug("Prescreening sub_graph_list... ")
@@ -107,15 +139,11 @@ class Ranker:
         hitting_times = [self.compute_hitting_time(sg) for sg in sub_graph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
-        logger.debug("score(method='naga')... ")
-        start = time.time()
-        scores_naga = [self.score(sg, method='naga')**(1/min_nodes) for sg in sub_graph_list]
-        logger.debug(f"{time.time()-start} seconds elapsed.")
+        #min_hit = min(hitting_times)
+        hit_comparison = self.compute_hitting_time_comparison(sub_graph_list)
+        ranking_scores = [hit_comparison/h for h in hitting_times]
         
-        min_hit = min(hitting_times)
-        scores_hit = [min_hit/h for h in hitting_times]
-        
-        ranking_scores = [np.sqrt(sn*sh) for (sn,sh) in zip(scores_naga, scores_hit)]
+        #ranking_scores = [np.sqrt(sn*sh) for (sn,sh) in zip(scores_naga, scores_hit)]
         
         ranking_sorting, ranking_scores_sorted = zip(*sorted(enumerate(ranking_scores), key = lambda elem: elem[1], reverse=True))
         sub_graph_list = [sub_graph_list[i] for i in ranking_sorting]
@@ -158,7 +186,11 @@ class Ranker:
 
         return (report, sub_graph_list)
 
-    def compute_hitting_time(self, sub_graph):
+    def compute_hitting_time(self,sub_graph):
+        L = self.compute_graph_laplacian(sub_graph)
+        return self.compute_hitting_time_from_laplacian(L)
+
+    def compute_graph_laplacian(self, sub_graph):
         # sub_graph is a list of dicts with fields 'id' and 'bound'
 
         # get updated weights
@@ -190,15 +222,24 @@ class Ranker:
 
         # add teleportation to allow leaps of faith
         L = L + self.teleport_weight * (n*np.eye(n)-np.ones((n,n)))
+        return L
+
+    def compute_hitting_time_comparison(self, sub_graph_list):
+        """ create a prototypical graph to compare hitting times against.
+        For now, we use a fully connected graph with weights 1/2
+        """
+        w = 0.5
+        n = int(np.round(np.mean([len(s) for s in sub_graph_list])))
+        L = w * (n*np.eye(n) - np.ones((n,n)))
+        return self.compute_hitting_time_from_laplacian(L)
         
+    def compute_hitting_time_from_laplacian(self,L):
         L[-1,:] = 0
         L[-1,-1] = 1
-        b = np.zeros(n)
+        b = np.zeros(L.shape[0])
         b[0] = 1
         x = np.linalg.solve(L,b)
-        hitting_time = x[1]
-        
-        return hitting_time
+        return x[1]
 
     def score(self, sub_graph, method='naga'):
         """ Assign a score to a specific subGraph
