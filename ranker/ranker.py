@@ -26,15 +26,17 @@ class Ranker:
     naga_parameters = {'alpha':.9, 'beta':.9}
     prescreen_count = 2000 # only look at this many graphs more in depth
     teleport_weight = 0.001 # probability to teleport along graph (make random inference) in hitting time calculation
-
+    output_count = 250
+    
     def __init__(self, G=nx.MultiDiGraph()):
         self.G = G
         self._evaluated_templates = {}
         self._result_count = -1
 
-    def set_weights(self,method='logistic'):
+    def set_weights(self,method='ngd'):
         """ Initialize weights on the graph based on metadata.
-            Currently just counts # of publications and applies a hand tuned logistic.
+            logistic just counts # of publications and applies a hand tuned logistic.
+            ngd uses the omnicorp_article_count on the edges to generate normalized google distance weights.
         """
         # notation: edge contains metadata, e is edge without metadata
         edges = self.G.edges(data=True,keys=True)
@@ -58,7 +60,7 @@ class Ranker:
             minimum_article_node_count = 1000 # assume every concept actually has at least this many publications we may or may not know about
 
             mean_ngd = 1e-8
-            node_count = [0, 0]
+            node_count = [minimum_article_node_count]*2
             for edge in edges:
                 for i in range(2):
                     if 'omnicorp_article_count' in self.G.node[edge[i]]:
@@ -148,7 +150,6 @@ class Ranker:
         logger.debug(f"Comparison graph statistic: {graph_comparison}")
 
         # larger hitting/mixing times are worse
-        logger.debug(graph_stat)
         ranking_scores = [graph_comparison/s for s in graph_stat]
         
         ranking_sorting, ranking_scores_sorted = zip(*sorted(enumerate(ranking_scores), key = lambda elem: elem[1], reverse=True))
@@ -157,7 +158,12 @@ class Ranker:
         sub_graph_scores = [{'rank_score':ranking_scores[i],'pre_score':prescreen_scores_sorted[i]} for i in ranking_sorting]
         
         sorted_inds = [prescreen_sorting[i] for i in ranking_sorting]
-        
+
+        # trim output
+        if len(sub_graph_list) > self.output_count:
+            sub_graph_list = sub_graph_list[:self.output_count]
+            sub_graph_scores = sub_graph_scores[:self.output_count]
+            
         return (sub_graph_scores, sub_graph_list)
 
     def report_ranking(self,sub_graph_list):
