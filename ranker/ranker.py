@@ -55,6 +55,7 @@ class Ranker:
             
             N = 1e8 # approximate number of articles in corpus * typical number of keywords
             default_article_node_count = 25000 # large but typical number of article counts for a node
+            minimum_article_node_count = 1000 # assume every concept actually has at least this many publications we may or may not know about
 
             mean_ngd = 1e-8
             node_count = [0, 0]
@@ -66,12 +67,10 @@ class Ranker:
                         node_count[i] = default_article_node_count
                 
                 # make sure the node counts are at least as great as the sum of pubs along the edges we have
-                node_count[i] = max(node_count[i],node_pub_sum[edge[i]])
-
-                edge_count = edge[-1]['scoring']['num_pubs']
-                if edge_count < 1:
-                    edge_count = 1
-
+                node_count[i] = max(node_count[i],node_pub_sum[edge[i]],minimum_article_node_count)
+                
+                edge_count = edge[-1]['scoring']['num_pubs'] + 1 # avoid log(0) problem
+                
                 # formula for normalized google distance
                 ngd = (np.log(min(node_count)) - np.log(edge_count))/ \
                     (np.log(N) - np.log(max(node_count)))
@@ -110,7 +109,7 @@ class Ranker:
         
         logger.debug('set_weights()... ')
         start = time.time()
-        self.set_weights(method='logistic')
+        self.set_weights(method='ngd')
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
         # add the none node to G 
