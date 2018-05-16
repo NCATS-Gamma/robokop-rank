@@ -19,7 +19,7 @@ from ranker.answer import Answer, Answerset
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..', 'robokop-rank'))
 from ranker.ranker import Ranker
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("robokop.question")
 
 class Question():
     '''
@@ -154,8 +154,13 @@ class Question():
             prop_string = ''
         return f"({var_name}:{concept}{prop_string})"
 
-    def cypher_match_string(self, db=None):
+    def edge_match_string(self, edge_struct, var_name):
+        if not edge_struct['length'][0]==edge_struct['length'][1]:
+            return f"[{var_name}*{edge_struct['length'][0]}..{edge_struct['length'][-1]}]"
+        else:
+            return f"[{var_name}]"
 
+    def cypher_match_string(self, db=None):
         nodes, edges = self.nodes, self.edges
 
         node_count = len(nodes)
@@ -167,42 +172,21 @@ class Question():
 
         node_strings = [self.node_match_string(node, name, db) for node, name in zip(nodes, node_names)]
 
-        nodes_conditions = []
-        for node in nodes:
-            node_conditions = []
-            if 'identifiers' in node and node['identifiers']:
-                node_conditions.append([{'prop':'id', 'val':node_id, 'op':'=', 'cond':True} for node_id in node['identifiers']])
-            if 'type' in node and node['type']:
-                node_conditions.append([{'prop':'node_type', 'val':node['type'].replace(' ', ''), 'op':'=', 'cond':True}])
-            nodes_conditions += [node_conditions]
-
         # generate MATCH command string to get paths of the appropriate size
         match_strings = [f"MATCH {node_strings[0]}"]
-        match_strings += [
-            f"OPTIONAL MATCH ({node_names[i]})-[{edge_names[i]}*{edges[i]['length'][0]}..{edges[i]['length'][-1]}]-{node_strings[i+1]}" if not edges[i]['length'][0]==edges[i]['length'][1] \
-            else f"OPTIONAL MATCH ({node_names[i]})-[{edge_names[i]}]-{node_strings[i+1]}" 
-            for i in range(edge_count)]
+        for i in range(edge_count):
+            match_strings.append(f"OPTIONAL MATCH ({node_names[i]})-{self.edge_match_string(edges[i], edge_names[i])}-{node_strings[i+1]}")
+            match_strings.append(f"WHERE NOT {edge_names[i]}.predicate_id='omnicorp:1'")
+        if 'identifiers' in nodes[-1] and nodes[-1]['identifiers']:
+            match_strings.insert(1,f"MATCH ({node_names[-1]})")
+            for i in range(edge_count-1, -1, -1):
+                match_strings.append(f"OPTIONAL MATCH ({node_names[i]})-{self.edge_match_string(edges[i], f'{edge_names[i]}2')}-({node_names[i-1]})")
+                match_strings.append(f"WHERE NOT {edge_names[i]}2.predicate_id='omnicorp:1'")
+            case_strings = [f"CASE WHEN {e} IS null THEN {e}2 WHEN {e}2 IS null THEN {e} ELSE null" for e in edge_names]
+            with_string = f"WITH {' '.join(case_strings)}"
+            match_strings.append(with_string)
 
-        # generate WHERE command string to prune paths to those containing the desired nodes/node types
-        nodes_conditions = [
-            [
-                [
-                    {
-                        k:(node_condition[k] if k != 'cond'\
-                        else '' if node_condition[k]\
-                        else 'NOT ')\
-                        for k in node_condition
-                    } for node_condition in node_conditions_union
-                ] for node_conditions_union in node_conditions_intersection
-            ] for node_conditions_intersection in nodes_conditions
-        ]
-        node_cond_strings = [['('+' OR '.join([f"{node_condition['cond']}{node_names[node_idx]}.{node_condition['prop']}{node_condition['op']}'{node_condition['val']}'"\
-            for node_condition in node_conditions_union])+')'\
-            for node_conditions_union in node_conditions_intersection]\
-            for node_idx, node_conditions_intersection in enumerate(nodes_conditions)]
-        edge_cond_strings = [f"NOT {e}.predicate_id='omnicorp:1'" for e in edge_names]
-        where_strings = [""] + [f"WHERE {e}" for e in edge_cond_strings]
-        match_string = ' '.join([f"{m} {w}" for m, w in zip(match_strings, where_strings)])
+        match_string = ' '.join(match_strings)
         return match_string
 
     def cypher(self, db):
