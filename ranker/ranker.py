@@ -26,15 +26,17 @@ class Ranker:
     naga_parameters = {'alpha':.9, 'beta':.9}
     prescreen_count = 2000 # only look at this many graphs more in depth
     teleport_weight = 0.001 # probability to teleport along graph (make random inference) in hitting time calculation
-
+    output_count = 250
+    
     def __init__(self, G=nx.MultiDiGraph()):
         self.G = G
         self._evaluated_templates = {}
         self._result_count = -1
 
-    def set_weights(self,method='logistic'):
+    def set_weights(self,method='ngd'):
         """ Initialize weights on the graph based on metadata.
-            Currently just counts # of publications and applies a hand tuned logistic.
+            logistic just counts # of publications and applies a hand tuned logistic.
+            ngd uses the omnicorp_article_count on the edges to generate normalized google distance weights.
         """
         # notation: edge contains metadata, e is edge without metadata
         edges = self.G.edges(data=True,keys=True)
@@ -55,9 +57,10 @@ class Ranker:
             
             N = 1e8 # approximate number of articles in corpus * typical number of keywords
             default_article_node_count = 25000 # large but typical number of article counts for a node
+            minimum_article_node_count = 1000 # assume every concept actually has at least this many publications we may or may not know about
 
             mean_ngd = 1e-8
-            node_count = [0, 0]
+            node_count = [minimum_article_node_count]*2
             for edge in edges:
                 for i in range(2):
                     if 'omnicorp_article_count' in self.G.node[edge[i]]:
@@ -65,13 +68,11 @@ class Ranker:
                     else:
                         node_count[i] = default_article_node_count
                 
-                # make sure the node counts are at least as great as the sum of pubs along the edges we have
-                node_count[i] = max(node_count[i],node_pub_sum[edge[i]])
-
-                edge_count = edge[-1]['scoring']['num_pubs']
-                if edge_count < 1:
-                    edge_count = 1
-
+                    # make sure the node counts are at least as great as the sum of pubs along the edges we have
+                    node_count[i] = max(node_count[i],node_pub_sum[edge[i]],minimum_article_node_count)
+                
+                edge_count = edge[-1]['scoring']['num_pubs'] + 1 # avoid log(0) problem
+                
                 # formula for normalized google distance
                 ngd = (np.log(min(node_count)) - np.log(edge_count))/ \
                     (np.log(N) - np.log(max(node_count)))
@@ -110,7 +111,7 @@ class Ranker:
         
         logger.debug('set_weights()... ')
         start = time.time()
-        self.set_weights(method='logistic')
+        self.set_weights(method='ngd')
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
         # add the none node to G 
@@ -149,7 +150,6 @@ class Ranker:
         logger.debug(f"Comparison graph statistic: {graph_comparison}")
 
         # larger hitting/mixing times are worse
-        logger.debug(graph_stat)
         ranking_scores = [graph_comparison/s for s in graph_stat]
         
         ranking_sorting, ranking_scores_sorted = zip(*sorted(enumerate(ranking_scores), key = lambda elem: elem[1], reverse=True))
@@ -158,7 +158,12 @@ class Ranker:
         sub_graph_scores = [{'rank_score':ranking_scores[i],'pre_score':prescreen_scores_sorted[i]} for i in ranking_sorting]
         
         sorted_inds = [prescreen_sorting[i] for i in ranking_sorting]
-        
+
+        # trim output
+        if len(sub_graph_list) > self.output_count:
+            sub_graph_list = sub_graph_list[:self.output_count]
+            sub_graph_scores = sub_graph_scores[:self.output_count]
+            
         return (sub_graph_scores, sub_graph_list)
 
     def report_ranking(self,sub_graph_list):
@@ -282,143 +287,3 @@ class Ranker:
         ev.sort() # sorts ascending
 
         return 1/(1 - ev[-2])/g
-
-    def score(self, sub_graph, method='naga'):
-        """ Assign a score to a specific subGraph
-        sub_graph is a sub_graph of self.G with specification of bounded and unbounded nodes."""
-        # sub_graph is a list of dicts with fields 'id' and 'bound'
-        
-        sub_graph_update = self.G.subgraph([s['id'] for s in sub_graph])
-        edges = list(sub_graph_update.edges(keys=True,data=True))
-
-        # nodes_bound = nx.get_node_attributes(self.G,'bound')
-        nodes_bound = {n['id']:n['bound'] for n in sub_graph}
-        
-        result_count = self.count_result_templates()
-        
-        sub_graph_score = 0.0
-        for edge in edges:
-            
-            from_node = edge[0]
-            to_node = edge[1]
-            
-            # support edges influence weights only in full graph transition matrix
-            if edge[-1]['type']=='Support' or edge[-1]['type']=='Lookup':
-                continue
-
-            # sum weights along other edges connecting these nodes
-            edge_weight = sum([e['weight'] if 'weight' in e else 0 for (key, e) in self.G[from_node][to_node].items()])
-
-            if method=='prod':
-                edge_proba = edge_weight
-
-            elif method=='naga':
-                
-                # confidence probability determined by edge weight
-                proba_conf = edge_weight
-                
-                # return the count of instances of this template, as well as the total weights of all
-                # facts corresponding to this template
-
-                # TODO: deal with bound edges, whatever that means
-                # False below was once edge[-1]['bound']
-                edge_bound = (nodes_bound[from_node], nodes_bound[to_node], False)
-                edge_template = self.factTemplate(edge, edge_bound)
-                [template_count, template_weight] = self.eval_fact_template(edge_template,field='num_pubs')
-                
-                # query importance is lower for those with more options
-                proba_query = 1 - template_count/result_count
-                
-                # informativeness probability depends upon which parts of the fact are bound/unbound
-                informativeness_weight = edge[-1]['scoring']['num_pubs']
-                if template_weight is 0:
-                    proba_info = 1
-                else:
-                    proba_info = informativeness_weight/template_weight
-                
-                edge_proba = (1-self.naga_parameters['alpha']) * proba_query + self.naga_parameters['alpha'] * (
-                    (1-self.naga_parameters['beta']) * proba_info + self.naga_parameters['beta'] * proba_conf)
-                
-            else:
-                raise ValueError
-
-            sub_graph_score = sub_graph_score + np.log(edge_proba)
-
-        sub_graph_score = np.exp(sub_graph_score)
-
-        return sub_graph_score
-
-    def count_result_templates(self):
-        if self._result_count < 0:
-            edge_types = nx.get_edge_attributes(self.G,'type')
-            self._result_count = len([t for t in edge_types.values() if not t == 'Support'])
-
-        return self._result_count
-
-    def eval_fact_template(self,template,field):
-        ''' Evaluate the counts and total weights of all facts in the graph matching this template.
-        Evaluated template combinations are stored in a dict to avoid repeated computations.
-        '''
-        if template not in self._evaluated_templates:
-            # need to compute counts and weights for this template on the graph
-            # enumerate the facts (edges) matching the given template
-            edges = self.G.edges(data=True,keys=True)
-            cond = lambda e: ((template[0] is None or template[0] == e[0])
-                and  (template[1] is None or template[1] == e[1])
-                and  (template[2] is None or template[2] == e[2])
-                and not e[-1]['type']=='Support')
-
-            edge_weights = [e[-1]['scoring'][field] for e in edges if cond(e)]
-
-            self._evaluated_templates[template] = (len(edge_weights), max(edge_weights) if edge_weights else 0)
-
-        return self._evaluated_templates[template]
-
-    def factTemplate(self, fact, bound):
-        """ Convert queried fact into its corresponding template. A template is
-        a tuple with unbound parts of the fact replaced with None. None is used since None
-        cannot be used as keys in networkx.
-        """
-        return tuple([f if b else None for (f,b) in zip(fact,bound)])
-
-class ProtocopFact:
-    """ Holds a "fact" representing a connection between two nodes
-        Everything is stored as indices referenced to another graph
-    """
-    node_from = 0
-    node_to = 0
-    key = ''
-
-    from_bound = False
-    to_bound = False
-    edge_bound = False
-    def __init__(self, **kwargs):
-        for k in kwargs:
-            setattr(self, k, kwargs[k])
-
-    def template(self):
-        """ Convert queried fact into its corresponding template. A template is
-        a tuple with unbound parts of the fact replaced with None. None is used since None
-        cannot be used as keys in networkx.
-        """
-        fact = [self.node_from, self.node_to, self.key]
-        bound = [self.from_bound, self.to_bound, self.edge_bound]
-        return tuple([f if b else None for (f,b) in zip(fact,bound)])
-
-    def to_dict(self, G):
-        fact = dict()
-        fact['node_from'] = G.nodes(data=True)[self.node_from]
-        fact['node_to'] = G.nodes(data=True)[self.node_to]
-        fact['edge'] = G[self.node_from][self.node_to][self.key]
-
-        return fact
-
-    def to_json(self, G):
-
-        return json.dumps(self.to_dict(G))
-
-    def __str__(self):
-        return "{0}--({1})-->{2}".format(self.node_from, self.key, self.node_to)
-
-    def __repr__(self):
-        return self.__str__()
