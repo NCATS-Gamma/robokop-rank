@@ -44,8 +44,7 @@ def answer_question(self, question):
         self.update_state(state='ANSWERS FOUND')
         logger.info("Answers found.")
     else:
-        logger.exception("Question answering completed: no answers found.")
-        raise ValueError("Question answering completed: no answers found.")
+        raise ValueError("Question answering complete, found 0 answers.")
 
     logger.info("Done answering.")
     return answerset
