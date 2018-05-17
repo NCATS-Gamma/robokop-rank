@@ -175,18 +175,24 @@ class Question():
         # generate MATCH command string to get paths of the appropriate size
         match_strings = [f"MATCH ({node_strings[0]})"]
         for i in range(edge_count):
-            match_strings.append(f"OPTIONAL MATCH ({node_names[i]})-{self.edge_match_string(edges[i], edge_names[i])}-({node_strings[i+1] if i+1<edge_count else node_names[i+1]})")
+            match_strings.append(f"MATCH ({node_names[i]})-{self.edge_match_string(edges[i], edge_names[i])}-({node_strings[i+1] if i+1<edge_count else node_names[i+1]})")
             match_strings.append(f"WHERE NOT {edge_names[i]}.predicate_id='omnicorp:1'")
-        if 'identifiers' in nodes[-1] and nodes[-1]['identifiers']:
-            node_strings2 = [self.node_match_string(node, name+'b', db) for node, name in zip(nodes, node_names)]
-            match_strings.insert(1,f"MATCH ({node_strings2[-1]})")
-            for i in range(edge_count-1, -1, -1):
-                match_strings.append(f"OPTIONAL MATCH ({node_names[i+1]+('b' if i==-1 else '')})-{self.edge_match_string(edges[i], f'{edge_names[i]}b')}-({node_strings2[i]})")
-                match_strings.append(f"WHERE NOT {edge_names[i]}b.predicate_id='omnicorp:1'")
-            match_strings.append(f"AND {node_names[0]}={node_names[0]}b")
-            case_strings = [f"CASE WHEN {n} IS null THEN {n}b WHEN {n}b IS null THEN {n} ELSE null" for n in node_names]
-            with_string = f"WITH {' '.join(case_strings)}"
-            match_strings.append(with_string)
+
+        # optional matches are super slow, for some reason
+        # match_strings = [f"MATCH ({node_strings[0]})"]
+        # for i in range(edge_count):
+        #     match_strings.append(f"OPTIONAL MATCH ({node_names[i]})-{self.edge_match_string(edges[i], edge_names[i])}-({node_strings[i+1] if i+1<edge_count else node_names[i+1]})")
+        #     match_strings.append(f"WHERE NOT {edge_names[i]}.predicate_id='omnicorp:1'")
+        # if 'identifiers' in nodes[-1] and nodes[-1]['identifiers']:
+        #     node_strings2 = [self.node_match_string(node, name+'b', db) for node, name in zip(nodes, node_names)]
+        #     match_strings.insert(1,f"MATCH ({node_strings[-1]})")
+        #     for i in range(edge_count-1, -1, -1):
+        #         match_strings.append(f"OPTIONAL MATCH ({node_names[i+1]+('b' if not i==edge_count-1 else '')})-{self.edge_match_string(edges[i], f'{edge_names[i]}b')}-({node_strings2[i]})")
+        #         match_strings.append(f"WHERE NOT {edge_names[i]}b.predicate_id='omnicorp:1'")
+        #     match_strings.append(f"AND {node_names[0]}={node_names[0]}b")
+        #     case_strings = [f"CASE WHEN {n} IS null THEN {n}b WHEN {n}b IS null THEN {n} ELSE null END AS {n}" for n in node_names[:-1]] + ['n6']
+        #     with_string = f"WITH {', '.join(case_strings)}"
+        #     match_strings.append(with_string)
 
         match_string = ' '.join(match_strings)
         return match_string
