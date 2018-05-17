@@ -152,7 +152,7 @@ class Question():
             prop_string = f" {{id:'{id}'}}"
         else:
             prop_string = ''
-        return f"({var_name}:{concept}{prop_string})"
+        return f"{var_name}:{concept}{prop_string}"
 
     def edge_match_string(self, edge_struct, var_name):
         if not edge_struct['length'][0]==edge_struct['length'][1]:
@@ -173,16 +173,18 @@ class Question():
         node_strings = [self.node_match_string(node, name, db) for node, name in zip(nodes, node_names)]
 
         # generate MATCH command string to get paths of the appropriate size
-        match_strings = [f"MATCH {node_strings[0]}"]
+        match_strings = [f"MATCH ({node_strings[0]})"]
         for i in range(edge_count):
-            match_strings.append(f"OPTIONAL MATCH ({node_names[i]})-{self.edge_match_string(edges[i], edge_names[i])}-{node_strings[i+1]}")
+            match_strings.append(f"OPTIONAL MATCH ({node_names[i]})-{self.edge_match_string(edges[i], edge_names[i])}-({node_strings[i+1]})")
             match_strings.append(f"WHERE NOT {edge_names[i]}.predicate_id='omnicorp:1'")
         if 'identifiers' in nodes[-1] and nodes[-1]['identifiers']:
+            node_strings2 = [self.node_match_string(node, name+'b', db) for node, name in zip(nodes, node_names)]
             match_strings.insert(1,f"MATCH ({node_names[-1]})")
             for i in range(edge_count-1, -1, -1):
-                match_strings.append(f"OPTIONAL MATCH ({node_names[i]})-{self.edge_match_string(edges[i], f'{edge_names[i]}2')}-({node_names[i-1]})")
-                match_strings.append(f"WHERE NOT {edge_names[i]}2.predicate_id='omnicorp:1'")
-            case_strings = [f"CASE WHEN {e} IS null THEN {e}2 WHEN {e}2 IS null THEN {e} ELSE null" for e in edge_names]
+                match_strings.append(f"OPTIONAL MATCH ({node_names[i]+('b' if i==-1 else '')})-{self.edge_match_string(edges[i], f'{edge_names[i]}b')}-({node_strings2[i-1]})")
+                match_strings.append(f"WHERE NOT {edge_names[i]}b.predicate_id='omnicorp:1'")
+            match_strings.append(f"AND {node_strings[0]}={node_strings2[0]}")
+            case_strings = [f"CASE WHEN {n} IS null THEN {n}b WHEN {n}b IS null THEN {n} ELSE null" for n in node_names]
             with_string = f"WITH {' '.join(case_strings)}"
             match_strings.append(with_string)
 
