@@ -93,7 +93,7 @@ class Question():
     def relevant_subgraph(self):
         # get the subgraph relevant to the question from the knowledge graph
         database = KnowledgeGraph()
-        subgraph_networkx = database.queryToGraph(self.subgraph_with_support())
+        subgraph_networkx = database.queryToGraph(self.subgraph_with_support(database))
         del database
         subgraph = UniversalGraph(subgraph_networkx)
         return {"nodes":subgraph.nodes,\
