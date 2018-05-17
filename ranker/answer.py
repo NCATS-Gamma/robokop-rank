@@ -207,7 +207,6 @@ def standardize_edge(edge):
     target_id
     type
     '''
-    print(edge)
     output = {
         'confidence': edge['weight'],
         'origin_list': edge['edge_source'],
@@ -228,7 +227,6 @@ def standardize_node(node):
     symbol
     type
     '''
-    print(node)
     output = {
         'accession': 'accession',
         'description': node['name'],
