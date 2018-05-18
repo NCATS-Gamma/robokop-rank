@@ -110,7 +110,7 @@ class Ranker:
         # sub_graph_list is a list of lists of dicts with fields 'id' and 'bound'
 
         if not sub_graph_list:
-            return ([],[],[])
+            return ([],[])
         
         logger.debug('set_weights()... ')
         start = time.time()
