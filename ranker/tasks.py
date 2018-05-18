@@ -9,6 +9,7 @@ from celery import Celery, signals
 from kombu import Queue
 
 from ranker.api.setup import app
+from ranker.question import NoAnswersException
 
 # set up Celery
 app.config['broker_url'] = f'redis://{os.environ["REDIS_HOST"]}:{os.environ["REDIS_PORT"]}/{os.environ["MANAGER_REDIS_DB"]}'
@@ -37,6 +38,9 @@ def answer_question(self, question):
 
     try:
         answerset = question.answer()
+    except NoAnswersException as err:
+        logger.debug(err)
+        raise err
     except Exception as err:
         logger.exception(f"Something went wrong with question answering: {err}")
         raise err
@@ -44,7 +48,7 @@ def answer_question(self, question):
         self.update_state(state='ANSWERS FOUND')
         logger.info("Answers found.")
     else:
-        raise ValueError("Question answering complete, found 0 answers.")
+        raise NoAnswersException("Question answering complete, found 0 answers.")
 
     logger.info("Done answering.")
     return answerset

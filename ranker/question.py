@@ -21,6 +21,9 @@ from ranker.ranker import Ranker
 
 logger = logging.getLogger(__name__)
 
+class NoAnswersException(Exception):
+    pass
+
 class Question():
     '''
     Represents a question such as "What genetic condition provides protection against disease X?"
@@ -146,7 +149,10 @@ class Question():
         if 'identifiers' in node_struct and node_struct['identifiers']:
             if db:
                 id_map = db.get_map_for_type(concept)
-                id = id_map[node_struct['identifiers'][0]]
+                try:
+                    id = id_map[node_struct['identifiers'][0]]
+                except KeyError:
+                    raise NoAnswersException("Question answering complete, found 0 answers.")
             else:
                 id = node_struct['identifiers'][0]
             prop_string = f" {{id:'{id}'}}"
