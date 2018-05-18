@@ -166,6 +166,37 @@ class IDMap(Resource):
 
 api.add_resource(IDMap, '/id_map/<concept>')
 
+class MapID(Resource):
+    def post(self, concept, identifier):
+        """
+        Get canonical id, IF AVAILABLE IN NEO4J CACHE
+        ---
+        parameters:
+          - in: path
+            name: concept
+            description: Biolink concept
+            type: string
+            required: true
+          - in: path
+            name: identifier
+            description: curie
+            type: string
+            required: true
+        responses:
+            200:
+                description: Knowledge subgraph
+                schema:
+                    type: string
+        """
+
+        database = KnowledgeGraph()
+        id_map = database.get_map_for_type(concept)
+        del database
+
+        return id_map[identifier], 200
+
+api.add_resource(MapID, '/canonicalize/<concept>/<identifier>')
+
 if __name__ == '__main__':
 
     # Get host and port from environmental variables
