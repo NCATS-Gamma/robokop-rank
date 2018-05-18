@@ -11,8 +11,9 @@ from ranker.api.logging_config import logger
 from ranker.question import Question
 from ranker.tasks import answer_question
 import ranker.api.definitions
+import ranker.api.logging_config
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("ranker")
 
 class AnswerQuestion(Resource):
     def post(self):
@@ -50,7 +51,6 @@ class AnswerQuestion(Resource):
                         $ref: '#/definitions/Question'
         """
         question = Question(request.json)
-        logger.debug(question.cypher_match_string())
         answer = answer_question.apply(args=[question]).result
         if isinstance(answer, BaseException):
             return "No answers", 204
