@@ -12,6 +12,7 @@ from ranker.question import Question
 from ranker.tasks import answer_question
 import ranker.api.definitions
 import ranker.api.logging_config
+from ranker.knowledgegraph import KnowledgeGraph
 
 logger = logging.getLogger("ranker")
 
@@ -138,6 +139,32 @@ class QuestionSubgraph(Resource):
         return subgraph, 200
 
 api.add_resource(QuestionSubgraph, '/subgraph')
+
+class IDMap(Resource):
+    def post(self, concept):
+        """
+        Get id map
+        ---
+        parameters:
+          - in: path
+            name: concept
+            description: Biolink concept
+            type: string
+            required: true
+        responses:
+            200:
+                description: Knowledge subgraph
+                schema:
+                    type: object
+        """
+
+        database = KnowledgeGraph()
+        id_map = database.get_map_for_type(concept)
+        del database
+
+        return id_map, 200
+
+api.add_resource(IDMap, '/id_map/<concept>')
 
 if __name__ == '__main__':
 
