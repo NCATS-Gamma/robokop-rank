@@ -12,8 +12,8 @@ from ranker.api.setup import app
 from ranker.question import NoAnswersException
 
 # set up Celery
-app.config['broker_url'] = f'redis://{os.environ["REDIS_HOST"]}:{os.environ["REDIS_PORT"]}/{os.environ["MANAGER_REDIS_DB"]}'
-app.config['result_backend'] = f'redis://{os.environ["REDIS_HOST"]}:{os.environ["REDIS_PORT"]}/{os.environ["MANAGER_REDIS_DB"]}'
+app.config['broker_url'] = os.environ["CELERY_BROKER_URL"]
+app.config['result_backend'] = os.environ["CELERY_RESULT_BACKEND"]
 celery = Celery(app.name, broker=app.config['broker_url'])
 celery.conf.update(app.config)
 celery.conf.task_queues = (
