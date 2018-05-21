@@ -8,7 +8,7 @@ from flask_restful import Resource
 from flask import request
 from ranker.api.setup import app, api
 from ranker.api.logging_config import logger
-from ranker.question import Question
+from ranker.question import Question, NoAnswersException
 from ranker.tasks import answer_question
 import ranker.api.definitions
 import ranker.api.logging_config
@@ -133,8 +133,11 @@ class QuestionSubgraph(Resource):
         """
 
         question = Question(request.json)
-            
-        subgraph = question.relevant_subgraph()
+        
+        try:
+            subgraph = question.relevant_subgraph()
+        except NoAnswersException:
+            return "Question not found in neo4j cache.", 404
 
         return subgraph, 200
 

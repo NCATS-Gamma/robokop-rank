@@ -94,6 +94,9 @@ class Ranker:
         else:
             raise Exception('Method ' + method + ' has not been implemented.')
 
+        # make sure weights on edges are not nan valued - set them to zero otherwise
+        weights = {e:(weights[e] if np.isfinite(weights[e]) else 0) for e in weights}
+
         # set the weights on the edges
         nx.set_edge_attributes(self.G, values=weights, name='weight')
 
@@ -107,7 +110,7 @@ class Ranker:
         # sub_graph_list is a list of lists of dicts with fields 'id' and 'bound'
 
         if not sub_graph_list:
-            return ([],[],[])
+            return ([],[])
         
         logger.debug('set_weights()... ')
         start = time.time()
@@ -150,7 +153,10 @@ class Ranker:
         logger.debug(f"Comparison graph statistic: {graph_comparison}")
 
         # larger hitting/mixing times are worse
-        ranking_scores = [graph_comparison/s for s in graph_stat]
+        ranking_scores = [graph_comparison/s if s>0 else -1 for s in graph_stat]
+        
+        # Fail safe to nuke nans
+        ranking_scores = [r if np.isfinite(r) else -1 for r in ranking_scores]
         
         ranking_sorting, ranking_scores_sorted = zip(*sorted(enumerate(ranking_scores), key = lambda elem: elem[1], reverse=True))
         sub_graph_list = [sub_graph_list[i] for i in ranking_sorting]
@@ -213,6 +219,7 @@ class Ranker:
         """
         w = 0.5
         n = int(np.round(np.mean([len(s) for s in sub_graph_list])))
+        n = max(n,2)
         L = w * (n*np.eye(n) - np.ones((n,n)))
 
         if type=='hit':
@@ -270,10 +277,10 @@ class Ranker:
         n = L.shape[0]
         g = max(np.diag(L))
         if g < 1e-8 or not np.isfinite(g):
-            return np.Inf
+            return -1
 
         # uniformitization into discrete time chain
-        P = np.eye(n) - L/g
+        P = np.eye(n) - L/g/2
         try: # always put other people's code inside a try catch loop
             ev = numpy.linalg.eigvals(P)
         except:
@@ -281,7 +288,7 @@ class Ranker:
             logger.debug("Eigenvalue computation failed for P:")
             for i in range(n):
                 logger.debug(P[i,:])
-            return np.Inf
+            return -1
 
         ev = np.abs(ev)
         ev.sort() # sorts ascending
