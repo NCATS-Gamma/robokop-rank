@@ -9,6 +9,7 @@ import sys
 from flask import Flask, Blueprint
 from flask_restful import Api
 from flasgger import Swagger
+from flask_cors import CORS
 
 app = Flask(__name__, static_folder='../pack', template_folder='../templates')
 # Set default static folder to point to parent static folder where all
@@ -17,6 +18,7 @@ app = Flask(__name__, static_folder='../pack', template_folder='../templates')
 
 api_blueprint = Blueprint('api', __name__, url_prefix='/api')
 api = Api(api_blueprint)
+CORS(app)
 app.register_blueprint(api_blueprint)
 
 template = {
