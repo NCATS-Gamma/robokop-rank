@@ -16,6 +16,67 @@ from ranker.knowledgegraph import KnowledgeGraph
 
 logger = logging.getLogger("ranker")
 
+class QueryTemplate(Resource):
+    def post(self):
+        """
+        Query
+        ---
+        tags:
+          - "query"
+        summary: "Query RTX using a predefined question type"
+        description: ""
+        operationId: "query"
+        consumes:
+          - "application/json"
+        produces:
+          - "application/json"
+        parameters:
+          - in: "body"
+            name: "body"
+            description: "Query information to be submitted"
+            required: true
+            schema:
+                $ref: "#/definitions/Query"
+        responses:
+            200:
+                description: "successful operation"
+                schema:
+                    $ref: "#/definitions/Response"
+            400:
+                description: "Invalid status value"
+        """
+        if not request.json['known_query_type_id'] == 'Q3':
+            return f"I don't know what a '{request.json['known_query_type_id']} is.", 200
+        drug_id = request.json['terms']['chemical_substance']
+        q_json = {
+            "edges": [
+                {
+                "end": 1,
+                "start": 0
+                }
+            ],
+            "nodes": [
+                {
+                "id": 0,
+                "identifiers": [
+                    drug_id
+                ],
+                "type": "chemical_substance"
+                },
+                {
+                "id": 1,
+                "type": "gene"
+                }
+            ]
+        }
+        question = Question(q_json)
+        answer = answer_question.apply(args=[question]).result
+        if isinstance(answer, BaseException):
+            return "No answers", 200
+        return answer.toStandard(), 200
+
+api.add_resource(QueryTemplate, '/query')
+
 class AnswerQuestion(Resource):
     def post(self):
         """

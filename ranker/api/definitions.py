@@ -1,6 +1,54 @@
 from ranker.api.setup import swagger
 from ranker.api.util import FromDictMixin
 
+@swagger.definition('Query')
+class Query():
+    """
+    type: "object"
+    properties:
+      original_question:
+        type: "string"
+        example: "what genetic conditions offer protection against malaria"
+        description: "Original question as it was typed in by the user"
+      restated_question:
+        type: "string"
+        example: "Which genetic conditions may offer protection against malaria?"
+        description: "Restatement of the question as understood by the translator"
+      message:
+        type: "string"
+        example: "Your question was understood."
+        description: "Response from the translation engine to the user"
+      known_query_type_id:
+        type: "string"
+        example: "Q1"
+        description: "RTX identifier for the specific query type"
+      bypass_cache:
+        type: "string"
+        example: "true"
+        description: "Set to true in order to bypass any possible cached response and try to answer the query over again"
+      max_results:
+        type: "integer"
+        example: "100"
+        description: "Maximum number of individual results to return"
+      page_size:
+        type: "integer"
+        example: 100
+        description: "Split the results into pages with this number of results each"
+      page_number:
+        type: "integer"
+        example: 1
+        description: "Page number of results when the number of results exceeds the page_size"
+      terms:
+        type: "object"
+        description: "Dict of terms needed by the specific query type"
+        properties:
+          disease:
+            type: "string"
+            example: "malaria"
+        additionalProperties: true
+    """
+    pass
+    
 @swagger.definition('Node')
 class Node(FromDictMixin):
     """
