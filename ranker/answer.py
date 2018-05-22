@@ -54,8 +54,7 @@ class Answerset():
         id
         message
         original_question_text
-        restated_question_text
-        result_code
+        response_code
         result_list
         '''
         json = self.toJSON()
@@ -63,11 +62,10 @@ class Answerset():
         output = {
             'context': 'context',
             'datetime': json['timestamp'],
-            'id': 'uid',
+            'id': '',
             'message': f"{len(self.answers)} potential answers found.",
             'original_question_text': natural_question,
-            'restated_question_text': f"An improved version of '{natural_question}'?",
-            'result_code': 'OK' if self.answers else 'EMPTY',
+            'response_code': 'OK' if self.answers else 'EMPTY',
             'result_list': [a.toStandard() for a in self.answers]
         }
         return output
@@ -157,6 +155,7 @@ class Answer():
                 node_attributes
                 symbol
                 type
+        result_type
         text
         '''
         json = self.toJSON()
@@ -167,6 +166,7 @@ class Answer():
                 'node_list': [standardize_node(n) for n in json['nodes']],
                 'edge_list': [standardize_edge(e) for e in json['edges']]
             },
+            'result_type': 'individual query answer',
             'text': generate_summary(json['nodes'], json['edges'])
         }
         return output
@@ -176,6 +176,7 @@ def generate_summary(nodes, edges):
     summary = nodes[0]['name']
     latest_node_id = nodes[0]['id']
     node_ids = [n['id'] for n in nodes]
+    edges = [e for e in edges if not e['predicate'] == 'literature_co-occurrence']
     edge_starts = [e['start'] for e in edges]
     edge_ends = [e['end'] for e in edges]
     while True:
@@ -202,14 +203,14 @@ def generate_summary(nodes, edges):
 def standardize_edge(edge):
     '''
     confidence
-    origin_list
+    provided_by
     source_id
     target_id
     type
     '''
     output = {
         'confidence': edge['weight'],
-        'origin_list': edge['edge_source'],
+        'provided_by': edge['edge_source'],
         'source_id': edge['start'],
         'target_id': edge['end'],
         'type': edge['predicate'],
@@ -219,7 +220,6 @@ def standardize_edge(edge):
 
 def standardize_node(node):
     '''
-    accession
     description
     id
     name
@@ -228,12 +228,9 @@ def standardize_node(node):
     type
     '''
     output = {
-        'accession': 'accession',
         'description': node['name'],
         'id': node['id'],
-        'name': node['id'],
-        'node_attributes': None,
-        'symbol': None,
+        'name': node['name'],
         'type': node['node_type']
     }
     return output
