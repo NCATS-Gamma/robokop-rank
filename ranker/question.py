@@ -181,7 +181,6 @@ class Question():
         # generate MATCH command string to get paths of the appropriate size
         match_strings = []
         match_strings.append(f"MATCH ({node_strings[0]})")
-        match_strings.append(f"WHERE ({node_strings[0]})")
         for i in range(edge_count):
             match_strings.append(f"MATCH ({node_names[i]})-{self.edge_match_string(edges[i], edge_names[i])}-({node_strings[i+1]})")
             match_strings.append(f"WHERE NOT {edge_names[i]}.predicate_id='omnicorp:1'")
