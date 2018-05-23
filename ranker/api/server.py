@@ -4,6 +4,7 @@
 
 import os
 import logging
+from datetime import datetime
 from flask_restful import Resource
 from flask import request
 from ranker.api.setup import app, api
@@ -45,6 +46,7 @@ class QueryTemplate(Resource):
             400:
                 description: "Invalid status value"
         """
+        logger.debug(f"Received request {request.json}.")
         if not request.json['query_type_id'] == 'Q3':
             return f"I don't know what a '{request.json['query_type_id']} is.", 200
         drug_id = request.json['terms']['chemical_substance']
@@ -72,9 +74,17 @@ class QueryTemplate(Resource):
         question = Question(q_json)
         answerset = answer_question.apply(args=[question]).result
         if isinstance(answerset, BaseException):
-            return "No answers", 200
-        response = answerset.toStandard()
-        response.update(request.json)
+            response = {
+                'datetime': datetime.now().isoformat(),
+                'id': '',
+                'message': f"Found 0 answers.",
+                'response_code': 'OK',
+                'result_list': []
+            }
+        else:
+            response = answerset.toStandard()
+            response.update(request.json)
+        logger.debug(f"Prepared response {response}.")
         return response, 200
 
 api.add_resource(QueryTemplate, '/query')
