@@ -78,8 +78,7 @@ class QueryTemplate(Resource):
                 'datetime': datetime.now().isoformat(),
                 'id': '',
                 'message': f"Found 0 answers.",
-                'response_code': 'OK',
-                'result_list': []
+                'response_code': 'OK'
             }
         else:
             response = answerset.toStandard()
