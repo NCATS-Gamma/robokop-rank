@@ -2,6 +2,7 @@ celery
 eventlet
 flask
 flask-restful
+flask-cors
 flasgger
 flower
 gunicorn
