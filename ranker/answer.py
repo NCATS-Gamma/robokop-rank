@@ -16,7 +16,7 @@ class Answerset():
 
     def __init__(self, *args, **kwargs):
         self.answers = []
-        self.question_info = None
+        self.misc_info = None
         self.filename = None
         self.__idx = 0
         self.timestamp = datetime.datetime.now() # answer creation time
@@ -58,11 +58,11 @@ class Answerset():
         result_list
         '''
         json = self.toJSON()
-        natural_question = json['question_info']['natural_question']
+        natural_question = json['misc_info']['natural_question']
         output = {
             'datetime': json['timestamp'],
             'id': '',
-            'message': f"{len(self.answers)} potential answers found.",
+            'message': f"{self.misc_info['num_total_paths']} answers found. {len(self.answers)} returned.",
             'response_code': 'OK' if self.answers else 'EMPTY',
             'result_list': [a.toStandard() for a in self.answers]
         }

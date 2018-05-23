@@ -120,11 +120,12 @@ class Question():
         pr = Ranker(answer_set_subgraph)
         subgraphs_with_metadata, subgraphs = pr.report_ranking(subgraphs) # returned subgraphs are sorted by rank
         
-        question_info = {
+        misc_info = {
             'question_hash': self.compute_hash(),
-            'natural_question': self.natural_question
+            'natural_question': self.natural_question,
+            'num_total_paths': len(subgraphs)
         }
-        aset = Answerset(question_info=question_info)
+        aset = Answerset(misc_info=misc_info)
         #for substruct, subgraph in zip(score_struct, subgraphs):
         for subgraph in subgraphs_with_metadata:
             #graph = UniversalGraph(nodes=substruct['nodes'], edges=substruct['edges'])
