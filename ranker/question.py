@@ -150,11 +150,11 @@ class Question():
             if db:
                 id_map = db.get_map_for_type(concept)
                 try:
-                    id = id_map[node_struct['identifiers'][0]]
+                    id = id_map[node_struct['identifiers'][0].upper()]
                 except KeyError:
                     raise NoAnswersException("Question answering complete, found 0 answers.")
             else:
-                id = node_struct['identifiers'][0]
+                id = node_struct['identifiers'][0].upper()
             prop_string = f" {{id:'{id}'}}"
         else:
             prop_string = ''
@@ -179,7 +179,9 @@ class Question():
         node_strings = [self.node_match_string(node, name, db) for node, name in zip(nodes, node_names)]
 
         # generate MATCH command string to get paths of the appropriate size
-        match_strings = [f"MATCH ({node_strings[0]})"]
+        match_strings = []
+        match_strings.append(f"MATCH ({node_strings[0]})")
+        match_strings.append(f"WHERE ({node_strings[0]})")
         for i in range(edge_count):
             match_strings.append(f"MATCH ({node_names[i]})-{self.edge_match_string(edges[i], edge_names[i])}-({node_strings[i+1]})")
             match_strings.append(f"WHERE NOT {edge_names[i]}.predicate_id='omnicorp:1'")
