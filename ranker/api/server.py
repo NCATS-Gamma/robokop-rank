@@ -45,8 +45,8 @@ class QueryTemplate(Resource):
             400:
                 description: "Invalid status value"
         """
-        if not request.json['known_query_type_id'] == 'Q3':
-            return f"I don't know what a '{request.json['known_query_type_id']} is.", 200
+        if not request.json['query_type_id'] == 'Q3':
+            return f"I don't know what a '{request.json['query_type_id']} is.", 200
         drug_id = request.json['terms']['chemical_substance']
         q_json = {
             "edges": [
