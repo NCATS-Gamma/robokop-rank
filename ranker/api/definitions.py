@@ -122,7 +122,7 @@ class Query():
     properties:
       original_question:
         type: "string"
-        example: "what genetic conditions offer protection against malaria"
+        example: "What proteins are targeted by ibuprofen?"
         description: "Original question as it was typed in by the user"
       query_type_id:
         type: "string"
