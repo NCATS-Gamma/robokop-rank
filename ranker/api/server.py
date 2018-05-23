@@ -70,10 +70,12 @@ class QueryTemplate(Resource):
             ]
         }
         question = Question(q_json)
-        answer = answer_question.apply(args=[question]).result
-        if isinstance(answer, BaseException):
+        answerset = answer_question.apply(args=[question]).result
+        if isinstance(answerset, BaseException):
             return "No answers", 200
-        return answer.toStandard(), 200
+        response = answerset.toStandard()
+        response.update(request.json)
+        return response, 200
 
 api.add_resource(QueryTemplate, '/query')
 
