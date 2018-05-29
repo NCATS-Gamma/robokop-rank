@@ -1,5 +1,10 @@
+import logging
 from copy import deepcopy
 import networkx as nx
+
+import ranker.api.logging_config
+
+logger = logging.getLogger(__name__)
 
 class UniversalGraph:
     '''
