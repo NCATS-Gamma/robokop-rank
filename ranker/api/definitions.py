@@ -148,23 +148,22 @@ class Node(FromDictMixin):
     """
     Node Object
     ---
-    schema:
-        id: Node
-        required:
-            - id
-        properties:
-            id:
+    id: Node
+    required:
+        - id
+    properties:
+        id:
+            type: string
+            required: true
+        type:
+            type: string
+        name:
+            type: string
+        identifiers:
+            type: array
+            items:
                 type: string
-                required: true
-            type:
-                type: string
-            name:
-                type: string
-            identifiers:
-                type: array
-                items:
-                    type: string
-                default: []
+            default: []
     """
     def __init__(self, *args, **kwargs):
         self.id = None
@@ -232,22 +231,21 @@ class Edge(FromDictMixin):
     """
     Edge Object
     ---
-    schema:
-        id: Edge
-        required:
-            - start
-            - end
-        properties:
-            start:
-                type: string
-            end:
-                type: string
-            min_length:
-                type: integer
-                default: 1
-            max_length:
-                type: integer
-                default: 1
+    id: Edge
+    required:
+        - start
+        - end
+    properties:
+        start:
+            type: string
+        end:
+            type: string
+        min_length:
+            type: integer
+            default: 1
+        max_length:
+            type: integer
+            default: 1
     """
     def __init__(self, *args, **kwargs):
         self.start = None
@@ -265,34 +263,33 @@ class Question(FromDictMixin):
     """
     Question Object
     ---
-    schema:
-        id: Question
-        required:
-          - nodes
-          - edges
-        properties:
-            nodes:
-                type: array
-                items:
-                    $ref: '#/definitions/Node'
-            edges:
-                type: array
-                items:
-                    $ref: '#/definitions/Edge'
-        example:
-            nodes:
-              - id: 0
-                type: disease
-                identifiers: ["MONDO:0005737"]
-              - id: 1
-                type: gene
-              - id: 2
-                type: genetic_condition
-            edges:
-              - start: 0
-                end: 1
-              - start: 1
-                end: 2
+    id: Question
+    required:
+        - nodes
+        - edges
+    properties:
+        nodes:
+            type: array
+            items:
+                $ref: '#/definitions/Node'
+        edges:
+            type: array
+            items:
+                $ref: '#/definitions/Edge'
+    example:
+        nodes:
+            - id: 0
+            type: disease
+            identifiers: ["MONDO:0005737"]
+            - id: 1
+            type: gene
+            - id: 2
+            type: genetic_condition
+        edges:
+            - start: 0
+            end: 1
+            - start: 1
+            end: 2
     """
 
     def __init__(self, *args, **kwargs):
