@@ -87,14 +87,14 @@ class Result():
         example: "answer"
         description: "One of several possible result types: 'individual query answer', 'neighborhood graph', 'type summary graph'"
       result_graph:
-        $ref: "#/definitions/Result_graph"
+        $ref: "#/definitions/Graph"
     """
     pass
 
-@swagger.definition('Result_graph')
-class Result_graph():
+@swagger.definition('Graph')
+class Graph():
     """
-    Result_graph
+    Graph
     ---
     type: "object"
     description: "A thought graph associated with this result. This will commonly be a linear path subgraph from one concept to another, but related items aside of the path may be included."
@@ -106,7 +106,7 @@ class Result_graph():
       edge_list:
         type: "array"
         items:
-          $ref: "#/definitions/ResultEdge"
+          $ref: "#/definitions/Edge"
     """
     pass
 
@@ -278,17 +278,17 @@ class Question(FromDictMixin):
                 $ref: '#/definitions/Edge'
     example:
         nodes:
-            - id: 0
+          - id: 0
             type: disease
             identifiers: ["MONDO:0005737"]
-            - id: 1
+          - id: 1
             type: gene
-            - id: 2
+          - id: 2
             type: genetic_condition
         edges:
-            - start: 0
+          - start: 0
             end: 1
-            - start: 1
+          - start: 1
             end: 2
     """
 

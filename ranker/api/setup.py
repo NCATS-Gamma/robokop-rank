@@ -42,6 +42,6 @@ template = {
 }
 app.config['SWAGGER'] = {
     'title': 'ROBOKOP Ranker API',
-    'uiversion': 2 #3
+    'uiversion': 3
 }
 swagger = Swagger(app, template=template)

@@ -22,8 +22,7 @@ class QueryTemplate(Resource):
         """
         Query
         ---
-        tags:
-          - "query"
+        tags: [query]
         summary: "Query RTX using a predefined question type"
         description: ""
         operationId: "query"
@@ -93,6 +92,7 @@ class AnswerQuestion(Resource):
         """
         Get answers to a question
         ---
+        tags: [answer]
         parameters:
           - in: body
             name: question
@@ -136,6 +136,7 @@ class AnswerQuestionStandard(Resource):
         """
         Get answers to a question in standard format
         ---
+        tags: [answer]
         parameters:
           - in: body
             name: question
@@ -180,6 +181,7 @@ class QuestionSubgraph(Resource):
         """
         Get question subgraph
         ---
+        tags: [util]
         parameters:
           - in: body
             name: question
@@ -220,6 +222,7 @@ class IDMap(Resource):
         """
         Get id map
         ---
+        tags: [util]
         parameters:
           - in: path
             name: concept
@@ -246,6 +249,7 @@ class MapID(Resource):
         """
         Get canonical id, IF AVAILABLE IN NEO4J CACHE
         ---
+        tags: [util]
         parameters:
           - in: path
             name: concept
