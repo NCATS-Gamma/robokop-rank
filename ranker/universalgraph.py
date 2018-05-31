@@ -34,15 +34,15 @@ class UniversalGraph:
         node_ids = [node['id'] for node in self.nodes]
         edges = []
         for edge in self.edges:
-            start_node_ids = [node_id for node_id in node_ids if node_id==edge['start']]
-            end_node_ids = [node_id for node_id in node_ids if node_id==edge['end']]
+            start_node_ids = [node_id for node_id in node_ids if node_id==edge['source_id']]
+            end_node_ids = [node_id for node_id in node_ids if node_id==edge['target_id']]
             node_pairs = [(start_node_id, end_node_id)\
                 for end_node_id in end_node_ids\
                 for start_node_id in start_node_ids]
             for i, node_pair in enumerate(node_pairs):
                 edge = dict(edge)
-                edge['from'] = node_pair[0]
-                edge['to'] = node_pair[1]
+                edge['source_id'] = node_pair[0]
+                edge['target_id'] = node_pair[1]
                 edge['id'] = '{}_{:02d}'.format(edge['id'], i)
                 edges += [edge,]
         self.edges = edges
@@ -62,10 +62,10 @@ class UniversalGraph:
                     graph.add_node(node['id'], **node)
             if 'rels' in record:
                 for edge in record["rels"]:
-                    graph.add_edge(edge['start'], edge['end'], **edge)
+                    graph.add_edge(edge['source_id'], edge['target_id'], **edge)
             if 'supports' in record:
                 for edge in record["supports"]:
-                    graph.add_edge(edge['start'], edge['end'], **edge)
+                    graph.add_edge(edge['source_id'], edge['target_id'], **edge)
         return graph
 
     @staticmethod
@@ -121,8 +121,8 @@ class UniversalGraph:
             props['scoring'] = []
         
         return {**props,\
-            'to':edge[1],\
-            'from':edge[0]}
+            'target_id':edge[1],\
+            'source_id':edge[0]}
 
     def merge_multiedges(self):
         ''' Find edges between the same nodes and merge them. '''
@@ -131,10 +131,10 @@ class UniversalGraph:
         # concatenate publications
 
         edges = self.edges
-        edge_list = set([(e['from'],e['to']) for e in edges])
+        edge_list = set([(e['source_id'],e['target_id']) for e in edges])
         pruned = []
         for key in edge_list:
-            edge_group = [e for e in edges if (e['from'], e['to']) == key]
+            edge_group = [e for e in edges if (e['source_id'], e['target_id']) == key]
             edge = UniversalGraph.merge_edges(edge_group)
             pruned += [edge]
         self.edges = pruned
