@@ -1,5 +1,4 @@
 import warnings
-import networkx as nx
 
 class FromDictMixin():
     def __init__(self, *args, **kwargs):
