@@ -239,7 +239,9 @@ class Question():
         collection_string = f"WITH {'+'.join([f'collect({n})' for n in node_names])} as nodes" + "\n" + \
             "UNWIND nodes as n WITH collect(distinct n) as nodes"
         support_string = 'CALL apoc.path.subgraphAll(nodes, {maxLevel:0}) YIELD relationships as rels' + "\n" +\
-            "WITH [r in rels | r{.*, source_id:startNode(r).id, target_id:endNode(r).id, type:type(r), id:id(r)}] as rels, nodes"
+            """WITH
+               [r in rels | r{.*, source_id:startNode(r).id, target_id:endNode(r).id, type:type(r), id:id(r)}] as rels,
+               [n in nodes | n{.*, type:labels(n)[0]}] as nodes"""
         return_string = 'RETURN nodes, rels'
         query_string = "\n".join([match_string, collection_string, support_string, return_string])
 
