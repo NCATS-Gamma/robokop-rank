@@ -113,11 +113,11 @@ class Question():
         # get all subgraphs relevant to the question from the knowledge graph
         database = KnowledgeGraph()
         subgraphs = database.query(self) # list of lists of nodes with 'id' and 'bound'
-        answer_set_subgraph = database.queryToGraph(self.subgraph_with_support(database))
+        answerset_subgraph = database.queryToGraph(self.subgraph_with_support(database))
         del database
 
         # compute scores with NAGA, export to json
-        pr = Ranker(answer_set_subgraph)
+        pr = Ranker(answerset_subgraph)
         subgraphs_with_metadata, subgraphs = pr.report_ranking(subgraphs) # returned subgraphs are sorted by rank
         
         misc_info = {

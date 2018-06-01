@@ -106,7 +106,7 @@ class Answer():
     def __init__(self, *args, **kwargs):
         # initialize all attributes
         self.id = None # int
-        self.answer_set = None # AnswerSet
+        self.answerset = None # AnswerSet
         self.natural_answer = None # str
         self.nodes = [] # list of str
         self.edges = [] # list of str
