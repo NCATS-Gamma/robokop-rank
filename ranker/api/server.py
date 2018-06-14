@@ -71,7 +71,7 @@ class QueryTemplate(Resource):
             ]
         }
         question = Question(q_json)
-        answerset = answer_question.apply(args=[question]).result
+        answerset = answer_question(question)
         if isinstance(answerset, BaseException):
             response = {
                 'datetime': datetime.now().isoformat(),
@@ -124,7 +124,7 @@ class AnswerQuestion(Resource):
                         $ref: '#/definitions/Question'
         """
         question = Question(request.json)
-        answer = answer_question.apply(args=[question]).result
+        answer = answer_question(question)
         if isinstance(answer, BaseException):
             return "No answers", 204
         return answer.toJSON(), 200
@@ -169,7 +169,7 @@ class AnswerQuestionStandard(Resource):
         """
         question = Question(request.json)
         logger.debug(question.cypher_match_string())
-        answer = answer_question.apply(args=[question]).result
+        answer = answer_question(question)
         if isinstance(answer, BaseException):
             return "No answers", 204
         return answer.toStandard(), 200
