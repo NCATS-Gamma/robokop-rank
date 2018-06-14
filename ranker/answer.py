@@ -174,7 +174,7 @@ def generate_summary(nodes, edges):
     summary = nodes[0]['name']
     latest_node_id = nodes[0]['id']
     node_ids = [n['id'] for n in nodes]
-    edges = [e for e in edges if not e['predicate'] == 'literature_co-occurrence']
+    edges = [e for e in edges if not e['type'] == 'literature_co-occurrence']
     edge_starts = [e['source_id'] for e in edges]
     edge_ends = [e['target_id'] for e in edges]
     while True:
@@ -185,7 +185,7 @@ def generate_summary(nodes, edges):
             edge = edges.pop(idx)
             latest_node_id = edge['target_id']
             latest_node = nodes[node_ids.index(latest_node_id)]
-            summary += f" -{edge['predicate']}-> {latest_node['name']}"
+            summary += f" -{edge['type']}-> {latest_node['name']}"
         elif latest_node_id in edge_ends:
             idx = edge_ends.index(latest_node_id)
             edge_starts.pop(idx)
@@ -193,7 +193,7 @@ def generate_summary(nodes, edges):
             edge = edges.pop(idx)
             latest_node_id = edge['source_id']
             latest_node = nodes[node_ids.index(latest_node_id)]
-            summary += f" <-{edge['predicate']}- {latest_node['name']}"
+            summary += f" <-{edge['type']}- {latest_node['name']}"
         else:
             break
     return summary
@@ -211,7 +211,7 @@ def standardize_edge(edge):
         'provided_by': edge['edge_source'],
         'source_id': edge['source_id'],
         'target_id': edge['target_id'],
-        'type': edge['predicate'],
+        'type': edge['type'],
         'publications': edge['publications']
     }
     return output
@@ -229,6 +229,6 @@ def standardize_node(node):
         'description': node['name'],
         'id': node['id'],
         'name': node['name'],
-        'type': node['node_type']
+        'type': node['type']
     }
     return output
