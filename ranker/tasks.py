@@ -5,35 +5,17 @@ Tasks for Celery workers
 import os
 import sys
 import logging
-from celery import Celery, signals
-from kombu import Queue
 
 from ranker.api.setup import app
 from ranker.question import NoAnswersException
 
-# set up Celery
-app.config['broker_url'] = os.environ["CELERY_BROKER_URL"]
-app.config['result_backend'] = os.environ["CELERY_RESULT_BACKEND"]
-celery = Celery(app.name, broker=app.config['broker_url'])
-celery.conf.update(app.config)
-celery.conf.task_queues = (
-    Queue('answer', routing_key='answer'),
-)
-# Tell celery not to mess with logging at all
-@signals.setup_logging.connect
-def setup_celery_logging(**kwargs):
-    pass
-celery.log.setup()
-
 logger = logging.getLogger(__name__)
 
-@celery.task(bind=True, queue='answer')
-def answer_question(self, question):
+def answer_question(question):
     '''
     Generate answerset for a question
     '''
 
-    self.update_state(state='ANSWERING')
     logger.info("Answering your question...")
 
     try:
@@ -45,7 +27,6 @@ def answer_question(self, question):
         logger.exception(f"Something went wrong with question answering: {err}")
         raise err
     if answerset.answers:
-        self.update_state(state='ANSWERS FOUND')
         logger.info("Answers found.")
     else:
         raise NoAnswersException("Question answering complete, found 0 answers.")
