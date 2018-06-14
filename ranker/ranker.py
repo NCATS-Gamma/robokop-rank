@@ -161,7 +161,7 @@ class Ranker:
         ranking_sorting, ranking_scores_sorted = zip(*sorted(enumerate(ranking_scores), key = lambda elem: elem[1], reverse=True))
         sub_graph_list = [sub_graph_list[i] for i in ranking_sorting]
         
-        sub_graph_scores = [{'rank_score':ranking_scores[i],'pre_score':prescreen_scores_sorted[i]} for i in ranking_sorting]
+        sub_graph_scores = [ranking_scores[i] for i in ranking_sorting]
         
         sorted_inds = [prescreen_sorting[i] for i in ranking_sorting]
 
