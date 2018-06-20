@@ -6,7 +6,6 @@ Question definition
 import os
 import sys
 import json
-import hashlib
 import warnings
 import logging
 
@@ -66,33 +65,6 @@ class Question():
             else:
                 warnings.warn("Keyword argument {} ignored.".format(key))
 
-        # replace input node names with identifiers
-        for n in self.nodes:
-            if 'nodeSpecType' in n and n['nodeSpecType'] == 'Named Node':
-                identifiers = [n['meta']['identifier']]
-                n['identifiers'] = identifiers
-            elif not 'identifiers' in n:
-                n['identifiers'] = None
-        for e in self.edges:
-            if not 'length' in e:
-                e['length'] = [1, 1]
-            if len(e['length'])==1:
-                e['length'] += e['length']
-
-    def compute_hash(self):
-        '''
-        Generate an MD5 hash of the machine readable question interpretation
-        i.e. the nodes and edges attributes
-        '''
-
-        json_spec = {
-            "nodes":self.nodes,
-            "edges":self.edges
-        }
-        m = hashlib.md5()
-        m.update(json.dumps(json_spec).encode('utf-8'))
-        return m.hexdigest()
-
     def relevant_subgraph(self):
         # get the subgraph relevant to the question from the knowledge graph
         database = KnowledgeGraph()
@@ -121,7 +93,6 @@ class Question():
         subgraphs_with_metadata, subgraphs = pr.report_ranking(subgraphs) # returned subgraphs are sorted by rank
         
         misc_info = {
-            'question_hash': self.compute_hash(),
             'natural_question': self.natural_question,
             'num_total_paths': len(subgraphs)
         }
@@ -147,23 +118,23 @@ class Question():
 
     def node_match_string(self, node_struct, var_name, db):
         concept = node_struct['type'] if not node_struct['type'] == 'biological_process' else 'biological_process_or_molecular_activity'
-        if 'identifiers' in node_struct and node_struct['identifiers']:
+        if 'curie' in node_struct and node_struct['curie']:
             if db:
                 id_map = db.get_map_for_type(concept)
                 try:
-                    id = id_map[node_struct['identifiers'][0].upper()]
+                    id = id_map[node_struct['curie'].upper()]
                 except KeyError:
                     raise NoAnswersException("Question answering complete, found 0 answers.")
             else:
-                id = node_struct['identifiers'][0].upper()
+                id = node_struct['curie'].upper()
             prop_string = f" {{id:'{id}'}}"
         else:
             prop_string = ''
         return f"{var_name}:{concept}{prop_string}"
 
     def edge_match_string(self, edge_struct, var_name):
-        if not edge_struct['length'][0]==edge_struct['length'][1]:
-            return f"[{var_name}*{edge_struct['length'][0]}..{edge_struct['length'][-1]}]"
+        if not edge_struct['min_length']==edge_struct['max_length']:
+            return f"[{var_name}*{edge_struct['min_length']}..{edge_struct['max_length']}]"
         else:
             return f"[{var_name}]"
 
@@ -219,7 +190,7 @@ class Question():
         edge_names = ['r{0:d}{1:d}'.format(i, i+1) for i in range(len(self.edges))]
 
         # define bound nodes (no edges are bound)
-        node_bound = ['identifiers' in n and n['identifiers'] for n in self.nodes]
+        node_bound = ['curie' in n and n['curie'] for n in nodes]
         node_bound = ["True" if b else "False" for b in node_bound]
 
         # add bound fields and return map
