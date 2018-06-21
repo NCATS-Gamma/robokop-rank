@@ -45,8 +45,7 @@ class Question():
         self.notes = None
         self.name = None
         self.natural_question = None
-        self.nodes = [] # list of nodes
-        self.edges = [] # list of edges
+        self.machine_question = {}
 
         # apply json properties to existing attributes
         attributes = self.__dict__.keys()
@@ -91,7 +90,7 @@ class Question():
         # compute scores with NAGA, export to json
         pr = Ranker(answerset_subgraph)
         subgraphs_with_metadata, subgraphs = pr.report_ranking(subgraphs) # returned subgraphs are sorted by rank
-        
+
         misc_info = {
             'natural_question': self.natural_question,
             'num_total_paths': len(subgraphs)
@@ -117,7 +116,7 @@ class Question():
         return aset
 
     def node_match_string(self, node_struct, var_name, db):
-        concept = node_struct['type'] if not node_struct['type'] == 'biological_process' else 'biological_process_or_molecular_activity'
+        concept = node_struct['type'] if not node_struct['type'] == 'biological_process' else 'biological_process_or_activity'
         if 'curie' in node_struct and node_struct['curie']:
             if db:
                 id_map = db.get_map_for_type(concept)
@@ -139,7 +138,7 @@ class Question():
             return f"[{var_name}]"
 
     def cypher_match_string(self, db=None):
-        nodes, edges = self.nodes, self.edges
+        nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
 
         node_count = len(nodes)
         edge_count = len(edges)
@@ -185,9 +184,11 @@ class Question():
 
         match_string = self.cypher_match_string(db)
 
+        nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
+
         # generate internal node and edge variable names
-        node_names = ['n{:d}'.format(i) for i in range(len(self.nodes))]
-        edge_names = ['r{0:d}{1:d}'.format(i, i+1) for i in range(len(self.edges))]
+        node_names = ['n{:d}'.format(i) for i in range(len(nodes))]
+        edge_names = ['r{0:d}{1:d}'.format(i, i+1) for i in range(len(edges))]
 
         # define bound nodes (no edges are bound)
         node_bound = ['curie' in n and n['curie'] for n in nodes]
@@ -199,13 +200,17 @@ class Question():
         # return subgraphs matching query
         query_string = ' '.join([match_string, answer_return_string])
 
+        logger.debug(query_string)
+
         return query_string
 
     def subgraph_with_support(self, db):
         match_string = self.cypher_match_string(db)
 
+        nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
+
         # generate internal node and edge variable names
-        node_names = ['n{:d}'.format(i) for i in range(len(self.nodes))]
+        node_names = ['n{:d}'.format(i) for i in range(len(nodes))]
 
         collection_string = f"WITH {'+'.join([f'collect({n})' for n in node_names])} as nodes" + "\n" + \
             "UNWIND nodes as n WITH collect(distinct n) as nodes"
@@ -221,9 +226,11 @@ class Question():
     def subgraph(self):
         match_string = self.cypher_match_string()
 
+        nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
+
         # generate internal node and edge variable names
-        node_names = ['n{:d}'.format(i) for i in range(len(self.nodes))]
-        edge_names = ['r{0:d}{1:d}'.format(i, i+1) for i in range(len(self.edges))]
+        node_names = ['n{:d}'.format(i) for i in range(len(nodes))]
+        edge_names = ['r{0:d}{1:d}'.format(i, i+1) for i in range(len(edges))]
 
         # just return a list of nodes and edges
         collection_string = f"WITH {'+'.join([f'collect({e})' for e in edge_names])} as rels, {'+'.join([f'collect({n})' for n in node_names])} as nodes"
