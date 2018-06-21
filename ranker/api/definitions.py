@@ -99,14 +99,14 @@ class Graph():
     type: "object"
     description: "A thought graph associated with this result. This will commonly be a linear path subgraph from one concept to another, but related items aside of the path may be included."
     properties:
-      node_list:
-        type: "array"
-        items:
-          $ref: "#/definitions/Node"
-      edge_list:
-        type: "array"
-        items:
-          $ref: "#/definitions/Edge"
+        node_list:
+            type: "array"
+            items:
+                $ref: "#/definitions/Node"
+        edge_list:
+            type: "array"
+            items:
+                $ref: "#/definitions/Edge"
     """
     pass
 
@@ -154,16 +154,12 @@ class Node(FromDictMixin):
     properties:
         id:
             type: string
-            required: true
         type:
             type: string
         name:
             type: string
-        identifiers:
-            type: array
-            items:
-                type: string
-            default: []
+        curie:
+            type: string
     """
     def __init__(self, *args, **kwargs):
         self.id = None
@@ -233,12 +229,12 @@ class Edge(FromDictMixin):
     ---
     id: Edge
     required:
-        - start
-        - end
+        - source_id
+        - target_id
     properties:
-        start:
+        source_id:
             type: string
-        end:
+        target_id:
             type: string
         min_length:
             type: integer
@@ -268,28 +264,23 @@ class Question(FromDictMixin):
         - nodes
         - edges
     properties:
-        nodes:
-            type: array
-            items:
-                $ref: '#/definitions/Node'
-        edges:
-            type: array
-            items:
-                $ref: '#/definitions/Edge'
+        machine_question:
+            $ref: "#/definitions/Graph"
     example:
-        nodes:
-          - id: 0
-            type: disease
-            identifiers: ["MONDO:0005737"]
-          - id: 1
-            type: gene
-          - id: 2
-            type: genetic_condition
-        edges:
-          - start: 0
-            end: 1
-          - start: 1
-            end: 2
+        machine_question:
+            nodes:
+              - id: 0
+                type: disease
+                curie: "MONDO:0005737"
+              - id: 1
+                type: gene
+              - id: 2
+                type: genetic_condition
+            edges:
+              - source_id: 0
+                target_id: 1
+              - source_id: 1
+                target_id: 2
     """
 
     def __init__(self, *args, **kwargs):
