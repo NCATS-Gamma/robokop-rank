@@ -132,7 +132,11 @@ class Question():
         return f"{var_name}:{concept}{prop_string}"
 
     def edge_match_string(self, edge_struct, var_name):
-        if not edge_struct['min_length']==edge_struct['max_length']:
+        if 'min_length' not in edge_struct:
+            edge_struct['min_length'] = 1
+        if 'max_length' not in edge_struct:
+            edge_struct['max_length'] = 1
+        if not edge_struct['min_length']==edge_struct['max_length']==1:
             return f"[{var_name}*{edge_struct['min_length']}..{edge_struct['max_length']}]"
         else:
             return f"[{var_name}]"
@@ -199,8 +203,6 @@ class Question():
 
         # return subgraphs matching query
         query_string = ' '.join([match_string, answer_return_string])
-
-        logger.debug(query_string)
 
         return query_string
 
