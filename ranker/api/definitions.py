@@ -232,6 +232,10 @@ class Edge(FromDictMixin):
         - source_id
         - target_id
     properties:
+        type:
+            type: string
+        provided_by:
+            type: string
         source_id:
             type: string
         target_id:
@@ -244,6 +248,8 @@ class Edge(FromDictMixin):
             default: 1
     """
     def __init__(self, *args, **kwargs):
+        self.type = None
+        self.provided_by = None
         self.start = None
         self.end = None
         self.min_length = 1
@@ -279,8 +285,10 @@ class Question(FromDictMixin):
             edges:
               - source_id: 0
                 target_id: 1
+                type: disease_to_gene_association
               - source_id: 1
                 target_id: 2
+                type: has_phenotype
     """
 
     def __init__(self, *args, **kwargs):
