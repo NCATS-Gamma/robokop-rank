@@ -123,11 +123,8 @@ class AnswerQuestion(Resource):
                     schema:
                         $ref: '#/definitions/Question'
         """
-        question = Question(request.json)
-        answer = answer_question(question)
-        if isinstance(answer, BaseException):
-            return "No answers", 204
-        return answer.toJSON(), 200
+        task = answer_question.apply_async(args=[request.json])
+        return {'task_id':task.id}, 202
 
 api.add_resource(AnswerQuestion, '/')
 
@@ -275,6 +272,103 @@ class MapID(Resource):
         return id_map[identifier], 200
 
 api.add_resource(MapID, '/canonicalize/<concept>/<identifier>')
+
+class Tasks(Resource):
+    def get(self):
+        """
+        Fetch queued/active task list
+        ---
+        tags: [util]
+        responses:
+            200:
+                description: tasks
+                schema:
+                    type: string
+        """
+        r = redis.Redis(
+            host=os.environ['RESULTS_HOST'],
+            port=os.environ['RESULTS_PORT'],
+            db=os.environ['RANKER_RESULTS_DB'])
+
+        tasks = []
+        for name in r.scan_iter('*'):
+            name = name.decode() # convert bytes to str
+            tasks.append(json.loads(r.get(name)))
+
+        return tasks
+
+api.add_resource(Tasks, '/tasks/')
+
+class Results(Resource):
+    def get(self, task_id):
+        """
+        Fetch results from task
+        ---
+        tags: [util]
+        parameters:
+          - in: path
+            name: task_id
+            description: ID of task
+            type: string
+            required: true
+        responses:
+            200:
+                description: result
+                schema:
+                    $ref: "#/definitions/Graph"
+        """
+        r = redis.Redis(
+            host=os.environ['RESULTS_HOST'],
+            port=os.environ['RESULTS_PORT'],
+            db=os.environ['RANKER_RESULTS_DB'])
+
+        task_id = 'celery-task-meta-'+task_id
+        task_string = r.get(task_id)
+        if task_string is None:
+            return 'No such task', 404
+        info = json.loads(task_string)
+        if info['status'] != 'SUCCESS':
+            return 'This task is incomplete or failed', 404
+
+        filename = info['result']
+        result_path = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', filename)
+        with open(result_path, 'r') as f:
+            return json.load(f)
+
+api.add_resource(Results, '/result/<task_id>')
+
+class TaskStatus(Resource):
+    def get(self, task_id):
+        """
+        Get status of task
+        ---
+        tags: [util]
+        parameters:
+          - in: path
+            name: task_id
+            description: ID of task
+            type: string
+            required: true
+        responses:
+            200:
+                description: result
+                schema:
+                    $ref: "#/definitions/Graph"
+        """
+        r = redis.Redis(
+            host=os.environ['RESULTS_HOST'],
+            port=os.environ['RESULTS_PORT'],
+            db=os.environ['RANKER_RESULTS_DB'])
+
+        task_id = 'celery-task-meta-'+task_id
+        task_string = r.get(task_id)
+        if task_string is None:
+            return 'No such task', 404
+        info = json.loads(task_string)
+        
+        return info, 200
+
+api.add_resource(TaskStatus, '/task/<task_id>')
 
 if __name__ == '__main__':
 

@@ -10,6 +10,8 @@ services:
       - DEPLOY=docker
       - ROBOKOP_HOME=/home/murphy
       - NEO4J_HOST=neo4j
+      - RESULTS_HOST=results
+      - BROKER_HOST=broker
     ports:
       - "${RANKER_PORT}:${RANKER_PORT}"
       - "${FLOWER_PORT}:${FLOWER_PORT}"
