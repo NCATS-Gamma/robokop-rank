@@ -137,7 +137,7 @@ class Question():
         if 'max_length' not in edge_struct:
             edge_struct['max_length'] = 1
         parts = [var_name]
-        if edge_struct['type']:
+        if 'type' in edge_struct and edge_struct['type']:
             parts.append(f":{edge_struct['type']}")
         if not edge_struct['min_length']==edge_struct['max_length']==1:
             parts.append(f"*{edge_struct['min_length']}..{edge_struct['max_length']}")
