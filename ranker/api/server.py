@@ -5,8 +5,12 @@
 import os
 import logging
 from datetime import datetime
+import json
+
+import redis
 from flask_restful import Resource
 from flask import request
+
 from ranker.api.setup import app, api
 from ranker.api.logging_config import logger
 from ranker.question import Question, NoAnswersException
