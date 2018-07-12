@@ -157,16 +157,19 @@ class Answer():
         text
         '''
         json = self.toJSON()
-        output = {
-            'confidence': json['score']['rank_score'],
-            'id': json['id'],
-            'result_graph': {
-                'node_list': [standardize_node(n) for n in json['nodes']],
-                'edge_list': [standardize_edge(e) for e in json['edges']]
-            },
-            'result_type': 'individual query answer',
-            'text': generate_summary(json['nodes'], json['edges'])
-        }
+        try:
+            output = {
+                'confidence': json['score'],
+                'id': json['id'],
+                'result_graph': {
+                    'node_list': [standardize_node(n) for n in json['nodes']],
+                    'edge_list': [standardize_edge(e) for e in json['edges']]
+                },
+                'result_type': 'individual query answer',
+                'text': generate_summary(json['nodes'], json['edges'])
+            }
+        except Exception as err:
+            logger.exception(err)
         return output
 
 def generate_summary(nodes, edges):
