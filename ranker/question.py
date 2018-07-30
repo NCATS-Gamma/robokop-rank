@@ -13,15 +13,14 @@ import logging
 from ranker.universalgraph import UniversalGraph
 from ranker.knowledgegraph import KnowledgeGraph
 from ranker.answer import Answer, Answerset
-
-# robokop-rank modules
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..', 'robokop-rank'))
 from ranker.ranker import Ranker
 
 logger = logging.getLogger(__name__)
 
+
 class NoAnswersException(Exception):
     pass
+
 
 class Question():
     '''
@@ -70,8 +69,8 @@ class Question():
         subgraph_networkx = database.queryToGraph(self.subgraph_with_support(database))
         del database
         subgraph = UniversalGraph(subgraph_networkx)
-        return {"nodes":subgraph.nodes,\
-            "edges":subgraph.edges}
+        return {"nodes": subgraph.nodes,
+                "edges": subgraph.edges}
 
     def answer(self):
         '''
@@ -80,38 +79,38 @@ class Question():
         Returns the answer struct, something along the lines of:
         https://docs.google.com/document/d/1O6_sVSdSjgMmXacyI44JJfEVQLATagal9ydWLBgi-vE
         '''
-        
+
         # get all subgraphs relevant to the question from the knowledge graph
         database = KnowledgeGraph()
-        subgraphs = database.query(self) # list of lists of nodes with 'id' and 'bound'
+        subgraphs = database.query(self)  # list of lists of nodes with 'id' and 'bound'
         answerset_subgraph = database.queryToGraph(self.subgraph_with_support(database))
         del database
 
         # compute scores with NAGA, export to json
         pr = Ranker(answerset_subgraph)
-        subgraphs_with_metadata, subgraphs = pr.report_ranking(subgraphs) # returned subgraphs are sorted by rank
+        subgraphs_with_metadata, subgraphs = pr.report_ranking(subgraphs)  # returned subgraphs are sorted by rank
 
         misc_info = {
             'natural_question': self.natural_question,
             'num_total_paths': len(subgraphs)
         }
         aset = Answerset(misc_info=misc_info)
-        #for substruct, subgraph in zip(score_struct, subgraphs):
+        # for substruct, subgraph in zip(score_struct, subgraphs):
         for subgraph in subgraphs_with_metadata:
-            #graph = UniversalGraph(nodes=substruct['nodes'], edges=substruct['edges'])
-            #graph.merge_multiedges()
-            #graph.to_answer_walk(subgraph)
-            
-            answer = Answer(nodes=subgraph['nodes'],\
-                    edges=subgraph['edges'],\
-                    score=subgraph['score'])
+            # graph = UniversalGraph(nodes=substruct['nodes'], edges=substruct['edges'])
+            # graph.merge_multiedges()
+            # graph.to_answer_walk(subgraph)
+
+            answer = Answer(nodes=subgraph['nodes'],
+                            edges=subgraph['edges'],
+                            score=subgraph['score'])
             # TODO: move node/edge details to AnswerSet
             # node_ids = [node['id'] for node in graph.nodes]
             # edge_ids = [edge['id'] for edge in graph.edges]
             # answer = Answer(nodes=node_ids,\
             #         edges=edge_ids,\
             #         score=0)
-            aset += answer #substruct['score'])
+            aset += answer  # substruct['score'])
 
         return aset
 
@@ -139,7 +138,7 @@ class Question():
         parts = [var_name]
         if 'type' in edge_struct and edge_struct['type']:
             parts.append(f":{edge_struct['type']}")
-        if not edge_struct['min_length']==edge_struct['max_length']==1:
+        if not edge_struct['min_length'] == edge_struct['max_length']==1:
             parts.append(f"*{edge_struct['min_length']}..{edge_struct['max_length']}")
         return f"[{''.join(parts)}]"
 
@@ -151,7 +150,7 @@ class Question():
 
         # generate internal node and edge variable names
         node_names = ['n{:d}'.format(i) for i in range(node_count)]
-        edge_names = ['r{0:d}{1:d}'.format(i, i+1) for i in range(edge_count)]
+        edge_names = ['r{0:d}{1:d}'.format(i, i + 1) for i in range(edge_count)]
 
         node_strings = [self.node_match_string(node, name, db) for node, name in zip(nodes, node_names)]
 
@@ -194,7 +193,7 @@ class Question():
 
         # generate internal node and edge variable names
         node_names = ['n{:d}'.format(i) for i in range(len(nodes))]
-        edge_names = ['r{0:d}{1:d}'.format(i, i+1) for i in range(len(edges))]
+        edge_names = ['r{0:d}{1:d}'.format(i, i + 1) for i in range(len(edges))]
 
         # define bound nodes (no edges are bound)
         node_bound = ['curie' in n and n['curie'] for n in nodes]
@@ -234,7 +233,7 @@ class Question():
 
         # generate internal node and edge variable names
         node_names = ['n{:d}'.format(i) for i in range(len(nodes))]
-        edge_names = ['r{0:d}{1:d}'.format(i, i+1) for i in range(len(edges))]
+        edge_names = ['r{0:d}{1:d}'.format(i, i + 1) for i in range(len(edges))]
 
         # just return a list of nodes and edges
         collection_string = f"WITH {'+'.join([f'collect({e})' for e in edge_names])} as rels, {'+'.join([f'collect({n})' for n in node_names])} as nodes"
