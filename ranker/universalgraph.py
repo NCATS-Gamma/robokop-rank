@@ -60,11 +60,8 @@ class UniversalGraph:
             if 'nodes' in record:
                 for node in record["nodes"]:
                     graph.add_node(node['id'], **node)
-            if 'rels' in record:
-                for edge in record["rels"]:
-                    graph.add_edge(edge['source_id'], edge['target_id'], **edge)
-            if 'supports' in record:
-                for edge in record["supports"]:
+            if 'edges' in record:
+                for edge in record["edges"]:
                     graph.add_edge(edge['source_id'], edge['target_id'], **edge)
         return graph
 

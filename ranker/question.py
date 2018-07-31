@@ -22,6 +22,67 @@ class NoAnswersException(Exception):
     pass
 
 
+class NodeReference():
+    def __init__(self, node, db=None):
+        name = f'n{node["id"]}'
+        label = node['type'] if 'type' in node else None
+
+        if label == 'biological_process':
+            label = 'biological_process_or_activity'
+
+        if 'curie' in node:
+            if db:
+                id_map = db.get_map_for_type(label)
+                try:
+                    curie = id_map[node['curie'].upper()]
+                except KeyError:
+                    raise NoAnswersException("Question answering complete, found 0 answers.")
+            else:
+                curie = node['curie'].upper()
+            prop_string = f" {{id: \'{curie}\'}}"
+        else:
+            prop_string = ''
+
+        self.name = name
+        self.label = label
+        self.prop_string = prop_string
+        self._num = 0
+
+    def __str__(self):
+        self._num += 1
+        if self._num == 1:
+            return f'{self.name}{":" + self.label if self.label else ""}{self.prop_string}'
+        else:
+            return self.name
+
+
+class EdgeReference():
+    def __init__(self, edge, db=None):
+        name = f'e{edge["id"]}'
+        label = edge['type'] if 'type' in edge else None
+
+        if 'min_length' not in edge:
+            edge['min_length'] = 1
+        if 'max_length' not in edge:
+            edge['max_length'] = 1
+        if not edge['min_length'] == edge['max_length'] == 1:
+            length_string = f"*{edge['min_length']}..{edge['max_length']}"
+        else:
+            length_string = ''
+
+        self.name = name
+        self.label = label
+        self.length_string = length_string
+        self._num = 0
+
+    def __str__(self):
+        self._num += 1
+        if self._num == 1:
+            return f'{self.name}{":" + self.label if self.label else ""}{self.length_string}'
+        else:
+            return self.name
+
+
 class Question():
     '''
     Represents a question such as "What genetic condition provides protection against disease X?"
@@ -62,6 +123,11 @@ class Question():
                 setattr(self, key, kwargs[key])
             else:
                 warnings.warn("Keyword argument {} ignored.".format(key))
+
+        # add ids to edges if necessary
+        if not any(['id' in e for e in self.machine_question['edges']]):
+            for i, e in enumerate(self.machine_question['edges']):
+                e['id'] = chr(ord('a') + i)
 
     def relevant_subgraph(self):
         # get the subgraph relevant to the question from the knowledge graph
@@ -114,68 +180,17 @@ class Question():
 
         return aset
 
-    def node_match_string(self, node_struct, var_name, db):
-        concept = node_struct['type'] if not node_struct['type'] == 'biological_process' else 'biological_process_or_activity'
-        if 'curie' in node_struct and node_struct['curie']:
-            if db:
-                id_map = db.get_map_for_type(concept)
-                try:
-                    id = id_map[node_struct['curie'].upper()]
-                except KeyError:
-                    raise NoAnswersException("Question answering complete, found 0 answers.")
-            else:
-                id = node_struct['curie'].upper()
-            prop_string = f" {{id:'{id}'}}"
-        else:
-            prop_string = ''
-        return f"{var_name}:{concept}{prop_string}"
-
-    def edge_match_string(self, edge_struct, var_name):
-        if 'min_length' not in edge_struct:
-            edge_struct['min_length'] = 1
-        if 'max_length' not in edge_struct:
-            edge_struct['max_length'] = 1
-        parts = [var_name]
-        if 'type' in edge_struct and edge_struct['type']:
-            parts.append(f":{edge_struct['type']}")
-        if not edge_struct['min_length'] == edge_struct['max_length']==1:
-            parts.append(f"*{edge_struct['min_length']}..{edge_struct['max_length']}")
-        return f"[{''.join(parts)}]"
-
     def cypher_match_string(self, db=None):
         nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
 
-        node_count = len(nodes)
-        edge_count = len(edges)
-
         # generate internal node and edge variable names
-        node_names = ['n{:d}'.format(i) for i in range(node_count)]
-        edge_names = ['r{0:d}{1:d}'.format(i, i + 1) for i in range(edge_count)]
-
-        node_strings = [self.node_match_string(node, name, db) for node, name in zip(nodes, node_names)]
+        node_references = {n['id']: NodeReference(n, db=db) for n in nodes}
+        edge_references = [EdgeReference(e, db=db) for e in edges]
 
         # generate MATCH command string to get paths of the appropriate size
         match_strings = []
-        match_strings.append(f"MATCH ({node_strings[0]})")
-        for i in range(edge_count):
-            match_strings.append(f"MATCH ({node_names[i]})-{self.edge_match_string(edges[i], edge_names[i])}-({node_strings[i+1]})")
-            match_strings.append(f"WHERE NOT {edge_names[i]}.predicate_id='omnicorp:1'")
-
-        # optional matches are super slow, for some reason
-        # match_strings = [f"MATCH ({node_strings[0]})"]
-        # for i in range(edge_count):
-        #     match_strings.append(f"OPTIONAL MATCH ({node_names[i]})-{self.edge_match_string(edges[i], edge_names[i])}-({node_strings[i+1] if i+1<edge_count else node_names[i+1]})")
-        #     match_strings.append(f"WHERE NOT {edge_names[i]}.predicate_id='omnicorp:1'")
-        # if 'identifiers' in nodes[-1] and nodes[-1]['identifiers']:
-        #     node_strings2 = [self.node_match_string(node, name+'b', db) for node, name in zip(nodes, node_names)]
-        #     match_strings.insert(1,f"MATCH ({node_strings[-1]})")
-        #     for i in range(edge_count-1, -1, -1):
-        #         match_strings.append(f"OPTIONAL MATCH ({node_names[i+1]+('b' if not i==edge_count-1 else '')})-{self.edge_match_string(edges[i], f'{edge_names[i]}b')}-({node_strings2[i]})")
-        #         match_strings.append(f"WHERE NOT {edge_names[i]}b.predicate_id='omnicorp:1'")
-        #     match_strings.append(f"AND {node_names[0]}={node_names[0]}b")
-        #     case_strings = [f"CASE WHEN {n} IS null THEN {n}b WHEN {n}b IS null THEN {n} ELSE null END AS {n}" for n in node_names[:-1]] + ['n6']
-        #     with_string = f"WITH {', '.join(case_strings)}"
-        #     match_strings.append(with_string)
+        for e, eref in zip(edges, edge_references):
+            match_strings.append(f"MATCH ({node_references[e['source_id']]})-[{eref}]-({node_references[e['target_id']]})")
 
         match_string = ' '.join(match_strings)
         return match_string
@@ -192,15 +207,11 @@ class Question():
         nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
 
         # generate internal node and edge variable names
-        node_names = ['n{:d}'.format(i) for i in range(len(nodes))]
-        edge_names = ['r{0:d}{1:d}'.format(i, i + 1) for i in range(len(edges))]
-
-        # define bound nodes (no edges are bound)
-        node_bound = ['curie' in n and n['curie'] for n in nodes]
-        node_bound = ["True" if b else "False" for b in node_bound]
+        node_names = [f"n{n['id']}" for n in nodes]
+        edge_names = [f"e{e['id']}" for e in edges]
 
         # add bound fields and return map
-        answer_return_string = f"RETURN [{', '.join([f'{{id:{n}.id, bound:{b}}}' for n, b in zip(node_names, node_bound)])}] as nodes"
+        answer_return_string = f"RETURN {{{', '.join([f'{n}:{n}.id' for n in node_names])}}} as nodes, {{{', '.join([f'{e}:id({e})' for e in edge_names])}}} as edges"
 
         # return subgraphs matching query
         query_string = ' '.join([match_string, answer_return_string])
@@ -213,15 +224,16 @@ class Question():
         nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
 
         # generate internal node and edge variable names
-        node_names = ['n{:d}'.format(i) for i in range(len(nodes))]
+        node_names = [f"n{n['id']}" for n in nodes]
+        edge_names = [f"e{e['id']}" for e in edges]
 
-        collection_string = f"WITH {'+'.join([f'collect({n})' for n in node_names])} as nodes" + "\n" + \
-            "UNWIND nodes as n WITH collect(distinct n) as nodes"
-        support_string = 'CALL apoc.path.subgraphAll(nodes, {maxLevel:0}) YIELD relationships as rels' + "\n" +\
-            """WITH
-               [r in rels | r{.*, source_id:startNode(r).id, target_id:endNode(r).id, type:type(r), id:id(r)}] as rels,
-               [n in nodes | n{.*, type:labels(n)[0]}] as nodes"""
-        return_string = 'RETURN nodes, rels'
+        collection_string = f"""WITH {'+'.join([f'collect({n})' for n in node_names])} as nodes, {'+'.join([f'collect({e})' for e in edge_names])} as edges
+            UNWIND nodes as n WITH collect(distinct n) as nodes, edges
+            UNWIND edges as e WITH nodes, collect(distinct e) as edges"""
+        support_string = """WITH
+            [r in edges | r{.*, source_id:startNode(r).id, target_id:endNode(r).id, type:type(r), id:id(r)}] as edges,
+            [n in nodes | n{.*, type:labels(n)[0]}] as nodes"""
+        return_string = 'RETURN nodes, edges'
         query_string = "\n".join([match_string, collection_string, support_string, return_string])
 
         return query_string

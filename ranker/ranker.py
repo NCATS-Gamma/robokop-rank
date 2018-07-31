@@ -100,10 +100,18 @@ class Ranker:
         # set the weights on the edges
         nx.set_edge_attributes(self.G, values=weights, name='weight')
 
+    def get_edges_by_id(self, edge_ids, data=False):
+        edges = [e for e in self.G.edges(data=True) if e[-1]['id'] in edge_ids]
+        if data:
+            return edges
+        else:
+            return [e[:2] for e in edges]
+
     def sum_edge_weights(self, sub_graph):
-        sub_graph_update = self.G.subgraph([s['id'] for s in sub_graph])
-        edges = sub_graph_update.edges(data='weight')
-        return sum([edge[-1] for edge in edges])
+        # choose edges with one of the appropriate ids
+        edges = self.get_edges_by_id(sub_graph['edges'].values(), data=True)
+        # sum their weights
+        return sum([edge[-1]['weight'] for edge in edges])
 
     def rank(self, sub_graph_list):
         """ Primary method to generate a sorted list and scores for a set of subgraphs """
@@ -123,14 +131,6 @@ class Ranker:
         else:
             self.G.add_node('None') # must add the none node to correspond to None id's
         
-        # convert None nodes to string None and check that all the subgraph nodes are in G
-        for sg in sub_graph_list:
-            for node in sg:
-                if node['id'] is None:
-                    node['id'] = 'None'
-                if node['id'] not in self.G:
-                    raise KeyError('Node id:' + node['id'] + ' does not exist in the graph G')
-
         logger.debug("Prescreening sub_graph_list... ")
         start = time.time()
         prescreen_scores = [self.sum_edge_weights(sg) for sg in sub_graph_list]
@@ -180,17 +180,17 @@ class Ranker:
         # add extra computed metadata in self.G to subgraph for display
         logger.debug("Extracting subgraphs... ")
         start = time.time()
-        sub_graphs_meta = [self.G.subgraph([s['id'] if s['id'] is not None else 'None' for s in sub_graph]) for sub_graph in sub_graph_list]
+        sub_graphs_meta = [self.G.subgraph([s for s in sub_graph['nodes'].values()]) for sub_graph in sub_graph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
         
         report = []
         for i, sg in enumerate(sub_graphs_meta):
 
             # re-sort the nodes in the sub-graph according to the node_list and remove None nodes
-            node_list = sub_graph_list[i]
+            node_list = sub_graph_list[i]['nodes'].values()
             nodes = list(sg.nodes(data=True))
             ids = [n[0] for n in nodes]
-            nodes = [nodes[ids.index(n['id'])][-1] for n in node_list if n['id'] is not 'None']
+            nodes = [nodes[ids.index(n)][-1] for n in node_list if n is not 'None']
             
             edges = list(sg.edges(data=True))
             edges = [e[-1] for e in edges]
@@ -233,25 +233,22 @@ class Ranker:
         # sub_graph is a list of dicts with fields 'id' and 'bound'
 
         # get updated weights
-        node_ids = [s['id'] for s in sub_graph]
-        sub_graph_update = self.G.subgraph(node_ids)
+        edges = self.get_edges_by_id(sub_graph['edges'].values(), data=True)
+        # edge_subgraph is busted, this avoids the issue:
+        edges = [(e[0], e[1], f"{e[2]['source_database']}:{e[2]['type']}") for e in edges]
+        sub_graph_update = self.G.edge_subgraph(edges)
+        node_ids = list(self.G.nodes)
         
         nodes = sub_graph_update.nodes(data=True)
 
         # get updated weights
-        sub_graph_update = sub_graph_update.subgraph([s[0] for s in nodes])
         sub_graph_update = sub_graph_update.to_undirected()
 
-        # calculate hitting time of last node from first node
-        #logger.debug(json.dumps(node_ids))
-        #L = nx.laplacian_matrix(sub_graph_update.to_undirected(),nodelist = node_ids)
-        #L = np.array(L.todense())
-
         # compute graph laplacian for this case with potentially duplicated nodes (None may be duplicated)
-        n = len(node_ids)
+        n = len(nodes)
         L = np.zeros((n,n))
         index = {id:node_ids.index(id) for id in node_ids}
-        for u,v,w in sub_graph_update.edges_iter(data='weight'):
+        for u, v, w in sub_graph_update.edges(data='weight'):
             if u is not v and (u in node_ids) and (v in node_ids):
                 i, j = index[u], index[v]
                 L[i,j] = -w

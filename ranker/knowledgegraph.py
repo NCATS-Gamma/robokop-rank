@@ -37,7 +37,7 @@ class KnowledgeGraph:
         logger.debug('Running query... ')
         start = time.time()
         result = self.session.run(query_string)
-        records = [r['nodes'] for r in result]
+        records = [{'nodes': r['nodes'], 'edges': r['edges']} for r in result]
         logger.debug(f"{time.time()-start} seconds elapsed")
 
         logger.debug(f"{len(records)} subgraphs returned.")
