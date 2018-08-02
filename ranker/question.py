@@ -1,11 +1,7 @@
-'''
-Question definition
-'''
+"""Question definition."""
 
 # standard modules
 import os
-import sys
-import json
 import warnings
 import logging
 from importlib import import_module
@@ -21,11 +17,14 @@ logger = logging.getLogger(__name__)
 
 
 class NoAnswersException(Exception):
+    """Exception when no answers are found."""
     pass
 
 
 class NodeReference():
+    """Node reference object."""
     def __init__(self, node, db=None):
+        """Create a node reference."""
         name = f'n{node["id"]}'
         label = node['type'] if 'type' in node else None
 
@@ -51,15 +50,20 @@ class NodeReference():
         self._num = 0
 
     def __str__(self):
+        """Return the cypher node reference."""
         self._num += 1
         if self._num == 1:
-            return f'{self.name}{":" + self.label if self.label else ""}{self.prop_string}'
-        else:
-            return self.name
+            return f'{self.name}' + \
+                   f'{":" + self.label if self.label else ""}' + \
+                   f'{self.prop_string}'
+        return self.name
 
 
 class EdgeReference():
+    """Edge reference object."""
+
     def __init__(self, edge, db=None):
+        """Create an edge reference."""
         name = f'e{edge["id"]}'
         label = edge['type'] if 'type' in edge else None
 
@@ -78,6 +82,7 @@ class EdgeReference():
         self._num = 0
 
     def __str__(self):
+        """Return the cypher edge reference."""
         self._num += 1
         if self._num == 1:
             return f'{self.name}{":" + self.label if self.label else ""}{self.length_string}'
@@ -86,21 +91,22 @@ class EdgeReference():
 
 
 class Question():
-    '''
+    """Question object.
+    
     Represents a question such as "What genetic condition provides protection against disease X?"
 
     methods:
     * answer() - a struct containing the ranked answer paths
     * cypher() - the appropriate Cypher query for the Knowledge Graph
-    '''
+    """
 
     def __init__(self, *args, **kwargs):
-        '''
+        """Create a question.
+
         keyword arguments: id, user, notes, natural_question, nodes, edges
         q = Question(kw0=value, ...)
         q = Question(struct, ...)
-        '''
-
+        """
         # initialize all properties
         self.user_id = None
         self.id = None
@@ -141,12 +147,11 @@ class Question():
                 "edges": subgraph.edges}
 
     def answer(self):
-        '''
-        Answer the question.
+        """Answer the question.
 
         Returns the answer struct, something along the lines of:
         https://docs.google.com/document/d/1O6_sVSdSjgMmXacyI44JJfEVQLATagal9ydWLBgi-vE
-        '''
+        """
 
         # get all subgraphs relevant to the question from the knowledge graph
         database = KnowledgeGraph()
