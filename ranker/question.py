@@ -146,11 +146,13 @@ class Question():
     def relevant_subgraph(self):
         # get the subgraph relevant to the question from the knowledge graph
         database = KnowledgeGraph()
-        subgraph_networkx = database.queryToGraph(self.subgraph_with_support(database))
+        record = list(database.session.run(self.subgraph_with_support(database)))[0]
+        subgraph = {
+            'nodes': record['nodes'],
+            'edges': record['edges']
+        }
         del database
-        subgraph = UniversalGraph(subgraph_networkx)
-        return {"nodes": subgraph.nodes,
-                "edges": subgraph.edges}
+        return subgraph
 
     def answer(self):
         """Answer the question.
