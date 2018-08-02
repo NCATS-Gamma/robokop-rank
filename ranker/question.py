@@ -13,7 +13,6 @@ from itertools import combinations
 import networkx as nx
 
 # our modules
-from ranker.universalgraph import UniversalGraph
 from ranker.knowledgegraph import KnowledgeGraph
 from ranker.answer import Answer, Answerset
 from ranker.ranker import Ranker
@@ -186,7 +185,25 @@ class Question():
         #         'eb': 263
         #     }
         # }]
-        answerset_subgraph = database.queryToGraph(self.subgraph_with_support(database))
+        query_string = self.subgraph_with_support(database)
+        result = list(database.session.run(query_string))
+
+        def record2networkx(records):
+            """Return a networkx graph corresponding to the Neo4j Record.
+
+            http://neo4j.com/docs/api/java-driver/current/org/neo4j/driver/v1/Record.html
+            """
+            graph = nx.MultiDiGraph()
+            for record in records:
+                if 'nodes' in record:
+                    for node in record["nodes"]:
+                        graph.add_node(node['id'], **node)
+                if 'edges' in record:
+                    for edge in record["edges"]:
+                        graph.add_edge(edge['source_id'], edge['target_id'], **edge)
+            return graph
+        
+        answerset_subgraph = record2networkx(result)
         # answerset_subgraph is a networkx graph
         # whose node ids match the node values above and
         # whose edges have an 'id' property matching the edge values
@@ -266,9 +283,6 @@ class Question():
         aset = Answerset(misc_info=misc_info)
         # for substruct, subgraph in zip(score_struct, subgraphs):
         for subgraph in subgraphs_with_metadata:
-            # graph = UniversalGraph(nodes=substruct['nodes'], edges=substruct['edges'])
-            # graph.merge_multiedges()
-            # graph.to_answer_walk(subgraph)
 
             answer = Answer(nodes=subgraph['nodes'],
                             edges=subgraph['edges'],
