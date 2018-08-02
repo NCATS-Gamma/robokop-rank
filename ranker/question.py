@@ -266,7 +266,10 @@ class Question():
                                         type='is_associated_with',
                                         id=uid,
                                         publications=support_edge,
-                                        source_database='omnicorp')
+                                        source_database='omnicorp',
+                                        source_id=pair[0],
+                                        target_id=pair[1],
+                                        edge_source='omnicorp.term_to_term')
             for sg in pairs[pair]:
                 subgraphs[sg]['edges'].update({f's{support_idx}': uid})
 
