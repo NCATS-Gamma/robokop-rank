@@ -5,6 +5,12 @@ import os
 import warnings
 import logging
 from importlib import import_module
+from uuid import uuid4
+from collections import defaultdict
+from itertools import combinations
+
+# 3rd-party modules
+import networkx as nx
 
 # our modules
 from ranker.universalgraph import UniversalGraph
@@ -92,7 +98,7 @@ class EdgeReference():
 
 class Question():
     """Question object.
-    
+
     Represents a question such as "What genetic condition provides protection against disease X?"
 
     methods:
@@ -155,24 +161,43 @@ class Question():
 
         # get all subgraphs relevant to the question from the knowledge graph
         database = KnowledgeGraph()
-        subgraphs = database.query(self)  # list of lists of nodes with 'id' and 'bound'
+        subgraphs = database.query(self)
+        # subgraphs is a list of maps like this:
+        # [{
+        #     'nodes': {
+        #         'n0': 'MONDO:0005737',
+        #         'n1': 'HGNC:16361',
+        #         'n2': 'MONDO:0019588'
+        #     },
+        #     'edges': {
+        #         'ea': 261,
+        #         'eb': 264
+        #     }
+        # },{
+        #     'nodes': {
+        #         'n0': 'MONDO:0005737',
+        #         'n1': 'HGNC:16361',
+        #         'n2': 'MONDO:0016484'
+        #     },
+        #     'edges': {
+        #         'ea': 261,
+        #         'eb': 263
+        #     }
+        # }]
         answerset_subgraph = database.queryToGraph(self.subgraph_with_support(database))
+        # answerset_subgraph is a networkx graph
+        # whose node ids match the node values above and
+        # whose edges have an 'id' property matching the edge values
         del database
 
-        nodes = set()
-        pairs = set()
-        for subgraph in subgraphs:
+        # generate a set of node curies and a set of pairs of node curies
+        node_curies = set()
+        pairs = defaultdict(list)  # a map of node pairs to answers
+        for ans_idx, subgraph in enumerate(subgraphs):
             for node in list(subgraph['nodes'].values()):
-                nodes.add(node)
-            node_ids = list(subgraph['nodes'].keys())
-            for i, node_id in enumerate(node_ids):
-                node_i = subgraph['nodes'][node_id]
-                for node_id in node_ids[i + 1:]:
-                    node_j = subgraph['nodes'][node_id]
-                    if node_i > node_j:
-                        pairs.add((node_j, node_i))
-                    else:
-                        pairs.add((node_i, node_j))
+                node_curies.add(node)
+            for node_i, node_j in combinations(subgraph['nodes'].values(), 2):
+                pairs[(node_i, node_j)].append(ans_idx)
 
         # get cache
         # redis_conf = self.config["cache"]
@@ -186,7 +211,8 @@ class Question():
         supporter = import_module(support_module_name).get_supporter()
 
         # get all node supports
-        for node in nodes:
+        attrs = {}
+        for node in node_curies:
             key = f"{supporter.__class__.__name__}({node})"
             support_dict = cache.get(key)
             if support_dict is not None:
@@ -195,12 +221,12 @@ class Question():
                 logger.info(f"exec op: {key}")
                 support_dict = supporter.get_node_info(node)
                 cache.set(key, support_dict)
-            print(support_dict)
-            # if support_dict is not None:
-            #     node.properties.update(support_dict)
+            attrs[node] = support_dict
+        # add omnicorp_article_count to nodes in networkx graph
+        nx.set_node_attributes(answerset_subgraph, attrs)
 
         # get all pair supports
-        for pair in pairs:
+        for support_idx, pair in enumerate(pairs):
             key = f"{supporter.__class__.__name__}({pair[0]},{pair[1]})"
             support_edge = cache.get(key)
             if support_edge is not None:
@@ -214,7 +240,17 @@ class Question():
                     raise e
                     # logger.debug('Support error, not caching')
                     # continue
-            print(support_edge)
+            if not support_edge:
+                continue
+            uid = str(uuid4())
+            answerset_subgraph.add_edge(pair[0], pair[1],
+                                        type='is_associated_with',
+                                        id=uid,
+                                        publications=support_edge,
+                                        source_database='omnicorp')
+            for sg in pairs[pair]:
+                subgraphs[sg]['edges'].update({f's{support_idx}': uid})
+
         # ... incorporate support into ranking
 
         # compute scores with NAGA, export to json
