@@ -18,6 +18,11 @@ import numpy.linalg
 logger = logging.getLogger(__name__)
 
 
+def argsort(x, reverse=False):
+    """Return the indices that would sort the array."""
+    return [p[0] for p in sorted(enumerate(x), key=lambda elem: elem[1], reverse=reverse)]
+
+
 class Ranker:
     """Ranker."""
 
@@ -121,14 +126,51 @@ class Ranker:
         # sum their weights
         return sum([edge[-1]['weight'] for edge in edges])
 
+    def prescreen(self, subgraph_list):
+        """Prescreen subgraphs.
+        
+        Keep the top self.prescreen_count, by their total edge weight.
+        """
+        prescreen_scores = [self.sum_edge_weights(sg) for sg in subgraph_list]
+
+        prescreen_sorting = argsort(prescreen_scores, reverse=True)
+        prescreen_scores_sorted = [prescreen_scores[i] for i in prescreen_sorting]
+
+        if len(prescreen_sorting) > self.prescreen_count:
+            prescreen_sorting = prescreen_sorting[0:self.prescreen_count]
+            prescreen_scores_sorted = prescreen_scores_sorted[0:self.prescreen_count]
+
+        return [subgraph_list[i] for i in prescreen_sorting]
+
     def rank(self, subgraph_list):
         """Generate a sorted list and scores for a set of subgraphs."""
-        # subgraph_list is a list of lists of dicts with fields
-        # 'id' and 'bound'
+        # subgraph_list is a list of maps like this:
+        # [{
+        #     'nodes': {
+        #         'n0': 'MONDO:0005737',
+        #         'n1': 'HGNC:16361',
+        #         'n2': 'MONDO:0019588'
+        #     },
+        #     'edges': {
+        #         'ea': 261,
+        #         'eb': 264
+        #     }
+        # },{
+        #     'nodes': {
+        #         'n0': 'MONDO:0005737',
+        #         'n1': 'HGNC:16361',
+        #         'n2': 'MONDO:0016484'
+        #     },
+        #     'edges': {
+        #         'ea': 261,
+        #         'eb': 263
+        #     }
+        # }]
 
         if not subgraph_list:
             return ([], [])
 
+        # add weights to edges
         logger.debug('set_weights()... ')
         start = time.time()
         self.set_weights(method='ngd')
@@ -141,21 +183,15 @@ class Ranker:
         else:
             self.graph.add_node('None')   # must add the none node to correspond to None id's
 
+        # prescreen
         logger.debug("Prescreening subgraph_list... ")
         start = time.time()
-        prescreen_scores = [self.sum_edge_weights(sg) for sg in subgraph_list]
-        prescreen_sorting, prescreen_scores_sorted = zip(*sorted(enumerate(prescreen_scores), key=lambda elem: elem[1], reverse=True))
-
-        if len(prescreen_sorting) > self.prescreen_count:
-            prescreen_sorting = prescreen_sorting[0:self.prescreen_count]
-            prescreen_scores_sorted = prescreen_scores_sorted[0:self.prescreen_count]
-
-        subgraph_list = [subgraph_list[i] for i in prescreen_sorting]
+        subgraph_list = self.prescreen(subgraph_list)
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
+        # get subgraph statistics
         logger.debug("Calculating subgraph statistics()... ")
         start = time.time()
-
         graph_stat = [self.subgraph_statistic(sg, metric_type='mix') for sg in subgraph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
@@ -168,9 +204,9 @@ class Ranker:
         # Fail safe to nuke nans
         ranking_scores = [r if np.isfinite(r) else -1 for r in ranking_scores]
 
-        ranking_sorting, _ = zip(*sorted(enumerate(ranking_scores), key=lambda elem: elem[1], reverse=True))
+        # sort by scores
+        ranking_sorting = argsort(ranking_scores, reverse=True)
         subgraph_list = [subgraph_list[i] for i in ranking_sorting]
-
         subgraph_scores = [ranking_scores[i] for i in ranking_sorting]
 
         # trim output
@@ -276,7 +312,13 @@ class Ranker:
 
 
 def hitting_time_from_laplacian(laplacian):
-    """Compute hitting time from Laplacian."""
+    """Compute hitting time from Laplacian.
+
+    The expected time to reach the last node from the second node?
+
+    Berestycki and Sousi, 2017. Applied Probability
+    http://www.statslab.cam.ac.uk/~ps422/notes-new.pdf
+    """
     # assume L is square
     laplacian[-1, :] = 0
     laplacian[-1, -1] = 1
@@ -286,22 +328,26 @@ def hitting_time_from_laplacian(laplacian):
 
 
 def mixing_time_from_laplacian(laplacian):
-    """Compute mixing time from Laplacian."""
-    # assume L is square
-    n = laplacian.shape[0]
+    """Compute mixing time from Laplacian.
+
+    mixing time = 1/log(1/μ)
+                = 1/(1 - μ) if μ ~= 1
+    μ = second-largest eigenvalue modulus (absolute eigenvalue)
+
+    Boyd et al. 2004. Fastest Mixing Markov Chain on a Graph. SIAM Review Vol 46, No 4, pp 667-689
+    https://web.stanford.edu/~boyd/papers/pdf/fmmc.pdf
+    """
+    # invent discrete-time transition probability matrix
     g = max(np.diag(laplacian))
     if g < 1e-8 or not np.isfinite(g):
         return -1
+    P = np.eye(laplacian.shape[0]) - laplacian / g / 2
 
-    # uniformitization into discrete time chain
-    P = np.eye(n) - laplacian / g / 2
     try:  # always put other people's code inside a try catch loop
         eigvals = numpy.linalg.eigvals(P)
     except Exception:
         # this should never happen for nonzero teleportation
-        logger.debug("Eigenvalue computation failed for P:")
-        for i in range(n):
-            logger.debug(P[i, :])
+        logger.debug(f"Eigenvalue computation failed for P:\n{P}")
         return -1
 
     eigvals = np.abs(eigvals)
