@@ -8,12 +8,14 @@ import sys
 import json
 import warnings
 import logging
+from importlib import import_module
 
 # our modules
 from ranker.universalgraph import UniversalGraph
 from ranker.knowledgegraph import KnowledgeGraph
 from ranker.answer import Answer, Answerset
 from ranker.ranker import Ranker
+from ranker.cache import Cache
 
 logger = logging.getLogger(__name__)
 
@@ -151,6 +153,64 @@ class Question():
         subgraphs = database.query(self)  # list of lists of nodes with 'id' and 'bound'
         answerset_subgraph = database.queryToGraph(self.subgraph_with_support(database))
         del database
+
+        nodes = set()
+        pairs = set()
+        for subgraph in subgraphs:
+            for node in list(subgraph['nodes'].values()):
+                nodes.add(node)
+            node_ids = list(subgraph['nodes'].keys())
+            for i, node_id in enumerate(node_ids):
+                node_i = subgraph['nodes'][node_id]
+                for node_id in node_ids[i + 1:]:
+                    node_j = subgraph['nodes'][node_id]
+                    if node_i > node_j:
+                        pairs.add((node_j, node_i))
+                    else:
+                        pairs.add((node_i, node_j))
+
+        # get cache
+        # redis_conf = self.config["cache"]
+        cache = Cache(
+            redis_host=os.environ['CACHE_HOST'],  # redis_conf.get ("host"),
+            redis_port=os.environ['CACHE_PORT'],  # redis_conf.get ("port"),
+            redis_db=os.environ['CACHE_DB'])  # redis_conf.get ("db"))
+
+        # get supoorter
+        support_module_name = 'ranker.support.omnicorp'
+        supporter = import_module(support_module_name).get_supporter()
+
+        # get all node supports
+        for node in nodes:
+            key = f"{supporter.__class__.__name__}({node})"
+            support_dict = cache.get(key)
+            if support_dict is not None:
+                logger.info(f"cache hit: {key} {support_dict}")
+            else:
+                logger.info(f"exec op: {key}")
+                support_dict = supporter.get_node_info(node)
+                cache.set(key, support_dict)
+            print(support_dict)
+            # if support_dict is not None:
+            #     node.properties.update(support_dict)
+
+        # get all pair supports
+        for pair in pairs:
+            key = f"{supporter.__class__.__name__}({pair[0]},{pair[1]})"
+            support_edge = cache.get(key)
+            if support_edge is not None:
+                logger.info(f"cache hit: {key} {support_edge}")
+            else:
+                logger.info(f"exec op: {key}")
+                try:
+                    support_edge = supporter.term_to_term(pair[0], pair[1])
+                    cache.set(key, support_edge)
+                except Exception as e:
+                    raise e
+                    # logger.debug('Support error, not caching')
+                    # continue
+            print(support_edge)
+        # ... incorporate support into ranking
 
         # compute scores with NAGA, export to json
         pr = Ranker(answerset_subgraph)
