@@ -56,21 +56,21 @@ class QueryTemplate(Resource):
         q_json = {
             "edges": [
                 {
-                "end": 1,
-                "start": 0
+                    "end": 1,
+                    "start": 0
                 }
             ],
             "nodes": [
                 {
-                "id": 0,
-                "identifiers": [
-                    drug_id
-                ],
-                "type": "chemical_substance"
+                    "id": 0,
+                    "identifiers": [
+                        drug_id
+                    ],
+                    "type": "chemical_substance"
                 },
                 {
-                "id": 1,
-                "type": "gene"
+                    "id": 1,
+                    "type": "gene"
                 }
             ]
         }
@@ -90,6 +90,49 @@ class QueryTemplate(Resource):
         return response, 200
 
 api.add_resource(QueryTemplate, '/query')
+
+class AnswerQuestionNow(Resource):
+    def post(self):
+        """
+        Get answers to a question
+        ---
+        tags: [answer]
+        parameters:
+          - in: body
+            name: question
+            description: The machine-readable question graph.
+            schema:
+                $ref: '#/definitions/Question'
+            required: true
+        responses:
+            200:
+                description: Answer
+                schema:
+                    type: object
+                    required:
+                      - thingsandstuff
+                    properties:
+                        thingsandstuff:
+                            type: string
+                            description: all the things and stuff
+        """
+        # replace `parameters` with this when OAS 3.0 is fully supported by Swagger UI
+        # https://github.com/swagger-api/swagger-ui/issues/3641
+        """
+        requestBody:
+            description: The machine-readable question graph.
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/definitions/Question'
+        """
+        result = answer_question.apply(args=[request.json])
+        with open(os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', result.get()), 'r') as f:
+            answers = json.load(f)
+        return answers, 202
+
+api.add_resource(AnswerQuestionNow, '/now')
 
 class AnswerQuestion(Resource):
     def post(self):
@@ -382,5 +425,5 @@ if __name__ == '__main__':
 
     app.run(host=server_host,\
         port=server_port,\
-        debug=True,\
+        debug=False,\
         use_reloader=True)
