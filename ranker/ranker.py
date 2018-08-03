@@ -283,19 +283,19 @@ class Ranker:
 
         # get updated weights
         edges = self.get_edges_by_id(subgraph['edges'].values(), data=True)
-        # edge_subgraph is busted, this avoids the issue:
-        edges = [(e[0], e[1], f"{e[2]['source_database']}:{e[2]['type']}") for e in edges]
-        subgraph_update = self.graph.edge_subgraph(edges)
-        node_ids = list(self.graph.nodes)
+        nodes = []
+        for e in edges:
+            nodes.extend([e[0], e[1]])
+        subgraph_update = self.graph.subgraph(nodes)
 
-        nodes = subgraph_update.nodes(data=True)
+        node_ids = list(subgraph_update.nodes)
 
         # get updated weights
         subgraph_update = subgraph_update.to_undirected()
 
         # compute graph laplacian for this case with potentially duplicated
         # nodes (None may be duplicated)
-        num_nodes = len(nodes)
+        num_nodes = len(node_ids)
         laplacian = np.zeros((num_nodes, num_nodes))
         index = {id: node_ids.index(id) for id in node_ids}
         for source_id, target_id, weight in subgraph_update.edges(data='weight'):
