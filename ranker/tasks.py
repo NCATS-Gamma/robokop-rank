@@ -58,7 +58,10 @@ def answer_question(self, question_json):
     self.update_state(state='SAVING')
 
     filename = f"{uuid.uuid4()}.json"
-    result_path = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', filename)
+    answers_dir = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers')
+    if not os.path.exists(answers_dir):
+        os.makedirs(answers_dir)
+    result_path = os.path.join(answers_dir, filename)
     try:
         with open(result_path, 'w') as f:
             json.dump(answerset.toJSON(), f)
