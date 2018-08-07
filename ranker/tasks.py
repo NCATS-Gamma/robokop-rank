@@ -13,6 +13,7 @@ from kombu import Queue
 
 from ranker.api.setup import app
 from ranker.question import Question, NoAnswersException
+import ranker.api.logging_config
 
 logger = logging.getLogger(__name__)
 
