@@ -14,7 +14,6 @@ services:
       - BROKER_HOST=broker
     ports:
       - "${RANKER_PORT}:${RANKER_PORT}"
-      - "${FLOWER_PORT}:${FLOWER_PORT}"
       - "${SUPERVISOR_PORT}:${SUPERVISOR_PORT}"
     volumes:
       - ../../logs:/home/murphy/logs

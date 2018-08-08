@@ -263,7 +263,7 @@ class Question():
                 continue
             uid = str(uuid4())
             answerset_subgraph.add_edge(pair[0], pair[1],
-                                        type='is_associated_with',
+                                        type='literature_co-occurrence',
                                         id=uid,
                                         publications=support_edge,
                                         source_database='omnicorp',
