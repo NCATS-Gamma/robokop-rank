@@ -4,7 +4,6 @@ flask
 flask-restful
 flask-cors
 flasgger
-flower
 gunicorn
 kombu
 lru-dict
