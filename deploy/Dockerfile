@@ -1,6 +1,6 @@
 # This Dockerfile is used to build ROBOKOP
 
-FROM python:3
+FROM python:3.6.6-stretch
 
 LABEL maintainer="patrick@covar.com"
 ENV LANG=C.UTF-8 \
