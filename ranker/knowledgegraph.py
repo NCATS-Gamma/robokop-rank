@@ -3,6 +3,7 @@ import os
 import sys
 import logging
 from neo4j.v1 import GraphDatabase, basic_auth
+import ranker.api.logging_config
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +29,7 @@ class KnowledgeGraph:
             query_string = question.cypher(self)
 
         logger.debug('Running query... ')
+        logger.debug(query_string)
         start = time.time()
         result = self.session.run(query_string)
         records = [{'nodes': r['nodes'], 'edges': r['edges']} for r in result]

@@ -17,6 +17,8 @@ from ranker.knowledgegraph import KnowledgeGraph
 from ranker.answer import Answer, Answerset
 from ranker.ranker import Ranker
 from ranker.cache import Cache
+import ranker.api.logging_config
+
 
 logger = logging.getLogger(__name__)
 
