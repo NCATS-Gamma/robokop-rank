@@ -147,12 +147,12 @@ class Question():
     def relevant_subgraph(self):
         # get the subgraph relevant to the question from the knowledge graph
         database = KnowledgeGraph()
-        record = list(database.session.run(self.subgraph_with_support(database)))[0]
+        with database.driver.session() as session:
+            record = list(session.run(self.subgraph_with_support(database)))[0]
         subgraph = {
             'nodes': record['nodes'],
             'edges': record['edges']
         }
-        del database
         return subgraph
 
     def answer(self):
@@ -188,7 +188,10 @@ class Question():
         #     }
         # }]
         query_string = self.subgraph_with_support(database)
-        result = list(database.session.run(query_string))
+        with database.driver.session() as session:
+            result = session.run(query_string)
+        logger.debug('Converting Neo4j Result to dict...')
+        result = list(result)
 
         def record2networkx(records):
             """Return a networkx graph corresponding to the Neo4j Record.

@@ -282,7 +282,6 @@ class IDMap(Resource):
 
         database = KnowledgeGraph()
         id_map = database.get_map_for_type(concept)
-        del database
 
         return id_map, 200
 
@@ -314,7 +313,6 @@ class MapID(Resource):
 
         database = KnowledgeGraph()
         id_map = database.get_map_for_type(concept)
-        del database
 
         return id_map[identifier], 200
 
