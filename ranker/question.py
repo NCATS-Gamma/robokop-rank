@@ -320,7 +320,7 @@ class Question():
         match_string = ' '.join(match_strings)
         return match_string
 
-    def cypher(self, db):
+    def cypher(self, db, options=None):
         '''
         Generate a Cypher query to extract the portion of the Knowledge Graph necessary to answer the question.
 
@@ -340,6 +340,11 @@ class Question():
 
         # return subgraphs matching query
         query_string = ' '.join([match_string, answer_return_string])
+        if options is not None:
+            if 'skip' in options:
+                query_string += f' SKIP {options["skip"]}'
+            if 'limit' in options:
+                query_string += f' LIMIT {options["limit"]}'
 
         return query_string
 

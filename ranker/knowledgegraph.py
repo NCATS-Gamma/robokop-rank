@@ -21,11 +21,11 @@ class KnowledgeGraph:
         synsets = [r['n'].properties['equivalent_identifiers'] for r in records]
         return {syn:id for id, synset in zip(ids,synsets) for syn in synset}
 
-    def query(self, question):
+    def query(self, question, options=None):
         if isinstance(question, str):
             query_string = question
         else:
-            query_string = question.cypher(self)
+            query_string = question.cypher(self, options=options)
 
         logger.debug('Running query... ')
         logger.debug(query_string)
@@ -38,4 +38,3 @@ class KnowledgeGraph:
         logger.debug(f"{len(records)} subgraphs returned.")
 
         return records
-
