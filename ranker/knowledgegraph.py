@@ -39,6 +39,3 @@ class KnowledgeGraph:
 
         return records
 
-    def __del__(self):
-        self.session.close()
-        logger.debug('Disconnected from database.')
