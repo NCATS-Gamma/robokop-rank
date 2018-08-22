@@ -2,12 +2,15 @@
 
 # standard modules
 import os
+import sys
 import warnings
 import logging
 from importlib import import_module
 from uuid import uuid4
 from collections import defaultdict
 from itertools import combinations
+import pickle
+import resource
 
 # 3rd-party modules
 import networkx as nx
@@ -97,6 +100,22 @@ class EdgeReference():
             return self.name
 
 
+def record2networkx(records):
+    """Return a networkx graph corresponding to the Neo4j Record.
+
+    http://neo4j.com/docs/api/java-driver/current/org/neo4j/driver/v1/Record.html
+    """
+    graph = nx.MultiDiGraph()
+    for record in records:
+        if 'nodes' in record:
+            for node in record["nodes"]:
+                graph.add_node(node['id'], **node)
+        if 'edges' in record:
+            for edge in record["edges"]:
+                graph.add_edge(edge['source_id'], edge['target_id'], **edge)
+    return graph
+
+
 class Question():
     """Question object.
 
@@ -162,95 +181,74 @@ class Question():
         https://docs.google.com/document/d/1O6_sVSdSjgMmXacyI44JJfEVQLATagal9ydWLBgi-vE
         """
 
-        # get all subgraphs relevant to the question from the knowledge graph
+        # get cache
+        cache = Cache(
+            redis_host=os.environ['CACHE_HOST'],
+            redis_port=os.environ['CACHE_PORT'],
+            redis_db=os.environ['CACHE_DB'])
+
+        # get supporter
+        support_module_name = 'ranker.support.omnicorp'
+        supporter = import_module(support_module_name).get_supporter()
+
+        # get Neo4j connection
         database = KnowledgeGraph()
-        subgraphs = database.query(self)
-        # subgraphs is a list of maps like this:
-        # [{
-        #     'nodes': {
-        #         'n0': 'MONDO:0005737',
-        #         'n1': 'HGNC:16361',
-        #         'n2': 'MONDO:0019588'
-        #     },
-        #     'edges': {
-        #         'ea': 261,
-        #         'eb': 264
-        #     }
-        # },{
-        #     'nodes': {
-        #         'n0': 'MONDO:0005737',
-        #         'n1': 'HGNC:16361',
-        #         'n2': 'MONDO:0016484'
-        #     },
-        #     'edges': {
-        #         'ea': 261,
-        #         'eb': 263
-        #     }
-        # }]
+
+        # get joint subgraph
+        logger.debug('Getting joint subgraph...')
         query_string = self.subgraph_with_support(database)
+        logger.debug(query_string)
         with database.driver.session() as session:
             result = session.run(query_string)
         logger.debug('Converting Neo4j Result to dict...')
         result = list(result)
 
-        def record2networkx(records):
-            """Return a networkx graph corresponding to the Neo4j Record.
-
-            http://neo4j.com/docs/api/java-driver/current/org/neo4j/driver/v1/Record.html
-            """
-            graph = nx.MultiDiGraph()
-            for record in records:
-                if 'nodes' in record:
-                    for node in record["nodes"]:
-                        graph.add_node(node['id'], **node)
-                if 'edges' in record:
-                    for edge in record["edges"]:
-                        graph.add_edge(edge['source_id'], edge['target_id'], **edge)
-            return graph
-        
-        answerset_subgraph = record2networkx(result)
-        # answerset_subgraph is a networkx graph
-        # whose node ids match the node values above and
-        # whose edges have an 'id' property matching the edge values
-        del database
-
-        # generate a set of node curies and a set of pairs of node curies
-        node_curies = set()
-        pairs = defaultdict(list)  # a map of node pairs to answers
-        for ans_idx, subgraph in enumerate(subgraphs):
-            for node in list(subgraph['nodes'].values()):
-                node_curies.add(node)
-            for node_i, node_j in combinations(subgraph['nodes'].values(), 2):
-                pairs[(node_i, node_j)].append(ans_idx)
-
-        # get cache
-        # redis_conf = self.config["cache"]
-        cache = Cache(
-            redis_host=os.environ['CACHE_HOST'],  # redis_conf.get ("host"),
-            redis_port=os.environ['CACHE_PORT'],  # redis_conf.get ("port"),
-            redis_db=os.environ['CACHE_DB'])  # redis_conf.get ("db"))
-
-        # get supoorter
-        support_module_name = 'ranker.support.omnicorp'
-        supporter = import_module(support_module_name).get_supporter()
+        answerset_subgraph = {
+            'nodes': result[0]['nodes'],
+            'edges': result[0]['edges']
+        }
 
         # get all node supports
-        attrs = {}
-        for node in node_curies:
-            key = f"{supporter.__class__.__name__}({node})"
+        for node in answerset_subgraph['nodes']:
+            key = f"{supporter.__class__.__name__}({node['id']})"
             support_dict = cache.get(key)
             if support_dict is not None:
                 logger.info(f"cache hit: {key} {support_dict}")
             else:
                 logger.info(f"exec op: {key}")
-                support_dict = supporter.get_node_info(node)
+                support_dict = supporter.get_node_info(node['id'])
                 cache.set(key, support_dict)
-            attrs[node] = support_dict
-        # add omnicorp_article_count to nodes in networkx graph
-        nx.set_node_attributes(answerset_subgraph, attrs)
+            # add omnicorp_article_count to nodes in networkx graph
+            node.update(support_dict)
+
+        # get all subgraphs relevant to the question from the knowledge graph
+        logger.debug('Getting answer paths...')
+        all_subgraphs = []
+        options = {
+            'limit': 1000000,
+            'skip': 0
+        }
+        while len(all_subgraphs) < options['limit'] * 4:
+            subgraphs = database.query(self, options=options)
+            options['skip'] += options['limit']
+            subgraph_list = [{'nodes': g['nodes'], 'edges': g['edges']} for g in subgraphs]
+            all_subgraphs.extend(subgraph_list)
+            logger.debug(f'{len(all_subgraphs)} subgraphs: {int(sys.getsizeof(pickle.dumps(all_subgraphs)) / 1e6):d} MB')
+            logger.debug(f'memory usage: {int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e3):d} MB')
+            if len(subgraph_list) < options['limit']:
+                break
+
+        logger.debug('Generating node pairs...')
+        # generate a set of pairs of node curies
+        pair_to_answer = defaultdict(list)  # a map of node pairs to answers
+        for ans_idx, subgraph in enumerate(all_subgraphs):
+            nodes = [n if isinstance(n, list) else [n] for n in subgraph['nodes'].values()]
+            nodes = [n for l in nodes for n in l]
+            for node_i, node_j in combinations(nodes, 2):
+                pair_to_answer[(node_i, node_j)].append(ans_idx)
 
         # get all pair supports
-        for support_idx, pair in enumerate(pairs):
+        for support_idx, pair in enumerate(pair_to_answer):
             key = f"{supporter.__class__.__name__}({pair[0]},{pair[1]})"
             support_edge = cache.get(key)
             if support_edge is not None:
@@ -267,22 +265,22 @@ class Question():
             if not support_edge:
                 continue
             uid = str(uuid4())
-            answerset_subgraph.add_edge(pair[0], pair[1],
-                                        type='literature_co-occurrence',
-                                        id=uid,
-                                        publications=support_edge,
-                                        source_database='omnicorp',
-                                        source_id=pair[0],
-                                        target_id=pair[1],
-                                        edge_source='omnicorp.term_to_term')
-            for sg in pairs[pair]:
-                subgraphs[sg]['edges'].update({f's{support_idx}': uid})
+            answerset_subgraph['edges'].append({
+                'type': 'literature_co-occurrence',
+                'id': uid,
+                'publications': support_edge,
+                'source_database': 'omnicorp',
+                'source_id': pair[0],
+                'target_id': pair[1],
+                'edge_source': 'omnicorp.term_to_term'
+            })
+            for sg in pair_to_answer[pair]:
+                all_subgraphs[sg]['edges'].update({f's{support_idx}': uid})
 
-        # ... incorporate support into ranking
-
+        logger.debug('Ranking...')
         # compute scores with NAGA, export to json
         pr = Ranker(answerset_subgraph)
-        subgraphs_with_metadata, subgraphs = pr.report_ranking(subgraphs)  # returned subgraphs are sorted by rank
+        subgraphs_with_metadata, subgraphs = pr.report_ranking(all_subgraphs)  # returned subgraphs are sorted by rank
 
         misc_info = {
             'natural_question': self.natural_question,
@@ -330,16 +328,27 @@ class Question():
         match_string = self.cypher_match_string(db)
 
         nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
+        node_map = {n['id']: n for n in nodes}
 
         # generate internal node and edge variable names
         node_names = [f"n{n['id']}" for n in nodes]
         edge_names = [f"e{e['id']}" for e in edges]
 
+        # deal with sets
+        node_id_accessor = [f"collect(distinct n{n['id']}.id) as n{n['id']}" if 'set' in n and n['set'] else f"n{n['id']}.id as n{n['id']}" for n in nodes]
+        edge_set = []
+        for e in edges:
+            source_node = node_map[e['source_id']]
+            target_node = node_map[e['target_id']]
+            edge_set.append('set' in source_node and source_node['set'] or 'set' in target_node and target_node['set'])
+        edge_id_accessor = [f"collect(distinct id(e{e['id']})) as e{e['id']}" if is_set else f"id(e{e['id']}) as e{e['id']}" for e, is_set in zip(edges, edge_set)]
+        with_string = f"WITH {', '.join(node_id_accessor+edge_id_accessor)}"
+
         # add bound fields and return map
-        answer_return_string = f"RETURN {{{', '.join([f'{n}:{n}.id' for n in node_names])}}} as nodes, {{{', '.join([f'{e}:id({e})' for e in edge_names])}}} as edges"
+        answer_return_string = f"RETURN {{{', '.join([f'{n}:{n}' for n in node_names])}}} as nodes, {{{', '.join([f'{e}:{e}' for e in edge_names])}}} as edges"
 
         # return subgraphs matching query
-        query_string = ' '.join([match_string, answer_return_string])
+        query_string = ' '.join([match_string, with_string, answer_return_string])
         if options is not None:
             if 'skip' in options:
                 query_string += f' SKIP {options["skip"]}'
@@ -357,7 +366,7 @@ class Question():
         node_names = [f"n{n['id']}" for n in nodes]
         edge_names = [f"e{e['id']}" for e in edges]
 
-        collection_string = f"""WITH {'+'.join([f'collect({n})' for n in node_names])} as nodes, {'+'.join([f'collect({e})' for e in edge_names])} as edges
+        collection_string = f"""WITH {'+'.join([f'collect(distinct {n})' for n in node_names])} as nodes, {'+'.join([f'collect(distinct {e})' for e in edge_names])} as edges
             UNWIND nodes as n WITH collect(distinct n) as nodes, edges
             UNWIND edges as e WITH nodes, collect(distinct e) as edges"""
         support_string = """WITH
@@ -365,6 +374,8 @@ class Question():
             [n in nodes | n{.*, type:labels(n)[0]}] as nodes"""
         return_string = 'RETURN nodes, edges'
         query_string = "\n".join([match_string, collection_string, support_string, return_string])
+
+        logger.debug(query_string)
 
         return query_string
 
