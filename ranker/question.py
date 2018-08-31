@@ -170,6 +170,9 @@ class Question():
             'nodes': record['nodes'],
             'edges': record['edges']
         }
+        for node in subgraph['nodes']:
+            node['type'].remove('named_thing')
+            node['type'] = node['type'][0]
         return subgraph
 
     def answer(self):
@@ -205,6 +208,9 @@ class Question():
             'nodes': result[0]['nodes'],
             'edges': result[0]['edges']
         }
+        for node in answerset_subgraph['nodes']:
+            node['type'].remove('named_thing')
+            node['type'] = node['type'][0]
 
         # get all node supports
         for node in answerset_subgraph['nodes']:
@@ -369,7 +375,7 @@ class Question():
             UNWIND edges as e WITH nodes, collect(distinct e) as edges"""
         support_string = """WITH
             [r in edges | r{.*, source_id:startNode(r).id, target_id:endNode(r).id, type:type(r), id:id(r)}] as edges,
-            [n in nodes | n{.*, type:labels(n)[0]}] as nodes"""
+            [n in nodes | n{.*, type:labels(n)}] as nodes"""
         return_string = 'RETURN nodes, edges'
         query_string = "\n".join([match_string, collection_string, support_string, return_string])
 
