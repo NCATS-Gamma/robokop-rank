@@ -5,6 +5,7 @@ import os
 import sys
 import warnings
 import logging
+import requests
 from importlib import import_module
 from uuid import uuid4
 from collections import defaultdict
@@ -42,14 +43,11 @@ class NodeReference():
             label = 'biological_process_or_activity'
 
         if 'curie' in node:
-            if db:
-                id_map = db.get_map_for_type(label)
-                try:
-                    curie = id_map[node['curie'].upper()]
-                except KeyError:
-                    raise NoAnswersException("Question answering complete, found 0 answers.")
+            if 'type' in node:
+                response = requests.post(f"http://{os.environ['BUILDER_HOST']}:6010/api/synonymize/{node['curie']}/{node['type']}/")
+                curie = response.json()['id']
             else:
-                curie = node['curie'].upper()
+                curie = node['curie']
             prop_string = f" {{id: \'{curie}\'}}"
         else:
             prop_string = ''
