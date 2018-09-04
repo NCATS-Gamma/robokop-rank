@@ -417,6 +417,62 @@ class TaskStatus(Resource):
 
 api.add_resource(TaskStatus, '/task/<task_id>')
 
+class SimilaritySearch(Resource):
+    def get(self, type1, identifier, type2, by_type):
+        """
+        Similarity search in the local knowledge graph
+        ---
+          - in: path
+            name: type1
+            description: "type of query node"
+            type: string
+            required: true
+            default: "disease"
+          - in: path
+            name: id1
+            description: "curie of query node"
+            type: string
+            required: true
+            default: "MONDO:0005737"
+          - in: path
+            name: type2
+            description: "type of return nodes"
+            type: string
+            required: true
+            default: "disease"
+          - in: path
+            name: by_type
+            description: "type used to evaluate similarity"
+            type: string
+            required: true
+            default: "phenotypic_feature"
+          - in: query
+            name: threshhold
+            description: "Number between 0 and 1 indicating the minimum similarity to return"
+            type: float
+            default: 0.4
+          - in: query
+            name: maxresults
+            description: "The maximum number of results to return. Set to 0 to return all results."
+            type: integer
+            default: 100
+        responses:
+            200:
+                description: result
+                schema:
+                    $ref: "#/definitions/SimilarityResult"
+        """
+        database = KnowledgeGraph()
+        threshhold = request.args.get('threshhold', default = 0.4)
+        maxresults = request.args.get('maxresults', default = 100)
+        sim_results = database.similarity_search(type1, identifier, type2, by_type, threshhold, maxresults)
+        del database
+
+        return sim_results, 200
+
+api.add_resource(SimilaritySearch, '/similarity/<type1>/<identifier>/<type2>/<by_type>')
+
+
 if __name__ == '__main__':
 
     # Get host and port from environmental variables
