@@ -11,7 +11,9 @@ The most typical use case is:
 
 import logging
 import time
-import networkx as nx
+import heapq
+import operator
+
 import numpy as np
 import numpy.linalg
 
@@ -23,17 +25,21 @@ def argsort(x, reverse=False):
     return [p[0] for p in sorted(enumerate(x), key=lambda elem: elem[1], reverse=reverse)]
 
 
+def flatten_semilist(x):
+    lists = [n if isinstance(n, list) else [n] for n in x]
+    return [e for el in lists for e in el]
+
+
 class Ranker:
     """Ranker."""
 
-    G = nx.MultiDiGraph()  # a networkx MultiDiGraph() with weights
     graphInfo = {}  # will be populated on construction
     naga_parameters = {'alpha': .9, 'beta': .9}
     prescreen_count = 2000  # only look at this many graphs more in depth
     teleport_weight = 0.001  # probability to teleport along graph (make random inference) in hitting time calculation
     output_count = 250
 
-    def __init__(self, graph=nx.MultiDiGraph()):
+    def __init__(self, graph=None):
         """Create ranker."""
         self.graph = graph
         self._evaluated_templates = {}
@@ -42,146 +48,93 @@ class Ranker:
     def set_weights(self, method='ngd'):
         """Initialize weights on the graph based on metadata.
 
-        * 'logistic' just counts # of publications and applies a hand tuned
-        logistic.
         * 'ngd' uses the omnicorp_article_count on the edges to generate
         normalized google distance weights.
         """
+
+        if method != 'ngd':
+            raise RuntimeError('You must use method "ngd".')
+
+        node_pubs = {n['id']: n['omnicorp_article_count'] for n in self.graph['nodes']}
+
+        N = 1e8  # approximate number of articles in corpus * typical number of keywords
+        minimum_article_node_count = 1000  # assume every concept actually has at least this many publications we may or may not know about
+
+        mean_ngd = 1e-8
+
         # notation: edge contains metadata, e is edge without metadata
-        edges = self.graph.edges(data=True, keys=True)
-        pub_counts = {edge[:-1]: len(edge[-1]['publications']) if 'publications' in edge[-1] else 0 for edge in edges}
+        edges = self.graph['edges']
+        for edge in edges:
+            pub_count = len(edge['publications']) if 'publications' in edge else 0
 
-        # initialize scoring info - ngd initializes to big number (np.inf not
-        # well-liked) so that weight becomes zero
-        scoring_info = {e: {'num_pubs': pub_counts[e], 'ngd': 1e6} for e in pub_counts}
-        nx.set_edge_attributes(self.graph, values=scoring_info, name='scoring')
+            # initialize scoring info - ngd initializes to big number (np.inf not
+            # well-liked) so that weight becomes zero
+            scoring_info = {'num_pubs': pub_count, 'ngd': 1e6}
+            edge['scoring'] = scoring_info
 
-        if method == 'logistic':
-            # apply logistic function to publications to get weights
-            weights = {e: 1 / (1 + np.exp((5 - pub_counts[e]) / 2)) for e in pub_counts}
+            source_pubs = max(int(node_pubs[edge['source_id']]), minimum_article_node_count)
+            target_pubs = max(int(node_pubs[edge['target_id']]), minimum_article_node_count)
 
-        elif method == 'ngd':
-            # this method tries to use omnicorp's article counts to normalize
-            # probabilities in a meaningful way
-            nodes = self.graph.nodes()
-            node_pub_sum = {n: sum([edge[-1]['scoring']['num_pubs'] for edge in self.graph.edges(n, data=True)]) for n in nodes}
+            edge_count = edge['scoring']['num_pubs'] + 1  # avoid log(0) problem
 
-            N = 1e8  # approximate number of articles in corpus * typical number of keywords
-            default_article_node_count = 25000  # large but typical number of article counts for a node
-            minimum_article_node_count = 1000  # assume every concept actually has at least this many publications we may or may not know about
+            # formula for normalized google distance
+            ngd = (np.log(max(source_pubs, target_pubs)) - np.log(edge_count)) / \
+                (np.log(N) - np.log(min(source_pubs, target_pubs)))
 
-            mean_ngd = 1e-8
-            node_count = [minimum_article_node_count] * 2
-            for edge in edges:
-                for i in range(2):
-                    if 'omnicorp_article_count' in self.graph.node[edge[i]]:
-                        node_count[i] = int(self.graph.node[edge[i]]['omnicorp_article_count'])
-                    else:
-                        node_count[i] = default_article_node_count
+            # this shouldn't happen but theoretically could
+            if ngd < 0:
+                ngd = 0
 
-                    # make sure the node counts are at least as great as the sum of pubs along the edges we have
-                    node_count[i] = max(node_count[i], node_pub_sum[edge[i]], minimum_article_node_count)
+            edge['scoring']['ngd'] = ngd
+            mean_ngd += ngd
 
-                edge_count = edge[-1]['scoring']['num_pubs'] + 1  # avoid log(0) problem
+        mean_ngd = mean_ngd / len(edges)
 
-                # formula for normalized google distance
-                ngd = (np.log(min(node_count)) - np.log(edge_count)) / \
-                    (np.log(N) - np.log(max(node_count)))
-
-                # this shouldn't happen but theoretically could
-                if ngd < 0:
-                    ngd = 0
-
-                edge[-1]['scoring']['ngd'] = ngd
-                mean_ngd = mean_ngd + ngd
-
-            mean_ngd = mean_ngd / len(edges)
-            logger.debug(f"Mean ngd: {mean_ngd}")
-
+        for edge in edges:
             # ngd is like a metric, we need a similarity
             # common way to do this is with a gaussian kernel
-            weights = {edge[:-1]: np.exp(-(edge[-1]['scoring']['ngd'] / mean_ngd)**2 / 2) for edge in edges}
+            weight = np.exp(-(edge['scoring']['ngd'] / mean_ngd)**2 / 2)
 
-        else:
-            raise Exception('Method ' + method + ' has not been implemented.')
+            # make sure weights on edges are not nan valued - set them to zero otherwise
+            edge['weight'] = weight if np.isfinite(weight) else 0
 
-        # make sure weights on edges are not nan valued - set them to zero otherwise
-        weights = {e: (weights[e] if np.isfinite(weights[e]) else 0) for e in weights}
-
-        # set the weights on the edges
-        nx.set_edge_attributes(self.graph, values=weights, name='weight')
-
-    def get_edges_by_id(self, edge_ids, data=False):
+    def get_edges_by_id(self, edge_ids):
         """Get edges by id."""
-        edges = [e for e in self.graph.edges(data=True) if e[-1]['id'] in edge_ids]
-        if data:
-            return edges
-        else:
-            return [e[:2] for e in edges]
+        edges = [e for e in self.graph['edges'] if e['id'] in flatten_semilist(edge_ids)]
+        return edges
 
     def sum_edge_weights(self, subgraph):
         """Add edge weights."""
         # choose edges with one of the appropriate ids
-        edges = self.get_edges_by_id(subgraph['edges'].values(), data=True)
+        edges = self.get_edges_by_id(subgraph['edges'].values())
         # sum their weights
-        return sum([edge[-1]['weight'] for edge in edges])
+        return sum([edge['weight'] for edge in edges])
 
     def prescreen(self, subgraph_list):
         """Prescreen subgraphs.
         
         Keep the top self.prescreen_count, by their total edge weight.
         """
+        logger.debug(f'Getting {len(subgraph_list)} prescreen scores...')
         prescreen_scores = [self.sum_edge_weights(sg) for sg in subgraph_list]
 
-        prescreen_sorting = argsort(prescreen_scores, reverse=True)
-        prescreen_scores_sorted = [prescreen_scores[i] for i in prescreen_sorting]
+        logger.debug('Getting top N...')
+        prescreen_sorting = [x[0] for x in heapq.nlargest(self.prescreen_count, enumerate(prescreen_scores), key=operator.itemgetter(1))]
 
-        if len(prescreen_sorting) > self.prescreen_count:
-            prescreen_sorting = prescreen_sorting[0:self.prescreen_count]
-            prescreen_scores_sorted = prescreen_scores_sorted[0:self.prescreen_count]
-
+        logger.debug('Returning sorted results...')
         return [subgraph_list[i] for i in prescreen_sorting]
 
     def rank(self, subgraph_list):
         """Generate a sorted list and scores for a set of subgraphs."""
-        # subgraph_list is a list of maps like this:
-        # [{
-        #     'nodes': {
-        #         'n0': 'MONDO:0005737',
-        #         'n1': 'HGNC:16361',
-        #         'n2': 'MONDO:0019588'
-        #     },
-        #     'edges': {
-        #         'ea': 261,
-        #         'eb': 264
-        #     }
-        # },{
-        #     'nodes': {
-        #         'n0': 'MONDO:0005737',
-        #         'n1': 'HGNC:16361',
-        #         'n2': 'MONDO:0016484'
-        #     },
-        #     'edges': {
-        #         'ea': 261,
-        #         'eb': 263
-        #     }
-        # }]
 
         if not subgraph_list:
             return ([], [])
 
         # add weights to edges
-        logger.debug('set_weights()... ')
+        logger.debug('Setting weights... ')
         start = time.time()
         self.set_weights(method='ngd')
         logger.debug(f"{time.time()-start} seconds elapsed.")
-
-        # add the none node to G
-        if 'None' in self.graph:
-            logger.error("Node 'None' already exists in G.\n" +
-                         "This could cause incorrect ranking results.")
-        else:
-            self.graph.add_node('None')   # must add the none node to correspond to None id's
 
         # prescreen
         logger.debug("Prescreening subgraph_list... ")
@@ -225,43 +178,33 @@ class Ranker:
         # add extra computed metadata in self.graph to subgraph for display
         logger.debug("Extracting subgraphs... ")
         start = time.time()
-        subgraphs_meta = [self.graph.subgraph([s for s in subgraph['nodes'].values()]) for subgraph in subgraph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
         report = []
-        for i, subgraph in enumerate(subgraphs_meta):
+        for i, subgraph in enumerate(subgraph_list):
+            nodes = [n for n in self.graph['nodes'] if n['id'] in flatten_semilist(subgraph['nodes'].values())]
+            edges = [e for e in self.graph['edges'] if e['id'] in flatten_semilist(subgraph['edges'].values())]
 
-            # re-sort the nodes in the sub-graph according to the node_list
-            # and remove None nodes
-            node_list = subgraph_list[i]['nodes'].values()
-            nodes = list(subgraph.nodes(data=True))
-            ids = [n[0] for n in nodes]
-            nodes = [nodes[ids.index(n)][-1] for n in node_list if n != 'None']
-
-            edges = list(subgraph.edges(data=True))
-            edges = [e[-1] for e in edges]
-
-            sgr = dict()
-            sgr['score'] = subgraph_scores[i]
-            sgr['nodes'] = nodes
-            sgr['edges'] = edges
+            sgr = {
+                'nodes': nodes,
+                'edges': edges,
+                'score': subgraph_scores[i]
+            }
 
             report.append(sgr)
 
         return (report, subgraph_list)
 
-    def subgraph_statistic(self, subgraph, metric_type='hit'):
+    def subgraph_statistic(self, subgraph, metric_type='mix'):
         """Compute subgraph statistic?"""
         laplacian = self.graph_laplacian(subgraph)
-        if metric_type == 'hit':
-            return hitting_time_from_laplacian(laplacian)
-        elif metric_type == 'mix':
+        if metric_type == 'mix':
             return mixing_time_from_laplacian(laplacian)
         else:
             raise ValueError(f'Unknown metric type "{metric_type}"')
 
-    def comparison_statistic(self, subgraph_list, metric_type='hit'):
-        """Create a prototypical graph to compare hitting times against.
+    def comparison_statistic(self, subgraph_list, metric_type='mix'):
+        """Create a prototypical graph to compare mixing times against.
 
         For now, we use a fully connected graph with weights 1/2
         """
@@ -270,9 +213,7 @@ class Ranker:
         num_nodes = max(num_nodes, 2)
         laplacian = weight * (num_nodes * np.eye(num_nodes) - np.ones((num_nodes, num_nodes)))
 
-        if metric_type == 'hit':
-            return hitting_time_from_laplacian(laplacian)
-        elif metric_type == 'mix':
+        if metric_type == 'mix':
             return mixing_time_from_laplacian(laplacian)
         else:
             raise ValueError(f'Unknown metric type "{metric_type}"')
@@ -281,24 +222,45 @@ class Ranker:
         """Generate graph Laplacian."""
         # subgraph is a list of dicts with fields 'id' and 'bound'
 
+        node_map = {}
+        for key in subgraph['nodes']:
+            value = subgraph['nodes'][key]
+            if isinstance(value, str):
+                node_map[value] = key
+            else:
+                for v in value:
+                    node_map[v] = key
+
         # get updated weights
-        edges = self.get_edges_by_id(subgraph['edges'].values(), data=True)
-        nodes = []
-        for e in edges:
-            nodes.extend([e[0], e[1]])
-        subgraph_update = self.graph.subgraph(nodes)
+        edges = self.get_edges_by_id(subgraph['edges'].values())
+        edge_map = {e['id']: e for e in edges}
+        edges = []
+        for edge_thing in subgraph['edges'].values():
+            if isinstance(edge_thing, int) or isinstance(edge_thing, str):
+                first_edge = edge_map[edge_thing]
+                edge = {
+                    'weight': first_edge['weight'],
+                    'source_id': node_map[first_edge['source_id']],
+                    'target_id': node_map[first_edge['target_id']]
+                }
+            else:
+                edge_thing.sort()
+                first_edge = edge_map[edge_thing[0]]
+                edge = {
+                    'weight': sum([edge_map[e]['weight'] for e in edge_thing]),
+                    'source_id': node_map[first_edge['source_id']],
+                    'target_id': node_map[first_edge['target_id']]
+                }
+            edges.append(edge)
 
-        node_ids = list(subgraph_update.nodes)
+        node_ids = list({e['source_id'] for e in edges}.union({e['target_id'] for e in edges}))
 
-        # get updated weights
-        subgraph_update = subgraph_update.to_undirected()
-
-        # compute graph laplacian for this case with potentially duplicated
-        # nodes (None may be duplicated)
+        # compute graph laplacian for this case with potentially duplicated nodes
         num_nodes = len(node_ids)
         laplacian = np.zeros((num_nodes, num_nodes))
         index = {id: node_ids.index(id) for id in node_ids}
-        for source_id, target_id, weight in subgraph_update.edges(data='weight'):
+        for e in edges:
+            source_id, target_id, weight = e['source_id'], e['target_id'], e['weight']
             if source_id is not target_id and (source_id in node_ids) and (target_id in node_ids):
                 i, j = index[source_id], index[target_id]
                 laplacian[i, j] = -weight
@@ -309,22 +271,6 @@ class Ranker:
         # add teleportation to allow leaps of faith
         laplacian = laplacian + self.teleport_weight * (num_nodes * np.eye(num_nodes) - np.ones((num_nodes, num_nodes)))
         return laplacian
-
-
-def hitting_time_from_laplacian(laplacian):
-    """Compute hitting time from Laplacian.
-
-    The expected time to reach the last node from the second node?
-
-    Berestycki and Sousi, 2017. Applied Probability
-    http://www.statslab.cam.ac.uk/~ps422/notes-new.pdf
-    """
-    # assume L is square
-    laplacian[-1, :] = 0
-    laplacian[-1, -1] = 1
-    b = np.zeros(laplacian.shape[0])
-    b[0] = 1
-    return np.linalg.solve(laplacian, b)[1]
 
 
 def mixing_time_from_laplacian(laplacian):
