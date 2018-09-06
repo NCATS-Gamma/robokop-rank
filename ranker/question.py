@@ -45,12 +45,12 @@ class NodeReference():
         if 'curie' in node:
             if isinstance(node['curie'], str):
                 # synonymize/normalize curie
-            if 'type' in node:
-                response = requests.post(f"http://{os.environ['BUILDER_HOST']}:6010/api/synonymize/{node['curie']}/{node['type']}/")
-                curie = response.json()['id']
-            else:
-                curie = node['curie']
-            prop_string = f" {{id: \'{curie}\'}}"
+                if 'type' in node:
+                    response = requests.post(f"http://{os.environ['BUILDER_HOST']}:6010/api/synonymize/{node['curie']}/{node['type']}/")
+                    curie = response.json()['id']
+                else:
+                    curie = node['curie']
+                prop_string = f" {{id: \'{curie}\'}}"
                 conditions = ''
             elif isinstance(node['curie'], list):
                 conditions = []
@@ -64,7 +64,7 @@ class NodeReference():
                 # OR curie-matching conditions together
                 prop_string = ''
                 conditions = ' OR '.join(conditions)
-        else:
+            else:
                 raise TypeError("Curie should be a string or list of strings.")
         else:
             prop_string = ''
@@ -312,7 +312,7 @@ class Question():
 
         logger.debug('Ranking...')
         # compute scores with NAGA, export to json
-        pr = Ranker(answerset_subgraph)
+        pr = Ranker(answerset_subgraph, self.machine_question)
         subgraphs_with_metadata, subgraphs = pr.report_ranking(all_subgraphs)  # returned subgraphs are sorted by rank
 
         misc_info = {
