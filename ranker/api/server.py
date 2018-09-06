@@ -415,6 +415,75 @@ class TaskStatus(Resource):
 
 api.add_resource(TaskStatus, '/task/<task_id>')
 
+
+class EnrichedExpansion(Resource):
+    def post(self, type1, type2):
+        """
+        Similarity search in the local knowledge graph
+        ---
+          - in: path
+            name: type1
+            description: "type of query node"
+            type: string
+            required: true
+            default: "disease"
+          - in: path
+            name: type2
+            description: "type of return nodes"
+            type: string
+            required: true
+            default: "disease"
+          - in: query
+            name: identifiers
+            description: "identifiers of query nodes"
+            type: list
+            required: true
+          - in: query
+            name: threshhold
+            description: "Number between 0 and 1 indicating the maximum p-value to return"
+            type: float
+            default: 0.05
+          - in: query
+            name: maxresults
+            description: "The maximum number of results to return. Set to 0 to return all results."
+            type: integer
+            default: 100
+          - in: query
+            name: num_type1
+            description: "The total number of type1 entities that can exist.  If not specified, this is estimated from the cache"
+            type: integer
+        responses:
+            200:
+                description: result
+                schema:
+                    $ref: "#/definitions/SimilarityResult"
+        """
+        logger.info("WHAT")
+        parameters = request.json
+        logger.info(json.dumps(parameters,indent=4))
+        identifiers = parameters['identifiers']
+        if 'threshhold' in parameters:
+            threshhold = parameters['threshhold']
+        else:
+            threshhold = 0.05
+        if 'maxresults' in parameters:
+            maxresults = parameters['maxresults']
+        else:
+            maxresults = 100
+        if 'num_type1' in parameters:
+            num_type1 = parameters['num_type1']
+        else:
+            num_type1 = None
+        database = KnowledgeGraph()
+        logger.info('READY')
+        sim_results = database.enrichment_search(identifiers, type1, type2, threshhold, maxresults,num_type1)
+        del database
+
+        return sim_results, 200
+
+api.add_resource(EnrichedExpansion, '/enrichment/<type1>/<type2>')
+
+
 class SimilaritySearch(Resource):
     def get(self, type1, identifier, type2, by_type):
         """
