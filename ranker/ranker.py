@@ -13,6 +13,8 @@ import logging
 import time
 import heapq
 import operator
+from collections import defaultdict
+from itertools import combinations
 
 import numpy as np
 import numpy.linalg
@@ -39,9 +41,10 @@ class Ranker:
     teleport_weight = 0.001  # probability to teleport along graph (make random inference) in hitting time calculation
     output_count = 250
 
-    def __init__(self, graph=None):
+    def __init__(self, graph=None, question=None):
         """Create ranker."""
         self.graph = graph
+        self.question = question
         self._evaluated_templates = {}
         self._result_count = -1
 
@@ -112,7 +115,7 @@ class Ranker:
 
     def prescreen(self, subgraph_list):
         """Prescreen subgraphs.
-        
+
         Keep the top self.prescreen_count, by their total edge weight.
         """
         logger.debug(f'Getting {len(subgraph_list)} prescreen scores...')
@@ -145,17 +148,11 @@ class Ranker:
         # get subgraph statistics
         logger.debug("Calculating subgraph statistics()... ")
         start = time.time()
-        graph_stat = [self.subgraph_statistic(sg, metric_type='mix') for sg in subgraph_list]
+        graph_stat = [self.subgraph_statistic(sg, metric_type='volt') for sg in subgraph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
-        graph_comparison = self.comparison_statistic(subgraph_list, metric_type='mix')
-        logger.debug(f"Comparison graph statistic: {graph_comparison}")
-
-        # larger hitting/mixing times are worse
-        ranking_scores = [graph_comparison / s if s > 0 else -1 for s in graph_stat]
-
         # Fail safe to nuke nans
-        ranking_scores = [r if np.isfinite(r) else -1 for r in ranking_scores]
+        ranking_scores = [r if np.isfinite(r) and r >= 0 else -1 for r in graph_stat]
 
         # sort by scores
         ranking_sorting = argsort(ranking_scores, reverse=True)
@@ -195,26 +192,52 @@ class Ranker:
 
         return (report, subgraph_list)
 
-    def subgraph_statistic(self, subgraph, metric_type='mix'):
-        """Compute subgraph statistic?"""
+    def get_edges(self, subgraph):
+        """Get subgraph edges, collapsing multiedges."""
+
+        # collapse multi-edges
+        edges = []
+        for qedge in self.question['edges']:
+            aedge = subgraph['edges']["e" + qedge['id']]
+            if isinstance(aedge, list):
+                kedges = [e for e in self.graph['edges'] if e['id'] in aedge]
+            else:
+                kedges = [e for e in self.graph['edges'] if e['id'] == aedge]
+            edge = {
+                'weight': sum([e['weight'] for e in kedges]),
+                'source_id': qedge['source_id'],
+                'target_id': qedge['target_id']
+            }
+            edges.append(edge)
+
+        return edges
+
+    def subgraph_statistic(self, subgraph, metric_type='hit'):
+        """Compute subgraph score."""
+        terminals = terminal_nodes(self.question)
         laplacian = self.graph_laplacian(subgraph)
         if metric_type == 'mix':
-            return mixing_time_from_laplacian(laplacian)
-        else:
-            raise ValueError(f'Unknown metric type "{metric_type}"')
-
-    def comparison_statistic(self, subgraph_list, metric_type='mix'):
-        """Create a prototypical graph to compare mixing times against.
-
-        For now, we use a fully connected graph with weights 1/2
-        """
-        weight = 0.5
-        num_nodes = int(np.round(np.mean([len(s) for s in subgraph_list])))
-        num_nodes = max(num_nodes, 2)
-        laplacian = weight * (num_nodes * np.eye(num_nodes) - np.ones((num_nodes, num_nodes)))
-
-        if metric_type == 'mix':
-            return mixing_time_from_laplacian(laplacian)
+            return 1 / mixing_time_from_laplacian(laplacian)
+        if metric_type == 'hit':
+            htimes = []
+            idx_set = set(range(laplacian.shape[0]))
+            for n1, n2 in combinations(terminals, 2):
+                idx = [n1] + list(idx_set - {n1, n2}) + [n2]
+                idx = np.expand_dims(np.array(idx), axis=1)
+                idy = np.transpose(idx)
+                Q = -laplacian[idx, idy]
+                htimes.append(1 / hitting_times_miles(Q)[0][0])
+            return sum(htimes)
+        if metric_type == 'volt':
+            voltages = []
+            idx_set = set(range(laplacian.shape[0]))
+            for n1, n2 in combinations(terminals, 2):
+                idx = [n1] + list(idx_set - {n1, n2}) + [n2]
+                idx = np.expand_dims(np.array(idx), axis=1)
+                idy = np.transpose(idx)
+                L = laplacian[idx, idy]
+                voltages.append(1 / voltage_from_laplacian(L))
+            return sum(voltages)
         else:
             raise ValueError(f'Unknown metric type "{metric_type}"')
 
@@ -222,36 +245,7 @@ class Ranker:
         """Generate graph Laplacian."""
         # subgraph is a list of dicts with fields 'id' and 'bound'
 
-        node_map = {}
-        for key in subgraph['nodes']:
-            value = subgraph['nodes'][key]
-            if isinstance(value, str):
-                node_map[value] = key
-            else:
-                for v in value:
-                    node_map[v] = key
-
-        # get updated weights
-        edges = self.get_edges_by_id(subgraph['edges'].values())
-        edge_map = {e['id']: e for e in edges}
-        edges = []
-        for edge_thing in subgraph['edges'].values():
-            if isinstance(edge_thing, int) or isinstance(edge_thing, str):
-                first_edge = edge_map[edge_thing]
-                edge = {
-                    'weight': first_edge['weight'],
-                    'source_id': node_map[first_edge['source_id']],
-                    'target_id': node_map[first_edge['target_id']]
-                }
-            else:
-                edge_thing.sort()
-                first_edge = edge_map[edge_thing[0]]
-                edge = {
-                    'weight': sum([edge_map[e]['weight'] for e in edge_thing]),
-                    'source_id': node_map[first_edge['source_id']],
-                    'target_id': node_map[first_edge['target_id']]
-                }
-            edges.append(edge)
+        edges = self.get_edges(subgraph)
 
         node_ids = list({e['source_id'] for e in edges}.union({e['target_id'] for e in edges}))
 
@@ -271,6 +265,18 @@ class Ranker:
         # add teleportation to allow leaps of faith
         laplacian = laplacian + self.teleport_weight * (num_nodes * np.eye(num_nodes) - np.ones((num_nodes, num_nodes)))
         return laplacian
+
+
+def terminal_nodes(question):
+    """Return indices of terminal question nodes.
+
+    Terminal nodes are those that have degree 1.
+    """
+    degree = defaultdict(int)
+    for edge in question['edges']:
+        degree[edge['source_id']] += 1
+        degree[edge['target_id']] += 1
+    return [i for i, key in enumerate(degree) if degree[key] == 1]
 
 
 def mixing_time_from_laplacian(laplacian):
@@ -300,3 +306,64 @@ def mixing_time_from_laplacian(laplacian):
     eigvals.sort()  # sorts ascending
 
     return 1 / (1 - eigvals[-2]) / g
+
+
+def voltage_from_laplacian(L):
+    iv = np.zeros(L.shape[0])
+    iv[0] = -1
+    iv[-1] = 1
+    results = np.linalg.lstsq(L, iv)
+    potentials = results[0]
+    return potentials[-1] - potentials[0]
+
+
+def hitting_times(Q):
+    """Compute hitting time AKA mean first-passage time.
+
+    Q is the "transition rate matrix" or "infinitesimal generator matrix"
+
+    https://cims.nyu.edu/~holmes/teaching/asa17/handout-Lecture4_2017.pdf
+    http://www.seas.ucla.edu/~vandenbe/133A/lectures/cls.pdf
+    """
+    N = Q.shape[0]
+    b = -np.ones((N, 1))
+
+    C = np.zeros((1, N))
+    C[-1, -1] = 1
+    d = np.zeros((1, 1))
+    Z = np.zeros((1, 1))
+    A = np.concatenate((
+        np.concatenate((np.matmul(np.transpose(Q), Q), np.transpose(C)), axis=1),
+        np.concatenate((C, Z), axis=1)
+    ), axis=0)
+    b = np.concatenate((np.matmul(np.transpose(Q), b), d), axis=0)
+
+    results = np.linalg.lstsq(A, b)
+    tau = results[0]
+    # print("b: ", b)
+    # print("A * tau: ", np.matmul(A, tau))
+    return results[0]
+
+
+def hitting_times_miles(Q):
+    """Compute hitting time AKA mean first-passage time.
+
+    Similar to above, but actually works. Since transitions from the absorbing states
+    shouldn't matter, use those rows of the matrix to enforce that the hitting times
+    starting in the absorbing states are zero.
+
+    Assume that the last state is the only absorbing state, i.e. the queried-for node.
+    To score a branching answer graph, sum the hitting times from all other ternminal
+    nodes to the queried-for node.
+    """
+    N = Q.shape[0]
+    b = -np.ones((N, 1))
+    b[-1] = 0
+
+    Qtilde = Q
+    Qtilde[-1, :] = 0
+    Qtilde[-1, -1] = 1
+
+    results = np.linalg.lstsq(Qtilde, b)
+    tau = results[0]
+    return tau

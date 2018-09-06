@@ -43,18 +43,37 @@ class NodeReference():
             label = 'biological_process_or_activity'
 
         if 'curie' in node:
-            if 'type' in node:
-                response = requests.post(f"http://{os.environ['BUILDER_HOST']}:6010/api/synonymize/{node['curie']}/{node['type']}/")
-                curie = response.json()['id']
+            if isinstance(node['curie'], str):
+                # synonymize/normalize curie
+                if 'type' in node:
+                    response = requests.post(f"http://{os.environ['BUILDER_HOST']}:6010/api/synonymize/{node['curie']}/{node['type']}/")
+                    curie = response.json()['id']
+                else:
+                    curie = node['curie']
+                prop_string = f" {{id: \'{curie}\'}}"
+                conditions = ''
+            elif isinstance(node['curie'], list):
+                conditions = []
+                for curie in node['curie']:
+                    # synonymize/normalize curie
+                    if 'type' in node:
+                        response = requests.post(f"http://{os.environ['BUILDER_HOST']}:6010/api/synonymize/{curie}/{node['type']}/")
+                        curie = response.json()['id']
+                    # generate curie-matching condition
+                    conditions.append(f"{name}.id = '{curie}'")
+                # OR curie-matching conditions together
+                prop_string = ''
+                conditions = ' OR '.join(conditions)
             else:
-                curie = node['curie']
-            prop_string = f" {{id: \'{curie}\'}}"
+                raise TypeError("Curie should be a string or list of strings.")
         else:
             prop_string = ''
+            conditions = ''
 
         self.name = name
         self.label = label
         self.prop_string = prop_string
+        self._conditions = conditions
         self._num = 0
 
     def __str__(self):
@@ -66,6 +85,16 @@ class NodeReference():
                    f'{self.prop_string}'
         return self.name
 
+    @property
+    def conditions(self):
+        """Return conditions for the cypher node reference.
+
+        To be used in a WHERE clause following the MATCH clause.
+        """
+        if self._num == 1:
+            return self._conditions
+        else:
+            return ''
 
 class EdgeReference():
     """Edge reference object."""
@@ -283,7 +312,7 @@ class Question():
 
         logger.debug('Ranking...')
         # compute scores with NAGA, export to json
-        pr = Ranker(answerset_subgraph)
+        pr = Ranker(answerset_subgraph, self.machine_question)
         subgraphs_with_metadata, subgraphs = pr.report_ranking(all_subgraphs)  # returned subgraphs are sorted by rank
 
         misc_info = {
@@ -317,7 +346,12 @@ class Question():
         # generate MATCH command string to get paths of the appropriate size
         match_strings = []
         for e, eref in zip(edges, edge_references):
-            match_strings.append(f"MATCH ({node_references[e['source_id']]})-[{eref}]-({node_references[e['target_id']]})")
+            source_node = node_references[e['source_id']]
+            target_node = node_references[e['target_id']]
+            match_strings.append(f"MATCH ({source_node})-[{eref}]-({target_node})")
+            conditions = [c for c in [source_node.conditions, target_node.conditions] if c]
+            if conditions:
+                match_strings.append("WHERE " + " OR ".join(conditions))
 
         match_string = ' '.join(match_strings)
         return match_string
