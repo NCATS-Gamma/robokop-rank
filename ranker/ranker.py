@@ -115,7 +115,7 @@ class Ranker:
 
     def prescreen(self, subgraph_list):
         """Prescreen subgraphs.
-        
+
         Keep the top self.prescreen_count, by their total edge weight.
         """
         logger.debug(f'Getting {len(subgraph_list)} prescreen scores...')
@@ -148,7 +148,7 @@ class Ranker:
         # get subgraph statistics
         logger.debug("Calculating subgraph statistics()... ")
         start = time.time()
-        graph_stat = [self.subgraph_statistic(sg, metric_type='mix') for sg in subgraph_list]
+        graph_stat = [self.subgraph_statistic(sg, metric_type='volt') for sg in subgraph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
         # Fail safe to nuke nans
@@ -201,7 +201,7 @@ class Ranker:
             aedge = subgraph['edges']["e" + qedge['id']]
             if isinstance(aedge, list):
                 kedges = [e for e in self.graph['edges'] if e['id'] in aedge]
-        else:
+            else:
                 kedges = [e for e in self.graph['edges'] if e['id'] == aedge]
             edge = {
                 'weight': sum([e['weight'] for e in kedges]),
@@ -228,6 +228,16 @@ class Ranker:
                 Q = -laplacian[idx, idy]
                 htimes.append(1 / hitting_times_miles(Q)[0][0])
             return sum(htimes)
+        if metric_type == 'volt':
+            voltages = []
+            idx_set = set(range(laplacian.shape[0]))
+            for n1, n2 in combinations(terminals, 2):
+                idx = [n1] + list(idx_set - {n1, n2}) + [n2]
+                idx = np.expand_dims(np.array(idx), axis=1)
+                idy = np.transpose(idx)
+                L = laplacian[idx, idy]
+                voltages.append(1 / voltage_from_laplacian(L))
+            return sum(voltages)
         else:
             raise ValueError(f'Unknown metric type "{metric_type}"')
 
@@ -296,6 +306,15 @@ def mixing_time_from_laplacian(laplacian):
     eigvals.sort()  # sorts ascending
 
     return 1 / (1 - eigvals[-2]) / g
+
+
+def voltage_from_laplacian(L):
+    iv = np.zeros(L.shape[0])
+    iv[0] = -1
+    iv[-1] = 1
+    results = np.linalg.lstsq(L, iv)
+    potentials = results[0]
+    return potentials[-1] - potentials[0]
 
 
 def hitting_times(Q):
