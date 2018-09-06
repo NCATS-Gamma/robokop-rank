@@ -65,7 +65,6 @@ class KnowledgeGraph:
         cypher = f"""MATCH (a:{node_type_1})--(p:{node_type_2}) 
                      WHERE a.id IN [{identifiers}] 
                      RETURN COUNT(DISTINCT a) as n"""
-        logger.info(cypher)
         with self.driver.session() as session:
             result = list(session.run(cypher))[0]['n']
         return result
@@ -77,13 +76,10 @@ class KnowledgeGraph:
         To calculate enrichment, the total number of possible type1 entities is needed.  if num_type1 is
         not specified, then the cypher is queried to estimate it, but this estimate may be poor.  If a value is
         passed in, then it is used instead."""
-        logger.info('enrich')
         ids = ','.join([f"'{x}'" for x in identifiers])
-        logger.info(ids)
         cypher = f"""MATCH (fa:{type1})--(p:{type2})--(d:{type1}) 
                      WHERE fa.id IN [{ids}] AND NOT d.id  in [{ids}] 
                      RETURN p.id as id,p.name as name,COUNT( DISTINCT d ) AS gmx, COUNT(DISTINCT fa) AS x """
-        logger.info(cypher)
         retres = []
         try:
             with self.driver.session() as session:
@@ -106,7 +102,6 @@ class KnowledgeGraph:
                 G = G_minus_x + x
                 p = hypergeom.sf(x-1,R,G,T)
                 retres.append( {'id':result_id, 'name':result_name, 'p':p } )
-                logger.info(f'{result_name}, {x}, {R}, {G}, {T}')
             retres = list(filter(lambda x: x['p'] < threshhold,retres))
             retres.sort(key=itemgetter('p'))
             if len(retres) > maxresults and maxresults > 0:
