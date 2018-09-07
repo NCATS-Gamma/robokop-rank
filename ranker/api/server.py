@@ -458,9 +458,7 @@ class EnrichedExpansion(Resource):
                 schema:
                     $ref: "#/definitions/SimilarityResult"
         """
-        logger.info("WHAT")
         parameters = request.json
-        logger.info(json.dumps(parameters,indent=4))
         identifiers = parameters['identifiers']
         if 'threshhold' in parameters:
             threshhold = parameters['threshhold']
@@ -475,7 +473,6 @@ class EnrichedExpansion(Resource):
         else:
             num_type1 = None
         database = KnowledgeGraph()
-        logger.info('READY')
         sim_results = database.enrichment_search(identifiers, type1, type2, threshhold, maxresults,num_type1)
         del database
 
