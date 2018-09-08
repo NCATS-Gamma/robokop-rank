@@ -238,8 +238,8 @@ class Ranker:
                 kedge_id = kedge_ids
                 kedge = next(e for e in self.graph['edges'] if e['id'] == kedge_id)
                 # find source and target
-                candidate_source_ids = [f"{qedge['source_id']}/{kedge['source_id']}", f"{qedge['source_id']}/{kedge['target_id']}"]
-                candidate_target_ids = [f"{qedge['target_id']}/{kedge['source_id']}", f"{qedge['target_id']}/{kedge['target_id']}"]
+                candidate_source_ids = [f"n{qedge['source_id']}/{kedge['source_id']}", f"n{qedge['source_id']}/{kedge['target_id']}"]
+                candidate_target_ids = [f"n{qedge['target_id']}/{kedge['source_id']}", f"n{qedge['target_id']}/{kedge['target_id']}"]
                 source_id = next(node_id for node_id in nodes if node_id in candidate_source_ids)
                 target_id = next(node_id for node_id in nodes if node_id in candidate_target_ids)
                 edge = {
