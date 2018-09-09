@@ -419,7 +419,7 @@ api.add_resource(TaskStatus, '/task/<task_id>')
 class EnrichedExpansion(Resource):
     def post(self, type1, type2):
         """
-        Similarity search in the local knowledge graph
+        Enriched search in the local knowledge graph
         ---
           - in: path
             name: type1
@@ -528,7 +528,7 @@ class SimilaritySearch(Resource):
         """
         database = KnowledgeGraph()
         threshhold = request.args.get('threshhold', default = 0.4)
-        maxresults = request.args.get('maxresults', default = 100)
+        maxresults = int(request.args.get('maxresulta', default = 100))
         sim_results = database.similarity_search(type1, identifier, type2, by_type, threshhold, maxresults)
         del database
 
