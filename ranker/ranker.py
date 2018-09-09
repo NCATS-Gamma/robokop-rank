@@ -192,47 +192,102 @@ class Ranker:
 
         return (report, subgraph_list)
 
-    def get_edges(self, subgraph):
-        """Get subgraph edges, collapsing multiedges."""
+    def get_rgraph(self, subgraph):
+        """Get "ranker" subgraph."""
 
-        # collapse multi-edges
-        edges = []
-        for qedge in self.question['edges']:
-            aedge = subgraph['edges']["e" + qedge['id']]
-            if isinstance(aedge, list):
-                kedges = [e for e in self.graph['edges'] if e['id'] in aedge]
+        # get list of nodes
+        nodes = []
+        knode_map = defaultdict(set)
+        for qnode_id in subgraph['nodes']:
+            knode_ids = subgraph['nodes'][qnode_id]
+            if isinstance(knode_ids, list):
+                for knode_id in knode_ids:
+                    rnode_id = f"{qnode_id}/{knode_id}"
+                    nodes.append(rnode_id)
+                    knode_map[knode_id].add(rnode_id)
             else:
-                kedges = [e for e in self.graph['edges'] if e['id'] == aedge]
-            edge = {
-                'weight': sum([e['weight'] for e in kedges]),
-                'source_id': qedge['source_id'],
-                'target_id': qedge['target_id']
-            }
-            edges.append(edge)
+                knode_id = knode_ids
+                rnode_id = f"{qnode_id}/{knode_id}"
+                nodes.append(rnode_id)
+                knode_map[knode_id].add(rnode_id)
 
-        return edges
+        # get "result" edges
+        edges = []
+        for qedge_id in subgraph['edges']:
+            if qedge_id[0] == 's':
+                continue
+            qedge = next(e for e in self.question['edges'] if e['id'] == qedge_id[1:])
+            kedge_ids = subgraph['edges'][qedge_id]
+            if isinstance(kedge_ids, list):
+                for kedge_id in subgraph['edges'][qedge_id]:
+                    kedge = next(e for e in self.graph['edges'] if e['id'] == kedge_id)
+                    # find source and target
+                    candidate_source_ids = [f"n{qedge['source_id']}/{kedge['source_id']}", f"n{qedge['source_id']}/{kedge['target_id']}"]
+                    candidate_target_ids = [f"n{qedge['target_id']}/{kedge['source_id']}", f"n{qedge['target_id']}/{kedge['target_id']}"]
+                    # logger.debug(candidate_source_ids)
+                    # logger.debug(nodes)
+                    source_id = next(node_id for node_id in nodes if node_id in candidate_source_ids)
+                    target_id = next(node_id for node_id in nodes if node_id in candidate_target_ids)
+                    edge = {
+                        'weight': kedge['weight'],
+                        'source_id': source_id,
+                        'target_id': target_id
+                    }
+                    edges.append(edge)
+            else:
+                kedge_id = kedge_ids
+                kedge = next(e for e in self.graph['edges'] if e['id'] == kedge_id)
+                # find source and target
+                candidate_source_ids = [f"n{qedge['source_id']}/{kedge['source_id']}", f"n{qedge['source_id']}/{kedge['target_id']}"]
+                candidate_target_ids = [f"n{qedge['target_id']}/{kedge['source_id']}", f"n{qedge['target_id']}/{kedge['target_id']}"]
+                source_id = next(node_id for node_id in nodes if node_id in candidate_source_ids)
+                target_id = next(node_id for node_id in nodes if node_id in candidate_target_ids)
+                edge = {
+                    'weight': kedge['weight'],
+                    'source_id': source_id,
+                    'target_id': target_id
+                }
+                edges.append(edge)
+
+        # get "support" edges
+        for kedge in self.graph['edges']:
+            if not (kedge['type'] == 'literature_co-occurrence' and kedge['source_id'] in knode_map and kedge['target_id'] in knode_map):
+                continue
+            for source_id in knode_map[kedge['source_id']]:
+                for target_id in knode_map[kedge['target_id']]:
+                    edge = {
+                        'weight': kedge['weight'],
+                        'source_id': source_id,
+                        'target_id': target_id
+                    }
+                    edges.append(edge)
+
+        return nodes, edges
 
     def subgraph_statistic(self, subgraph, metric_type='hit'):
         """Compute subgraph score."""
         terminals = terminal_nodes(self.question)
-        laplacian = self.graph_laplacian(subgraph)
+        laplacian, node_ids = self.graph_laplacian(subgraph)
+        terminals = [n for n in node_ids if any([n.startswith(t) for t in terminals])]
         if metric_type == 'mix':
             return 1 / mixing_time_from_laplacian(laplacian)
-        if metric_type == 'hit':
+        elif metric_type == 'hit':
             htimes = []
-            idx_set = set(range(laplacian.shape[0]))
-            for n1, n2 in combinations(terminals, 2):
-                idx = [n1] + list(idx_set - {n1, n2}) + [n2]
+            node_id_set = set(node_ids)
+            for from_id, to_id in combinations(terminals, 2):
+                node_ids_sorted = [from_id] + list(node_id_set - {from_id, to_id}) + [to_id]
+                idx = [node_ids.index(node_id) for node_id in node_ids_sorted]
                 idx = np.expand_dims(np.array(idx), axis=1)
                 idy = np.transpose(idx)
                 Q = -laplacian[idx, idy]
                 htimes.append(1 / hitting_times_miles(Q)[0][0])
             return sum(htimes)
-        if metric_type == 'volt':
+        elif metric_type == 'volt':
             voltages = []
-            idx_set = set(range(laplacian.shape[0]))
-            for n1, n2 in combinations(terminals, 2):
-                idx = [n1] + list(idx_set - {n1, n2}) + [n2]
+            node_id_set = set(node_ids)
+            for from_id, to_id in combinations(terminals, 2):
+                node_ids_sorted = [from_id] + list(node_id_set - {from_id, to_id}) + [to_id]
+                idx = [node_ids.index(node_id) for node_id in node_ids_sorted]
                 idx = np.expand_dims(np.array(idx), axis=1)
                 idy = np.transpose(idx)
                 L = laplacian[idx, idy]
@@ -245,26 +300,23 @@ class Ranker:
         """Generate graph Laplacian."""
         # subgraph is a list of dicts with fields 'id' and 'bound'
 
-        edges = self.get_edges(subgraph)
-
-        node_ids = list({e['source_id'] for e in edges}.union({e['target_id'] for e in edges}))
+        node_ids, edges = self.get_rgraph(subgraph)
 
         # compute graph laplacian for this case with potentially duplicated nodes
         num_nodes = len(node_ids)
         laplacian = np.zeros((num_nodes, num_nodes))
-        index = {id: node_ids.index(id) for id in node_ids}
-        for e in edges:
-            source_id, target_id, weight = e['source_id'], e['target_id'], e['weight']
-            if source_id is not target_id and (source_id in node_ids) and (target_id in node_ids):
-                i, j = index[source_id], index[target_id]
-                laplacian[i, j] = -weight
-                laplacian[j, i] = -weight
-                laplacian[i, i] = laplacian[i, i] + weight
-                laplacian[j, j] = laplacian[j, j] + weight
+        index = {node_id: node_ids.index(node_id) for node_id in node_ids}
+        for edge in edges:
+            source_id, target_id, weight = edge['source_id'], edge['target_id'], edge['weight']
+            i, j = index[source_id], index[target_id]
+            laplacian[i, j] = -weight
+            laplacian[j, i] = -weight
+            laplacian[i, i] = laplacian[i, i] + weight
+            laplacian[j, j] = laplacian[j, j] + weight
 
         # add teleportation to allow leaps of faith
         laplacian = laplacian + self.teleport_weight * (num_nodes * np.eye(num_nodes) - np.ones((num_nodes, num_nodes)))
-        return laplacian
+        return laplacian, node_ids
 
 
 def terminal_nodes(question):
@@ -276,7 +328,7 @@ def terminal_nodes(question):
     for edge in question['edges']:
         degree[edge['source_id']] += 1
         degree[edge['target_id']] += 1
-    return [i for i, key in enumerate(degree) if degree[key] == 1]
+    return [f"n{key}" for i, key in enumerate(degree) if degree[key] == 1]
 
 
 def mixing_time_from_laplacian(laplacian):

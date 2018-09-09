@@ -421,6 +421,8 @@ class EnrichedExpansion(Resource):
         """
         Enriched search in the local knowledge graph
         ---
+        tags: [util]
+        parameters:
           - in: path
             name: type1
             description: "type of query node"
@@ -486,6 +488,8 @@ class SimilaritySearch(Resource):
         """
         Similarity search in the local knowledge graph
         ---
+        tags: [util]
+        parameters:
           - in: path
             name: type1
             description: "type of query node"
