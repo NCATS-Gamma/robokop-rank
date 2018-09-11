@@ -33,7 +33,7 @@ def setup_celery_logging(**kwargs):
 celery.log.setup()
 
 @celery.task(bind=True, queue='ranker')
-def answer_question(self, question_json):
+def answer_question(self, question_json, max_results=250):
     '''
     Generate answerset for a question
     '''
@@ -44,7 +44,7 @@ def answer_question(self, question_json):
     logger.info("Answering your question...")
 
     try:
-        answerset = question.answer()
+        answerset = question.answer(max_results=max_results)
     except NoAnswersException as err:
         logger.debug(err)
         raise err

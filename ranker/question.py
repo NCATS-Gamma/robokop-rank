@@ -204,7 +204,7 @@ class Question():
             node['type'] = node['type'][0]
         return subgraph
 
-    def answer(self):
+    def answer(self, max_results=250):
         """Answer the question.
 
         Returns the answer struct, something along the lines of:
@@ -313,7 +313,7 @@ class Question():
         logger.debug('Ranking...')
         # compute scores with NAGA, export to json
         pr = Ranker(answerset_subgraph, self.machine_question)
-        subgraphs_with_metadata, subgraphs = pr.report_ranking(all_subgraphs)  # returned subgraphs are sorted by rank
+        subgraphs_with_metadata, subgraphs = pr.report_ranking(all_subgraphs, max_results=max_results)  # returned subgraphs are sorted by rank
 
         misc_info = {
             'natural_question': self.natural_question,

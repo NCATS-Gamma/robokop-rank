@@ -39,7 +39,6 @@ class Ranker:
     naga_parameters = {'alpha': .9, 'beta': .9}
     prescreen_count = 2000  # only look at this many graphs more in depth
     teleport_weight = 0.001  # probability to teleport along graph (make random inference) in hitting time calculation
-    output_count = 250
 
     def __init__(self, graph=None, question=None):
         """Create ranker."""
@@ -113,21 +112,24 @@ class Ranker:
         # sum their weights
         return sum([edge['weight'] for edge in edges])
 
-    def prescreen(self, subgraph_list):
+    def prescreen(self, subgraph_list, max_results=None):
         """Prescreen subgraphs.
 
-        Keep the top self.prescreen_count, by their total edge weight.
+        Keep the top max_results or self.prescreen_count, by their total edge weight.
         """
+        if max_results is None:
+            max_results = self.prescreen_count
+
         logger.debug(f'Getting {len(subgraph_list)} prescreen scores...')
         prescreen_scores = [self.sum_edge_weights(sg) for sg in subgraph_list]
 
         logger.debug('Getting top N...')
-        prescreen_sorting = [x[0] for x in heapq.nlargest(self.prescreen_count, enumerate(prescreen_scores), key=operator.itemgetter(1))]
+        prescreen_sorting = [x[0] for x in heapq.nlargest(max_results, enumerate(prescreen_scores), key=operator.itemgetter(1))]
 
         logger.debug('Returning sorted results...')
         return [subgraph_list[i] for i in prescreen_sorting]
 
-    def rank(self, subgraph_list):
+    def rank(self, subgraph_list, max_results=250):
         """Generate a sorted list and scores for a set of subgraphs."""
 
         if not subgraph_list:
@@ -142,7 +144,7 @@ class Ranker:
         # prescreen
         logger.debug("Prescreening subgraph_list... ")
         start = time.time()
-        subgraph_list = self.prescreen(subgraph_list)
+        subgraph_list = self.prescreen(subgraph_list, max_results=max([self.prescreen_count, max_results * 2]))
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
         # get subgraph statistics
@@ -160,17 +162,17 @@ class Ranker:
         subgraph_scores = [ranking_scores[i] for i in ranking_sorting]
 
         # trim output
-        if len(subgraph_list) > self.output_count:
-            subgraph_list = subgraph_list[:self.output_count]
-            subgraph_scores = subgraph_scores[:self.output_count]
+        logger.debug('Keeping top %d...', max_results)
+        subgraph_list = subgraph_list[:max_results]
+        subgraph_scores = subgraph_scores[:max_results]
 
         return (subgraph_scores, subgraph_list)
 
-    def report_ranking(self, subgraph_list):
+    def report_ranking(self, subgraph_list, max_results=250):
         """Report ranking."""
         # construct the output that question.py expects
 
-        (subgraph_scores, subgraph_list) = self.rank(subgraph_list)
+        (subgraph_scores, subgraph_list) = self.rank(subgraph_list, max_results=max_results)
 
         # add extra computed metadata in self.graph to subgraph for display
         logger.debug("Extracting subgraphs... ")

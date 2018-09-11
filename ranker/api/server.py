@@ -34,6 +34,12 @@ class AnswerQuestionNow(Resource):
             schema:
                 $ref: '#/definitions/Question'
             required: true
+          - in: query
+            name: max_results
+            description: Maximum number of results to return
+            schema:
+                type: integer
+            default: 250
         responses:
             200:
                 description: Answer
@@ -57,7 +63,10 @@ class AnswerQuestionNow(Resource):
                     schema:
                         $ref: '#/definitions/Question'
         """
-        result = answer_question.apply(args=[request.json])
+        result = answer_question.apply(
+            args=[request.json],
+            kwargs={'max_results': int(request.args.get('max_results'))}
+        )
         with open(os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', result.get()), 'r') as f:
             answers = json.load(f)
         return answers, 202
@@ -77,6 +86,12 @@ class AnswerQuestion(Resource):
             schema:
                 $ref: '#/definitions/Question'
             required: true
+          - in: query
+            name: max_results
+            description: Maximum number of results to return
+            schema:
+                type: integer
+            default: 250
         responses:
             200:
                 description: Answer
@@ -100,7 +115,11 @@ class AnswerQuestion(Resource):
                     schema:
                         $ref: '#/definitions/Question'
         """
-        task = answer_question.apply_async(args=[request.json])
+        logger.debug(request.args.get('max_results'))
+        task = answer_question.apply_async(
+            args=[request.json],
+            kwargs={'max_results': request.args.get('max_results')}
+        )
         return {'task_id':task.id}, 202
 
 api.add_resource(AnswerQuestion, '/')
