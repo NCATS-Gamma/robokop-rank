@@ -100,17 +100,11 @@ class Ranker:
             # make sure weights on edges are not nan valued - set them to zero otherwise
             edge['weight'] = weight if np.isfinite(weight) else 0
 
-    def get_edges_by_id(self, edge_ids):
-        """Get edges by id."""
-        edges = [e for e in self.graph['edges'] if e['id'] in flatten_semilist(edge_ids)]
-        return edges
-
     def sum_edge_weights(self, subgraph):
         """Add edge weights."""
-        # choose edges with one of the appropriate ids
-        edges = self.get_edges_by_id(subgraph['edges'].values())
-        # sum their weights
-        return sum([edge['weight'] for edge in edges])
+        edge_ids = flatten_semilist(subgraph['edges'].values())
+        weights = [e['weight'] for e in self.graph['edges'] if e['id'] in edge_ids]
+        return sum(weights)
 
     def prescreen(self, subgraph_list, max_results=None):
         """Prescreen subgraphs.
@@ -181,9 +175,10 @@ class Ranker:
 
         report = []
         for i, subgraph in enumerate(subgraph_list):
-            nodes = [n for n in self.graph['nodes'] if n['id'] in flatten_semilist(subgraph['nodes'].values())]
-            edges = [e for e in self.graph['edges'] if e['id'] in flatten_semilist(subgraph['edges'].values())]
-
+            node_ids = flatten_semilist(subgraph['nodes'].values())
+            nodes = [n for n in self.graph['nodes'] if n['id'] in node_ids]
+            edge_ids = flatten_semilist(subgraph['edges'].values())
+            edges = [e for e in self.graph['edges'] if e['id'] in edge_ids]
             sgr = {
                 'nodes': nodes,
                 'edges': edges,
