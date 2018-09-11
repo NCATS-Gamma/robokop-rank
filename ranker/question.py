@@ -261,7 +261,7 @@ class Question():
             'limit': 1000000,
             'skip': 0
         }
-        while len(all_subgraphs) < options['limit'] * 4:
+        while True:
             subgraphs = database.query(self, options=options)
             options['skip'] += options['limit']
             subgraph_list = [{'nodes': g['nodes'], 'edges': g['edges']} for g in subgraphs]
