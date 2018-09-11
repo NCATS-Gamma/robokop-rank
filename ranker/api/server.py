@@ -36,7 +36,7 @@ class AnswerQuestionNow(Resource):
             required: true
           - in: query
             name: max_results
-            description: Maximum number of results to return
+            description: Maximum number of results to return. Provide -1 to indicate no maximum.
             schema:
                 type: integer
             default: 250
@@ -63,9 +63,22 @@ class AnswerQuestionNow(Resource):
                     schema:
                         $ref: '#/definitions/Question'
         """
+        max_results = request.args.get('max_results')
+        logger.debug("max_results: %s", str(max_results))
+        if max_results is None:
+            max_results = '250'
+        try:
+            max_results = int(max_results)
+        except ValueError:
+            return 'max_results should be an integer', 400
+        except:
+            raise
+        if max_results < 0:
+            max_results = None
+
         result = answer_question.apply(
             args=[request.json],
-            kwargs={'max_results': int(request.args.get('max_results'))}
+            kwargs={'max_results': max_results}
         )
         with open(os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', result.get()), 'r') as f:
             answers = json.load(f)
@@ -88,7 +101,7 @@ class AnswerQuestion(Resource):
             required: true
           - in: query
             name: max_results
-            description: Maximum number of results to return
+            description: Maximum number of results to return. Provide -1 to indicate no maximum.
             schema:
                 type: integer
             default: 250
@@ -115,10 +128,22 @@ class AnswerQuestion(Resource):
                     schema:
                         $ref: '#/definitions/Question'
         """
-        logger.debug(request.args.get('max_results'))
+        max_results = request.args.get('max_results')
+        logger.debug("max_results: %s", str(max_results))
+        if max_results is None:
+            max_results = '250'
+        try:
+            max_results = int(max_results)
+        except ValueError:
+            return 'max_results should be an integer', 400
+        except:
+            raise
+        if max_results < 0:
+            max_results = None
+
         task = answer_question.apply_async(
             args=[request.json],
-            kwargs={'max_results': request.args.get('max_results')}
+            kwargs={'max_results': max_results}
         )
         return {'task_id':task.id}, 202
 
@@ -396,5 +421,5 @@ if __name__ == '__main__':
 
     app.run(host=server_host,\
         port=server_port,\
-        debug=False,\
+        debug=True,\
         use_reloader=True)

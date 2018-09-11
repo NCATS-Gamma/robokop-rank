@@ -136,10 +136,11 @@ class Ranker:
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
         # prescreen
-        logger.debug("Prescreening subgraph_list... ")
-        start = time.time()
-        subgraph_list = self.prescreen(subgraph_list, max_results=max([self.prescreen_count, max_results * 2]))
-        logger.debug(f"{time.time()-start} seconds elapsed.")
+        if max_results is not None:
+            logger.debug("Prescreening subgraph_list... ")
+            start = time.time()
+            subgraph_list = self.prescreen(subgraph_list, max_results=max([self.prescreen_count, max_results * 2]))
+            logger.debug(f"{time.time()-start} seconds elapsed.")
 
         # get subgraph statistics
         logger.debug("Calculating subgraph statistics... ")
@@ -156,9 +157,10 @@ class Ranker:
         subgraph_scores = [ranking_scores[i] for i in ranking_sorting]
 
         # trim output
-        logger.debug('Keeping top %d...', max_results)
-        subgraph_list = subgraph_list[:max_results]
-        subgraph_scores = subgraph_scores[:max_results]
+        if max_results is not None:
+            logger.debug('Keeping top %d...', max_results)
+            subgraph_list = subgraph_list[:max_results]
+            subgraph_scores = subgraph_scores[:max_results]
 
         return (subgraph_scores, subgraph_list)
 
