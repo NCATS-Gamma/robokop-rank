@@ -114,13 +114,13 @@ class Ranker:
         if max_results is None:
             max_results = self.prescreen_count
 
-        logger.debug(f'Getting {len(subgraph_list)} prescreen scores...')
+        logger.debug(f'  Getting {len(subgraph_list)} prescreen scores...')
         prescreen_scores = [self.sum_edge_weights(sg) for sg in subgraph_list]
 
-        logger.debug('Getting top N...')
+        logger.debug(f'  Getting top {max_results}...')
         prescreen_sorting = [x[0] for x in heapq.nlargest(max_results, enumerate(prescreen_scores), key=operator.itemgetter(1))]
 
-        logger.debug('Returning sorted results...')
+        logger.debug('  Returning sorted results...')
         return [subgraph_list[i] for i in prescreen_sorting]
 
     def rank(self, subgraph_list, max_results=250):
@@ -142,7 +142,7 @@ class Ranker:
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
         # get subgraph statistics
-        logger.debug("Calculating subgraph statistics()... ")
+        logger.debug("Calculating subgraph statistics... ")
         start = time.time()
         graph_stat = [self.subgraph_statistic(sg, metric_type='volt') for sg in subgraph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
@@ -171,8 +171,6 @@ class Ranker:
         # add extra computed metadata in self.graph to subgraph for display
         logger.debug("Extracting subgraphs... ")
         start = time.time()
-        logger.debug(f"{time.time()-start} seconds elapsed.")
-
         report = []
         for i, subgraph in enumerate(subgraph_list):
             node_ids = flatten_semilist(subgraph['nodes'].values())
@@ -184,8 +182,8 @@ class Ranker:
                 'edges': edges,
                 'score': subgraph_scores[i]
             }
-
             report.append(sgr)
+        logger.debug(f"{time.time()-start} seconds elapsed.")
 
         return (report, subgraph_list)
 
