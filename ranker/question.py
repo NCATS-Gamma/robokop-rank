@@ -230,6 +230,8 @@ class Question():
         logger.debug(query_string)
         with database.driver.session() as session:
             result = session.run(query_string)
+        if result.peek() is None:
+            raise NoAnswersException()
         logger.debug('Converting Neo4j Result to dict...')
         result = list(result)
 
