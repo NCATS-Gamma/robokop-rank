@@ -51,10 +51,7 @@ def answer_question(self, question_json, max_results=250):
     except Exception as err:
         logger.exception(f"Something went wrong with question answering: {err}")
         raise err
-    if answerset.answers:
-        logger.info("Answers found.")
-    else:
-        raise NoAnswersException("Question answering complete, found 0 answers.")
+    logger.info("%d answers found.", len(answerset.answers))
 
     self.update_state(state='SAVING')
 
