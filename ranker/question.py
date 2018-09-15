@@ -376,12 +376,7 @@ class Question():
 
         # deal with sets
         node_id_accessor = [f"collect(distinct n{n['id']}.id) as n{n['id']}" if 'set' in n and n['set'] else f"n{n['id']}.id as n{n['id']}" for n in nodes]
-        edge_set = []
-        for e in edges:
-            source_node = node_map[e['source_id']]
-            target_node = node_map[e['target_id']]
-            edge_set.append('set' in source_node and source_node['set'] or 'set' in target_node and target_node['set'])
-        edge_id_accessor = [f"collect(distinct id(e{e['id']})) as e{e['id']}" if is_set else f"id(e{e['id']}) as e{e['id']}" for e, is_set in zip(edges, edge_set)]
+        edge_id_accessor = [f"collect(distinct id(e{e['id']})) as e{e['id']}" for e in edges]
         with_string = f"WITH {', '.join(node_id_accessor+edge_id_accessor)}"
 
         # add bound fields and return map
