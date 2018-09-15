@@ -282,21 +282,36 @@ class Question():
             for node_i, node_j in combinations(nodes, 2):
                 pair_to_answer[(node_i, node_j)].append(ans_idx)
 
+        cached_prefixes = cache.get('OmnicorpPrefixes')
         # get all pair supports
         for support_idx, pair in enumerate(pair_to_answer):
-            key = f"{supporter.__class__.__name__}({pair[0]},{pair[1]})"
+            logger.info(pair)
+            #The id's are in the cache sorted.
+            ids = [pair[0],pair[1]]
+            ids.sort()
+            key = f"{supporter.__class__.__name__}({ids[0]},{ids[1]})"
             support_edge = cache.get(key)
             if support_edge is not None:
                 logger.info(f"cache hit: {key} {support_edge}")
             else:
-                logger.info(f"exec op: {key}")
-                try:
-                    support_edge = supporter.term_to_term(pair[0], pair[1])
-                    cache.set(key, support_edge)
-                except Exception as e:
-                    raise e
-                    # logger.debug('Support error, not caching')
-                    # continue
+                #There are two reasons that we don't get anything back:
+                # 1. We haven't evaluated that pair
+                # 2. We evaluated, and found it to be zero, and it was part
+                #  of a prefix pair that we evaluated all of.  In that case
+                #  we can infer that getting nothing back means an empty list
+                #  check cached_prefixes for this...
+                prefixes = tuple([ ident.split(':')[0].upper() for ident in ids ])
+                if prefixes in cached_prefixes:
+                    support_edge = []
+                else:
+                    logger.info(f"exec op: {key}")
+                    try:
+                        support_edge = supporter.term_to_term(pair[0], pair[1])
+                        cache.set(key, support_edge)
+                    except Exception as e:
+                        raise e
+                        # logger.debug('Support error, not caching')
+                        # continue
             if not support_edge:
                 continue
             uid = str(uuid4())
