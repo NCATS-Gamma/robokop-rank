@@ -13,7 +13,7 @@ services:
       - RESULTS_HOST=results
       - BROKER_HOST=broker
       - BUILDER_HOST=interfaces
-      - CACHE_HOST=cache
+      #- CACHE_HOST=cache
     ports:
       - "${RANKER_PORT}:${RANKER_PORT}"
       - "${SUPERVISOR_PORT}:${SUPERVISOR_PORT}"
