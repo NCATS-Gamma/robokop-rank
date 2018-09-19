@@ -6,9 +6,11 @@ import warnings
 import datetime
 import logging
 
+from ranker.util import FromDictMixin
+
 logger = logging.getLogger(__name__)
 
-class Answerset():
+class Answerset(FromDictMixin):
     '''
     An "answer" to a Question.
     Contains a ranked list of walks through the Knowledge Graph.
@@ -21,29 +23,20 @@ class Answerset():
         self.__idx = 0
         self.timestamp = datetime.datetime.now() # answer creation time
 
-        # apply json properties to existing attributes
-        attributes = self.__dict__.keys()
-        if args:
-            struct = args[0]
-            for key in struct:
-                if key in attributes:
-                    setattr(self, key, struct[key])
-                else:
-                    warnings.warn("JSON field {} ignored.".format(key))
+        super().__init__(*args, **kwargs)
 
-        # override any json properties with the named ones
-        for key in kwargs:
-            if key in attributes:
-                setattr(self, key, kwargs[key])
-            else:
-                warnings.warn("Keyword argument {} ignored.".format(key))
+    def load_attribute(self, key, value):
+        if key == 'answers':
+            return [Answer(**v) if isinstance(v, dict) else v for v in value]
+        else:
+            return super().load_attribute(key, value)
 
     def toJSON(self):
         keys = [k for k in vars(self) if k[0] is not '_']
         struct = {key:getattr(self, key) for key in keys}
         if 'answers' in struct:
             struct['answers'] = [a.toJSON() for a in struct['answers']]
-        if 'timestamp' in struct:
+        if 'timestamp' in struct and not isinstance(struct['timestamp'], str):
             struct['timestamp'] = struct['timestamp'].isoformat()
         return struct
     
@@ -98,7 +91,7 @@ class Answerset():
     def len(self):
         return len(self.answers)
 
-class Answer():
+class Answer(FromDictMixin):
     '''
     Represents a single answer walk
     '''
@@ -112,22 +105,7 @@ class Answer():
         self.edges = [] # list of str
         self.score = None # float
 
-        # apply json properties to existing attributes
-        attributes = self.__dict__.keys()
-        if args:
-            struct = args[0]
-            for key in struct:
-                if key in attributes:
-                    setattr(self, key, struct[key])
-                else:
-                    warnings.warn("JSON field {} ignored.".format(key))
-
-        # override any json properties with the named ones
-        for key in kwargs:
-            if key in attributes:
-                setattr(self, key, kwargs[key])
-            else:
-                warnings.warn("Keyword argument {} ignored.".format(key))
+        super().__init__(*args, **kwargs)
 
     def toJSON(self):
         keys = [k for k in vars(self) if k[0] is not '_']
@@ -174,6 +152,7 @@ class Answer():
 
 def generate_summary(nodes, edges):
     # assume that the first node is at one end
+    return nodes[-1]['name']
     summary = nodes[0]['name']
     latest_node_id = nodes[0]['id']
     node_ids = [n['id'] for n in nodes]
