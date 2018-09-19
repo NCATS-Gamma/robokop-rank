@@ -226,7 +226,7 @@ class Results(Resource):
             if request.args.get('standardize') == 'true':
                 return Answerset(json.load(f)).toStandard()
             else:
-            return json.load(f)
+                return json.load(f)
 
 api.add_resource(Results, '/result/<task_id>')
 
