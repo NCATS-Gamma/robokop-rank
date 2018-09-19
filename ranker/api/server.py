@@ -14,6 +14,7 @@ from flask import request
 from ranker.api.setup import app, api
 from ranker.api.logging_config import logger
 from ranker.question import Question, NoAnswersException
+from ranker.answer import Answerset
 from ranker.tasks import answer_question
 import ranker.api.definitions
 import ranker.api.logging_config
@@ -192,6 +193,12 @@ class Results(Resource):
             schema:
                 type: string
             required: true
+          - in: query
+            name: standardize
+            description: Convert the output to RTX standard format?
+            schema:
+                type: boolean
+            default: false
         responses:
             200:
                 description: result
@@ -216,6 +223,9 @@ class Results(Resource):
         filename = info['result']
         result_path = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', filename)
         with open(result_path, 'r') as f:
+            if request.args.get('standardize') == 'true':
+                return Answerset(json.load(f)).toStandard()
+            else:
             return json.load(f)
 
 api.add_resource(Results, '/result/<task_id>')
