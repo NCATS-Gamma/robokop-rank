@@ -194,7 +194,7 @@ def standardize_edge(edge):
         'source_id': edge['source_id'],
         'target_id': edge['target_id'],
         'type': edge['type'],
-        'publications': ','.join(edge['publications'])
+        'publications': ','.join(str(p) for p in edge['publications'])
     }
     return output
 
