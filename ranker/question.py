@@ -365,7 +365,7 @@ class Question():
         for e, eref in zip(edges, edge_references):
             source_node = node_references[e['source_id']]
             target_node = node_references[e['target_id']]
-            match_strings.append(f"MATCH ({source_node})-[{eref}]-({target_node})")
+            match_strings.append(f"MATCH ({source_node})-[{eref}]->({target_node})")
             conditions = [c for c in [source_node.conditions, target_node.conditions] if c]
             if conditions:
                 match_strings.append("WHERE " + " OR ".join(conditions))
