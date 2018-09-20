@@ -5,6 +5,7 @@ Answer class
 import warnings
 import datetime
 import logging
+from uuid import uuid4
 
 from ranker.util import FromDictMixin
 
@@ -106,6 +107,10 @@ class Answer(FromDictMixin):
         self.score = None # float
 
         super().__init__(*args, **kwargs)
+
+        # make up default id if none is provided
+        if self.id is None:
+            self.id = str(uuid4())
 
     def toJSON(self):
         keys = [k for k in vars(self) if k[0] is not '_']
