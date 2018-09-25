@@ -22,7 +22,7 @@ CORS(app)
 app.register_blueprint(api_blueprint)
 
 template = {
-    "openapi": "2.0", #3.0.1",
+    "openapi": "3.0.1",
     "info": {
         "title": "ROBOKOP Ranker",
         "description": "An API for answering biomedical questions",
