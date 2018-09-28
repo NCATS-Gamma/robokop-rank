@@ -14,6 +14,7 @@ from flask import request
 from ranker.api.setup import app, api
 from ranker.api.logging_config import logger
 from ranker.question import Question, NoAnswersException
+from ranker.answer import Answerset
 from ranker.tasks import answer_question
 import ranker.api.definitions
 import ranker.api.logging_config
@@ -27,13 +28,14 @@ class AnswerQuestionNow(Resource):
         Get answers to a question
         ---
         tags: [answer]
-        parameters:
-          - in: body
-            name: question
+        requestBody:
             description: The machine-readable question graph.
-            schema:
-                $ref: '#/definitions/Question'
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/definitions/Question'
             required: true
+        parameters:
           - in: query
             name: max_results
             description: Maximum number of results to return. Provide -1 to indicate no maximum.
@@ -43,30 +45,13 @@ class AnswerQuestionNow(Resource):
         responses:
             200:
                 description: Answer
-                schema:
-                    type: object
-                    required:
-                      - thingsandstuff
-                    properties:
-                        thingsandstuff:
-                            type: string
-                            description: all the things and stuff
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/definitions/Response'
         """
-        # replace `parameters` with this when OAS 3.0 is fully supported by Swagger UI
-        # https://github.com/swagger-api/swagger-ui/issues/3641
-        """
-        requestBody:
-            description: The machine-readable question graph.
-            required: true
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/definitions/Question'
-        """
-        max_results = request.args.get('max_results')
+        max_results = request.args.get('max_results', default=250)
         logger.debug("max_results: %s", str(max_results))
-        if max_results is None:
-            max_results = '250'
         try:
             max_results = int(max_results)
         except ValueError:
@@ -92,13 +77,14 @@ class AnswerQuestion(Resource):
         Get answers to a question
         ---
         tags: [answer]
-        parameters:
-          - in: body
-            name: question
+        requestBody:
             description: The machine-readable question graph.
-            schema:
-                $ref: '#/definitions/Question'
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/definitions/Question'
             required: true
+        parameters:
           - in: query
             name: max_results
             description: Maximum number of results to return. Provide -1 to indicate no maximum.
@@ -108,30 +94,13 @@ class AnswerQuestion(Resource):
         responses:
             200:
                 description: Answer
-                schema:
-                    type: object
-                    required:
-                      - thingsandstuff
-                    properties:
-                        thingsandstuff:
-                            type: string
-                            description: all the things and stuff
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/definitions/Response'
         """
-        # replace `parameters` with this when OAS 3.0 is fully supported by Swagger UI
-        # https://github.com/swagger-api/swagger-ui/issues/3641
-        """
-        requestBody:
-            description: The machine-readable question graph.
-            required: true
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/definitions/Question'
-        """
-        max_results = request.args.get('max_results')
+        max_results = request.args.get('max_results', default=250)
         logger.debug("max_results: %s", str(max_results))
-        if max_results is None:
-            max_results = '250'
         try:
             max_results = int(max_results)
         except ValueError:
@@ -155,28 +124,21 @@ class QuestionSubgraph(Resource):
         Get question subgraph
         ---
         tags: [util]
-        parameters:
-          - in: body
+        requestBody:
             name: question
             description: The machine-readable question graph.
-            schema:
-                $ref: '#/definitions/Question'
-            required: true
-        responses:
-            200:
-                description: Knowledge subgraph
-                schema:
-                    $ref: '#/definitions/Question'
-        """
-        # https://github.com/swagger-api/swagger-ui/issues/3641
-        """
-        requestBody:
-            description: The machine-readable question graph.
-            required: true
             content:
                 application/json:
                     schema:
                         $ref: '#/definitions/Question'
+            required: true
+        responses:
+            200:
+                description: Knowledge subgraph
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/definitions/Question'
         """
 
         question = Question(request.json)
@@ -199,8 +161,10 @@ class Tasks(Resource):
         responses:
             200:
                 description: tasks
-                schema:
-                    type: string
+                content:
+                    application/json:
+                        schema:
+                            type: string
         """
         r = redis.Redis(
             host=os.environ['RESULTS_HOST'],
@@ -226,13 +190,22 @@ class Results(Resource):
           - in: path
             name: task_id
             description: ID of task
-            type: string
+            schema:
+                type: string
             required: true
+          - in: query
+            name: standardize
+            description: Convert the output to RTX standard format?
+            schema:
+                type: boolean
+            default: false
         responses:
             200:
                 description: result
-                schema:
-                    $ref: "#/definitions/Graph"
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/definitions/Graph"
         """
         r = redis.Redis(
             host=os.environ['RESULTS_HOST'],
@@ -250,7 +223,10 @@ class Results(Resource):
         filename = info['result']
         result_path = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', filename)
         with open(result_path, 'r') as f:
-            return json.load(f)
+            if request.args.get('standardize') == 'true':
+                return Answerset(json.load(f)).toStandard()
+            else:
+                return json.load(f)
 
 api.add_resource(Results, '/result/<task_id>')
 
@@ -264,13 +240,16 @@ class TaskStatus(Resource):
           - in: path
             name: task_id
             description: ID of task
-            type: string
+            schema:
+                type: string
             required: true
         responses:
             200:
                 description: result
-                schema:
-                    $ref: "#/definitions/Graph"
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/definitions/Graph"
         """
         r = redis.Redis(
             host=os.environ['RESULTS_HOST'],
@@ -298,39 +277,47 @@ class EnrichedExpansion(Resource):
           - in: path
             name: type1
             description: "type of query node"
-            type: string
+            schema:
+                type: string
             required: true
             default: "disease"
           - in: path
             name: type2
             description: "type of return nodes"
-            type: string
+            schema:
+                type: string
             required: true
             default: "disease"
           - in: query
             name: identifiers
             description: "identifiers of query nodes"
-            type: list
+            schema:
+                type: list
             required: true
           - in: query
             name: threshhold
             description: "Number between 0 and 1 indicating the maximum p-value to return"
-            type: float
+            schema:
+                type: float
             default: 0.05
           - in: query
             name: maxresults
             description: "The maximum number of results to return. Set to 0 to return all results."
-            type: integer
+            schema:
+                type: integer
             default: 100
           - in: query
             name: num_type1
             description: "The total number of type1 entities that can exist.  If not specified, this is estimated from the cache"
-            type: integer
+            schema:
+                type: integer
         responses:
             200:
                 description: result
-                schema:
-                    $ref: "#/definitions/SimilarityResult"
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/definitions/SimilarityResult"
         """
         parameters = request.json
         identifiers = parameters['identifiers']
@@ -365,42 +352,50 @@ class SimilaritySearch(Resource):
           - in: path
             name: type1
             description: "type of query node"
-            type: string
+            schema:
+                type: string
             required: true
             default: "disease"
           - in: path
             name: id1
             description: "curie of query node"
-            type: string
+            schema:
+                type: string
             required: true
             default: "MONDO:0005737"
           - in: path
             name: type2
             description: "type of return nodes"
-            type: string
+            schema:
+                type: string
             required: true
             default: "disease"
           - in: path
             name: by_type
             description: "type used to evaluate similarity"
-            type: string
+            schema:
+                type: string
             required: true
             default: "phenotypic_feature"
           - in: query
             name: threshhold
             description: "Number between 0 and 1 indicating the minimum similarity to return"
-            type: float
+            schema:
+                type: float
             default: 0.4
           - in: query
             name: maxresults
             description: "The maximum number of results to return. Set to 0 to return all results."
-            type: integer
+            schema:
+                type: integer
             default: 100
         responses:
             200:
                 description: result
-                schema:
-                    $ref: "#/definitions/SimilarityResult"
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/definitions/SimilarityResult"
         """
         database = KnowledgeGraph()
         threshhold = request.args.get('threshhold', default = 0.4)

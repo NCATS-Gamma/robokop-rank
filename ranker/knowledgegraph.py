@@ -36,12 +36,13 @@ class KnowledgeGraph:
                     RETURN result, jaccard ORDER BY jaccard DESC """
         if maxresults > 0:
             cypher += f"""LIMIT {maxresults}"""
+        logger.info(cypher)
         try:
             with self.driver.session() as session:
                 result = session.run(cypher)
             records = list(result)
             retres = [{'id':r['result'].properties['id'],
-                       'name':r['result'].properties['name'],
+                       'name':r['result'].properties['name'] if 'name' in r['result'].properties else r['result'].properties['id'],
                        'similarity':r['jaccard']} for r in records]
             retres = list(filter(lambda x: x['id'] != identifier,retres))
             return retres
