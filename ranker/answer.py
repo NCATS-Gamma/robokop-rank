@@ -108,10 +108,6 @@ class Answer(FromDictMixin):
 
         super().__init__(*args, **kwargs)
 
-        # make up default id if none is provided
-        if self.id is None:
-            self.id = str(uuid4())
-
     def toJSON(self):
         keys = [k for k in vars(self) if k[0] is not '_']
         struct = {key:getattr(self, key) for key in keys}
@@ -140,19 +136,21 @@ class Answer(FromDictMixin):
         text
         '''
         json = self.toJSON()
-        try:
-            output = {
-                'confidence': json['score'],
-                'id': json['id'],
-                'result_graph': {
-                    'node_list': [standardize_node(n) for n in json['nodes']],
-                    'edge_list': [standardize_edge(e) for e in json['edges']]
-                },
-                'result_type': 'individual query answer',
-                'text': generate_summary(json['nodes'], json['edges'])
-            }
-        except Exception as err:
-            logger.exception(err)
+
+        # make up default id if none is provided
+        if json['id'] is None:
+            json['id'] = str(uuid4())
+
+        output = {
+            'confidence': json['score'],
+            'id': json['id'],
+            'result_graph': {
+                'node_list': [standardize_node(n) for n in json['nodes']],
+                'edge_list': [standardize_edge(e) for e in json['edges']]
+            },
+            'result_type': 'individual query answer',
+            'text': generate_summary(json['nodes'], json['edges'])
+        }
         return output
 
 def generate_summary(nodes, edges):
