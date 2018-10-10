@@ -42,7 +42,7 @@ class NodeReference():
         if label == 'biological_process':
             label = 'biological_process_or_activity'
 
-        if 'curie' in node:
+        if 'curie' in node and node['curie'] is not None:
             if isinstance(node['curie'], str):
                 # synonymize/normalize curie
                 if 'type' in node:
@@ -104,8 +104,7 @@ class EdgeReference():
         name = f'e{edge["id"]}'
         label = edge['type'] if 'type' in edge else None
 
-
-        if 'type' in edge:
+        if 'type' in edge and edge['type'] is not None:
             if isinstance(edge['type'], str):
                 label = edge['type']
                 conditions = ''
