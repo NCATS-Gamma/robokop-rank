@@ -36,7 +36,7 @@ class NodeReference():
     """Node reference object."""
     def __init__(self, node, db=None):
         """Create a node reference."""
-        name = f'n{node["id"]}'
+        name = f'{node["id"]}'
         label = node['type'] if 'type' in node else None
 
         if label == 'biological_process':
@@ -101,7 +101,7 @@ class EdgeReference():
 
     def __init__(self, edge, db=None):
         """Create an edge reference."""
-        name = f'e{edge["id"]}'
+        name = f'{edge["id"]}'
         label = edge['type'] if 'type' in edge else None
 
         if 'type' in edge and edge['type'] is not None:
@@ -416,12 +416,12 @@ class Question():
         node_map = {n['id']: n for n in nodes}
 
         # generate internal node and edge variable names
-        node_names = [f"n{n['id']}" for n in nodes]
-        edge_names = [f"e{e['id']}" for e in edges]
+        node_names = [f"{n['id']}" for n in nodes]
+        edge_names = [f"{e['id']}" for e in edges]
 
         # deal with sets
-        node_id_accessor = [f"collect(distinct n{n['id']}.id) as n{n['id']}" if 'set' in n and n['set'] else f"n{n['id']}.id as n{n['id']}" for n in nodes]
-        edge_id_accessor = [f"collect(distinct toString(id(e{e['id']}))) as e{e['id']}" for e in edges]
+        node_id_accessor = [f"collect(distinct {n['id']}.id) as {n['id']}" if 'set' in n and n['set'] else f"{n['id']}.id as {n['id']}" for n in nodes]
+        edge_id_accessor = [f"collect(distinct toString(id({e['id']}))) as {e['id']}" for e in edges]
         with_string = f"WITH {', '.join(node_id_accessor+edge_id_accessor)}"
 
         # add bound fields and return map
@@ -443,8 +443,8 @@ class Question():
         nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
 
         # generate internal node and edge variable names
-        node_names = [f"n{n['id']}" for n in nodes]
-        edge_names = [f"e{e['id']}" for e in edges]
+        node_names = [f"{n['id']}" for n in nodes]
+        edge_names = [f"{e['id']}" for e in edges]
 
         collection_string = f"""WITH {'+'.join([f'collect(distinct {n})' for n in node_names])} as nodes, {'+'.join([f'collect(distinct {e})' for e in edge_names])} as edges
             UNWIND nodes as n WITH collect(distinct n) as nodes, edges

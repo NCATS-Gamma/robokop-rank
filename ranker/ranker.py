@@ -213,14 +213,14 @@ class Ranker:
         for qedge_id in subgraph['edges']:
             if qedge_id[0] == 's':
                 continue
-            qedge = next(e for e in self.question['edges'] if e['id'] == qedge_id[1:])
+            qedge = next(e for e in self.question['edges'] if e['id'] == qedge_id)
             kedge_ids = subgraph['edges'][qedge_id]
             if isinstance(kedge_ids, list):
                 for kedge_id in subgraph['edges'][qedge_id]:
                     kedge = next(e for e in self.graph['edges'] if e['id'] == kedge_id)
                     # find source and target
-                    candidate_source_ids = [f"n{qedge['source_id']}/{kedge['source_id']}", f"n{qedge['source_id']}/{kedge['target_id']}"]
-                    candidate_target_ids = [f"n{qedge['target_id']}/{kedge['source_id']}", f"n{qedge['target_id']}/{kedge['target_id']}"]
+                    candidate_source_ids = [f"{qedge['source_id']}/{kedge['source_id']}", f"{qedge['source_id']}/{kedge['target_id']}"]
+                    candidate_target_ids = [f"{qedge['target_id']}/{kedge['source_id']}", f"{qedge['target_id']}/{kedge['target_id']}"]
                     # logger.debug(candidate_source_ids)
                     # logger.debug(nodes)
                     source_id = next(node_id for node_id in nodes if node_id in candidate_source_ids)
@@ -235,8 +235,8 @@ class Ranker:
                 kedge_id = kedge_ids
                 kedge = next(e for e in self.graph['edges'] if e['id'] == kedge_id)
                 # find source and target
-                candidate_source_ids = [f"n{qedge['source_id']}/{kedge['source_id']}", f"n{qedge['source_id']}/{kedge['target_id']}"]
-                candidate_target_ids = [f"n{qedge['target_id']}/{kedge['source_id']}", f"n{qedge['target_id']}/{kedge['target_id']}"]
+                candidate_source_ids = [f"{qedge['source_id']}/{kedge['source_id']}", f"{qedge['source_id']}/{kedge['target_id']}"]
+                candidate_target_ids = [f"{qedge['target_id']}/{kedge['source_id']}", f"{qedge['target_id']}/{kedge['target_id']}"]
                 source_id = next(node_id for node_id in nodes if node_id in candidate_source_ids)
                 target_id = next(node_id for node_id in nodes if node_id in candidate_target_ids)
                 edge = {

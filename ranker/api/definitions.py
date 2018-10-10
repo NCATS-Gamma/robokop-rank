@@ -275,19 +275,21 @@ class Question(FromDictMixin):
     example:
         machine_question:
             nodes:
-              - id: 0
+              - id: n0
                 type: disease
                 curie: "MONDO:0005737"
-              - id: 1
+              - id: n1
                 type: gene
-              - id: 2
+              - id: n2
                 type: genetic_condition
             edges:
-              - source_id: 0
-                target_id: 1
+              - id: e0
+                source_id: n0
+                target_id: n1
                 type: disease_to_gene_association
-              - source_id: 1
-                target_id: 2
+              - id: e1
+                source_id: n1
+                target_id: n2
                 type: has_phenotype
     """
 
