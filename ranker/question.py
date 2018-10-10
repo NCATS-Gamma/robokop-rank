@@ -104,15 +104,6 @@ class EdgeReference():
         name = f'e{edge["id"]}'
         label = edge['type'] if 'type' in edge else None
 
-        min_length = max_length = 1
-        if 'min_length' in edge:
-            min_length = edge['min_length']
-        if 'max_length' in edge:
-            max_length = edge['max_length']
-        if not min_length == max_length == 1:
-            length_string = f"*{min_length}..{max_length}"
-        else:
-            length_string = ''
 
         if 'type' in edge:
             if isinstance(edge['type'], str):
@@ -130,7 +121,6 @@ class EdgeReference():
 
         self.name = name
         self.label = label
-        self.length_string = length_string
         self._num = 0
         self._conditions = conditions
 
@@ -138,7 +128,7 @@ class EdgeReference():
         """Return the cypher edge reference."""
         self._num += 1
         if self._num == 1:
-            return f'{self.name}{":" + self.label if self.label else ""}{self.length_string}'
+            return f'{self.name}{":" + self.label if self.label else ""}'
         else:
             return self.name
 
