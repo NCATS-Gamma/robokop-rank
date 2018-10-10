@@ -104,12 +104,13 @@ class EdgeReference():
         name = f'e{edge["id"]}'
         label = edge['type'] if 'type' in edge else None
 
-        if 'min_length' not in edge:
-            edge['min_length'] = 1
-        if 'max_length' not in edge:
-            edge['max_length'] = 1
-        if not edge['min_length'] == edge['max_length'] == 1:
-            length_string = f"*{edge['min_length']}..{edge['max_length']}"
+        min_length = max_length = 1
+        if 'min_length' in edge:
+            min_length = edge['min_length']
+        if 'max_length' in edge:
+            max_length = edge['max_length']
+        if not min_length == max_length == 1:
+            length_string = f"*{min_length}..{max_length}"
         else:
             length_string = ''
 
