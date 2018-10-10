@@ -230,29 +230,13 @@ class Question():
             node['type'] = node['type'][0]
         return subgraph
 
-    def answer(self, max_results=250):
-        """Answer the question.
-
-        Returns the answer struct, something along the lines of:
-        https://docs.google.com/document/d/1O6_sVSdSjgMmXacyI44JJfEVQLATagal9ydWLBgi-vE
-        """
-
-        # get cache
-        cache = Cache(
-            redis_host=os.environ['CACHE_HOST'],
-            redis_port=os.environ['CACHE_PORT'],
-            redis_db=os.environ['CACHE_DB'])
-
-        # get supporter
-        support_module_name = 'ranker.support.omnicorp'
-        supporter = import_module(support_module_name).get_supporter()
-
+    def fetch_answers(self):
         # get Neo4j connection
         database = KnowledgeGraph()
 
         # get joint subgraph
         logger.debug('Getting joint subgraph...')
-        query_string = self.subgraph_with_support(database)
+        query_string = self.subgraph(database)
         logger.debug(query_string)
         with database.driver.session() as session:
             result = session.run(query_string)
@@ -268,19 +252,6 @@ class Question():
         for node in answerset_subgraph['nodes']:
             node['type'].remove('named_thing')
             node['type'] = node['type'][0]
-
-        # get all node supports
-        for node in answerset_subgraph['nodes']:
-            key = f"{supporter.__class__.__name__}({node['id']})"
-            support_dict = cache.get(key)
-            if support_dict is not None:
-                logger.info(f"cache hit: {key} {support_dict}")
-            else:
-                logger.info(f"exec op: {key}")
-                support_dict = supporter.get_node_info(node['id'])
-                cache.set(key, support_dict)
-            # add omnicorp_article_count to nodes in networkx graph
-            node.update(support_dict)
 
         # get all subgraphs relevant to the question from the knowledge graph
         logger.debug('Getting answer paths...')
@@ -299,7 +270,47 @@ class Question():
             if len(subgraph_list) < options['limit']:
                 break
 
-        logger.debug('Generating node pairs...')
+        return {
+            'knowledge_graph': answerset_subgraph,
+            'knowledge_maps': all_subgraphs
+        }
+
+    def answer(self, max_results=250):
+        """Answer the question.
+
+        Returns the answer struct, something along the lines of:
+        https://docs.google.com/document/d/1O6_sVSdSjgMmXacyI44JJfEVQLATagal9ydWLBgi-vE
+        """
+
+        # get cache
+        cache = Cache(
+            redis_host=os.environ['CACHE_HOST'],
+            redis_port=os.environ['CACHE_PORT'],
+            redis_db=os.environ['CACHE_DB'])
+
+        answers = self.fetch_answers()
+        answerset_subgraph = answers['knowledge_graph']
+        all_subgraphs = answers['knowledge_maps']
+
+        # get supporter
+        support_module_name = 'ranker.support.omnicorp'
+        supporter = import_module(support_module_name).get_supporter()
+
+        # get all node supports
+        logger.info('Getting individual node supports...')
+        for node in answerset_subgraph['nodes']:
+            key = f"{supporter.__class__.__name__}({node['id']})"
+            support_dict = cache.get(key)
+            if support_dict is not None:
+                logger.info(f"cache hit: {key} {support_dict}")
+            else:
+                logger.info(f"exec op: {key}")
+                support_dict = supporter.get_node_info(node['id'])
+                cache.set(key, support_dict)
+            # add omnicorp_article_count to nodes in networkx graph
+            node.update(support_dict)
+
+        logger.info('Getting node pair supports...')
         # generate a set of pairs of node curies
         pair_to_answer = defaultdict(list)  # a map of node pairs to answers
         for ans_idx, subgraph in enumerate(all_subgraphs):
