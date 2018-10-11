@@ -387,8 +387,18 @@ class Question():
         node_references = {n['id']: NodeReference(n, db=db) for n in nodes}
         edge_references = [EdgeReference(e, db=db) for e in edges]
 
-        # generate MATCH command string to get paths of the appropriate size
         match_strings = []
+
+        # match orphaned nodes
+        def flatten(l):
+            return [e for sl in l for e in sl]
+        all_nodes = set([n['id'] for n in nodes])
+        all_referenced_nodes = set(flatten([[e['source_id'], e['target_id']] for e in edges]))
+        orphaned_nodes = all_nodes - all_referenced_nodes
+        for n in orphaned_nodes:
+            match_strings.append(f"MATCH ({node_references[n]})")
+
+        # match edges
         for e, eref in zip(edges, edge_references):
             source_node = node_references[e['source_id']]
             target_node = node_references[e['target_id']]
