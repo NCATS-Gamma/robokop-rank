@@ -19,8 +19,65 @@ from ranker.tasks import answer_question
 import ranker.api.definitions
 import ranker.api.logging_config
 from ranker.knowledgegraph import KnowledgeGraph
+from ranker.definitions import Message
 
 logger = logging.getLogger("ranker")
+
+class PassMessage(Resource):
+    def post(self):
+        """
+        Get answers to a question
+        ---
+        tags: [answer]
+        requestBody:
+            description: Input message
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/definitions/Message'
+        responses:
+            200:
+                description: Output message
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/definitions/Message'
+        """
+        message = Message(request.json)
+
+        logger.info(f"{len(message.knowledge_maps)} questions.")
+        big_answerset = None
+        for i, kmap in enumerate(message.knowledge_maps):
+            logger.info(f"Answering question {i}...")
+            question_json = message.question_graph.apply(kmap)
+            question = Question(question_json)
+
+            try:
+                answerset = question.fetch_answers()
+            except Exception as err:
+                logger.exception(f"Something went wrong with question answering: {err}")
+                return "Internal server error. See the logs for details.", 500
+            if answerset is None:
+                continue
+            answerset = Message(answerset)
+            logger.info("%d answers found.", len(answerset.knowledge_maps))
+            answerset.knowledge_maps = [{**kmap, **km['nodes'], **km['edges']} for km in answerset.knowledge_maps]
+            if big_answerset is None:
+                big_answerset = answerset
+                big_answerset.knowledge_graph.merge(message.knowledge_graph)
+            else:
+                big_answerset.knowledge_graph.merge(answerset.knowledge_graph)
+                big_answerset.knowledge_maps = big_answerset.knowledge_maps + answerset.knowledge_maps
+
+        if big_answerset is None:
+            logger.info("0 answers found. Returning None.")
+            return None, 200
+        big_answerset.question_graph = message.question_graph
+        return big_answerset.dump(), 200
+
+api.add_resource(PassMessage, '/ti')
+
 
 class AnswerQuestionNow(Resource):
     def post(self):
