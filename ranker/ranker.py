@@ -325,7 +325,7 @@ def terminal_nodes(question):
     for edge in question['edges']:
         degree[edge['source_id']] += 1
         degree[edge['target_id']] += 1
-    return [f"n{key}" for i, key in enumerate(degree) if degree[key] == 1]
+    return [f"{key}" for i, key in enumerate(degree) if degree[key] == 1]
 
 
 def mixing_time_from_laplacian(laplacian):
