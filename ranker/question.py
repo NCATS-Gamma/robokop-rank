@@ -304,9 +304,18 @@ class Question():
         # generate a set of pairs of node curies
         pair_to_answer = defaultdict(list)  # a map of node pairs to answers
         for ans_idx, subgraph in enumerate(all_subgraphs):
-            nodes = [n if isinstance(n, list) else [n] for n in subgraph['nodes'].values()]
-            nodes = [n for l in nodes for n in l]
-            for node_i, node_j in combinations(nodes, 2):
+            for combo in combinations(subgraph['nodes'], 2):
+                if isinstance(subgraph['nodes'][combo[0]], str):
+                    sources = [subgraph['nodes'][combo[0]]]
+                else:
+                    sources = subgraph['nodes'][combo[0]]
+                if isinstance(subgraph['nodes'][combo[1]], str):
+                    targets = [subgraph['nodes'][combo[1]]]
+                else:
+                    targets = subgraph['nodes'][combo[1]]
+                for source_id in sources:
+                    for target_id in targets:
+                        node_i, node_j = sorted([source_id, target_id])
                 pair_to_answer[(node_i, node_j)].append(ans_idx)
 
         cached_prefixes = cache.get('OmnicorpPrefixes')
