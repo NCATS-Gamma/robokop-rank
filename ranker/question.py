@@ -392,7 +392,7 @@ class Question():
             source_node = node_references[e['source_id']]
             target_node = node_references[e['target_id']]
             if 'type' in e and e['type']:
-            match_strings.append(f"MATCH ({source_node})-[{eref}]->({target_node})")
+                match_strings.append(f"MATCH ({source_node})-[{eref}]->({target_node})")
             else:
                 match_strings.append(f"MATCH ({source_node})-[{eref}]-({target_node})")
             conditions = [c for c in [source_node.conditions, target_node.conditions, eref.conditions] if c]
