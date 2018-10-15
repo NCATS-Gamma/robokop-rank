@@ -11,14 +11,14 @@ import uuid
 from celery import Celery, signals
 from kombu import Queue
 
-from ranker.api.setup import app
 from ranker.question import Question, NoAnswersException
-import ranker.api.logging_config
+from ranker.api.logging_config import setup_logger
 
+setup_logger()
 logger = logging.getLogger(__name__)
 
 # set up Celery
-celery = Celery(app.name)
+celery = Celery('ranker.api.setup')
 celery.conf.update(
     broker_url=os.environ["CELERY_BROKER_URL"],
     result_backend=os.environ["CELERY_RESULT_BACKEND"],

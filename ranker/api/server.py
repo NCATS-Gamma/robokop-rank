@@ -12,12 +12,10 @@ from flask_restful import Resource
 from flask import request
 
 from ranker.api.setup import app, api
-from ranker.api.logging_config import logger
 from ranker.question import Question, NoAnswersException
 from ranker.answer import Answerset
 from ranker.tasks import answer_question
 import ranker.api.definitions
-import ranker.api.logging_config
 from ranker.knowledgegraph import KnowledgeGraph
 from ranker.definitions import Message
 
@@ -53,11 +51,7 @@ class PassMessage(Resource):
             question_json = message.question_graph.apply(kmap)
             question = Question(question_json)
 
-            try:
                 answerset = question.fetch_answers()
-            except Exception as err:
-                logger.exception(f"Something went wrong with question answering: {err}")
-                return "Internal server error. See the logs for details.", 500
             if answerset is None:
                 continue
             answerset = Message(answerset)
@@ -113,18 +107,24 @@ class AnswerQuestionNow(Resource):
             max_results = int(max_results)
         except ValueError:
             return 'max_results should be an integer', 400
-        except:
-            raise
         if max_results < 0:
             max_results = None
 
+        try:
         result = answer_question.apply(
             args=[request.json],
             kwargs={'max_results': max_results}
         )
-        with open(os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', result.get()), 'r') as f:
+            result = result.get()
+        except:
+            # Celery tasks log errors internally. Just return.
+            return "Internal server error. See the logs for details.", 500
+        if result is None:
+            return None, 200
+        logger.debug(f'Answerset file: {result}')
+        with open(os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', result), 'r') as f:
             answers = json.load(f)
-        return answers, 202
+        return answers, 200
 
 api.add_resource(AnswerQuestionNow, '/now')
 
@@ -473,5 +473,5 @@ if __name__ == '__main__':
 
     app.run(host=server_host,\
         port=server_port,\
-        debug=True,\
+        debug=False,\
         use_reloader=True)
