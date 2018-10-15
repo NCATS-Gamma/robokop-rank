@@ -45,12 +45,12 @@ def answer_question(self, question_json, max_results=250):
 
     try:
         answerset = question.answer(max_results=max_results)
-    except NoAnswersException as err:
-        logger.debug(err)
-        raise err
     except Exception as err:
         logger.exception(f"Something went wrong with question answering: {err}")
         raise err
+    if answerset is None:
+        logger.info("0 answers found. Returning None.")
+        return None
     logger.info("%d answers found.", len(answerset.answers))
 
     self.update_state(state='SAVING')
