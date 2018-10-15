@@ -209,7 +209,7 @@ class Question():
         # get the subgraph relevant to the question from the knowledge graph
         database = KnowledgeGraph()
         with database.driver.session() as session:
-            record = list(session.run(self.subgraph_with_support(database)))[0]
+            record = list(session.run(self.subgraph(database)))[0]
         subgraph = {
             'nodes': record['nodes'],
             'edges': record['edges']
@@ -316,7 +316,7 @@ class Question():
                 for source_id in sources:
                     for target_id in targets:
                         node_i, node_j = sorted([source_id, target_id])
-                pair_to_answer[(node_i, node_j)].append(ans_idx)
+                        pair_to_answer[(node_i, node_j)].append(ans_idx)
 
         cached_prefixes = cache.get('OmnicorpPrefixes')
         # get all pair supports
@@ -456,7 +456,7 @@ class Question():
 
         return query_string
 
-    def subgraph_with_support(self, db):
+    def subgraph(self, db):
         match_string = self.cypher_match_string(db)
 
         nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
@@ -475,23 +475,5 @@ class Question():
         query_string = "\n".join([match_string, collection_string, support_string, return_string])
 
         logger.debug(query_string)
-
-        return query_string
-
-    def subgraph(self):
-        match_string = self.cypher_match_string()
-
-        nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
-
-        # generate internal node and edge variable names
-        node_names = ['n{:d}'.format(i) for i in range(len(nodes))]
-        edge_names = ['r{0:d}{1:d}'.format(i, i + 1) for i in range(len(edges))]
-
-        # just return a list of nodes and edges
-        collection_string = f"WITH {'+'.join([f'collect({e})' for e in edge_names])} as rels, {'+'.join([f'collect({n})' for n in node_names])} as nodes"
-        unique_string = 'UNWIND nodes as n WITH collect(distinct n) as nodes, rels UNWIND rels as r WITH nodes, collect(distinct r) as rels'
-        return_string = "\n".join([collection_string, unique_string, 'RETURN nodes, rels'])
-
-        query_string = "\n".join([match_string, return_string])
 
         return query_string
