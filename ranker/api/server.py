@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 
-"""Flask REST API server for ranker"""
+"""Flask REST API server for ranker."""
 
 import os
 import logging
-from datetime import datetime
 import json
 
 import redis
@@ -51,7 +50,7 @@ class PassMessage(Resource):
             question_json = message.question_graph.apply(kmap)
             question = Question(question_json)
 
-                answerset = question.fetch_answers()
+            answerset = question.fetch_answers()
             if answerset is None:
                 continue
             answerset = Message(answerset)
@@ -111,10 +110,10 @@ class AnswerQuestionNow(Resource):
             max_results = None
 
         try:
-        result = answer_question.apply(
-            args=[request.json],
-            kwargs={'max_results': max_results}
-        )
+            result = answer_question.apply(
+                args=[request.json],
+                kwargs={'max_results': max_results}
+            )
             result = result.get()
         except:
             # Celery tasks log errors internally. Just return.
