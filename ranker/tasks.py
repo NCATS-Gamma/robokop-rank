@@ -1,9 +1,6 @@
-'''
-Tasks for Celery workers
-'''
+"""Tasks for Celery workers."""
 
 import os
-import sys
 import logging
 import json
 import uuid
@@ -34,9 +31,7 @@ celery.log.setup()
 
 @celery.task(bind=True, queue='ranker')
 def answer_question(self, question_json, max_results=250):
-    '''
-    Generate answerset for a question
-    '''
+    """Generate answerset for a question."""
 
     question = Question(question_json)
 
@@ -68,5 +63,5 @@ def answer_question(self, question_json, max_results=250):
         raise err
 
     logger.info("Answerset saved.")
-    
+
     return filename
