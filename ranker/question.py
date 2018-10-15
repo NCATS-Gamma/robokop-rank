@@ -465,7 +465,7 @@ class Question():
         node_names = [f"{n['id']}" for n in nodes]
         edge_names = [f"{e['id']}" for e in edges]
 
-        collection_string = f"""WITH {'+'.join([f'collect(distinct {n})' for n in node_names])} as nodes, {'+'.join([f'collect(distinct {e})' for e in edge_names])} as edges
+        collection_string = f"""WITH {' + '.join([f'collect(distinct {n})' for n in node_names])} as nodes, {'+'.join([f'collect(distinct {e})' for e in edge_names])} as edges
             UNWIND nodes as n WITH collect(distinct n) as nodes, edges
             UNWIND edges as e WITH nodes, collect(distinct e) as edges"""
         support_string = """WITH
