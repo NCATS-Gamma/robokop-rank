@@ -311,8 +311,8 @@ class Ranker:
         for edge in edges:
             source_id, target_id, weight = edge['source_id'], edge['target_id'], edge['weight']
             i, j = index[source_id], index[target_id]
-            laplacian[i, j] += -weight
-            laplacian[j, i] += -weight
+            laplacian[i, j] = -weight
+            laplacian[j, i] = -weight
             laplacian[i, i] = laplacian[i, i] + weight
             laplacian[j, j] = laplacian[j, j] + weight
 
