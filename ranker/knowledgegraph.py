@@ -3,7 +3,6 @@ import os
 import sys
 import logging
 from neo4j.v1 import GraphDatabase, basic_auth
-import ranker.api.logging_config
 from scipy.stats import hypergeom
 from operator import itemgetter
 
