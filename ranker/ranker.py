@@ -42,6 +42,10 @@ class Ranker:
 
     def __init__(self, graph=None, question=None):
         """Create ranker."""
+        logger.info("QUESTION")
+        logger.info(question)
+        logger.info("WHOLE GRAPH")
+        logger.info(graph)
         self.graph = graph
         self.question = question
         self._evaluated_templates = {}
@@ -145,6 +149,7 @@ class Ranker:
         # get subgraph statistics
         logger.debug("Calculating subgraph statistics... ")
         start = time.time()
+        logger.info("subgraph_statistic on ")
         graph_stat = [self.subgraph_statistic(sg, metric_type='volt') for sg in subgraph_list]
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
@@ -306,8 +311,8 @@ class Ranker:
         for edge in edges:
             source_id, target_id, weight = edge['source_id'], edge['target_id'], edge['weight']
             i, j = index[source_id], index[target_id]
-            laplacian[i, j] = -weight
-            laplacian[j, i] = -weight
+            laplacian[i, j] += -weight
+            laplacian[j, i] += -weight
             laplacian[i, i] = laplacian[i, i] + weight
             laplacian[j, j] = laplacian[j, j] + weight
 
