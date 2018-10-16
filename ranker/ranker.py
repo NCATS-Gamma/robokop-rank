@@ -313,8 +313,8 @@ class Ranker:
             i, j = index[source_id], index[target_id]
             laplacian[i, j] += -weight
             laplacian[j, i] += -weight
-            laplacian[i, i] = laplacian[i, i] + weight
-            laplacian[j, j] = laplacian[j, j] + weight
+            laplacian[i, i] += weight
+            laplacian[j, j] += weight
 
         # add teleportation to allow leaps of faith
         laplacian = laplacian + self.teleport_weight * (num_nodes * np.eye(num_nodes) - np.ones((num_nodes, num_nodes)))
