@@ -43,6 +43,9 @@ class OmniCorp():
         self.npair = 0
         self.total_pair_call = datetime.timedelta()
 
+    def __del__(self):
+        self.conn.close()
+
     def get_omni_identifier(self, node_id):
         """Get omnicorp identifier."""
         # Let's start with just the 'best' identifier
