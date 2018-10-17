@@ -1,9 +1,6 @@
-'''
-Tasks for Celery workers
-'''
+"""Tasks for Celery workers."""
 
 import os
-import sys
 import logging
 import json
 import uuid
@@ -11,14 +8,14 @@ import uuid
 from celery import Celery, signals
 from kombu import Queue
 
-from ranker.api.setup import app
 from ranker.question import Question, NoAnswersException
-import ranker.api.logging_config
+from ranker.api.logging_config import setup_logger
 
+setup_logger()
 logger = logging.getLogger(__name__)
 
 # set up Celery
-celery = Celery(app.name)
+celery = Celery('ranker.api.setup')
 celery.conf.update(
     broker_url=os.environ["CELERY_BROKER_URL"],
     result_backend=os.environ["CELERY_RESULT_BACKEND"],
@@ -34,9 +31,7 @@ celery.log.setup()
 
 @celery.task(bind=True, queue='ranker')
 def answer_question(self, question_json, max_results=250):
-    '''
-    Generate answerset for a question
-    '''
+    """Generate answerset for a question."""
 
     question = Question(question_json)
 
@@ -45,12 +40,12 @@ def answer_question(self, question_json, max_results=250):
 
     try:
         answerset = question.answer(max_results=max_results)
-    except NoAnswersException as err:
-        logger.debug(err)
-        raise err
     except Exception as err:
         logger.exception(f"Something went wrong with question answering: {err}")
         raise err
+    if answerset is None:
+        logger.info("0 answers found. Returning None.")
+        return None
     logger.info("%d answers found.", len(answerset.answers))
 
     self.update_state(state='SAVING')
@@ -68,5 +63,5 @@ def answer_question(self, question_json, max_results=250):
         raise err
 
     logger.info("Answerset saved.")
-    
+
     return filename

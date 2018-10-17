@@ -21,7 +21,6 @@ from ranker.knowledgegraph import KnowledgeGraph
 from ranker.answer import Answer, Answerset
 from ranker.ranker import Ranker
 from ranker.cache import Cache
-import ranker.api.logging_config
 
 
 logger = logging.getLogger(__name__)
@@ -36,13 +35,13 @@ class NodeReference():
     """Node reference object."""
     def __init__(self, node, db=None):
         """Create a node reference."""
-        name = f'n{node["id"]}'
+        name = f'{node["id"]}'
         label = node['type'] if 'type' in node else None
 
         if label == 'biological_process':
             label = 'biological_process_or_activity'
 
-        if 'curie' in node:
+        if 'curie' in node and node['curie'] is not None:
             if isinstance(node['curie'], str):
                 # synonymize/normalize curie
                 if 'type' in node:
@@ -101,19 +100,10 @@ class EdgeReference():
 
     def __init__(self, edge, db=None):
         """Create an edge reference."""
-        name = f'e{edge["id"]}'
+        name = f'{edge["id"]}'
         label = edge['type'] if 'type' in edge else None
 
-        if 'min_length' not in edge:
-            edge['min_length'] = 1
-        if 'max_length' not in edge:
-            edge['max_length'] = 1
-        if not edge['min_length'] == edge['max_length'] == 1:
-            length_string = f"*{edge['min_length']}..{edge['max_length']}"
-        else:
-            length_string = ''
-
-        if 'type' in edge:
+        if 'type' in edge and edge['type'] is not None:
             if isinstance(edge['type'], str):
                 label = edge['type']
                 conditions = ''
@@ -129,7 +119,6 @@ class EdgeReference():
 
         self.name = name
         self.label = label
-        self.length_string = length_string
         self._num = 0
         self._conditions = conditions
 
@@ -137,7 +126,7 @@ class EdgeReference():
         """Return the cypher edge reference."""
         self._num += 1
         if self._num == 1:
-            return f'{self.name}{":" + self.label if self.label else ""}{self.length_string}'
+            return f'{self.name}{":" + self.label if self.label else ""}'
         else:
             return self.name
 
@@ -220,7 +209,7 @@ class Question():
         # get the subgraph relevant to the question from the knowledge graph
         database = KnowledgeGraph()
         with database.driver.session() as session:
-            record = list(session.run(self.subgraph_with_support(database)))[0]
+            record = list(session.run(self.subgraph(database)))[0]
         subgraph = {
             'nodes': record['nodes'],
             'edges': record['edges']
@@ -230,34 +219,19 @@ class Question():
             node['type'] = node['type'][0]
         return subgraph
 
-    def answer(self, max_results=250):
-        """Answer the question.
-
-        Returns the answer struct, something along the lines of:
-        https://docs.google.com/document/d/1O6_sVSdSjgMmXacyI44JJfEVQLATagal9ydWLBgi-vE
-        """
-
-        # get cache
-        cache = Cache(
-            redis_host=os.environ['CACHE_HOST'],
-            redis_port=os.environ['CACHE_PORT'],
-            redis_db=os.environ['CACHE_DB'])
-
-        # get supporter
-        support_module_name = 'ranker.support.omnicorp'
-        supporter = import_module(support_module_name).get_supporter()
-
+    def fetch_answers(self):
         # get Neo4j connection
         database = KnowledgeGraph()
 
         # get joint subgraph
         logger.debug('Getting joint subgraph...')
-        query_string = self.subgraph_with_support(database)
+        query_string = self.subgraph(database)
         logger.debug(query_string)
         with database.driver.session() as session:
             result = session.run(query_string)
         if result.peek() is None:
-            raise NoAnswersException()
+            logger.debug("No answers found. Returning None.")
+            return None
         logger.debug('Converting Neo4j Result to dict...')
         result = list(result)
 
@@ -268,19 +242,6 @@ class Question():
         for node in answerset_subgraph['nodes']:
             node['type'].remove('named_thing')
             node['type'] = node['type'][0]
-
-        # get all node supports
-        for node in answerset_subgraph['nodes']:
-            key = f"{supporter.__class__.__name__}({node['id']})"
-            support_dict = cache.get(key)
-            if support_dict is not None:
-                logger.info(f"cache hit: {key} {support_dict}")
-            else:
-                logger.info(f"exec op: {key}")
-                support_dict = supporter.get_node_info(node['id'])
-                cache.set(key, support_dict)
-            # add omnicorp_article_count to nodes in networkx graph
-            node.update(support_dict)
 
         # get all subgraphs relevant to the question from the knowledge graph
         logger.debug('Getting answer paths...')
@@ -299,14 +260,63 @@ class Question():
             if len(subgraph_list) < options['limit']:
                 break
 
-        logger.debug('Generating node pairs...')
+        return {
+            'knowledge_graph': answerset_subgraph,
+            'knowledge_maps': all_subgraphs
+        }
+
+    def answer(self, max_results=250):
+        """Answer the question.
+
+        Returns the answer struct, something along the lines of:
+        https://docs.google.com/document/d/1O6_sVSdSjgMmXacyI44JJfEVQLATagal9ydWLBgi-vE
+        """
+
+        # get cache
+        cache = Cache(
+            redis_host=os.environ['CACHE_HOST'],
+            redis_port=os.environ['CACHE_PORT'],
+            redis_db=os.environ['CACHE_DB'])
+
+        answers = self.fetch_answers()
+        answerset_subgraph = answers['knowledge_graph']
+        all_subgraphs = answers['knowledge_maps']
+
+        # get supporter
+        support_module_name = 'ranker.support.omnicorp'
+        supporter = import_module(support_module_name).get_supporter()
+
+        # get all node supports
+        logger.info('Getting individual node supports...')
+        for node in answerset_subgraph['nodes']:
+            key = f"{supporter.__class__.__name__}({node['id']})"
+            support_dict = cache.get(key)
+            if support_dict is not None:
+                logger.info(f"cache hit: {key} {support_dict}")
+            else:
+                logger.info(f"exec op: {key}")
+                support_dict = supporter.get_node_info(node['id'])
+                cache.set(key, support_dict)
+            # add omnicorp_article_count to nodes in networkx graph
+            node.update(support_dict)
+
+        logger.info('Getting node pair supports...')
         # generate a set of pairs of node curies
         pair_to_answer = defaultdict(list)  # a map of node pairs to answers
         for ans_idx, subgraph in enumerate(all_subgraphs):
-            nodes = [n if isinstance(n, list) else [n] for n in subgraph['nodes'].values()]
-            nodes = [n for l in nodes for n in l]
-            for node_i, node_j in combinations(nodes, 2):
-                pair_to_answer[(node_i, node_j)].append(ans_idx)
+            for combo in combinations(subgraph['nodes'], 2):
+                if isinstance(subgraph['nodes'][combo[0]], str):
+                    sources = [subgraph['nodes'][combo[0]]]
+                else:
+                    sources = subgraph['nodes'][combo[0]]
+                if isinstance(subgraph['nodes'][combo[1]], str):
+                    targets = [subgraph['nodes'][combo[1]]]
+                else:
+                    targets = subgraph['nodes'][combo[1]]
+                for source_id in sources:
+                    for target_id in targets:
+                        node_i, node_j = sorted([source_id, target_id])
+                        pair_to_answer[(node_i, node_j)].append(ans_idx)
 
         cached_prefixes = cache.get('OmnicorpPrefixes')
         # get all pair supports
@@ -386,8 +396,18 @@ class Question():
         node_references = {n['id']: NodeReference(n, db=db) for n in nodes}
         edge_references = [EdgeReference(e, db=db) for e in edges]
 
-        # generate MATCH command string to get paths of the appropriate size
         match_strings = []
+
+        # match orphaned nodes
+        def flatten(l):
+            return [e for sl in l for e in sl]
+        all_nodes = set([n['id'] for n in nodes])
+        all_referenced_nodes = set(flatten([[e['source_id'], e['target_id']] for e in edges]))
+        orphaned_nodes = all_nodes - all_referenced_nodes
+        for n in orphaned_nodes:
+            match_strings.append(f"MATCH ({node_references[n]})")
+
+        # match edges
         for e, eref in zip(edges, edge_references):
             source_node = node_references[e['source_id']]
             target_node = node_references[e['target_id']]
@@ -415,12 +435,12 @@ class Question():
         node_map = {n['id']: n for n in nodes}
 
         # generate internal node and edge variable names
-        node_names = [f"n{n['id']}" for n in nodes]
-        edge_names = [f"e{e['id']}" for e in edges]
+        node_names = [f"{n['id']}" for n in nodes]
+        edge_names = [f"{e['id']}" for e in edges]
 
         # deal with sets
-        node_id_accessor = [f"collect(distinct n{n['id']}.id) as n{n['id']}" if 'set' in n and n['set'] else f"n{n['id']}.id as n{n['id']}" for n in nodes]
-        edge_id_accessor = [f"collect(distinct id(e{e['id']})) as e{e['id']}" for e in edges]
+        node_id_accessor = [f"collect(distinct {n['id']}.id) as {n['id']}" if 'set' in n and n['set'] else f"{n['id']}.id as {n['id']}" for n in nodes]
+        edge_id_accessor = [f"collect(distinct toString(id({e['id']}))) as {e['id']}" for e in edges]
         with_string = f"WITH {', '.join(node_id_accessor+edge_id_accessor)}"
 
         # add bound fields and return map
@@ -436,42 +456,24 @@ class Question():
 
         return query_string
 
-    def subgraph_with_support(self, db):
+    def subgraph(self, db):
         match_string = self.cypher_match_string(db)
 
         nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
 
         # generate internal node and edge variable names
-        node_names = [f"n{n['id']}" for n in nodes]
-        edge_names = [f"e{e['id']}" for e in edges]
+        node_names = [f"{n['id']}" for n in nodes]
+        edge_names = [f"{e['id']}" for e in edges]
 
-        collection_string = f"""WITH {'+'.join([f'collect(distinct {n})' for n in node_names])} as nodes, {'+'.join([f'collect(distinct {e})' for e in edge_names])} as edges
+        collection_string = f"""WITH {' + '.join([f'collect(distinct {n})' for n in node_names])} as nodes, {'+'.join([f'collect(distinct {e})' for e in edge_names])} as edges
             UNWIND nodes as n WITH collect(distinct n) as nodes, edges
             UNWIND edges as e WITH nodes, collect(distinct e) as edges"""
         support_string = """WITH
-            [r in edges | r{.*, source_id:startNode(r).id, target_id:endNode(r).id, type:type(r), id:id(r)}] as edges,
+            [r in edges | r{.*, source_id:startNode(r).id, target_id:endNode(r).id, type:type(r), id:toString(id(r))}] as edges,
             [n in nodes | n{.*, type:labels(n)}] as nodes"""
         return_string = 'RETURN nodes, edges'
         query_string = "\n".join([match_string, collection_string, support_string, return_string])
 
         logger.debug(query_string)
-
-        return query_string
-
-    def subgraph(self):
-        match_string = self.cypher_match_string()
-
-        nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
-
-        # generate internal node and edge variable names
-        node_names = ['n{:d}'.format(i) for i in range(len(nodes))]
-        edge_names = ['r{0:d}{1:d}'.format(i, i + 1) for i in range(len(edges))]
-
-        # just return a list of nodes and edges
-        collection_string = f"WITH {'+'.join([f'collect({e})' for e in edge_names])} as rels, {'+'.join([f'collect({n})' for n in node_names])} as nodes"
-        unique_string = 'UNWIND nodes as n WITH collect(distinct n) as nodes, rels UNWIND rels as r WITH nodes, collect(distinct r) as rels'
-        return_string = "\n".join([collection_string, unique_string, 'RETURN nodes, rels'])
-
-        query_string = "\n".join([match_string, return_string])
 
         return query_string
