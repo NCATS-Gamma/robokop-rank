@@ -32,6 +32,7 @@ class OmniCorp():
             'CHEBI',
             'HGNC',
             'MESH'])
+        logger.info("Opening Connection to ROBOKOPDB Postgres")
         self.conn = psycopg2.connect(
             dbname=db,
             user=user,
@@ -42,6 +43,9 @@ class OmniCorp():
         self.total_single_call = datetime.timedelta()
         self.npair = 0
         self.total_pair_call = datetime.timedelta()
+
+    def close(self):
+        self.conn.close()
 
     def get_omni_identifier(self, node_id):
         """Get omnicorp identifier."""

@@ -21,6 +21,13 @@ class OmnicorpSupport():
         """Create omnicorp support object."""
         self.omnicorp = OmniCorp()
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exception_type, exception_value, traceback):
+        logger.info("Closing Connection to ROBOKOPDB Postgres")
+        self.omnicorp.close()
+
     def term_to_term(self, node_a, node_b):
         """Get number of articles related to both terms and return the result."""
         articles = self.omnicorp.get_shared_pmids(node_a, node_b)

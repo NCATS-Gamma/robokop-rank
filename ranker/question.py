@@ -23,6 +23,7 @@ from ranker.ranker import Ranker
 from ranker.cache import Cache
 import ranker.api.logging_config
 
+from ranker.support.omnicorp import OmnicorpSupport
 
 logger = logging.getLogger(__name__)
 
@@ -244,114 +245,115 @@ class Question():
             redis_db=os.environ['CACHE_DB'])
 
         # get supporter
-        support_module_name = 'ranker.support.omnicorp'
-        supporter = import_module(support_module_name).get_supporter()
+        #support_module_name = 'ranker.support.omnicorp'
+        #supporter = import_module(support_module_name).get_supporter()
+        with OmnicorpSupport() as supporter:
 
-        # get Neo4j connection
-        database = KnowledgeGraph()
+                # get Neo4j connection
+                database = KnowledgeGraph()
 
-        # get joint subgraph
-        logger.debug('Getting joint subgraph...')
-        query_string = self.subgraph_with_support(database)
-        logger.debug(query_string)
-        with database.driver.session() as session:
-            result = session.run(query_string)
-        if result.peek() is None:
-            raise NoAnswersException()
-        logger.debug('Converting Neo4j Result to dict...')
-        result = list(result)
+                # get joint subgraph
+                logger.debug('Getting joint subgraph...')
+                query_string = self.subgraph_with_support(database)
+                logger.debug(query_string)
+                with database.driver.session() as session:
+                    result = session.run(query_string)
+                if result.peek() is None:
+                    raise NoAnswersException()
+                logger.debug('Converting Neo4j Result to dict...')
+                result = list(result)
 
-        answerset_subgraph = {
-            'nodes': result[0]['nodes'],
-            'edges': result[0]['edges']
-        }
-        for node in answerset_subgraph['nodes']:
-            node['type'].remove('named_thing')
-            node['type'] = node['type'][0]
+                answerset_subgraph = {
+                    'nodes': result[0]['nodes'],
+                    'edges': result[0]['edges']
+                }
+                for node in answerset_subgraph['nodes']:
+                    node['type'].remove('named_thing')
+                    node['type'] = node['type'][0]
 
-        # get all node supports
-        for node in answerset_subgraph['nodes']:
-            key = f"{supporter.__class__.__name__}({node['id']})"
-            support_dict = cache.get(key)
-            if support_dict is not None:
-                logger.info(f"cache hit: {key} {support_dict}")
-            else:
-                logger.info(f"exec op: {key}")
-                support_dict = supporter.get_node_info(node['id'])
-                cache.set(key, support_dict)
-            # add omnicorp_article_count to nodes in networkx graph
-            node.update(support_dict)
+                # get all node supports
+                for node in answerset_subgraph['nodes']:
+                    key = f"{supporter.__class__.__name__}({node['id']})"
+                    support_dict = cache.get(key)
+                    if support_dict is not None:
+                        logger.info(f"cache hit: {key} {support_dict}")
+                    else:
+                        logger.info(f"exec op: {key}")
+                        support_dict = supporter.get_node_info(node['id'])
+                        cache.set(key, support_dict)
+                    # add omnicorp_article_count to nodes in networkx graph
+                    node.update(support_dict)
 
-        # get all subgraphs relevant to the question from the knowledge graph
-        logger.debug('Getting answer paths...')
-        all_subgraphs = []
-        options = {
-            'limit': 1000000,
-            'skip': 0
-        }
-        while True:
-            subgraphs = database.query(self, options=options)
-            options['skip'] += options['limit']
-            subgraph_list = [{'nodes': g['nodes'], 'edges': g['edges']} for g in subgraphs]
-            all_subgraphs.extend(subgraph_list)
-            logger.debug(f'{len(all_subgraphs)} subgraphs: {int(sys.getsizeof(pickle.dumps(all_subgraphs)) / 1e6):d} MB')
-            logger.debug(f'memory usage: {int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e3):d} MB')
-            if len(subgraph_list) < options['limit']:
-                break
+                # get all subgraphs relevant to the question from the knowledge graph
+                logger.debug('Getting answer paths...')
+                all_subgraphs = []
+                options = {
+                    'limit': 1000000,
+                    'skip': 0
+                }
+                while True:
+                    subgraphs = database.query(self, options=options)
+                    options['skip'] += options['limit']
+                    subgraph_list = [{'nodes': g['nodes'], 'edges': g['edges']} for g in subgraphs]
+                    all_subgraphs.extend(subgraph_list)
+                    logger.debug(f'{len(all_subgraphs)} subgraphs: {int(sys.getsizeof(pickle.dumps(all_subgraphs)) / 1e6):d} MB')
+                    logger.debug(f'memory usage: {int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e3):d} MB')
+                    if len(subgraph_list) < options['limit']:
+                        break
 
-        logger.debug('Generating node pairs...')
-        # generate a set of pairs of node curies
-        pair_to_answer = defaultdict(list)  # a map of node pairs to answers
-        for ans_idx, subgraph in enumerate(all_subgraphs):
-            nodes = [n if isinstance(n, list) else [n] for n in subgraph['nodes'].values()]
-            nodes = [n for l in nodes for n in l]
-            for node_i, node_j in combinations(nodes, 2):
-                pair_to_answer[(node_i, node_j)].append(ans_idx)
+                logger.debug('Generating node pairs...')
+                # generate a set of pairs of node curies
+                pair_to_answer = defaultdict(list)  # a map of node pairs to answers
+                for ans_idx, subgraph in enumerate(all_subgraphs):
+                    nodes = [n if isinstance(n, list) else [n] for n in subgraph['nodes'].values()]
+                    nodes = [n for l in nodes for n in l]
+                    for node_i, node_j in combinations(nodes, 2):
+                        pair_to_answer[(node_i, node_j)].append(ans_idx)
 
-        cached_prefixes = cache.get('OmnicorpPrefixes')
-        # get all pair supports
-        for support_idx, pair in enumerate(pair_to_answer):
-            logger.info(pair)
-            #The id's are in the cache sorted.
-            ids = [pair[0],pair[1]]
-            ids.sort()
-            key = f"{supporter.__class__.__name__}({ids[0]},{ids[1]})"
-            support_edge = cache.get(key)
-            if support_edge is not None:
-                logger.info(f"cache hit: {key} {support_edge}")
-            else:
-                #There are two reasons that we don't get anything back:
-                # 1. We haven't evaluated that pair
-                # 2. We evaluated, and found it to be zero, and it was part
-                #  of a prefix pair that we evaluated all of.  In that case
-                #  we can infer that getting nothing back means an empty list
-                #  check cached_prefixes for this...
-                prefixes = tuple([ ident.split(':')[0].upper() for ident in ids ])
-                if prefixes in cached_prefixes:
-                    support_edge = []
-                else:
-                    logger.info(f"exec op: {key}")
-                    try:
-                        support_edge = supporter.term_to_term(pair[0], pair[1])
-                        cache.set(key, support_edge)
-                    except Exception as e:
-                        raise e
-                        # logger.debug('Support error, not caching')
-                        # continue
-            if not support_edge:
-                continue
-            uid = str(uuid4())
-            answerset_subgraph['edges'].append({
-                'type': 'literature_co-occurrence',
-                'id': uid,
-                'publications': support_edge,
-                'source_database': 'omnicorp',
-                'source_id': pair[0],
-                'target_id': pair[1],
-                'edge_source': 'omnicorp.term_to_term'
-            })
-            for sg in pair_to_answer[pair]:
-                all_subgraphs[sg]['edges'].update({f's{support_idx}': uid})
+                cached_prefixes = cache.get('OmnicorpPrefixes')
+                # get all pair supports
+                for support_idx, pair in enumerate(pair_to_answer):
+                    logger.info(pair)
+                    #The id's are in the cache sorted.
+                    ids = [pair[0],pair[1]]
+                    ids.sort()
+                    key = f"{supporter.__class__.__name__}({ids[0]},{ids[1]})"
+                    support_edge = cache.get(key)
+                    if support_edge is not None:
+                        logger.info(f"cache hit: {key} {support_edge}")
+                    else:
+                        #There are two reasons that we don't get anything back:
+                        # 1. We haven't evaluated that pair
+                        # 2. We evaluated, and found it to be zero, and it was part
+                        #  of a prefix pair that we evaluated all of.  In that case
+                        #  we can infer that getting nothing back means an empty list
+                        #  check cached_prefixes for this...
+                        prefixes = tuple([ ident.split(':')[0].upper() for ident in ids ])
+                        if prefixes in cached_prefixes:
+                            support_edge = []
+                        else:
+                            logger.info(f"exec op: {key}")
+                            try:
+                                support_edge = supporter.term_to_term(pair[0], pair[1])
+                                cache.set(key, support_edge)
+                            except Exception as e:
+                                raise e
+                                # logger.debug('Support error, not caching')
+                                # continue
+                    if not support_edge:
+                        continue
+                    uid = str(uuid4())
+                    answerset_subgraph['edges'].append({
+                        'type': 'literature_co-occurrence',
+                        'id': uid,
+                        'publications': support_edge,
+                        'source_database': 'omnicorp',
+                        'source_id': pair[0],
+                        'target_id': pair[1],
+                        'edge_source': 'omnicorp.term_to_term'
+                    })
+                    for sg in pair_to_answer[pair]:
+                        all_subgraphs[sg]['edges'].update({f's{support_idx}': uid})
 
         logger.debug('Ranking...')
         # compute scores with NAGA, export to json
