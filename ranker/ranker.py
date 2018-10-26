@@ -202,13 +202,9 @@ class Ranker:
         knode_map = defaultdict(set)
         for qnode_id in subgraph['nodes']:
             knode_ids = subgraph['nodes'][qnode_id]
-            if isinstance(knode_ids, list):
-                for knode_id in knode_ids:
-                    rnode_id = f"{qnode_id}/{knode_id}"
-                    nodes.append(rnode_id)
-                    knode_map[knode_id].add(rnode_id)
-            else:
-                knode_id = knode_ids
+            if not isinstance(knode_ids, list):
+                knode_ids = [knode_ids]
+            for knode_id in knode_ids:
                 rnode_id = f"{qnode_id}/{knode_id}"
                 nodes.append(rnode_id)
                 knode_map[knode_id].add(rnode_id)
@@ -220,24 +216,9 @@ class Ranker:
                 continue
             qedge = next(e for e in self.question['edges'] if e['id'] == qedge_id)
             kedge_ids = subgraph['edges'][qedge_id]
-            if isinstance(kedge_ids, list):
-                for kedge_id in subgraph['edges'][qedge_id]:
-                    kedge = next(e for e in self.graph['edges'] if e['id'] == kedge_id)
-                    # find source and target
-                    candidate_source_ids = [f"{qedge['source_id']}/{kedge['source_id']}", f"{qedge['source_id']}/{kedge['target_id']}"]
-                    candidate_target_ids = [f"{qedge['target_id']}/{kedge['source_id']}", f"{qedge['target_id']}/{kedge['target_id']}"]
-                    # logger.debug(candidate_source_ids)
-                    # logger.debug(nodes)
-                    source_id = next(node_id for node_id in nodes if node_id in candidate_source_ids)
-                    target_id = next(node_id for node_id in nodes if node_id in candidate_target_ids)
-                    edge = {
-                        'weight': kedge['weight'],
-                        'source_id': source_id,
-                        'target_id': target_id
-                    }
-                    edges.append(edge)
-            else:
-                kedge_id = kedge_ids
+            if not isinstance(kedge_ids, list):
+                kedge_ids = [kedge_ids]
+            for kedge_id in kedge_ids:
                 kedge = next(e for e in self.graph['edges'] if e['id'] == kedge_id)
                 # find source and target
                 candidate_source_ids = [f"{qedge['source_id']}/{kedge['source_id']}", f"{qedge['source_id']}/{kedge['target_id']}"]
