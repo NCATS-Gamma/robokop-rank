@@ -35,8 +35,10 @@ def flatten_semilist(x):
 class Ranker:
     """Ranker."""
 
-    graphInfo = {}  # will be populated on construction
-    naga_parameters = {'alpha': .9, 'beta': .9}
+    wt_min = 0.1  # weight at 0 pubs
+    wt_max = 1  # maximum weight (at inf pubs)
+    mark95 = 20  # pubs at 95% of wt_max
+    relevance = 0.5  # portion of cooccurrence pubs relevant to question
     prescreen_count = 2000  # only look at this many graphs more in depth
     teleport_weight = 0.001  # probability to teleport along graph (make random inference) in hitting time calculation
 
@@ -51,58 +53,29 @@ class Ranker:
         self._evaluated_templates = {}
         self._result_count = -1
 
-    def set_weights(self, method='ngd'):
-        """Initialize weights on the graph based on metadata.
-
-        * 'ngd' uses the omnicorp_article_count on the edges to generate
-        normalized google distance weights.
-        """
-
-        if method != 'ngd':
-            raise RuntimeError('You must use method "ngd".')
+    def set_weights(self):
+        """Initialize weights on the graph based on metadata."""
 
         node_pubs = {n['id']: n['omnicorp_article_count'] for n in self.graph['nodes']}
+        all_pubs = 27840000
 
-        N = 1e8  # approximate number of articles in corpus * typical number of keywords
-        minimum_article_node_count = 1000  # assume every concept actually has at least this many publications we may or may not know about
-
-        mean_ngd = 1e-8
-
-        # notation: edge contains metadata, e is edge without metadata
         edges = self.graph['edges']
         for edge in edges:
-            pub_count = len(edge['publications']) if 'publications' in edge else 0
+            if edge['type'] == 'literature_co-occurrence':
+                source_pubs = int(node_pubs[edge['source_id']])
+                target_pubs = int(node_pubs[edge['target_id']])
+                both_pubs = len(edge['publications']) if 'publications' in edge else 0
 
-            # initialize scoring info - ngd initializes to big number (np.inf not
-            # well-liked) so that weight becomes zero
-            scoring_info = {'num_pubs': pub_count, 'ngd': 1e6}
-            edge['scoring'] = scoring_info
+                cov = (both_pubs / all_pubs) - (source_pubs / all_pubs) * (target_pubs / all_pubs)
+                effective_pubs = cov * all_pubs * self.relevance
+            else:
+                effective_pubs = len(edge['publications']) if 'publications' in edge else 0
 
-            source_pubs = max(int(node_pubs[edge['source_id']]), minimum_article_node_count)
-            target_pubs = max(int(node_pubs[edge['target_id']]), minimum_article_node_count)
-
-            edge_count = edge['scoring']['num_pubs'] + 1  # avoid log(0) problem
-
-            # formula for normalized google distance
-            ngd = (np.log(max(source_pubs, target_pubs)) - np.log(edge_count)) / \
-                (np.log(N) - np.log(min(source_pubs, target_pubs)))
-
-            # this shouldn't happen but theoretically could
-            if ngd < 0:
-                ngd = 0
-
-            edge['scoring']['ngd'] = ngd
-            mean_ngd += ngd
-
-        mean_ngd = mean_ngd / len(edges)
-
-        for edge in edges:
-            # ngd is like a metric, we need a similarity
-            # common way to do this is with a gaussian kernel
-            weight = np.exp(-(edge['scoring']['ngd'] / mean_ngd)**2 / 2)
-
-            # make sure weights on edges are not nan valued - set them to zero otherwise
-            edge['weight'] = weight if np.isfinite(weight) else 0
+            a = 2 * (self.wt_max - self.wt_min)  # 1.8
+            r = 0.95
+            c = self.wt_max - 2 * self.wt_min  # 0.8
+            k = 1 / self.mark95 * (np.log(r + c) - np.log(a - r - c))  # 0.1778
+            edge['weight'] = a / (1 + np.exp(-k * effective_pubs)) - c
 
     def sum_edge_weights(self, subgraph):
         """Add edge weights."""
@@ -136,7 +109,7 @@ class Ranker:
         # add weights to edges
         logger.debug('Setting weights... ')
         start = time.time()
-        self.set_weights(method='ngd')
+        self.set_weights()
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
         # prescreen
