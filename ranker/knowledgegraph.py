@@ -3,7 +3,6 @@ import os
 import sys
 import logging
 from neo4j.v1 import GraphDatabase, basic_auth
-import ranker.api.logging_config
 from scipy.stats import hypergeom
 from operator import itemgetter
 
@@ -14,6 +13,12 @@ class KnowledgeGraph:
     def __init__(self):
         # connect to neo4j database
         self.driver = GraphDatabase.driver("bolt://"+os.environ["NEO4J_HOST"]+":"+os.environ["NEO4J_BOLT_PORT"], auth=basic_auth("neo4j", os.environ["NEO4J_PASSWORD"]))
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exception_type, exception_value, traceback):
+        self.driver.close()
 
     def get_map_for_type(self, type):
         with self.driver.session() as session:

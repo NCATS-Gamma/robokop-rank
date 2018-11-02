@@ -2,14 +2,19 @@
 Set up Flask server
 '''
 
+import logging
 import logging.config
-import os
-import sys
 
 from flask import Flask, Blueprint
 from flask_restful import Api
 from flasgger import Swagger
 from flask_cors import CORS
+
+from ranker.api.logging_config import setup_logger
+
+
+setup_logger()
+logger = logging.getLogger("ranker")
 
 app = Flask(__name__, static_folder='../pack', template_folder='../templates')
 # Set default static folder to point to parent static folder where all
@@ -45,3 +50,11 @@ app.config['SWAGGER'] = {
     'uiversion': 3
 }
 swagger = Swagger(app, template=template)
+
+# Should be catching werkzeug.exceptions.InternalServerError instead?
+@app.errorhandler(Exception)
+def handle_error(ex):
+    logger.exception(ex)
+    return "Internal server error. See the logs for details.", 500
+app.config['PROPAGATE_EXCEPTIONS'] = True
+app.url_map.strict_slashes = False

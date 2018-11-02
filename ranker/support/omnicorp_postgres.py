@@ -44,7 +44,7 @@ class OmniCorp():
         self.npair = 0
         self.total_pair_call = datetime.timedelta()
 
-    def close(self):
+    def __del__(self):
         self.conn.close()
 
     def get_omni_identifier(self, node_id):
