@@ -207,9 +207,9 @@ class Question():
 
     def relevant_subgraph(self):
         # get the subgraph relevant to the question from the knowledge graph
-        database = KnowledgeGraph()
-        with database.driver.session() as session:
-            record = list(session.run(self.subgraph(database)))[0]
+        with KnowledgeGraph() as database:
+            with database.driver.session() as session:
+                record = list(session.run(self.subgraph(database)))[0]
         subgraph = {
             'nodes': record['nodes'],
             'edges': record['edges']
@@ -221,44 +221,44 @@ class Question():
 
     def fetch_answers(self):
         # get Neo4j connection
-        database = KnowledgeGraph()
+        with KnowledgeGraph() as database:
 
-        # get joint subgraph
-        logger.debug('Getting joint subgraph...')
-        query_string = self.subgraph(database)
-        logger.debug(query_string)
-        with database.driver.session() as session:
-            result = session.run(query_string)
-        if result.peek() is None:
-            logger.debug("No answers found. Returning None.")
-            return None
-        logger.debug('Converting Neo4j Result to dict...')
-        result = list(result)
+            # get joint subgraph
+            logger.debug('Getting joint subgraph...')
+            query_string = self.subgraph(database)
+            logger.debug(query_string)
+            with database.driver.session() as session:
+                result = session.run(query_string)
+            if result.peek() is None:
+                logger.debug("No answers found. Returning None.")
+                return None
+            logger.debug('Converting Neo4j Result to dict...')
+            result = list(result)
 
-        answerset_subgraph = {
-            'nodes': result[0]['nodes'],
-            'edges': result[0]['edges']
-        }
-        for node in answerset_subgraph['nodes']:
-            node['type'].remove('named_thing')
-            node['type'] = node['type'][0]
+            answerset_subgraph = {
+                'nodes': result[0]['nodes'],
+                'edges': result[0]['edges']
+            }
+            for node in answerset_subgraph['nodes']:
+                node['type'].remove('named_thing')
+                node['type'] = node['type'][0]
 
-        # get all subgraphs relevant to the question from the knowledge graph
-        logger.debug('Getting answer paths...')
-        all_subgraphs = []
-        options = {
-            'limit': 1000000,
-            'skip': 0
-        }
-        while True:
-            subgraphs = database.query(self, options=options)
-            options['skip'] += options['limit']
-            subgraph_list = [{'nodes': g['nodes'], 'edges': g['edges']} for g in subgraphs]
-            all_subgraphs.extend(subgraph_list)
-            logger.debug(f'{len(all_subgraphs)} subgraphs: {int(sys.getsizeof(pickle.dumps(all_subgraphs)) / 1e6):d} MB')
-            logger.debug(f'memory usage: {int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e3):d} MB')
-            if len(subgraph_list) < options['limit']:
-                break
+            # get all subgraphs relevant to the question from the knowledge graph
+            logger.debug('Getting answer paths...')
+            all_subgraphs = []
+            options = {
+                'limit': 1000000,
+                'skip': 0
+            }
+            while True:
+                subgraphs = database.query(self, options=options)
+                options['skip'] += options['limit']
+                subgraph_list = [{'nodes': g['nodes'], 'edges': g['edges']} for g in subgraphs]
+                all_subgraphs.extend(subgraph_list)
+                logger.debug(f'{len(all_subgraphs)} subgraphs: {int(sys.getsizeof(pickle.dumps(all_subgraphs)) / 1e6):d} MB')
+                logger.debug(f'memory usage: {int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e3):d} MB')
+                if len(subgraph_list) < options['limit']:
+                    break
 
         return {
             'knowledge_graph': answerset_subgraph,

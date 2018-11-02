@@ -389,9 +389,8 @@ class EnrichedExpansion(Resource):
             num_type1 = parameters['num_type1']
         else:
             num_type1 = None
-        database = KnowledgeGraph()
-        sim_results = database.enrichment_search(identifiers, type1, type2, threshhold, maxresults,num_type1)
-        del database
+        with KnowledgeGraph() as database:
+            sim_results = database.enrichment_search(identifiers, type1, type2, threshhold, maxresults,num_type1)
 
         return sim_results, 200
 
@@ -453,11 +452,10 @@ class SimilaritySearch(Resource):
                         schema:
                             $ref: "#/definitions/SimilarityResult"
         """
-        database = KnowledgeGraph()
         threshhold = request.args.get('threshhold', default = 0.4)
-        maxresults = int(request.args.get('maxresulta', default = 100))
-        sim_results = database.similarity_search(type1, identifier, type2, by_type, threshhold, maxresults)
-        del database
+        maxresults = int(request.args.get('maxresults', default = 100))
+        with KnowledgeGraph() as database:
+            sim_results = database.similarity_search(type1, identifier, type2, by_type, threshhold, maxresults)
 
         return sim_results, 200
 
