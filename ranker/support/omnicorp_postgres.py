@@ -47,6 +47,9 @@ class OmniCorp():
     def __del__(self):
         self.conn.close()
 
+    def close(self):
+        self.conn.close()
+
     def get_omni_identifier(self, node_id):
         """Get omnicorp identifier."""
         # Let's start with just the 'best' identifier
