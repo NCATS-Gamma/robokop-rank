@@ -67,6 +67,7 @@ class Ranker:
                 both_pubs = len(edge['publications']) if 'publications' in edge else 0
 
                 cov = (both_pubs / all_pubs) - (source_pubs / all_pubs) * (target_pubs / all_pubs)
+                cov = max((cov, 0.0))
                 effective_pubs = cov * all_pubs * self.relevance
             else:
                 effective_pubs = len(edge['publications']) if 'publications' in edge else 0
