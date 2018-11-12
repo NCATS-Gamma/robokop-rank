@@ -121,8 +121,10 @@ class AnswerQuestionNow(Resource):
         if result is None:
             return None, 200
         logger.debug(f'Answerset file: {result}')
-        with open(os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', result), 'r') as f:
+        filename = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', result)
+        with open(filename, 'r') as f:
             answers = json.load(f)
+        os.remove(filename)
         return answers, 200
 
 api.add_resource(AnswerQuestionNow, '/now')
@@ -279,10 +281,12 @@ class Results(Resource):
         filename = info['result']
         result_path = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', filename)
         with open(result_path, 'r') as f:
-            if request.args.get('standardize') == 'true':
-                return Answerset(json.load(f)).toStandard()
-            else:
-                return json.load(f)
+            file_contents = json.load(f)
+        os.remove(result_path)
+        if request.args.get('standardize') == 'true':
+            return Answerset(file_contents).toStandard()
+        else:
+            return file_contents
 
 api.add_resource(Results, '/result/<task_id>')
 
