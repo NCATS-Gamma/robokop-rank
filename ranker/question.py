@@ -280,6 +280,8 @@ class Question():
             redis_db=os.environ['CACHE_DB'])
 
         answers = self.fetch_answers()
+        if answers is None:
+            return None
         answerset_subgraph = answers['knowledge_graph']
         all_subgraphs = answers['knowledge_maps']
 
