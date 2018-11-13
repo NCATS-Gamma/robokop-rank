@@ -34,7 +34,7 @@ class NoAnswersException(Exception):
 
 class NodeReference():
     """Node reference object."""
-    def __init__(self, node, db=None):
+    def __init__(self, node):
         """Create a node reference."""
         name = f'{node["id"]}'
         label = node['type'] if 'type' in node else None
@@ -99,7 +99,7 @@ class NodeReference():
 class EdgeReference():
     """Edge reference object."""
 
-    def __init__(self, edge, db=None):
+    def __init__(self, edge):
         """Create an edge reference."""
         name = f'{edge["id"]}'
         label = edge['type'] if 'type' in edge else None
@@ -210,7 +210,7 @@ class Question():
         # get the knowledge graph relevant to the question from the big knowledge graph in Neo4j
         with KnowledgeGraph() as database:
             with database.driver.session() as session:
-                record = list(session.run(self.kg_query(database)))[0]
+                record = list(session.run(self.kg_query()))[0]
         knowledge_graph = {
             'nodes': record['nodes'],
             'edges': record['edges']
@@ -226,7 +226,7 @@ class Question():
 
             # get knowledge graph
             logger.debug('Getting knowledge graph...')
-            query_string = self.kg_query(database)
+            query_string = self.kg_query()
             logger.debug(query_string)
             with database.driver.session() as session:
                 result = session.run(query_string)
@@ -394,12 +394,12 @@ class Question():
 
         return aset
 
-    def cypher_match_string(self, db=None):
+    def cypher_match_string(self):
         nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
 
         # generate internal node and edge variable names
-        node_references = {n['id']: NodeReference(n, db=db) for n in nodes}
-        edge_references = [EdgeReference(e, db=db) for e in edges]
+        node_references = {n['id']: NodeReference(n) for n in nodes}
+        edge_references = [EdgeReference(e) for e in edges]
 
         match_strings = []
 
@@ -427,14 +427,14 @@ class Question():
         match_string = ' '.join(match_strings)
         return match_string
 
-    def cypher(self, db, options=None):
+    def cypher(self, options=None):
         '''
         Generate a Cypher query to extract the portion of the Knowledge Graph necessary to answer the question.
 
         Returns the query as a string.
         '''
 
-        match_string = self.cypher_match_string(db)
+        match_string = self.cypher_match_string()
 
         nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
         node_map = {n['id']: n for n in nodes}
@@ -461,8 +461,8 @@ class Question():
 
         return query_string
 
-    def kg_query(self, db):
-        match_string = self.cypher_match_string(db)
+    def kg_query(self):
+        match_string = self.cypher_match_string()
 
         nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
 
