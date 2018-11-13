@@ -210,7 +210,7 @@ class Question():
         # get the knowledge graph relevant to the question from the big knowledge graph in Neo4j
         with KnowledgeGraph() as database:
             with database.driver.session() as session:
-                record = list(session.run(self.knowledge_graph(database)))[0]
+                record = list(session.run(self.kg_query(database)))[0]
         knowledge_graph = {
             'nodes': record['nodes'],
             'edges': record['edges']
@@ -226,7 +226,7 @@ class Question():
 
             # get knowledge graph
             logger.debug('Getting knowledge graph...')
-            query_string = self.knowledge_graph(database)
+            query_string = self.kg_query(database)
             logger.debug(query_string)
             with database.driver.session() as session:
                 result = session.run(query_string)
@@ -461,7 +461,7 @@ class Question():
 
         return query_string
 
-    def knowledge_graph(self, db):
+    def kg_query(self, db):
         match_string = self.cypher_match_string(db)
 
         nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
