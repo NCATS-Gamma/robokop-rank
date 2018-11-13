@@ -206,27 +206,27 @@ class Question():
             for i, e in enumerate(self.machine_question['edges']):
                 e['id'] = chr(ord('a') + i)
 
-    def relevant_subgraph(self):
-        # get the subgraph relevant to the question from the knowledge graph
+    def relevant_knowledge_graph(self):
+        # get the knowledge graph relevant to the question from the big knowledge graph in Neo4j
         with KnowledgeGraph() as database:
             with database.driver.session() as session:
-                record = list(session.run(self.subgraph(database)))[0]
-        subgraph = {
+                record = list(session.run(self.knowledge_graph(database)))[0]
+        knowledge_graph = {
             'nodes': record['nodes'],
             'edges': record['edges']
         }
-        for node in subgraph['nodes']:
+        for node in knowledge_graph['nodes']:
             node['type'].remove('named_thing')
             node['type'] = node['type'][0]
-        return subgraph
+        return knowledge_graph
 
     def fetch_answers(self):
         # get Neo4j connection
         with KnowledgeGraph() as database:
 
-            # get joint subgraph
-            logger.debug('Getting joint subgraph...')
-            query_string = self.subgraph(database)
+            # get knowledge graph
+            logger.debug('Getting knowledge graph...')
+            query_string = self.knowledge_graph(database)
             logger.debug(query_string)
             with database.driver.session() as session:
                 result = session.run(query_string)
@@ -236,34 +236,34 @@ class Question():
             logger.debug('Converting Neo4j Result to dict...')
             result = list(result)
 
-            answerset_subgraph = {
+            knowledge_graph = {
                 'nodes': result[0]['nodes'],
                 'edges': result[0]['edges']
             }
-            for node in answerset_subgraph['nodes']:
+            for node in knowledge_graph['nodes']:
                 node['type'].remove('named_thing')
                 node['type'] = node['type'][0]
 
-            # get all subgraphs relevant to the question from the knowledge graph
-            logger.debug('Getting answer paths...')
-            all_subgraphs = []
+            # get all answer maps relevant to the question from the knowledge graph
+            logger.debug('Getting answer maps...')
+            knowledge_maps = []
             options = {
                 'limit': 1000000,
                 'skip': 0
             }
             while True:
-                subgraphs = database.query(self, options=options)
+                answer_maps = database.query(self, options=options)
                 options['skip'] += options['limit']
-                subgraph_list = [{'nodes': g['nodes'], 'edges': g['edges']} for g in subgraphs]
-                all_subgraphs.extend(subgraph_list)
-                logger.debug(f'{len(all_subgraphs)} subgraphs: {int(sys.getsizeof(pickle.dumps(all_subgraphs)) / 1e6):d} MB')
+                answer_maps = [{'nodes': g['nodes'], 'edges': g['edges']} for g in answer_maps]
+                knowledge_maps.extend(answer_maps)
+                logger.debug(f'{len(knowledge_maps)} answer_maps: {int(sys.getsizeof(pickle.dumps(knowledge_maps)) / 1e6):d} MB')
                 logger.debug(f'memory usage: {int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e3):d} MB')
-                if len(subgraph_list) < options['limit']:
+                if len(answer_maps) < options['limit']:
                     break
 
         return {
-            'knowledge_graph': answerset_subgraph,
-            'knowledge_maps': all_subgraphs
+            'knowledge_graph': knowledge_graph,
+            'knowledge_maps': knowledge_maps
         }
 
     def answer(self, max_results=250):
@@ -282,8 +282,8 @@ class Question():
         answers = self.fetch_answers()
         if answers is None:
             return None
-        answerset_subgraph = answers['knowledge_graph']
-        all_subgraphs = answers['knowledge_maps']
+        knowledge_graph = answers['knowledge_graph']
+        knowledge_maps = answers['knowledge_maps']
 
         #We don't need this generality if everything is omnicorp
         # get supporter
@@ -293,7 +293,7 @@ class Question():
         with OmnicorpSupport() as supporter:
             # get all node supports
             logger.info('Getting individual node supports...')
-            for node in answerset_subgraph['nodes']:
+            for node in knowledge_graph['nodes']:
                 key = f"{supporter.__class__.__name__}({node['id']})"
                 support_dict = cache.get(key)
                 if support_dict is not None:
@@ -308,16 +308,16 @@ class Question():
             logger.info('Getting node pair supports...')
             # generate a set of pairs of node curies
             pair_to_answer = defaultdict(list)  # a map of node pairs to answers
-            for ans_idx, subgraph in enumerate(all_subgraphs):
-                for combo in combinations(subgraph['nodes'], 2):
-                    if isinstance(subgraph['nodes'][combo[0]], str):
-                        sources = [subgraph['nodes'][combo[0]]]
+            for ans_idx, answer_map in enumerate(knowledge_maps):
+                for combo in combinations(answer_map['nodes'], 2):
+                    if isinstance(answer_map['nodes'][combo[0]], str):
+                        sources = [answer_map['nodes'][combo[0]]]
                     else:
-                        sources = subgraph['nodes'][combo[0]]
-                    if isinstance(subgraph['nodes'][combo[1]], str):
-                        targets = [subgraph['nodes'][combo[1]]]
+                        sources = answer_map['nodes'][combo[0]]
+                    if isinstance(answer_map['nodes'][combo[1]], str):
+                        targets = [answer_map['nodes'][combo[1]]]
                     else:
-                        targets = subgraph['nodes'][combo[1]]
+                        targets = answer_map['nodes'][combo[1]]
                     for source_id in sources:
                         for target_id in targets:
                             node_i, node_j = sorted([source_id, target_id])
@@ -356,7 +356,7 @@ class Question():
                 if not support_edge:
                     continue
                 uid = str(uuid4())
-                answerset_subgraph['edges'].append({
+                knowledge_graph['edges'].append({
                     'type': 'literature_co-occurrence',
                     'id': uid,
                     'publications': support_edge,
@@ -366,12 +366,12 @@ class Question():
                     'edge_source': 'omnicorp.term_to_term'
                 })
                 for sg in pair_to_answer[pair]:
-                    all_subgraphs[sg]['edges'].update({f's{support_idx}': uid})
+                    knowledge_maps[sg]['edges'].update({f's{support_idx}': uid})
 
         logger.debug('Ranking...')
         # compute scores with NAGA, export to json
-        pr = Ranker(answerset_subgraph, self.machine_question)
-        subgraphs_with_metadata, subgraphs = pr.report_ranking(all_subgraphs, max_results=max_results)  # returned subgraphs are sorted by rank
+        pr = Ranker(knowledge_graph, self.machine_question)
+        subgraphs_with_metadata, subgraphs = pr.report_ranking(knowledge_maps, max_results=max_results)  # returned subgraphs are sorted by rank
 
         misc_info = {
             'natural_question': self.natural_question,
@@ -451,7 +451,7 @@ class Question():
         # add bound fields and return map
         answer_return_string = f"RETURN {{{', '.join([f'{n}:{n}' for n in node_names])}}} as nodes, {{{', '.join([f'{e}:{e}' for e in edge_names])}}} as edges"
 
-        # return subgraphs matching query
+        # return answer maps matching query
         query_string = ' '.join([match_string, with_string, answer_return_string])
         if options is not None:
             if 'skip' in options:
@@ -461,7 +461,7 @@ class Question():
 
         return query_string
 
-    def subgraph(self, db):
+    def knowledge_graph(self, db):
         match_string = self.cypher_match_string(db)
 
         nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
