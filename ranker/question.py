@@ -291,82 +291,82 @@ class Question():
         #supporter = import_module(support_module_name).get_supporter()
 
         with OmnicorpSupport() as supporter:
-                # get all node supports
-                logger.info('Getting individual node supports...')
-                for node in answerset_subgraph['nodes']:
-                    key = f"{supporter.__class__.__name__}({node['id']})"
-                    support_dict = cache.get(key)
-                    if support_dict is not None:
-                        logger.info(f"cache hit: {key} {support_dict}")
+            # get all node supports
+            logger.info('Getting individual node supports...')
+            for node in answerset_subgraph['nodes']:
+                key = f"{supporter.__class__.__name__}({node['id']})"
+                support_dict = cache.get(key)
+                if support_dict is not None:
+                    logger.info(f"cache hit: {key} {support_dict}")
+                else:
+                    logger.info(f"exec op: {key}")
+                    support_dict = supporter.get_node_info(node['id'])
+                    cache.set(key, support_dict)
+                # add omnicorp_article_count to nodes in networkx graph
+                node.update(support_dict)
+
+            logger.info('Getting node pair supports...')
+            # generate a set of pairs of node curies
+            pair_to_answer = defaultdict(list)  # a map of node pairs to answers
+            for ans_idx, subgraph in enumerate(all_subgraphs):
+                for combo in combinations(subgraph['nodes'], 2):
+                    if isinstance(subgraph['nodes'][combo[0]], str):
+                        sources = [subgraph['nodes'][combo[0]]]
+                    else:
+                        sources = subgraph['nodes'][combo[0]]
+                    if isinstance(subgraph['nodes'][combo[1]], str):
+                        targets = [subgraph['nodes'][combo[1]]]
+                    else:
+                        targets = subgraph['nodes'][combo[1]]
+                    for source_id in sources:
+                        for target_id in targets:
+                            node_i, node_j = sorted([source_id, target_id])
+                            pair_to_answer[(node_i, node_j)].append(ans_idx)
+
+            cached_prefixes = cache.get('OmnicorpPrefixes')
+            # get all pair supports
+            for support_idx, pair in enumerate(pair_to_answer):
+                logger.info(pair)
+                #The id's are in the cache sorted.
+                ids = [pair[0],pair[1]]
+                ids.sort()
+                key = f"{supporter.__class__.__name__}({ids[0]},{ids[1]})"
+                support_edge = cache.get(key)
+                if support_edge is not None:
+                    logger.info(f"cache hit: {key} {support_edge}")
+                else:
+                    #There are two reasons that we don't get anything back:
+                    # 1. We haven't evaluated that pair
+                    # 2. We evaluated, and found it to be zero, and it was part
+                    #  of a prefix pair that we evaluated all of.  In that case
+                    #  we can infer that getting nothing back means an empty list
+                    #  check cached_prefixes for this...
+                    prefixes = tuple([ ident.split(':')[0].upper() for ident in ids ])
+                    if prefixes in cached_prefixes:
+                        support_edge = []
                     else:
                         logger.info(f"exec op: {key}")
-                        support_dict = supporter.get_node_info(node['id'])
-                        cache.set(key, support_dict)
-                    # add omnicorp_article_count to nodes in networkx graph
-                    node.update(support_dict)
-
-                logger.info('Getting node pair supports...')
-                # generate a set of pairs of node curies
-                pair_to_answer = defaultdict(list)  # a map of node pairs to answers
-                for ans_idx, subgraph in enumerate(all_subgraphs):
-                    for combo in combinations(subgraph['nodes'], 2):
-                        if isinstance(subgraph['nodes'][combo[0]], str):
-                            sources = [subgraph['nodes'][combo[0]]]
-                        else:
-                            sources = subgraph['nodes'][combo[0]]
-                        if isinstance(subgraph['nodes'][combo[1]], str):
-                            targets = [subgraph['nodes'][combo[1]]]
-                        else:
-                            targets = subgraph['nodes'][combo[1]]
-                        for source_id in sources:
-                            for target_id in targets:
-                                node_i, node_j = sorted([source_id, target_id])
-                                pair_to_answer[(node_i, node_j)].append(ans_idx)
-
-                cached_prefixes = cache.get('OmnicorpPrefixes')
-                # get all pair supports
-                for support_idx, pair in enumerate(pair_to_answer):
-                    logger.info(pair)
-                    #The id's are in the cache sorted.
-                    ids = [pair[0],pair[1]]
-                    ids.sort()
-                    key = f"{supporter.__class__.__name__}({ids[0]},{ids[1]})"
-                    support_edge = cache.get(key)
-                    if support_edge is not None:
-                        logger.info(f"cache hit: {key} {support_edge}")
-                    else:
-                        #There are two reasons that we don't get anything back:
-                        # 1. We haven't evaluated that pair
-                        # 2. We evaluated, and found it to be zero, and it was part
-                        #  of a prefix pair that we evaluated all of.  In that case
-                        #  we can infer that getting nothing back means an empty list
-                        #  check cached_prefixes for this...
-                        prefixes = tuple([ ident.split(':')[0].upper() for ident in ids ])
-                        if prefixes in cached_prefixes:
-                            support_edge = []
-                        else:
-                            logger.info(f"exec op: {key}")
-                            try:
-                                support_edge = supporter.term_to_term(pair[0], pair[1])
-                                cache.set(key, support_edge)
-                            except Exception as e:
-                                raise e
-                                # logger.debug('Support error, not caching')
-                                # continue
-                    if not support_edge:
-                        continue
-                    uid = str(uuid4())
-                    answerset_subgraph['edges'].append({
-                        'type': 'literature_co-occurrence',
-                        'id': uid,
-                        'publications': support_edge,
-                        'source_database': 'omnicorp',
-                        'source_id': pair[0],
-                        'target_id': pair[1],
-                        'edge_source': 'omnicorp.term_to_term'
-                    })
-                    for sg in pair_to_answer[pair]:
-                        all_subgraphs[sg]['edges'].update({f's{support_idx}': uid})
+                        try:
+                            support_edge = supporter.term_to_term(pair[0], pair[1])
+                            cache.set(key, support_edge)
+                        except Exception as e:
+                            raise e
+                            # logger.debug('Support error, not caching')
+                            # continue
+                if not support_edge:
+                    continue
+                uid = str(uuid4())
+                answerset_subgraph['edges'].append({
+                    'type': 'literature_co-occurrence',
+                    'id': uid,
+                    'publications': support_edge,
+                    'source_database': 'omnicorp',
+                    'source_id': pair[0],
+                    'target_id': pair[1],
+                    'edge_source': 'omnicorp.term_to_term'
+                })
+                for sg in pair_to_answer[pair]:
+                    all_subgraphs[sg]['edges'].update({f's{support_idx}': uid})
 
         logger.debug('Ranking...')
         # compute scores with NAGA, export to json
