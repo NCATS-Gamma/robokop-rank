@@ -157,7 +157,7 @@ class AnswerQuestion(Resource):
                         schema:
                             $ref: '#/definitions/Response'
         """
-        max_results = request.args.get('max_results', default=250)
+        max_results = request.args.get('max_results', default=50)
         logger.debug("max_results: %s", str(max_results))
         try:
             max_results = int(max_results)
