@@ -279,14 +279,19 @@ class Results(Resource):
             return 'This task is incomplete or failed', 404
 
         filename = info['result']
-        result_path = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', filename)
-        with open(result_path, 'r') as f:
-            file_contents = json.load(f)
-        os.remove(result_path)
-        if request.args.get('standardize') == 'true':
-            return Answerset(file_contents).toStandard()
-        else:
-            return file_contents
+        if filename:
+            result_path = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', filename)
+
+            with open(result_path, 'r') as f:
+                file_contents = json.load(f)
+            os.remove(result_path)
+
+            if request.args.get('standardize') == 'true':
+                return Answerset(file_contents).toStandard()
+            else:
+                return file_contents
+        else: 
+            return 'No results found', 200
 
 api.add_resource(Results, '/result/<task_id>')
 
