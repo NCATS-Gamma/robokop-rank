@@ -331,7 +331,7 @@ class Question():
                     key = f"{supporter.__class__.__name__}({ids[0]},{ids[1]})"
                     support_edge = cache.get(key)
                     if support_edge is not None:
-                        logger.info(f"cache hit: {key} {support_edge}")
+                        logger.info(f"cache hit: {key}")
                     else:
                         #There are two reasons that we don't get anything back:
                         # 1. We haven't evaluated that pair
