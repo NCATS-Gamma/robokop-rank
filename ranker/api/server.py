@@ -121,8 +121,10 @@ class AnswerQuestionNow(Resource):
         if result is None:
             return None, 200
         logger.debug(f'Answerset file: {result}')
-        with open(os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', result), 'r') as f:
+        filename = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', result)
+        with open(filename, 'r') as f:
             answers = json.load(f)
+        os.remove(filename)
         return answers, 200
 
 api.add_resource(AnswerQuestionNow, '/now')
@@ -155,7 +157,7 @@ class AnswerQuestion(Resource):
                         schema:
                             $ref: '#/definitions/Response'
         """
-        max_results = request.args.get('max_results', default=250)
+        max_results = request.args.get('max_results', default=50)
         logger.debug("max_results: %s", str(max_results))
         try:
             max_results = int(max_results)
@@ -277,12 +279,19 @@ class Results(Resource):
             return 'This task is incomplete or failed', 404
 
         filename = info['result']
-        result_path = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', filename)
-        with open(result_path, 'r') as f:
+        if filename:
+            result_path = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', filename)
+
+            with open(result_path, 'r') as f:
+                file_contents = json.load(f)
+            os.remove(result_path)
+
             if request.args.get('standardize') == 'true':
-                return Answerset(json.load(f)).toStandard()
+                return Answerset(file_contents).toStandard()
             else:
-                return json.load(f)
+                return file_contents
+        else: 
+            return 'No results found', 200
 
 api.add_resource(Results, '/result/<task_id>')
 

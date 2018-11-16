@@ -280,6 +280,8 @@ class Question():
             redis_db=os.environ['CACHE_DB'])
 
         answers = self.fetch_answers()
+        if answers is None:
+            return None
         answerset_subgraph = answers['knowledge_graph']
         all_subgraphs = answers['knowledge_maps']
 
@@ -357,7 +359,8 @@ class Question():
                     answerset_subgraph['edges'].append({
                         'type': 'literature_co-occurrence',
                         'id': uid,
-                        'publications': support_edge,
+                        'num_publications': len(support_edge),
+                        'publications': [],
                         'source_database': 'omnicorp',
                         'source_id': pair[0],
                         'target_id': pair[1],
