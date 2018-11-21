@@ -29,7 +29,7 @@ def setup_celery_logging(**kwargs):
     pass
 celery.log.setup()
 
-@celery.task(bind=True, queue='ranker')
+@celery.task(bind=True, queue='ranker', task_acks_late=True, track_started=True, worker_prefetch_multiplier=1)
 def answer_question(self, question_json, max_results=250):
     """Generate answerset for a question."""
 
