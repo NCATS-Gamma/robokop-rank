@@ -28,6 +28,12 @@ class OmnicorpSupport():
         logger.info("Closing Connection to ROBOKOPDB Postgres")
         self.omnicorp.close()
 
+    def term_to_term_count(self, node_a, node_b):
+        """Get number of articles related to both terms and return the result."""
+        num_articles = self.omnicorp.get_shared_pmids_count(node_a, node_b)
+        logger.debug(f'OmniCorp {node_a} {node_b} -> {num_articles}')
+        return num_articles
+
     def term_to_term(self, node_a, node_b):
         """Get number of articles related to both terms and return the result."""
         articles = self.omnicorp.get_shared_pmids(node_a, node_b)
