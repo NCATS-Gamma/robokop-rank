@@ -277,7 +277,8 @@ class Question():
         cache = Cache(
             redis_host=os.environ['CACHE_HOST'],
             redis_port=os.environ['CACHE_PORT'],
-            redis_db=os.environ['CACHE_DB'])
+            redis_db=os.environ['CACHE_DB'],
+            redis_password=os.environ['CACHE_PASSWORD'])
 
         answers = self.fetch_answers()
         if answers is None:

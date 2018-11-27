@@ -39,14 +39,23 @@ class Cache:
                  redis_host="localhost",
                  redis_port=6379,
                  redis_db=0,
+                 redis_password="",
                  enabled=True):
         """Connect to cache."""
         self.enabled = enabled
         try:
-            self.redis = redis.StrictRedis(
-                host=redis_host,
-                port=redis_port,
-                db=redis_db)
+            if redis_password:
+                self.redis = redis.StrictRedis(
+                    host=redis_host,
+                    port=redis_port,
+                    db=redis_db,
+                    password=redis_password)
+            else:
+                self.redis = redis.StrictRedis(
+                    host=redis_host,
+                    port=redis_port,
+                    db=redis_db)
+
             self.redis.get('x')
             logger.info("Cache connected to redis at %s:%s/%s",
                         redis_host,
