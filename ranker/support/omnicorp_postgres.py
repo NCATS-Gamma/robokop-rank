@@ -75,6 +75,18 @@ class OmniCorp():
             return None
         return [f'PMID:{p}' for p in pmids]
 
+    def get_shared_pmids_count(self, node1, node2):
+        """Get shared PMIDs."""
+        id1 = self.get_omni_identifier(node1)
+        id2 = self.get_omni_identifier(node2)
+        if id1 is None or id2 is None:
+            return []
+        pmid_count = self.postgres_get_shared_pmid_count(id1, id2)
+        if pmid_count is None:
+            logger.error("OmniCorp gave up")
+            return None
+        return pmid_count
+
     def postgres_get_shared_pmids(self, id1, id2):
         """Get shared PMIDs from postgres?"""
         prefix1 = Text.get_curie(id1)
@@ -99,6 +111,22 @@ class OmniCorp():
                         f"Total time: {self.total_pair_call}\n" +
                         f"Avg Time: {self.total_pair_call/self.npair}")
         return pmids
+
+    def postgres_get_shared_pmids_count(self, id1, id2):
+        """Get shared PMIDs from postgres?"""
+        prefix1 = Text.get_curie(id1)
+        prefix2 = Text.get_curie(id2)
+        cur = self.conn.cursor()
+        statement = f"SELECT COUNT(a.pubmedid)\n" + \
+                    f"FROM omnicorp.{prefix1} a\n" + \
+                    f"JOIN omnicorp.{prefix2} b ON a.pubmedid = b.pubmedid\n" + \
+                    f"WHERE a.curie = %s\n" + \
+                    f"AND b.curie = %s"
+        cur.execute(statement, (id1, id2))
+        pmid_count = cur.fetchall()[0][0]
+        cur.close()
+        return pmid_count
+
 
     def count_pmids(self, node):
         """Count PMIDs and return result."""
