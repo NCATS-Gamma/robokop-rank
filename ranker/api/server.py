@@ -227,7 +227,8 @@ class Tasks(Resource):
         r = redis.Redis(
             host=os.environ['RESULTS_HOST'],
             port=os.environ['RESULTS_PORT'],
-            db=os.environ['RANKER_RESULTS_DB'])
+            db=os.environ['RANKER_RESULTS_DB'],
+            password=os.environ['RESULT_PASSWORD'])
 
         tasks = []
         for name in r.scan_iter('*'):
@@ -268,7 +269,8 @@ class Results(Resource):
         r = redis.Redis(
             host=os.environ['RESULTS_HOST'],
             port=os.environ['RESULTS_PORT'],
-            db=os.environ['RANKER_RESULTS_DB'])
+            db=os.environ['RANKER_RESULTS_DB'],
+            password=os.environ['RESULTS_PASSWORD'])
 
         task_id = 'celery-task-meta-'+task_id
         task_string = r.get(task_id)
@@ -319,7 +321,8 @@ class TaskStatus(Resource):
         r = redis.Redis(
             host=os.environ['RESULTS_HOST'],
             port=os.environ['RESULTS_PORT'],
-            db=os.environ['RANKER_RESULTS_DB'])
+            db=os.environ['RANKER_RESULTS_DB'],
+            password=os.environ['RESULTS_PASSWORD'])
 
         task_id = 'celery-task-meta-'+task_id
         task_string = r.get(task_id)
