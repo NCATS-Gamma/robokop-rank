@@ -1,12 +1,11 @@
 version: "3"
 services:
   rank:
-    # image: patrickkwang/robokop-rank
     container_name: rank
     build:
       context: .
     env_file:
-      - ../../shared/robokop.env
+      - ./.env
     environment:
       - DEPLOY=docker
       - ROBOKOP_HOME=/home/murphy
