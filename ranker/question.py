@@ -332,7 +332,7 @@ class Question():
                     #The id's are in the cache sorted.
                     ids = [pair[0],pair[1]]
                     ids.sort()
-                    key = f"{supporter.__class__.__name__}({ids[0]},{ids[1]})"
+                    key = f"{supporter.__class__.__name__}_count({ids[0]},{ids[1]})"
                     support_edge = cache.get(key)
                     if support_edge is not None:
                         #logger.info(f"cache hit: {key} {support_edge}")
@@ -350,8 +350,8 @@ class Question():
                         else:
                             #logger.info(f"exec op: {key}")
                             try:
-                                support_edge = supporter.term_to_term(pair[0], pair[1])
-                                logger.info(f'Support {support_edge}')
+                                support_edge = supporter.term_to_term_count(pair[0], pair[1])
+                                # logger.info(f'Support {support_edge}')
                                 cache.set(key, support_edge)
                             except Exception as e:
                                 raise e
@@ -363,7 +363,7 @@ class Question():
                     answerset_subgraph['edges'].append({
                         'type': 'literature_co-occurrence',
                         'id': uid,
-                        'num_publications': len(support_edge),
+                        'num_publications': support_edge,
                         'publications': [],
                         'source_database': 'omnicorp',
                         'source_id': pair[0],
