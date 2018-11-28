@@ -299,7 +299,7 @@ class Question():
                     support_dict = cache.get(key)
                     if support_dict is not None:
                         #logger.info(f"cache hit: {key} {support_dict}")
-			pass
+                        pass
                     else:
                         #logger.info(f"exec op: {key}")
                         support_dict = supporter.get_node_info(node['id'])
@@ -336,7 +336,7 @@ class Question():
                     support_edge = cache.get(key)
                     if support_edge is not None:
                         #logger.info(f"cache hit: {key} {support_edge}")
-			pass
+                        pass
                     else:
                         #There are two reasons that we don't get anything back:
                         # 1. We haven't evaluated that pair
