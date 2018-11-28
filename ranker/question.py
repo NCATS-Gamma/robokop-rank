@@ -345,7 +345,7 @@ class Question():
                         #  we can infer that getting nothing back means an empty list
                         #  check cached_prefixes for this...
                         prefixes = tuple([ ident.split(':')[0].upper() for ident in ids ])
-                        if prefixes in cached_prefixes:
+                        if cached_prefixes and prefixes in cached_prefixes:
                             support_edge = []
                         else:
                             #logger.info(f"exec op: {key}")
