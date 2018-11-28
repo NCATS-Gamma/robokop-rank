@@ -351,6 +351,7 @@ class Question():
                             #logger.info(f"exec op: {key}")
                             try:
                                 support_edge = supporter.term_to_term(pair[0], pair[1])
+                                logger.info(f'Support {support_edge}')
                                 cache.set(key, support_edge)
                             except Exception as e:
                                 raise e
