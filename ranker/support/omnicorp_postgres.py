@@ -81,7 +81,7 @@ class OmniCorp():
         id2 = self.get_omni_identifier(node2)
         if id1 is None or id2 is None:
             return []
-        pmid_count = self.postgres_get_shared_pmid_count(id1, id2)
+        pmid_count = self.postgres_get_shared_pmids_count(id1, id2)
         if pmid_count is None:
             logger.error("OmniCorp gave up")
             return None
