@@ -122,7 +122,7 @@ class KnowledgeGraph:
         if isinstance(question, str):
             query_string = question
         else:
-            query_string = question.cypher(self, options=options)
+            query_string = question.cypher(options=options)
 
         logger.debug('Running query... ')
         logger.debug(query_string)
