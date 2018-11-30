@@ -56,7 +56,7 @@ class Ranker:
     def set_weights(self):
         """Initialize weights on the graph based on metadata."""
 
-        node_pubs = {n['id']: n['omnicorp_article_count'] for n in self.knowledge_graph['nodes']}
+        node_pubs = {n['id']: n.get('omnicorp_article_count', None) for n in self.knowledge_graph['nodes']}
         all_pubs = 27840000
 
         edges = self.knowledge_graph['edges']
