@@ -369,7 +369,7 @@ class Question():
                     'edge_source': 'omnicorp.term_to_term'
                 })
                 for sg in pair_to_answer[pair]:
-                    all_subgraphs[sg]['edges'].update({f's{support_idx}': uid})
+                    knowledge_maps[sg]['edges'].update({f's{support_idx}': uid})
 
         logger.debug('Ranking...')
         # compute scores with NAGA, export to json
