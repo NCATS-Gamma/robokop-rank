@@ -482,6 +482,4 @@ class Question():
         return_string = 'RETURN nodes, edges'
         query_string = "\n".join([match_string, collection_string, support_string, return_string])
 
-        logger.debug(query_string)
-
         return query_string
