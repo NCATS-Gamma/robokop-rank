@@ -266,30 +266,7 @@ class Question():
             'knowledge_maps': knowledge_maps
         }
 
-    def answer(self, max_results=250):
-        """Answer the question.
-
-        Returns the answer struct, something along the lines of:
-        https://docs.google.com/document/d/1O6_sVSdSjgMmXacyI44JJfEVQLATagal9ydWLBgi-vE
-        """
-
-        # get cache
-        cache = Cache(
-            redis_host=os.environ['CACHE_HOST'],
-            redis_port=os.environ['CACHE_PORT'],
-            redis_db=os.environ['CACHE_DB'])
-
-        answers = self.fetch_answers()
-        if answers is None:
-            return None
-        knowledge_graph = answers['knowledge_graph']
-        knowledge_maps = answers['knowledge_maps']
-
-        #We don't need this generality if everything is omnicorp
-        # get supporter
-        #support_module_name = 'ranker.support.omnicorp'
-        #supporter = import_module(support_module_name).get_supporter()
-
+    def get_support(self, knowledge_graph, knowledge_maps, cache=None):
         with OmnicorpSupport() as supporter:
             # get all node supports
             logger.info('Getting individual node supports...')
@@ -370,6 +347,35 @@ class Question():
                 })
                 for sg in pair_to_answer[pair]:
                     knowledge_maps[sg]['edges'].update({f's{support_idx}': uid})
+        return knowledge_graph
+                
+
+    def answer(self, max_results=250, use_support=True):
+        """Answer the question.
+
+        Returns the answer struct, something along the lines of:
+        https://docs.google.com/document/d/1O6_sVSdSjgMmXacyI44JJfEVQLATagal9ydWLBgi-vE
+        """
+
+        # get cache
+        cache = Cache(
+            redis_host=os.environ['CACHE_HOST'],
+            redis_port=os.environ['CACHE_PORT'],
+            redis_db=os.environ['CACHE_DB'])
+
+        answers = self.fetch_answers()
+        if answers is None:
+            return None
+        knowledge_graph = answers['knowledge_graph']
+        knowledge_maps = answers['knowledge_maps']
+
+        #We don't need this generality if everything is omnicorp
+        # get supporter
+        #support_module_name = 'ranker.support.omnicorp'
+        #supporter = import_module(support_module_name).get_supporter()
+
+        if use_support:
+            knowledge_graph = self.get_support(knowledge_graph, knowledge_maps, cache=cache)
 
         logger.debug('Ranking...')
         # compute scores with NAGA, export to json
