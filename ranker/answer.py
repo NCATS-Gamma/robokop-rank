@@ -197,6 +197,7 @@ def standardize_edge(edge):
         'source_id': edge['source_id'],
         'target_id': edge['target_id'],
         'type': edge['type'],
+        'num_publications': edge['num_publications'] if 'num_publications' in edge else None,
         'publications': ','.join(str(p) for p in edge['publications'])
     }
     return output

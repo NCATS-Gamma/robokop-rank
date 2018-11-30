@@ -157,7 +157,7 @@ class AnswerQuestion(Resource):
                         schema:
                             $ref: '#/definitions/Response'
         """
-        max_results = request.args.get('max_results', default=250)
+        max_results = request.args.get('max_results', default=50)
         logger.debug("max_results: %s", str(max_results))
         try:
             max_results = int(max_results)
@@ -227,7 +227,8 @@ class Tasks(Resource):
         r = redis.Redis(
             host=os.environ['RESULTS_HOST'],
             port=os.environ['RESULTS_PORT'],
-            db=os.environ['RANKER_RESULTS_DB'])
+            db=os.environ['RANKER_RESULTS_DB'],
+            password=os.environ['RESULT_PASSWORD'])
 
         tasks = []
         for name in r.scan_iter('*'):
@@ -268,7 +269,8 @@ class Results(Resource):
         r = redis.Redis(
             host=os.environ['RESULTS_HOST'],
             port=os.environ['RESULTS_PORT'],
-            db=os.environ['RANKER_RESULTS_DB'])
+            db=os.environ['RANKER_RESULTS_DB'],
+            password=os.environ['RESULTS_PASSWORD'])
 
         task_id = 'celery-task-meta-'+task_id
         task_string = r.get(task_id)
@@ -279,14 +281,19 @@ class Results(Resource):
             return 'This task is incomplete or failed', 404
 
         filename = info['result']
-        result_path = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', filename)
-        with open(result_path, 'r') as f:
-            file_contents = json.load(f)
-        os.remove(result_path)
-        if request.args.get('standardize') == 'true':
-            return Answerset(file_contents).toStandard()
-        else:
-            return file_contents
+        if filename:
+            result_path = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', filename)
+
+            with open(result_path, 'r') as f:
+                file_contents = json.load(f)
+            os.remove(result_path)
+
+            if request.args.get('standardize') == 'true':
+                return Answerset(file_contents).toStandard()
+            else:
+                return file_contents
+        else: 
+            return 'No results found', 200
 
 api.add_resource(Results, '/result/<task_id>')
 
@@ -314,7 +321,8 @@ class TaskStatus(Resource):
         r = redis.Redis(
             host=os.environ['RESULTS_HOST'],
             port=os.environ['RESULTS_PORT'],
-            db=os.environ['RANKER_RESULTS_DB'])
+            db=os.environ['RANKER_RESULTS_DB'],
+            password=os.environ['RESULTS_PASSWORD'])
 
         task_id = 'celery-task-meta-'+task_id
         task_string = r.get(task_id)

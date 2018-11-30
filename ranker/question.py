@@ -297,9 +297,10 @@ class Question():
                 key = f"{supporter.__class__.__name__}({node['id']})"
                 support_dict = cache.get(key)
                 if support_dict is not None:
-                    logger.info(f"cache hit: {key} {support_dict}")
+                    #logger.info(f"cache hit: {key} {support_dict}")
+                    pass
                 else:
-                    logger.info(f"exec op: {key}")
+                    #logger.info(f"exec op: {key}")
                     support_dict = supporter.get_node_info(node['id'])
                     cache.set(key, support_dict)
                 # add omnicorp_article_count to nodes in networkx graph
@@ -326,14 +327,15 @@ class Question():
             cached_prefixes = cache.get('OmnicorpPrefixes')
             # get all pair supports
             for support_idx, pair in enumerate(pair_to_answer):
-                logger.info(pair)
+                #logger.info(pair)
                 #The id's are in the cache sorted.
                 ids = [pair[0],pair[1]]
                 ids.sort()
                 key = f"{supporter.__class__.__name__}({ids[0]},{ids[1]})"
                 support_edge = cache.get(key)
                 if support_edge is not None:
-                    logger.info(f"cache hit: {key} {support_edge}")
+                    #logger.info(f"cache hit: {key} {support_edge}")
+                    pass
                 else:
                     #There are two reasons that we don't get anything back:
                     # 1. We haven't evaluated that pair
@@ -345,7 +347,7 @@ class Question():
                     if prefixes in cached_prefixes:
                         support_edge = []
                     else:
-                        logger.info(f"exec op: {key}")
+                        #logger.info(f"exec op: {key}")
                         try:
                             support_edge = supporter.term_to_term(pair[0], pair[1])
                             cache.set(key, support_edge)
@@ -359,14 +361,15 @@ class Question():
                 knowledge_graph['edges'].append({
                     'type': 'literature_co-occurrence',
                     'id': uid,
-                    'publications': support_edge,
+                    'num_publications': len(support_edge),
+                    'publications': [],
                     'source_database': 'omnicorp',
                     'source_id': pair[0],
                     'target_id': pair[1],
                     'edge_source': 'omnicorp.term_to_term'
                 })
                 for sg in pair_to_answer[pair]:
-                    knowledge_maps[sg]['edges'].update({f's{support_idx}': uid})
+                    all_subgraphs[sg]['edges'].update({f's{support_idx}': uid})
 
         logger.debug('Ranking...')
         # compute scores with NAGA, export to json

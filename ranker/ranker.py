@@ -64,7 +64,8 @@ class Ranker:
             if edge['type'] == 'literature_co-occurrence':
                 source_pubs = int(node_pubs[edge['source_id']])
                 target_pubs = int(node_pubs[edge['target_id']])
-                both_pubs = len(edge['publications']) if 'publications' in edge else 0
+                # both_pubs = len(edge['publications']) if 'publications' in edge else 0
+                both_pubs = edge['num_publications'] if 'num_publications' in edge else 0
 
                 cov = (both_pubs / all_pubs) - (source_pubs / all_pubs) * (target_pubs / all_pubs)
                 cov = max((cov, 0.0))
