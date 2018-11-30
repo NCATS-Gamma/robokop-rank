@@ -19,7 +19,7 @@ import networkx as nx
 # our modules
 from ranker.knowledgegraph import KnowledgeGraph
 from ranker.answer import Answer, Answerset
-from ranker.ranker import Ranker
+from ranker.ranker_obj import Ranker
 from ranker.cache import Cache
 from ranker.support.omnicorp import OmnicorpSupport
 
