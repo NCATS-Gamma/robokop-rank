@@ -48,7 +48,7 @@ class Ranker:
         logger.info(question)
         logger.info("WHOLE GRAPH")
         logger.info(graph)
-        self.graph = graph
+        self.knowledge_graph = graph
         self.question = question
         self._evaluated_templates = {}
         self._result_count = -1
@@ -56,10 +56,10 @@ class Ranker:
     def set_weights(self):
         """Initialize weights on the graph based on metadata."""
 
-        node_pubs = {n['id']: n['omnicorp_article_count'] for n in self.graph['nodes']}
+        node_pubs = {n['id']: n.get('omnicorp_article_count', None) for n in self.knowledge_graph['nodes']}
         all_pubs = 27840000
 
-        edges = self.graph['edges']
+        edges = self.knowledge_graph['edges']
         for edge in edges:
             if edge['type'] == 'literature_co-occurrence':
                 source_pubs = int(node_pubs[edge['source_id']])
@@ -90,7 +90,7 @@ class Ranker:
     def sum_edge_weights(self, subgraph):
         """Add edge weights."""
         edge_ids = flatten_semilist(subgraph['edges'].values())
-        weights = [e['weight'] for e in self.graph['edges'] if e['id'] in edge_ids]
+        weights = [e['weight'] for e in self.knowledge_graph['edges'] if e['id'] in edge_ids]
         return sum(weights)
 
     def prescreen(self, subgraph_list, max_results=None):
@@ -152,21 +152,21 @@ class Ranker:
 
         return (subgraph_scores, subgraph_list)
 
-    def report_ranking(self, subgraph_list, max_results=250):
+    def report_ranking(self, answer_maps, max_results=250):
         """Report ranking."""
         # construct the output that question.py expects
 
-        (subgraph_scores, subgraph_list) = self.rank(subgraph_list, max_results=max_results)
+        (subgraph_scores, answer_maps) = self.rank(answer_maps, max_results=max_results)
 
         # add extra computed metadata in self.graph to subgraph for display
         logger.debug("Extracting subgraphs... ")
         start = time.time()
         report = []
-        for i, subgraph in enumerate(subgraph_list):
+        for i, subgraph in enumerate(answer_maps):
             node_ids = flatten_semilist(subgraph['nodes'].values())
-            nodes = [n for n in self.graph['nodes'] if n['id'] in node_ids]
+            nodes = [n for n in self.knowledge_graph['nodes'] if n['id'] in node_ids]
             edge_ids = flatten_semilist(subgraph['edges'].values())
-            edges = [e for e in self.graph['edges'] if e['id'] in edge_ids]
+            edges = [e for e in self.knowledge_graph['edges'] if e['id'] in edge_ids]
             sgr = {
                 'nodes': nodes,
                 'edges': edges,
@@ -175,7 +175,7 @@ class Ranker:
             report.append(sgr)
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
-        return (report, subgraph_list)
+        return (report, answer_maps)
 
     def get_rgraph(self, subgraph):
         """Get "ranker" subgraph."""
@@ -202,7 +202,7 @@ class Ranker:
             if not isinstance(kedge_ids, list):
                 kedge_ids = [kedge_ids]
             for kedge_id in kedge_ids:
-                kedge = next(e for e in self.graph['edges'] if e['id'] == kedge_id)
+                kedge = next(e for e in self.knowledge_graph['edges'] if e['id'] == kedge_id)
                 # find source and target
                 candidate_source_ids = [f"{qedge['source_id']}/{kedge['source_id']}", f"{qedge['source_id']}/{kedge['target_id']}"]
                 candidate_target_ids = [f"{qedge['target_id']}/{kedge['source_id']}", f"{qedge['target_id']}/{kedge['target_id']}"]
@@ -216,7 +216,7 @@ class Ranker:
                 edges.append(edge)
 
         # get "support" edges
-        for kedge in self.graph['edges']:
+        for kedge in self.knowledge_graph['edges']:
             if not (kedge['type'] == 'literature_co-occurrence' and kedge['source_id'] in knode_map and kedge['target_id'] in knode_map):
                 continue
             for source_id in knode_map[kedge['source_id']]:

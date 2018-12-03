@@ -212,7 +212,7 @@ class QuestionSubgraph(Resource):
         question = Question(request.json)
         
         try:
-            subgraph = question.relevant_subgraph()
+            subgraph = question.relevant_knowledge_graph()
         except NoAnswersException:
             return "Question not found in neo4j cache.", 404
 

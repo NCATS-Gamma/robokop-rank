@@ -22,6 +22,9 @@ class QNode(FromDictMixin2):
         curie:
             type: string
             description: "Optional curie of this node"
+        set:
+            type: boolean
+            description: "Flag indicating whether node should be collapsed in answers"
     """
 
     def __init__(self, *args, **kwargs):
@@ -29,6 +32,7 @@ class QNode(FromDictMixin2):
         self.id = None
         self.type = None
         self.curie = None
+        self.set = False
 
         super().__init__(*args, **kwargs)
 
