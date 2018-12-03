@@ -7,12 +7,8 @@ import uuid
 
 from celery import Celery, signals
 from kombu import Queue
-
 from ranker.question import Question, NoAnswersException
-from ranker.api.logging_config import setup_logger
-
-setup_logger()
-logger = logging.getLogger(__name__)
+from ranker.api.logging_config import get_task_logger
 
 # set up Celery
 celery = Celery('ranker.api.setup')
@@ -23,18 +19,12 @@ celery.conf.update(
 celery.conf.task_queues = (
     Queue('ranker', routing_key='ranker'),
 )
-# Tell celery not to mess with logging at all
-@signals.setup_logging.connect
-def setup_celery_logging(**kwargs):
-    pass
-celery.log.setup()
 
 @celery.task(bind=True, queue='ranker', task_acks_late=True, track_started=True, worker_prefetch_multiplier=1)
 def answer_question(self, question_json, max_results=250):
     """Generate answerset for a question."""
-
+    logger = get_task_logger()
     question = Question(question_json)
-
     self.update_state(state='ANSWERING')
     logger.info("Answering your question...")
 

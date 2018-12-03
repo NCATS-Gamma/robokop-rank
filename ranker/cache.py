@@ -4,7 +4,7 @@ import os
 import pickle
 import redis
 from lru import LRU
-
+from ranker.api.logging_config import get_task_logger
 logger = logging.getLogger(__name__)
 
 
@@ -42,6 +42,7 @@ class Cache:
                  redis_password="",
                  enabled=True):
         """Connect to cache."""
+        logger = get_task_logger(module_name=__name__)
         self.enabled = enabled
         try:
             if redis_password:
