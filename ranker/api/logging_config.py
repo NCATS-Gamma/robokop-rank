@@ -78,7 +78,7 @@ def get_task_logger(module_name=None):
     logger = logging.getLogger('ranker.task' + f'.{task_id}')
     # prevent log getting to higher loggers
     # logger.propagate = False
-    file_path = os.path.join(os.environ.get('ROBOKOP_HOME'),'robokop-rank', 'task_logs', f'{task_id}.log')
+    file_path = os.path.join(os.environ.get('ROBOKOP_HOME'), 'task_logs', f'{task_id}.log')
     fileHandler = logging.handlers.RotatingFileHandler(filename=file_path)
     formatter = logging.Formatter("[%(asctime)s: %(levelname)s/%(name)s(%(processName)s)]: %(message)s")
     fileHandler.setFormatter(formatter)

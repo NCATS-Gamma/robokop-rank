@@ -4,6 +4,9 @@ set -e
 
 cd $ROBOKOP_HOME/robokop-rank
 
+echo "Creating task logs dir"
+mkdir -p $ROBOKOP_HOME/task_logs
+
 if [ -n "$(find . -user "murphy" -prune)" ]; then
     echo "Files are owned by murphy."
 else
