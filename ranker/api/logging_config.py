@@ -2,11 +2,10 @@
 
 import logging.config
 import os
-from celery._state import get_current_task
 
 
-def setup_logger():
-    """Set up logger."""
+def setup_main_logger():
+    """Set up default logger."""
 
     dict_config = {
         'version': 1,
@@ -65,22 +64,23 @@ def setup_logger():
         'disable_existing_loggers': True
     }
     logging.config.dictConfig(dict_config)
+setup_main_logger()
 
-def get_task_logger(module_name=None):
-    """Sets up and returns a new task-id based logger if a task exist else a normal logger."""
-    setup_logger()
-    
-    current_task = get_current_task()
-    if current_task == None :
-        return logging.getLogger(module_name or __name__)
-    task_id = current_task.request.id
-    # create a handler with <this-module>.<task-id>
-    logger = logging.getLogger('ranker.task' + f'.{task_id}')
-    # prevent log getting to higher loggers
-    # logger.propagate = False
-    file_path = os.path.join(os.environ.get('ROBOKOP_HOME'), 'task_logs', f'{task_id}.log')
-    fileHandler = logging.handlers.RotatingFileHandler(filename=file_path)
+def clear_log_handlers(logger):
+    """ Clears any handlers from the logger."""
+    for handler in logger.handlers:
+        handler.flush()
+        handler.close()
+    logger.handlers = []
+def add_task_id_based_handler(logger, task_id):
+    """Adds a file handler with task_id as file name to the logger."""
     formatter = logging.Formatter("[%(asctime)s: %(levelname)s/%(name)s(%(processName)s)]: %(message)s")
-    fileHandler.setFormatter(formatter)
-    logger.addHandler(fileHandler)
-    return logger
+    # create file handler and set level to debug
+    file_handler = logging.handlers.RotatingFileHandler(f"{os.environ['ROBOKOP_HOME']}/task_logs/{task_id}.log",
+        mode="a",
+        encoding="utf-8",
+        maxBytes=1e6,
+        backupCount=9)
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)

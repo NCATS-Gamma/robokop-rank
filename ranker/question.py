@@ -22,7 +22,6 @@ from ranker.answer import Answer, Answerset
 from ranker.ranker_obj import Ranker
 from ranker.cache import Cache
 from ranker.support.omnicorp import OmnicorpSupport
-from ranker.api.logging_config import get_task_logger
 
 logger = logging.getLogger(__name__)
 
@@ -177,7 +176,6 @@ class Question():
         q = Question(struct, ...)
         """
         # initialize all properties
-        logger = get_task_logger(module_name=__name__)
         self.user_id = None
         self.id = None
         self.notes = None

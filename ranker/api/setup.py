@@ -10,10 +10,10 @@ from flask_restful import Api
 from flasgger import Swagger
 from flask_cors import CORS
 
-from ranker.api.logging_config import setup_logger
+from ranker.api.logging_config import setup_main_logger
 
 
-setup_logger()
+setup_main_logger()
 logger = logging.getLogger("ranker")
 
 app = Flask(__name__, static_folder='../pack', template_folder='../templates')
