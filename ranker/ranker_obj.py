@@ -19,7 +19,7 @@ from itertools import combinations
 import numpy as np
 import numpy.linalg
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('ranker')
 
 
 def argsort(x, reverse=False):
