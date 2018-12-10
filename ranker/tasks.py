@@ -28,6 +28,7 @@ def setup_logging(signal=None, sender=None, task_id=None, task=None, *args, **kw
     Changes the main logger's handlers so they could log to a task specific log file.    
     """
     logger = logging.getLogger('ranker')
+    logger.info(f"Task {kwargs.get('task_id')} is starting.")
     clear_log_handlers(logger)
     add_task_id_based_handler(logger, task_id)
 
@@ -39,10 +40,10 @@ def tear_down_task_logging(**kwargs):
     logger = logging.getLogger('ranker')
     clear_log_handlers(logger)
     # change logging config back to the way it was
-    set_up_main_logger()
+    setup_main_logger()
     #finally log task has finished to main file
     logger = logging.getLogger('ranker')
-    logger.info(f"task {kwargs.get('task_id')} finished ...")
+    logger.info(f"Task {kwargs.get('task_id')} completed.")
 
 
 @celery.task(bind=True, queue='ranker', task_acks_late=True, track_started=True, worker_prefetch_multiplier=1)

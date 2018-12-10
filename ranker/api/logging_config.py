@@ -50,13 +50,6 @@ def setup_main_logger():
                     'file',
                     'smtp'
                 ]
-            },
-            'ranker.task': {
-                'level': 'DEBUG',
-                'handlers': [
-                    'smtp'
-                ],
-                'propagate': False
             }
         },
         'root': {},
