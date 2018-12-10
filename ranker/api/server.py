@@ -8,7 +8,7 @@ import json
 
 import redis
 from flask_restful import Resource
-from flask import request
+from flask import request, send_from_directory
 
 from ranker.api.setup import app, api
 from ranker.question import Question, NoAnswersException
@@ -420,6 +420,42 @@ class TaskStatus(Resource):
 
 api.add_resource(TaskStatus, '/task/<task_id>')
 
+class TaskLog(Resource):
+    def get(self, task_id):
+        """
+        Get activity log for a task
+        ---
+        tags: [util]
+        parameters:
+          - in: path
+            name: task_id
+            description: ID of task
+            schema:
+                type: string
+            required: true
+        responses:
+            200:
+                description: text
+        """
+
+        task_log_file = os.path.join(os.environ['ROBOKOP_HOME'], 'task_logs', f'{task_id}.log')
+        if os.path.isfile(task_log_file):
+            with open(task_log_file, 'r') as log_file:
+                log_contents = log_file.read()
+            return log_contents, 200
+        else:
+            return 'Task ID not found', 404
+
+
+        # task_log_dir = os.path.join(os.environ['ROBOKOP_HOME'], 'task_logs')
+        # task_log_file = f'{task_id}.log'
+
+        # if os.path.isfile(os.path.join(task_log_dir, task_log_file)):
+        #     return send_from_directory(task_log_dir, task_log_file,mimetype='text/plain',as_attachment=False)
+        # else:
+        #     return '', 404
+
+api.add_resource(TaskLog, '/task/<task_id>/log')
 
 class EnrichedExpansion(Resource):
     def post(self, type1, type2):
