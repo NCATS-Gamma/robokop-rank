@@ -101,15 +101,15 @@ class QGraph(FromDictMixin2):
 
         super().__init__(*args, **kwargs)
 
-    def apply(self, kmap):
-        """Apply a KMap to this QGraph."""
+    def apply(self, answer):
+        """Apply a Answer to this QGraph."""
         # add curies to mapped nodes
         nodes = copy.deepcopy(self.nodes)
         for node in nodes:
-            if node.id in kmap:
-                node.curie = kmap[node.id]
+            if node.id in answer:
+                node.curie = answer[node.id]
         # remove mapped edges
-        edges = [edge for edge in self.edges if edge.id not in kmap]
+        edges = [edge for edge in self.edges if edge.id not in answer]
         return {'machine_question': {
             'nodes': [n.dump() for n in nodes],
             'edges': [e.dump() for e in edges]
@@ -304,18 +304,27 @@ class KGraph(FromDictMixin2):
         self.edges = list(set(self.edges + other.edges))
 
 
-@swagger.definition('KMap')
-class KMap():
+@swagger.definition('Answer')
+class Answer():
     """
     Map from question node and edge IDs to knowledge-graph entity identifiers and relationship references
     ---
     type: object
-    additionalProperties:
-      oneOf:
-        - type: string
-        - type: array
-          items:
-            type: string
+    properties:
+        node_bindings:
+            additionalProperties:
+            oneOf:
+                - type: string
+                - type: array
+                items:
+                    type: string
+        edge_bindings:
+            additionalProperties:
+            oneOf:
+                - type: string
+                - type: array
+                items:
+                    type: string
     """
 
     pass
@@ -379,7 +388,7 @@ class Message(FromDictMixin2):
     required:
       - question_graph
       - knowledge_graph
-      - knowledge_maps
+      - answers
     properties:
       question_graph:
         $ref: '#/definitions/QGraph'
@@ -387,10 +396,10 @@ class Message(FromDictMixin2):
         oneOf:
           - $ref: '#/definitions/KGraph'
           - $ref: '#/definitions/RemoteKGraph'
-      knowledge_maps:
+      answers:
         type: array
         items:
-          $ref: '#/definitions/KMap'
+          $ref: '#/definitions/Answer'
       options:
         $ref: '#/definitions/Options'
     example:
@@ -428,6 +437,6 @@ class Message(FromDictMixin2):
         """Initialize Message."""
         self.question_graph = None
         self.knowledge_graph = None
-        self.knowledge_maps = []
+        self.answers = []
 
         super().__init__(*args, **kwargs)
