@@ -67,6 +67,6 @@ class FromDictMixin2():
         for key in json:
             if isinstance(json[key], FromDictMixin2):
                 json[key] = json[key].dump()
-            if isinstance(json[key], list) and isinstance(json[key][0], FromDictMixin2):
+            if isinstance(json[key], list) and json[key] and isinstance(json[key][0], FromDictMixin2):
                 json[key] = [v.dump() for v in json[key]]
         return json
