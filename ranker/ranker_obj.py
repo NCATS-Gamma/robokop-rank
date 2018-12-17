@@ -67,6 +67,8 @@ class Ranker:
                 # both_pubs = len(edge['publications']) if 'publications' in edge else 0
                 both_pubs = edge['num_publications'] if 'num_publications' in edge else 0
 
+                if isinstance(both_pubs, list):
+                    both_pubs = len(both_pubs)
                 cov = (both_pubs / all_pubs) - (source_pubs / all_pubs) * (target_pubs / all_pubs)
                 cov = max((cov, 0.0))
                 effective_pubs = cov * all_pubs * self.relevance
@@ -133,7 +135,15 @@ class Ranker:
         logger.debug("Calculating subgraph statistics... ")
         start = time.time()
         logger.info("subgraph_statistic on ")
-        graph_stat = [self.subgraph_statistic(sg, metric_type='volt') for sg in subgraph_list]
+        graph_stat = []
+        # build kgraph map
+        self.kgraph_map = {n['id']: n for n in self.knowledge_graph['nodes'] + self.knowledge_graph['edges']}
+        self.kedge_knodes_map = defaultdict(list)
+        for e in self.knowledge_graph['edges']:
+            self.kedge_knodes_map[tuple(sorted([e['source_id'], e['target_id']]))].append(e)
+        # for sg in tqdm(subgraph_list):
+        for sg in subgraph_list:
+            graph_stat.append(self.subgraph_statistic(sg, metric_type='volt'))
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
         # Fail safe to nuke nans
@@ -164,9 +174,9 @@ class Ranker:
         report = []
         for i, subgraph in enumerate(answer_maps):
             node_ids = flatten_semilist(subgraph['nodes'].values())
-            nodes = [n for n in self.knowledge_graph['nodes'] if n['id'] in node_ids]
+            nodes = [self.kgraph_map[n] for n in node_ids]
             edge_ids = flatten_semilist(subgraph['edges'].values())
-            edges = [e for e in self.knowledge_graph['edges'] if e['id'] in edge_ids]
+            edges = [self.kgraph_map[e] for e in edge_ids]
             sgr = {
                 'nodes': nodes,
                 'edges': edges,
@@ -177,58 +187,75 @@ class Ranker:
 
         return (report, answer_maps)
 
-    def get_rgraph(self, subgraph):
-        """Get "ranker" subgraph."""
-
-        # get list of nodes
+    def get_list_of_nodes(self, bindings):
         nodes = []
         knode_map = defaultdict(set)
-        for qnode_id in subgraph['nodes']:
-            knode_ids = subgraph['nodes'][qnode_id]
+        for qnode_id in bindings['nodes']:
+            knode_ids = bindings['nodes'][qnode_id]
             if not isinstance(knode_ids, list):
                 knode_ids = [knode_ids]
             for knode_id in knode_ids:
                 rnode_id = f"{qnode_id}/{knode_id}"
                 nodes.append(rnode_id)
                 knode_map[knode_id].add(rnode_id)
+        return nodes, knode_map
 
-        # get "result" edges
+    def get_result_edges(self, bindings, rnodes):
         edges = []
-        for qedge_id in subgraph['edges']:
+        for qedge_id in bindings['edges']:
             if qedge_id[0] == 's':
                 continue
             qedge = next(e for e in self.question['edges'] if e['id'] == qedge_id)
-            kedge_ids = subgraph['edges'][qedge_id]
+            kedge_ids = bindings['edges'][qedge_id]
             if not isinstance(kedge_ids, list):
                 kedge_ids = [kedge_ids]
             for kedge_id in kedge_ids:
-                kedge = next(e for e in self.knowledge_graph['edges'] if e['id'] == kedge_id)
+                kedge = self.kgraph_map[kedge_id]
+
                 # find source and target
                 candidate_source_ids = [f"{qedge['source_id']}/{kedge['source_id']}", f"{qedge['source_id']}/{kedge['target_id']}"]
                 candidate_target_ids = [f"{qedge['target_id']}/{kedge['source_id']}", f"{qedge['target_id']}/{kedge['target_id']}"]
-                source_id = next(node_id for node_id in nodes if node_id in candidate_source_ids)
-                target_id = next(node_id for node_id in nodes if node_id in candidate_target_ids)
+                source_id = next(rnode_id for rnode_id in rnodes if rnode_id in candidate_source_ids)
+                target_id = next(rnode_id for rnode_id in rnodes if rnode_id in candidate_target_ids)
                 edge = {
                     'weight': kedge['weight'],
                     'source_id': source_id,
                     'target_id': target_id
                 }
                 edges.append(edge)
+        return edges
+
+    def get_support_edges(self, knode_map):
+        edges = []
+        for nodes in combinations(sorted(knode_map.keys()), 2):
+            # loop over edges connecting these nodes
+            for kedge in self.kedge_knodes_map[nodes]:
+                if kedge['type'] != 'literature_co-occurrence':
+                    continue
+                # loop over rnodes connected by this edge
+                for source_id in knode_map[kedge['source_id']]:
+                    for target_id in knode_map[kedge['target_id']]:
+                        edge = {
+                            'weight': kedge['weight'],
+                            'source_id': source_id,
+                            'target_id': target_id
+                        }
+                        edges.append(edge)
+        return edges
+
+    def get_rgraph(self, bindings):
+        """Get "ranker" subgraph."""
+
+        # get list of nodes
+        rnodes, knode_map = self.get_list_of_nodes(bindings)
+
+        # get "result" edges
+        redges = self.get_result_edges(bindings, rnodes)
 
         # get "support" edges
-        for kedge in self.knowledge_graph['edges']:
-            if not (kedge['type'] == 'literature_co-occurrence' and kedge['source_id'] in knode_map and kedge['target_id'] in knode_map):
-                continue
-            for source_id in knode_map[kedge['source_id']]:
-                for target_id in knode_map[kedge['target_id']]:
-                    edge = {
-                        'weight': kedge['weight'],
-                        'source_id': source_id,
-                        'target_id': target_id
-                    }
-                    edges.append(edge)
+        redges += self.get_support_edges(knode_map)
 
-        return nodes, edges
+        return rnodes, redges
 
     def subgraph_statistic(self, subgraph, metric_type='hit'):
         """Compute subgraph score."""
@@ -330,7 +357,7 @@ def voltage_from_laplacian(L):
     iv = np.zeros(L.shape[0])
     iv[0] = -1
     iv[-1] = 1
-    results = np.linalg.lstsq(L, iv)
+    results = np.linalg.lstsq(L, iv, rcond=None)
     potentials = results[0]
     return potentials[-1] - potentials[0]
 
