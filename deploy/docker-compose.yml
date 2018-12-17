@@ -5,7 +5,7 @@ services:
     build:
       context: .
     env_file:
-      - ./.env
+      - ../../shared/robokop.env
     environment:
       - DEPLOY=docker
       - ROBOKOP_HOME=/home/murphy
