@@ -253,7 +253,7 @@ class Question():
             while True:
                 answer_maps = database.query(self, options=options)
                 options['skip'] += options['limit']
-                answer_maps = [{'nodes': g['nodes'], 'edges': g['edges']} for g in answer_maps]
+                answer_maps = [{'node_bindings': g['nodes'], 'edge_bindings': g['edges']} for g in answer_maps]
                 knowledge_maps.extend(answer_maps)
                 logger.debug(f'{len(knowledge_maps)} answer_maps: {int(sys.getsizeof(pickle.dumps(knowledge_maps)) / 1e6):d} MB')
                 logger.debug(f'memory usage: {int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e3):d} MB')
@@ -262,7 +262,7 @@ class Question():
 
         return {
             'knowledge_graph': knowledge_graph,
-            'knowledge_maps': knowledge_maps
+            'answers': knowledge_maps
         }
 
     def get_support(self, knowledge_graph, knowledge_maps, cache=None):
@@ -307,7 +307,7 @@ class Question():
                 #The id's are in the cache sorted.
                 ids = [pair[0],pair[1]]
                 ids.sort()
-                key = f"{supporter.__class__.__name__}({ids[0]},{ids[1]})"
+                key = f"{supporter.__class__.__name__}_count({ids[0]},{ids[1]})"
                 support_edge = cache.get(key)
                 if support_edge is not None:
                     #logger.info(f"cache hit: {key} {support_edge}")
@@ -320,7 +320,7 @@ class Question():
                     #  we can infer that getting nothing back means an empty list
                     #  check cached_prefixes for this...
                     prefixes = tuple([ ident.split(':')[0].upper() for ident in ids ])
-                    if prefixes in cached_prefixes:
+                    if cached_prefixes and prefixes in cached_prefixes:
                         support_edge = []
                     else:
                         #logger.info(f"exec op: {key}")
@@ -337,7 +337,7 @@ class Question():
                 knowledge_graph['edges'].append({
                     'type': 'literature_co-occurrence',
                     'id': uid,
-                    'num_publications': len(support_edge),
+                    'num_publications': support_edge,
                     'publications': [],
                     'source_database': 'omnicorp',
                     'source_id': pair[0],
@@ -347,7 +347,7 @@ class Question():
                 for sg in pair_to_answer[pair]:
                     knowledge_maps[sg]['edges'].update({f's{support_idx}': uid})
         return knowledge_graph
-                
+
 
     def answer(self, max_results=250, use_support=True):
         """Answer the question.
