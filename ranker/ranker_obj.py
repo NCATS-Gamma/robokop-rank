@@ -162,31 +162,6 @@ class Ranker:
 
         return (subgraph_scores, subgraph_list)
 
-    def report_ranking(self, answer_maps, max_results=250):
-        """Report ranking."""
-        # construct the output that question.py expects
-
-        (subgraph_scores, answer_maps) = self.rank(answer_maps, max_results=max_results)
-
-        # add extra computed metadata in self.graph to subgraph for display
-        logger.debug("Extracting subgraphs... ")
-        start = time.time()
-        report = []
-        for i, subgraph in enumerate(answer_maps):
-            node_ids = flatten_semilist(subgraph['nodes'].values())
-            nodes = [self.kgraph_map[n] for n in node_ids]
-            edge_ids = flatten_semilist(subgraph['edges'].values())
-            edges = [self.kgraph_map[e] for e in edge_ids]
-            sgr = {
-                'nodes': nodes,
-                'edges': edges,
-                'score': subgraph_scores[i]
-            }
-            report.append(sgr)
-        logger.debug(f"{time.time()-start} seconds elapsed.")
-
-        return (report, answer_maps)
-
     def get_list_of_nodes(self, bindings):
         nodes = []
         knode_map = defaultdict(set)
@@ -412,3 +387,4 @@ def hitting_times_miles(Q):
     results = np.linalg.lstsq(Qtilde, b)
     tau = results[0]
     return tau
+    

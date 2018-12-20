@@ -11,12 +11,10 @@ from flask_restful import Resource
 from flask import request, send_from_directory
 
 from ranker.api.setup import app, api
-from ranker.question import Question, NoAnswersException
-from ranker.answer import Answerset
+from ranker.message import Message, output_formats
 from ranker.tasks import answer_question
 import ranker.api.definitions
 from ranker.knowledgegraph import KnowledgeGraph
-from ranker.definitions import Message
 from ranker.support.omnicorp import OmnicorpSupport
 from ranker.cache import Cache
 
@@ -30,67 +28,6 @@ cached_prefixes = support_cache.get('OmnicorpPrefixes')
 
 logger = logging.getLogger("ranker")
 
-class PassMessage(Resource):
-    def post(self):
-        """
-        Get answers to a question
-        ---
-        tags: [answer]
-        requestBody:
-            description: Input message
-            required: true
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/definitions/Message'
-        responses:
-            200:
-                description: Output message
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/definitions/Message'
-        """
-        message = Message(request.json)
-
-        if not message.answers:
-            message.answers.append({
-                "node_bindings": {},
-                "edge_bindings": {}
-            })
-        logger.info(f"{len(message.answers)} questions.")
-        big_answerset = None
-        for i, kmap in enumerate(message.answers):
-            logger.info(f"Answering question {i}...")
-            question_json = message.question_graph.apply(kmap)
-            question = Question(question_json)
-
-            answerset = question.fetch_answers()
-            if answerset is None:
-                continue
-            logger.debug(answerset)
-            answerset = Message(answerset)
-            logger.info("%d answers found.", len(answerset.answers))
-            answerset.answers = [{
-                "node_bindings": {**kmap['node_bindings'], **km['node_bindings']},
-                "edge_bindings": {**kmap['edge_bindings'], **km['edge_bindings']}
-            } for km in answerset.answers]
-            if big_answerset is None:
-                big_answerset = answerset
-                big_answerset.knowledge_graph.merge(message.knowledge_graph)
-            else:
-                big_answerset.knowledge_graph.merge(answerset.knowledge_graph)
-                big_answerset.answers = big_answerset.answers + answerset.answers
-
-        if big_answerset is None:
-            logger.info("0 answers found. Returning None.")
-            return None, 200
-        big_answerset.question_graph = message.question_graph
-        return big_answerset.dump(), 200
-
-api.add_resource(PassMessage, '/ti')
-
-
 class AnswerQuestionNow(Resource):
     def post(self):
         """
@@ -98,11 +35,11 @@ class AnswerQuestionNow(Resource):
         ---
         tags: [answer]
         requestBody:
-            description: The machine-readable question graph.
+            description: A message with a machine-readable question graph.
             content:
                 application/json:
                     schema:
-                        $ref: '#/definitions/Question'
+                        $ref: '#/definitions/Message'
             required: true
         parameters:
           - in: query
@@ -111,6 +48,12 @@ class AnswerQuestionNow(Resource):
             schema:
                 type: integer
             default: 250
+          - in: query
+            name: output_format
+            description: Requested output format. APIStandard or Message
+            schema:
+                type: string
+            default: APIStandard
         responses:
             200:
                 description: Answer
@@ -120,7 +63,7 @@ class AnswerQuestionNow(Resource):
                             $ref: '#/definitions/Response'
         """
         max_results = request.args.get('max_results', default=250)
-        logger.debug("max_results: %s", str(max_results))
+        # logger.debug("max_results: %s", str(max_results))
         try:
             max_results = int(max_results)
         except ValueError:
@@ -128,10 +71,14 @@ class AnswerQuestionNow(Resource):
         if max_results < 0:
             max_results = None
 
+        output_format = request.args.get('output_format', default=output_formats[0])
+        if output_format not in output_formats:
+            return f'output_format must be one of [{" ".join(output_formats)}]', 400
+
         try:
             result = answer_question.apply(
                 args=[request.json],
-                kwargs={'max_results': max_results}
+                kwargs={'max_results': max_results, 'output_format': output_format}
             )
             result = result.get()
         except:
@@ -139,12 +86,13 @@ class AnswerQuestionNow(Resource):
             return "Internal server error. See the logs for details.", 500
         if result is None:
             return None, 200
-        logger.debug(f'Answerset file: {result}')
+
+        logger.debug(f'Fetching answerset file: {result}')
         filename = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', result)
         with open(filename, 'r') as f:
-            answers = json.load(f)
+            output = json.load(f)
         os.remove(filename)
-        return answers, 200
+        return output, 200
 
 api.add_resource(AnswerQuestionNow, '/now')
 
@@ -155,11 +103,11 @@ class AnswerQuestion(Resource):
         ---
         tags: [answer]
         requestBody:
-            description: The machine-readable question graph.
+            description: A message with a machine-readable question graph.
             content:
                 application/json:
                     schema:
-                        $ref: '#/definitions/Question'
+                        $ref: '#/definitions/Message'
             required: true
         parameters:
           - in: query
@@ -168,16 +116,20 @@ class AnswerQuestion(Resource):
             schema:
                 type: integer
             default: 250
+          - in: query
+            name: output_format
+            description: Requested output format. APIStandard or Message
+            schema:
+                type: string
+            default: APIStandard
         responses:
             200:
-                description: Answer
+                description: Successfull queued a task
                 content:
                     application/json:
-                        schema:
-                            $ref: '#/definitions/Response'
         """
-        max_results = request.args.get('max_results', default=50)
-        logger.debug("max_results: %s", str(max_results))
+
+        max_results = request.args.get('max_results', default=250)
         try:
             max_results = int(max_results)
         except ValueError:
@@ -187,14 +139,17 @@ class AnswerQuestion(Resource):
         if max_results < 0:
             max_results = None
 
+        output_format = request.args.get('output_format', default=output_formats[0])
+        if output_format not in output_formats:
+            return f'output_format must be one of [{" ".join(output_formats)}]', 400
+
         task = answer_question.apply_async(
             args=[request.json],
-            kwargs={'max_results': max_results}
+            kwargs={'max_results': max_results, 'output_format': output_format}
         )
         return {'task_id':task.id}, 202
 
 api.add_resource(AnswerQuestion, '/')
-
 class QuestionSubgraph(Resource):
     def post(self):
         """
@@ -218,12 +173,12 @@ class QuestionSubgraph(Resource):
                             $ref: '#/definitions/Question'
         """
 
-        question = Question(request.json)
+        message = Message(request.json)
         
         try:
-            subgraph = question.relevant_knowledge_graph()
-        except NoAnswersException:
-            return "Question not found in neo4j cache.", 404
+            subgraph = message.knowledge_graph
+        except:
+            return "Unable to retrieve knowledge graph.", 404
 
         return subgraph, 200
 
@@ -271,12 +226,6 @@ class Results(Resource):
             schema:
                 type: string
             required: true
-          - in: query
-            name: standardize
-            description: Convert the output to RTX standard format?
-            schema:
-                type: boolean
-            default: false
         responses:
             200:
                 description: result
@@ -306,16 +255,12 @@ class Results(Resource):
             with open(result_path, 'r') as f:
                 file_contents = json.load(f)
             os.remove(result_path)
-
-            if request.args.get('standardize') == 'true':
-                return Answerset(file_contents).toStandard()
-            else:
-                return file_contents
+        
+            return file_contents, 200
         else: 
             return 'No results found', 200
 
 api.add_resource(Results, '/result/<task_id>')
-
 
 class Omnicorp(Resource):
     def get(self, id1, id2):
@@ -603,7 +548,6 @@ class SimilaritySearch(Resource):
         return sim_results, 200
 
 api.add_resource(SimilaritySearch, '/similarity/<type1>/<identifier>/<type2>/<by_type>')
-
 
 if __name__ == '__main__':
 

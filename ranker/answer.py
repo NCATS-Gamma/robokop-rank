@@ -56,7 +56,7 @@ class Answerset(FromDictMixin):
         output = {
             'datetime': json['timestamp'],
             'id': '',
-            'message': f"{self.misc_info['num_total_paths']} answers found. {len(self.answers)} returned.",
+            'message': f"{json['misc_info']['num_total_paths']} answers found. {len(self.answers)} returned.",
             'response_code': 'OK' if self.answers else 'EMPTY',
             'result_list': [a.toStandard() for a in self.answers]
         }
