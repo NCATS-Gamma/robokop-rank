@@ -44,10 +44,10 @@ class Ranker:
 
     def __init__(self, graph=None, question=None):
         """Create ranker."""
-        logger.info("QUESTION")
-        logger.info(question)
-        logger.info("WHOLE GRAPH")
-        logger.info(graph)
+        # logger.info("QUESTION")
+        # logger.info(question)
+        # logger.info("WHOLE GRAPH")
+        # logger.info(graph)
         self.knowledge_graph = graph
         self.question = question
         self._evaluated_templates = {}
@@ -89,13 +89,13 @@ class Ranker:
             k = 1 / self.mark95 * (np.log(r + c) - np.log(a - r - c))  # 0.1778
             edge['weight'] = a / (1 + np.exp(-k * effective_pubs)) - c
 
-    def sum_edge_weights(self, subgraph):
+    def sum_edge_weights(self, answer):
         """Add edge weights."""
-        edge_ids = flatten_semilist(subgraph['edges'].values())
+        edge_ids = flatten_semilist(answer['edge_bindings'].values())
         weights = [e['weight'] for e in self.knowledge_graph['edges'] if e['id'] in edge_ids]
         return sum(weights)
 
-    def prescreen(self, subgraph_list, max_results=None):
+    def prescreen(self, answer_list, max_results=None):
         """Prescreen subgraphs.
 
         Keep the top max_results or self.prescreen_count, by their total edge weight.
@@ -103,19 +103,19 @@ class Ranker:
         if max_results is None:
             max_results = self.prescreen_count
 
-        logger.debug(f'  Getting {len(subgraph_list)} prescreen scores...')
-        prescreen_scores = [self.sum_edge_weights(sg) for sg in subgraph_list]
+        logger.debug(f'  Getting {len(answer_list)} prescreen scores...')
+        prescreen_scores = [self.sum_edge_weights(sg) for sg in answer_list]
 
         logger.debug(f'  Getting top {max_results}...')
         prescreen_sorting = [x[0] for x in heapq.nlargest(max_results, enumerate(prescreen_scores), key=operator.itemgetter(1))]
 
-        logger.debug('  Returning sorted results...')
-        return [subgraph_list[i] for i in prescreen_sorting]
+        logger.debug('  Returning sorted prescreen results...')
+        return [answer_list[i] for i in prescreen_sorting]
 
-    def rank(self, subgraph_list, max_results=250):
+    def rank(self, answer_list, max_results=250):
         """Generate a sorted list and scores for a set of subgraphs."""
 
-        if not subgraph_list:
+        if not answer_list:
             return ([], [])
 
         # add weights to edges
@@ -126,15 +126,15 @@ class Ranker:
 
         # prescreen
         if max_results is not None:
-            logger.debug("Prescreening subgraph_list... ")
+            logger.debug("Prescreening answer_list... ")
             start = time.time()
-            subgraph_list = self.prescreen(subgraph_list, max_results=max([self.prescreen_count, max_results * 2]))
+            answer_list = self.prescreen(answer_list, max_results=max([self.prescreen_count, max_results * 2]))
             logger.debug(f"{time.time()-start} seconds elapsed.")
 
         # get subgraph statistics
         logger.debug("Calculating subgraph statistics... ")
         start = time.time()
-        logger.info("subgraph_statistic on ")
+        
         graph_stat = []
         # build kgraph map
         self.kgraph_map = {n['id']: n for n in self.knowledge_graph['nodes'] + self.knowledge_graph['edges']}
@@ -142,7 +142,7 @@ class Ranker:
         for e in self.knowledge_graph['edges']:
             self.kedge_knodes_map[tuple(sorted([e['source_id'], e['target_id']]))].append(e)
         # for sg in tqdm(subgraph_list):
-        for sg in subgraph_list:
+        for sg in answer_list:
             graph_stat.append(self.subgraph_statistic(sg, metric_type='volt'))
         logger.debug(f"{time.time()-start} seconds elapsed.")
 
@@ -151,22 +151,22 @@ class Ranker:
 
         # sort by scores
         ranking_sorting = argsort(ranking_scores, reverse=True)
-        subgraph_list = [subgraph_list[i] for i in ranking_sorting]
-        subgraph_scores = [ranking_scores[i] for i in ranking_sorting]
+        answer_list = [answer_list[i] for i in ranking_sorting]
+        answer_scores = [ranking_scores[i] for i in ranking_sorting]
 
         # trim output
         if max_results is not None:
             logger.debug('Keeping top %d...', max_results)
-            subgraph_list = subgraph_list[:max_results]
-            subgraph_scores = subgraph_scores[:max_results]
+            answer_list = answer_list[:max_results]
+            answer_scores = answer_scores[:max_results]
 
-        return (subgraph_scores, subgraph_list)
+        return (answer_scores, answer_list)
 
-    def get_list_of_nodes(self, bindings):
+    def get_list_of_nodes(self, answer):
         nodes = []
         knode_map = defaultdict(set)
-        for qnode_id in bindings['nodes']:
-            knode_ids = bindings['nodes'][qnode_id]
+        for qnode_id in answer['node_bindings']:
+            knode_ids = answer['node_bindings'][qnode_id]
             if not isinstance(knode_ids, list):
                 knode_ids = [knode_ids]
             for knode_id in knode_ids:
@@ -175,13 +175,13 @@ class Ranker:
                 knode_map[knode_id].add(rnode_id)
         return nodes, knode_map
 
-    def get_result_edges(self, bindings, rnodes):
+    def get_result_edges(self, answer, rnodes):
         edges = []
-        for qedge_id in bindings['edges']:
+        for qedge_id in answer['edge_bindings']:
             if qedge_id[0] == 's':
                 continue
             qedge = next(e for e in self.question['edges'] if e['id'] == qedge_id)
-            kedge_ids = bindings['edges'][qedge_id]
+            kedge_ids = answer['edge_bindings'][qedge_id]
             if not isinstance(kedge_ids, list):
                 kedge_ids = [kedge_ids]
             for kedge_id in kedge_ids:
@@ -218,24 +218,24 @@ class Ranker:
                         edges.append(edge)
         return edges
 
-    def get_rgraph(self, bindings):
+    def get_rgraph(self, answer):
         """Get "ranker" subgraph."""
 
         # get list of nodes
-        rnodes, knode_map = self.get_list_of_nodes(bindings)
+        rnodes, knode_map = self.get_list_of_nodes(answer)
 
         # get "result" edges
-        redges = self.get_result_edges(bindings, rnodes)
+        redges = self.get_result_edges(answer, rnodes)
 
         # get "support" edges
         redges += self.get_support_edges(knode_map)
 
         return rnodes, redges
 
-    def subgraph_statistic(self, subgraph, metric_type='hit'):
-        """Compute subgraph score."""
+    def subgraph_statistic(self, answer, metric_type='hit'):
+        """Compute answer score."""
         terminals = terminal_nodes(self.question)
-        laplacian, node_ids = self.graph_laplacian(subgraph)
+        laplacian, node_ids = self.graph_laplacian(answer)
         terminals = [n for n in node_ids if any([n.startswith(t) for t in terminals])]
         if metric_type == 'mix':
             return 1 / mixing_time_from_laplacian(laplacian)
@@ -264,11 +264,11 @@ class Ranker:
         else:
             raise ValueError(f'Unknown metric type "{metric_type}"')
 
-    def graph_laplacian(self, subgraph):
+    def graph_laplacian(self, answer):
         """Generate graph Laplacian."""
-        # subgraph is a list of dicts with fields 'id' and 'bound'
+        # answer is a list of dicts with fields 'id' and 'bound'
 
-        node_ids, edges = self.get_rgraph(subgraph)
+        node_ids, edges = self.get_rgraph(answer)
 
         # compute graph laplacian for this case with potentially duplicated nodes
         num_nodes = len(node_ids)

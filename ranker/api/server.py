@@ -118,7 +118,7 @@ class AnswerQuestion(Resource):
             default: 250
           - in: query
             name: output_format
-            description: Requested output format. APIStandard or Message
+            description: Requested output format. APIStandard, Message, Answers
             schema:
                 type: string
             default: APIStandard
@@ -153,9 +153,9 @@ api.add_resource(AnswerQuestion, '/')
 class QuestionSubgraph(Resource):
     def post(self):
         """
-        Get question subgraph
+        Get local region of the knowlege graph for a question
         ---
-        tags: [util]
+        tags: [knolwedgeGraph]
         requestBody:
             name: question
             description: The machine-readable question graph.
@@ -182,14 +182,14 @@ class QuestionSubgraph(Resource):
 
         return subgraph, 200
 
-api.add_resource(QuestionSubgraph, '/subgraph')
+api.add_resource(QuestionSubgraph, '/knowledge_graph')
 
 class Tasks(Resource):
     def get(self):
         """
         Fetch queued/active task list
         ---
-        tags: [util]
+        tags: [tasks]
         responses:
             200:
                 description: tasks
@@ -218,7 +218,7 @@ class Results(Resource):
         """
         Fetch results from task
         ---
-        tags: [util]
+        tags: [tasks]
         parameters:
           - in: path
             name: task_id
@@ -260,7 +260,7 @@ class Results(Resource):
         else: 
             return 'No results found', 200
 
-api.add_resource(Results, '/result/<task_id>')
+api.add_resource(Results, '/task/<task_id>/result/')
 
 class Omnicorp(Resource):
     def get(self, id1, id2):
@@ -342,7 +342,7 @@ class TaskStatus(Resource):
         """
         Get status of task
         ---
-        tags: [util]
+        tags: [tasks]
         parameters:
           - in: path
             name: task_id
@@ -379,7 +379,7 @@ class TaskLog(Resource):
         """
         Get activity log for a task
         ---
-        tags: [util]
+        tags: [tasks]
         parameters:
           - in: path
             name: task_id
@@ -416,7 +416,7 @@ class EnrichedExpansion(Resource):
         """
         Enriched search in the local knowledge graph
         ---
-        tags: [util]
+        tags: [simple]
         parameters:
           - in: path
             name: type1
@@ -490,7 +490,7 @@ class SimilaritySearch(Resource):
         """
         Similarity search in the local knowledge graph
         ---
-        tags: [util]
+        tags: [simple]
         parameters:
           - in: path
             name: type1

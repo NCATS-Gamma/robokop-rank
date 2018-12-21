@@ -3,6 +3,7 @@
 # standard modules
 import os
 import sys
+import time
 import warnings
 import logging
 import requests
@@ -25,7 +26,7 @@ from ranker.support.omnicorp import OmnicorpSupport
 
 logger = logging.getLogger('ranker')
 
-output_formats = ['APIStandard', 'Message']
+output_formats = ['APIStandard', 'Message', 'Answers']
 
 class NodeReference():
     """Node reference object."""
@@ -196,15 +197,15 @@ class Message():
         with KnowledgeGraph() as database:
             query_string = self.cypher_query_knowledge_graph()
 
-            logger.debug("Fetching knowledge graph")
-            logger.debug(query_string)
+            logger.info("Fetching knowledge graph")
+            # logger.debug(query_string)
             with database.driver.session() as session:
                 result = session.run(query_string)
             if result.peek() is None:
-                logger.debug("No relevent knowledge graph was found. Returning None.")
+                logger.info("No relevent knowledge graph was found. Returning None.")
                 return None
             
-            logger.debug('Converting Neo4j Result to dict...')
+            logger.info('Converting neo4j Result to dict')
             result = list(result)
 
             knowledge_graph = {
@@ -216,6 +217,7 @@ class Message():
                 node['type'].remove('named_thing')
                 node['type'] = node['type'][0]
 
+            logger.info('Knowledge graph obtained')
         return knowledge_graph
 
     @property
@@ -232,32 +234,45 @@ class Message():
         # get Neo4j connection
         with KnowledgeGraph() as database:
 
-            knowledge_graph = self.fetch_knowledge_graph()
-
-            # get knowledge graph
-            logger.debug('Getting knowledge graph...')
+            # # get knowledge graph
+            # logger.debug('Getting knowledge graph...')
 
             # get all answer maps relevant to the question from the knowledge graph
-            logger.debug('Getting answer maps...')
-            knowledge_maps = []
+            logger.info('Getting answers')
+            answer_maps = []
             options = {
                 'limit': 1000000,
                 'skip': 0
             }
+            
+            logger.info('Running answer generation query')
             while True:
-                answer_maps = database.query(self, options=options)
+                
+                query_string = self.cypher_query_answer_map(options=options)
+                
+                # logger.debug(query_string)
+                start = time.time()
+                with database.driver.session() as session:
+                    result = session.run(query_string)
+            
+                these_answer_maps = [{'node_bindings': r['nodes'], 'edge_bindings': r['edges']} for r in result]
+                
+                logger.info(f"{time.time()-start} seconds elapsed")
+                logger.info(f"{len(these_answer_maps)} subgraphs returned.")
+
                 options['skip'] += options['limit']
-                answer_maps = [{'node_bindings': g['nodes'], 'edge_bindings': g['edges']} for g in answer_maps]
-                knowledge_maps.extend(answer_maps)
-                logger.debug(f'{len(knowledge_maps)} answer_maps: {int(sys.getsizeof(pickle.dumps(knowledge_maps)) / 1e6):d} MB')
-                logger.debug(f'memory usage: {int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e3):d} MB')
-                if len(answer_maps) < options['limit']:
+                answer_maps.extend(these_answer_maps)
+
+                logger.info(f'{len(answer_maps)} answer_maps: {int(sys.getsizeof(pickle.dumps(answer_maps)) / 1e6):d} MB')
+                logger.info(f'memory usage: {int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e3):d} MB')
+                if len(these_answer_maps) < options['limit']:
+                    # If this batch is less then the page size
+                    # It must be the last page
                     break
 
-        return {
-            'knowledge_graph': knowledge_graph,
-            'answers': knowledge_maps
-        }
+            logger.info('Answers obtained')
+
+        return answer_maps
 
     def fetch_knowledge_graph_support(self):
 
@@ -376,30 +391,36 @@ class Message():
         local_kg = self.knowledge_graph # This will attempt to fetch from graph db if empty in a getter()
         if local_kg is None:
             self.answer_maps = None
-            logger.debug('No possible answers found')
+            logger.info('No possible answers found')
             return
         
         # Actually have a local knowledge graph
         answer_maps = self.answer_maps # This will attempt to fetch from the graph db if empty in a getter()
         if answer_maps is None:
-            logger.debug('No possible answers found')
+            logger.info('No possible answers found')
             return
         
-        logger.debug('Ranking answers')
+        logger.info('Ranking answers')
         pr = Ranker(local_kg, self.question_graph)
         (answer_scores, sorted_answer_maps) = pr.rank(answer_maps, max_results=max_results)
         
         # Add the scores to the answer_maps
         for i, answer in enumerate(sorted_answer_maps):
-            sorted_answer_maps['score'] = answer_scores[i]
+            answer['score'] = answer_scores[i]
 
-        self.answer_maps = sorted_answer_maps
+        self._answer_maps = sorted_answer_maps
 
     def dump(self):
         out = {
             'question_graph': self.question_graph,
             'knowledge_graph': self.knowledge_graph,
-            'answer_maps': self.answer_maps
+            'answers': self.answer_maps
+        }
+        return out
+
+    def dump_answers(self):
+        out = {
+            'answers': self.answer_maps
         }
         return out
 
@@ -415,18 +436,20 @@ class Message():
         }
         aset = Answerset(misc_info=misc_info)
 
-        kgraph_map = {n['id']: n for n in self.knowledge_graph['nodes'] + self.knowledge_graph['edges']}
-        for subgraph in self.answer_maps:
-            node_ids = flatten_semilist(subgraph['nodes'].values())
-            nodes = [kgraph_map[n] for n in node_ids]
-            edge_ids = flatten_semilist(subgraph['edges'].values())
-            edges = [kgraph_map[e] for e in edge_ids]
-
-            answer = Answer(nodes=nodes,
-                        edges=edges,
-                        score=subgraph['score'])
+        if self.answer_maps:
+            kgraph_map = {n['id']: n for n in self.knowledge_graph['nodes'] + self.knowledge_graph['edges']}
         
-            aset += answer
+            for answer in self.answer_maps:
+                node_ids = flatten_semilist(answer['node_bindings'].values())
+                nodes = [kgraph_map[n] for n in node_ids]
+                edge_ids = flatten_semilist(answer['edge_bindings'].values())
+                edges = [kgraph_map[e] for e in edge_ids]
+
+                answer = Answer(nodes=nodes,
+                            edges=edges,
+                            score=answer['score'])
+            
+                aset += answer
 
         return aset.toStandard()
 
