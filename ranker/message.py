@@ -163,7 +163,7 @@ class Message():
             for key in struct:
                 if key in attributes:
                     setattr(self, key, struct[key])
-                elif key is 'machine_question':
+                elif key == 'machine_question':
                     setattr(self, 'question_graph', struct[key])
                 else:
                     warnings.warn("JSON field {} ignored.".format(key))
@@ -172,7 +172,7 @@ class Message():
         for key in kwargs:
             if key in attributes:
                 setattr(self, key, kwargs[key])
-            elif key is 'machine_question':
+            elif key == 'machine_question':
                 setattr(self, 'question_graph', kwargs[key])
             else:
                 warnings.warn("Keyword argument {} ignored.".format(key))
