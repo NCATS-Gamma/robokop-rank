@@ -184,6 +184,265 @@ class QuestionSubgraph(Resource):
 
 api.add_resource(QuestionSubgraph, '/knowledge_graph')
 
+
+class NodeLookup(Resource):
+    """Single-node lookup endpoints."""
+
+    def post(self):
+        """
+        Get properties of a node by id.
+        Returns null if no such node is found.
+        If 'fields' is provided, returns only the requested fields.
+        Returns null for any unknown fields.
+        ---
+        tags: [knowledgeGraph]
+        requestBody:
+            name: request
+            description: The node id for lookup.
+            content:
+                application/json:
+                    schema:
+                        required:
+                          - node_id
+                        properties:
+                            node_id:
+                                type: string
+                            fields:
+                                type: array
+                                items:
+                                    type: string
+                        example:
+                            node_id: "MONDO:0005737"
+            required: true
+        responses:
+            200:
+                description: Node
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/definitions/KNode'
+        """
+        node_id = request.json['node_id']
+        fields = request.json.get('fields', None)
+
+        if fields is not None:
+            prop_string = ', '.join([f'{key}:n.{key}' for key in fields])
+        else:
+            prop_string = '.*'
+        query_string = f'MATCH (n {{id:"{node_id}"}}) RETURN n{{{prop_string}}}'
+
+        with KnowledgeGraph() as database:
+            with database.driver.session() as session:
+                result = session.run(query_string)
+
+        records = list(result)
+        if not records:
+            return None, 200
+
+        return records[0]['n'], 200
+
+api.add_resource(NodeLookup, '/node_lookup')
+
+
+class MultiNodeLookup(Resource):
+    """Multi-node lookup endpoints."""
+
+    def post(self):
+        """
+        Get properties of nodes by id.
+        Ignores nodes that are not found.
+        If 'fields' is provided, returns only the requested fields.
+        Returns null for any unknown fields.
+
+        RESULTS MAY NOT BE SORTED!
+        ---
+        tags: [knowledgeGraph]
+        requestBody:
+            name: request
+            description: The node ids for lookup.
+            content:
+                application/json:
+                    schema:
+                        required:
+                          - node_ids
+                        properties:
+                            node_ids:
+                                type: array
+                                items:
+                                    type: string
+                            fields:
+                                type: array
+                                items:
+                                    type: string
+                        example:
+                            node_ids:
+                              - "MONDO:0005737"
+                              - "HGNC:16361"
+            required: true
+        responses:
+            200:
+                description: Node
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/definitions/KNode'
+        """
+        node_ids = request.json['node_ids']
+        fields = request.json.get('fields', None)
+
+        if fields is not None:
+            prop_string = ', '.join([f'{key}:n.{key}' for key in fields])
+        else:
+            prop_string = '.*'
+        where_string = ' OR '.join([f'n.id="{node_id}"' for node_id in node_ids])
+        query_string = f'MATCH (n) WHERE {where_string} RETURN n{{{prop_string}}}'
+
+        with KnowledgeGraph() as database:
+            with database.driver.session() as session:
+                result = session.run(query_string)
+
+        return [record['n'] for record in result], 200
+
+api.add_resource(MultiNodeLookup, '/multinode_lookup')
+
+
+class EdgeLookup(Resource):
+    """Single-edge lookup endpoints."""
+
+    def post(self):
+        """
+        Get properties of an edge by id.
+        Returns null if no such edge is found.
+        If 'fields' is provided, returns only the requested fields.
+        Returns null for any unknown fields.
+        ---
+        tags: [knowledgeGraph]
+        requestBody:
+            name: request
+            description: The edge id for lookup
+            content:
+                application/json:
+                    schema:
+                        required:
+                          - edge_id
+                        properties:
+                            edge_id:
+                                type: string
+                            fields:
+                                type: array
+                                items:
+                                    type: string
+                        example:
+                            edge_id: "636"
+            required: true
+        responses:
+            200:
+                description: Edge
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/definitions/KEdge'
+        """
+        edge_id = request.json['edge_id']
+        fields = request.json.get('fields', None)
+
+        functions = {
+            'source_id': 'startNode(e).id',
+            'target_id': 'endNode(e).id',
+            'type': 'type(e)',
+            'id': 'toString(id(e))'
+        }
+
+        if fields is not None:
+            prop_string = ', '.join([f'{key}:{functions[key]}' if key in functions else f'{key}:e.{key}' for key in fields])
+        else:
+            prop_string = ', '.join([f'{key}: {functions[key]}' for key in functions] + ['.*'])
+
+        query_string = f'MATCH ()-[e]->() WHERE id(e)={edge_id} RETURN e{{{prop_string}}}'
+
+        with KnowledgeGraph() as database:
+            with database.driver.session() as session:
+                result = session.run(query_string)
+
+        records = list(result)
+        if not records:
+            return None, 200
+
+        return records[0]['e'], 200
+
+api.add_resource(EdgeLookup, '/edge_lookup')
+
+
+class MultiEdgeLookup(Resource):
+    """Multi-edge lookup endpoints."""
+
+    def post(self):
+        """
+        Get properties of edges by id.
+        Ignores edges that are not found.
+        If 'fields' is provided, returns only the requested fields.
+        Returns null for any unknown fields.
+
+        RESULTS MAY NOT BE SORTED!
+        ---
+        tags: [knowledgeGraph]
+        requestBody:
+            name: request
+            description: The edge id for lookup
+            content:
+                application/json:
+                    schema:
+                        required:
+                          - edge_ids
+                        properties:
+                            edge_ids:
+                                type: array
+                                items:
+                                    type: string
+                            fields:
+                                type: array
+                                items:
+                                    type: string
+                        example:
+                            edge_ids:
+                              - "636"
+                              - "634"
+            required: true
+        responses:
+            200:
+                description: Edge
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/definitions/KEdge'
+        """
+        edge_ids = request.json['edge_ids']
+        fields = request.json.get('fields', None)
+
+        functions = {
+            'source_id': 'startNode(e).id',
+            'target_id': 'endNode(e).id',
+            'type': 'type(e)',
+            'id': 'toString(id(e))'
+        }
+
+        if fields is not None:
+            prop_string = ', '.join([f'{key}:{functions[key]}' if key in functions else f'{key}:e.{key}' for key in fields])
+        else:
+            prop_string = ', '.join([f'{key}: {functions[key]}' for key in functions] + ['.*'])
+
+        where_string = ' OR '.join([f'id(e)={edge_id}' for edge_id in edge_ids])
+        query_string = f'MATCH ()-[e]->() WHERE {where_string} RETURN e{{{prop_string}}}'
+
+        with KnowledgeGraph() as database:
+            with database.driver.session() as session:
+                result = session.run(query_string)
+
+        return [record['e'] for record in result], 200
+
+api.add_resource(MultiEdgeLookup, '/multiedge_lookup')
+
+
 class Tasks(Resource):
     def get(self):
         """
@@ -255,9 +514,9 @@ class Results(Resource):
             with open(result_path, 'r') as f:
                 file_contents = json.load(f)
             os.remove(result_path)
-        
+
             return file_contents, 200
-        else: 
+        else:
             return 'No results found', 200
 
 api.add_resource(Results, '/task/<task_id>/result/')
