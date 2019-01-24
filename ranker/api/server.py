@@ -13,7 +13,8 @@ from flask import request, send_from_directory
 from ranker.api.setup import app, api
 from ranker.message import Message, output_formats
 from ranker.tasks import answer_question
-import ranker.api.definitions
+# import ranker.api.definitions
+import ranker.definitions
 from ranker.knowledgegraph import KnowledgeGraph
 from ranker.support.omnicorp import OmnicorpSupport
 from ranker.cache import Cache
@@ -290,20 +291,24 @@ class MultiNodeLookup(Resource):
         node_ids = request.json['node_ids']
         fields = request.json.get('fields', None)
 
-        if fields is not None:
-            prop_string = ', '.join([f'{key}:n.{key}' for key in fields])
-        else:
-            prop_string = '.*'
-        where_string = ' OR '.join([f'n.id="{node_id}"' for node_id in node_ids])
-        query_string = f'MATCH (n) WHERE {where_string} RETURN n{{{prop_string}}}'
-
-        with KnowledgeGraph() as database:
-            with database.driver.session() as session:
-                result = session.run(query_string)
-
-        return [record['n'] for record in result], 200
+        return get_node_properties(node_ids, fields), 200
 
 api.add_resource(MultiNodeLookup, '/multinode_lookup')
+
+
+def get_node_properties(node_ids, fields=None):
+    if fields is not None:
+        prop_string = ', '.join([f'{key}:n.{key}' for key in fields])
+    else:
+        prop_string = '.*'
+    where_string = ' OR '.join([f'n.id="{node_id}"' for node_id in node_ids])
+    query_string = f'MATCH (n) WHERE {where_string} RETURN n{{{prop_string}}}'
+
+    with KnowledgeGraph() as database:
+        with database.driver.session() as session:
+            result = session.run(query_string)
+
+    return [record['n'] for record in result]
 
 
 class EdgeLookup(Resource):
@@ -419,28 +424,71 @@ class MultiEdgeLookup(Resource):
         edge_ids = request.json['edge_ids']
         fields = request.json.get('fields', None)
 
-        functions = {
-            'source_id': 'startNode(e).id',
-            'target_id': 'endNode(e).id',
-            'type': 'type(e)',
-            'id': 'toString(id(e))'
-        }
-
-        if fields is not None:
-            prop_string = ', '.join([f'{key}:{functions[key]}' if key in functions else f'{key}:e.{key}' for key in fields])
-        else:
-            prop_string = ', '.join([f'{key}: {functions[key]}' for key in functions] + ['.*'])
-
-        where_string = ' OR '.join([f'id(e)={edge_id}' for edge_id in edge_ids])
-        query_string = f'MATCH ()-[e]->() WHERE {where_string} RETURN e{{{prop_string}}}'
-
-        with KnowledgeGraph() as database:
-            with database.driver.session() as session:
-                result = session.run(query_string)
-
-        return [record['e'] for record in result], 200
+        return get_edge_properties(edge_ids, fields), 200
 
 api.add_resource(MultiEdgeLookup, '/multiedge_lookup')
+
+
+def get_edge_properties(edge_ids, fields=None):
+    functions = {
+        'source_id': 'startNode(e).id',
+        'target_id': 'endNode(e).id',
+        'type': 'type(e)',
+        'id': 'toString(id(e))'
+    }
+
+    if fields is not None:
+        prop_string = ', '.join([f'{key}:{functions[key]}' if key in functions else f'{key}:e.{key}' for key in fields])
+    else:
+        prop_string = ', '.join([f'{key}: {functions[key]}' for key in functions] + ['.*'])
+
+    where_string = ' OR '.join([f'id(e)={edge_id}' for edge_id in edge_ids])
+    query_string = f'MATCH ()-[e]->() WHERE {where_string} RETURN e{{{prop_string}}}'
+
+    with KnowledgeGraph() as database:
+        with database.driver.session() as session:
+            result = session.run(query_string)
+
+    return [record['e'] for record in result]
+
+
+class KGLookup(Resource):
+    def post(self):
+        """
+        Get knowledge graph for message.
+        ---
+        tags: [knowledgeGraph]
+        requestBody:
+            description: A message with a machine-readable question graph.
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/definitions/Message'
+            required: true
+        responses:
+            200:
+                description: Answer
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/definitions/Response'
+        """
+        message = request.json
+
+        # get nodes and edge ids from message answers
+        node_ids = [knode_id for answer in message['answers'] for knode_id in answer['node_bindings'].values()]
+        edge_ids = [kedge_id for answer in message['answers'] for kedge_id in answer['edge_bindings'].values()]
+
+        nodes = get_node_properties(node_ids)
+        edges = get_edge_properties(edge_ids)
+
+        output = {
+            'nodes': nodes,
+            'edges': edges
+        }
+        return output, 200
+
+api.add_resource(KGLookup, '/kg_lookup')
 
 
 class Tasks(Resource):
