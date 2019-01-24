@@ -155,7 +155,7 @@ class QuestionSubgraph(Resource):
         """
         Get local region of the knowlege graph for a question
         ---
-        tags: [knolwedgeGraph]
+        tags: [knowledgeGraph]
         requestBody:
             name: question
             description: The machine-readable question graph.
