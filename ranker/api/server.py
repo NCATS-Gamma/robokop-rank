@@ -151,98 +151,54 @@ class AnswerQuestion(Resource):
         return {'task_id':task.id}, 202
 
 api.add_resource(AnswerQuestion, '/')
+
+
 class QuestionSubgraph(Resource):
     def post(self):
         """
-        Get local region of the knowlege graph for a question
+        Get knowledge graph for message.
         ---
         tags: [knowledgeGraph]
         requestBody:
-            name: question
-            description: The machine-readable question graph.
+            description: A message with a machine-readable question graph.
             content:
                 application/json:
                     schema:
-                        $ref: '#/definitions/Question'
+                        $ref: '#/definitions/Message'
             required: true
         responses:
             200:
-                description: Knowledge subgraph
+                description: Answer
                 content:
                     application/json:
                         schema:
-                            $ref: '#/definitions/Question'
+                            $ref: '#/definitions/Response'
         """
+        message = request.json
+        if not message.get('answers', []):
+            message_obj = Message(request.json)
 
-        message = Message(request.json)
-        
-        try:
-            subgraph = message.knowledge_graph
-        except:
-            return "Unable to retrieve knowledge graph.", 404
+            try:
+                kg = message_obj.knowledge_graph
+            except:
+                return "Unable to retrieve knowledge graph.", 404
 
-        return subgraph, 200
+            return kg, 200
+
+        # get nodes and edge ids from message answers
+        node_ids = [knode_id for answer in message['answers'] for knode_id in answer['node_bindings'].values()]
+        edge_ids = [kedge_id for answer in message['answers'] for kedge_id in answer['edge_bindings'].values()]
+
+        nodes = get_node_properties(node_ids)
+        edges = get_edge_properties(edge_ids)
+
+        kg = {
+            'nodes': nodes,
+            'edges': edges
+        }
+        return kg, 200
 
 api.add_resource(QuestionSubgraph, '/knowledge_graph')
-
-
-class NodeLookup(Resource):
-    """Single-node lookup endpoints."""
-
-    def post(self):
-        """
-        Get properties of a node by id.
-        Returns null if no such node is found.
-        If 'fields' is provided, returns only the requested fields.
-        Returns null for any unknown fields.
-        ---
-        tags: [knowledgeGraph]
-        requestBody:
-            name: request
-            description: The node id for lookup.
-            content:
-                application/json:
-                    schema:
-                        required:
-                          - node_id
-                        properties:
-                            node_id:
-                                type: string
-                            fields:
-                                type: array
-                                items:
-                                    type: string
-                        example:
-                            node_id: "MONDO:0005737"
-            required: true
-        responses:
-            200:
-                description: Node
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/definitions/KNode'
-        """
-        node_id = request.json['node_id']
-        fields = request.json.get('fields', None)
-
-        if fields is not None:
-            prop_string = ', '.join([f'{key}:n.{key}' for key in fields])
-        else:
-            prop_string = '.*'
-        query_string = f'MATCH (n {{id:"{node_id}"}}) RETURN n{{{prop_string}}}'
-
-        with KnowledgeGraph() as database:
-            with database.driver.session() as session:
-                result = session.run(query_string)
-
-        records = list(result)
-        if not records:
-            return None, 200
-
-        return records[0]['n'], 200
-
-api.add_resource(NodeLookup, '/node_lookup')
 
 
 class MultiNodeLookup(Resource):
@@ -309,73 +265,6 @@ def get_node_properties(node_ids, fields=None):
             result = session.run(query_string)
 
     return [record['n'] for record in result]
-
-
-class EdgeLookup(Resource):
-    """Single-edge lookup endpoints."""
-
-    def post(self):
-        """
-        Get properties of an edge by id.
-        Returns null if no such edge is found.
-        If 'fields' is provided, returns only the requested fields.
-        Returns null for any unknown fields.
-        ---
-        tags: [knowledgeGraph]
-        requestBody:
-            name: request
-            description: The edge id for lookup
-            content:
-                application/json:
-                    schema:
-                        required:
-                          - edge_id
-                        properties:
-                            edge_id:
-                                type: string
-                            fields:
-                                type: array
-                                items:
-                                    type: string
-                        example:
-                            edge_id: "636"
-            required: true
-        responses:
-            200:
-                description: Edge
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/definitions/KEdge'
-        """
-        edge_id = request.json['edge_id']
-        fields = request.json.get('fields', None)
-
-        functions = {
-            'source_id': 'startNode(e).id',
-            'target_id': 'endNode(e).id',
-            'type': 'type(e)',
-            'id': 'toString(id(e))'
-        }
-
-        if fields is not None:
-            prop_string = ', '.join([f'{key}:{functions[key]}' if key in functions else f'{key}:e.{key}' for key in fields])
-        else:
-            prop_string = ', '.join([f'{key}: {functions[key]}' for key in functions] + ['.*'])
-
-        query_string = f'MATCH ()-[e]->() WHERE id(e)={edge_id} RETURN e{{{prop_string}}}'
-
-        with KnowledgeGraph() as database:
-            with database.driver.session() as session:
-                result = session.run(query_string)
-
-        records = list(result)
-        if not records:
-            return None, 200
-
-        return records[0]['e'], 200
-
-api.add_resource(EdgeLookup, '/edge_lookup')
 
 
 class MultiEdgeLookup(Resource):
@@ -450,45 +339,6 @@ def get_edge_properties(edge_ids, fields=None):
             result = session.run(query_string)
 
     return [record['e'] for record in result]
-
-
-class KGLookup(Resource):
-    def post(self):
-        """
-        Get knowledge graph for message.
-        ---
-        tags: [knowledgeGraph]
-        requestBody:
-            description: A message with a machine-readable question graph.
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/definitions/Message'
-            required: true
-        responses:
-            200:
-                description: Answer
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/definitions/Response'
-        """
-        message = request.json
-
-        # get nodes and edge ids from message answers
-        node_ids = [knode_id for answer in message['answers'] for knode_id in answer['node_bindings'].values()]
-        edge_ids = [kedge_id for answer in message['answers'] for kedge_id in answer['edge_bindings'].values()]
-
-        nodes = get_node_properties(node_ids)
-        edges = get_edge_properties(edge_ids)
-
-        output = {
-            'nodes': nodes,
-            'edges': edges
-        }
-        return output, 200
-
-api.add_resource(KGLookup, '/kg_lookup')
 
 
 class Tasks(Resource):
