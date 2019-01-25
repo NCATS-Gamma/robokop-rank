@@ -185,9 +185,15 @@ class QuestionSubgraph(Resource):
 
             return kg, 200
 
+        def flatten_semilist(x):
+            lists = [n if isinstance(n, list) else [n] for n in x]
+            return [e for el in lists for e in el]
+
         # get nodes and edge ids from message answers
         node_ids = [knode_id for answer in message['answers'] for knode_id in answer['node_bindings'].values()]
         edge_ids = [kedge_id for answer in message['answers'] for kedge_id in answer['edge_bindings'].values()]
+        node_ids = flatten_semilist(node_ids)
+        edge_ids = flatten_semilist(edge_ids)
 
         nodes = get_node_properties(node_ids)
         edges = get_edge_properties(edge_ids)
@@ -333,6 +339,7 @@ def get_edge_properties(edge_ids, fields=None):
 
     where_string = ' OR '.join([f'id(e)={edge_id}' for edge_id in edge_ids])
     query_string = f'MATCH ()-[e]->() WHERE {where_string} RETURN e{{{prop_string}}}'
+    logger.debug(query_string)
 
     with KnowledgeGraph() as database:
         with database.driver.session() as session:
