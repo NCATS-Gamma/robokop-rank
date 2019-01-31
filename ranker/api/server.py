@@ -259,10 +259,16 @@ api.add_resource(MultiNodeLookup, '/multinode_lookup')
 
 
 def get_node_properties(node_ids, fields=None):
+    functions = {
+        'labels': 'labels(n)',
+    }
+
     if fields is not None:
-        prop_string = ', '.join([f'{key}:n.{key}' for key in fields])
+        prop_string = ', '.join([f'{key}:{functions[key]}' if key in functions else f'{key}:n.{key}' for key in fields])
     else:
-        prop_string = '.*'
+        prop_string = ', '.join([f'{key}:{functions[key]}' for key in functions] + ['.*'])
+
+
     where_string = ' OR '.join([f'n.id="{node_id}"' for node_id in node_ids])
     query_string = f'MATCH (n) WHERE {where_string} RETURN n{{{prop_string}}}'
 
@@ -270,7 +276,14 @@ def get_node_properties(node_ids, fields=None):
         with database.driver.session() as session:
             result = session.run(query_string)
 
-    return [record['n'] for record in result]
+    output = []
+    for record in result:
+        r = record['n']
+        if 'labels' in r and 'named_thing' in r['labels']:
+            r['labels'].remove('named_thing')
+        output.append(r)
+
+    return output
 
 
 class MultiEdgeLookup(Resource):
@@ -335,11 +348,11 @@ def get_edge_properties(edge_ids, fields=None):
     if fields is not None:
         prop_string = ', '.join([f'{key}:{functions[key]}' if key in functions else f'{key}:e.{key}' for key in fields])
     else:
-        prop_string = ', '.join([f'{key}: {functions[key]}' for key in functions] + ['.*'])
+        prop_string = ', '.join([f'{key}:{functions[key]}' for key in functions] + ['.*'])
 
     where_string = ' OR '.join([f'id(e)={edge_id}' for edge_id in edge_ids])
     query_string = f'MATCH ()-[e]->() WHERE {where_string} RETURN e{{{prop_string}}}'
-    logger.debug(query_string)
+    # logger.debug(query_string)
 
     with KnowledgeGraph() as database:
         with database.driver.session() as session:
@@ -712,6 +725,68 @@ class SimilaritySearch(Resource):
         return sim_results, 200
 
 api.add_resource(SimilaritySearch, '/similarity/<type1>/<identifier>/<type2>/<by_type>')
+
+
+class CypherKnowledgeGraph(Resource):
+    def post(self):
+        """
+        Transpile a question into a cypher query to retrieve a knowledge graph
+        ---
+        tags: [cypher]
+        requestBody:
+            description: A message with a machine-readable question graph.
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/definitions/Message'
+            required: true
+        responses:
+            200:
+                description: A cypher query to retrieve a knowledge graph
+                content:
+                    application/txt:
+        """
+        try:
+            message_obj = Message(request.json)
+            c = message_obj.cypher_query_knowledge_graph()
+        except:
+            return "Unable to transpile question to cypher query.", 404
+
+        return c, 200
+
+api.add_resource(CypherKnowledgeGraph, '/cypher/knowledge_graph/')
+
+
+class CypherAnswers(Resource):
+    def post(self):
+        """
+        Transpile question into a cypher query to retrieve a list of potential answer maps
+        ---
+        tags: [cypher]
+        requestBody:
+            description: A message with a machine-readable question graph.
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/definitions/Message'
+            required: true
+        responses:
+            200:
+                description: A cypher query to retrieve a list of potential answer maps
+                content:
+                    application/txt:
+        """
+        
+        try:
+            message_obj = Message(request.json)
+            c = message_obj.cypher_query_answer_map()
+        except:
+            return "Unable to transpile question to cypher query.", 404
+
+        return c, 200
+
+api.add_resource(CypherAnswers, '/cypher/answers/')
+
 
 if __name__ == '__main__':
 
