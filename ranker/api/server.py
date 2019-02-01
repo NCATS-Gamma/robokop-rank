@@ -122,7 +122,7 @@ class AnswerQuestion(Resource):
             description: Requested output format. APIStandard, Message, Answers
             schema:
                 type: string
-            default: APIStandard
+            default: Message
         responses:
             200:
                 description: Successfull queued a task
@@ -140,7 +140,7 @@ class AnswerQuestion(Resource):
         if max_results < 0:
             max_results = None
 
-        output_format = request.args.get('output_format', default=output_formats[0])
+        output_format = request.args.get('output_format', default=output_formats[1])
         if output_format not in output_formats:
             return f'output_format must be one of [{" ".join(output_formats)}]', 400
 
