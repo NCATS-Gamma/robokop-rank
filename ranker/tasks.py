@@ -49,7 +49,7 @@ def tear_down_task_logging(**kwargs):
 
 
 @celery.task(bind=True, queue='ranker', task_acks_late=True, track_started=True, worker_prefetch_multiplier=1)
-def answer_question(self, message_json, max_results=250, output_format=output_formats[0]):
+def answer_question(self, message_json, max_results=250, output_format=output_formats[1], max_connectivity=0):
     """Generate a message from the input json for a question."""
 
     self.update_state(state='ANSWERING')
@@ -58,9 +58,9 @@ def answer_question(self, message_json, max_results=250, output_format=output_fo
 
     try:
         message = Message(message_json)
-
+        
         try:
-            message.rank_answers(max_results=250)
+            message.rank_answers(max_results=250, max_connectivity=max_connectivity)
         except Exception as err:
             logger.exception(f"Something went wrong with question answering: {err}")
             raise err

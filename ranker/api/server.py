@@ -5,6 +5,7 @@
 import os
 import logging
 import json
+import sys
 
 import redis
 from flask_restful import Resource
@@ -55,6 +56,12 @@ class AnswerQuestionNow(Resource):
             schema:
                 type: string
             default: Message
+          - in: query
+            name: max_connectivity
+            description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
+            schema:
+                type: integer
+            default: 0
         responses:
             200:
                 description: Answer
@@ -72,6 +79,17 @@ class AnswerQuestionNow(Resource):
         if max_results < 0:
             max_results = None
 
+        max_connectivity = request.args.get('max_connectivity', default=None)
+        if max_connectivity:
+            try:
+                max_connectivity = int(max_connectivity)
+            except ValueError:
+                return 'max_connectivity should be an integer', 400
+            except:
+                raise
+            if max_connectivity < 0:
+                max_connectivity = None
+
         output_format = request.args.get('output_format', default=output_formats[1])
         if output_format not in output_formats:
             return f'output_format must be one of [{" ".join(output_formats)}]', 400
@@ -79,14 +97,18 @@ class AnswerQuestionNow(Resource):
         try:
             result = answer_question.apply(
                 args=[request.json],
-                kwargs={'max_results': max_results, 'output_format': output_format}
+                kwargs={'max_results': max_results, 'output_format': output_format, 'max_connectivity': max_connectivity}
             )
             result = result.get()
         except:
             # Celery tasks log errors internally. Just return.
             return "Internal server error. See the logs for details.", 500
+        
         if result is None:
-            return None, 200
+            message = request.json
+            message['knowledge_graph'] = []
+            message['answers'] = []
+            return message, 200
 
         logger.debug(f'Fetching answerset file: {result}')
         filename = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', result)
@@ -123,6 +145,12 @@ class AnswerQuestion(Resource):
             schema:
                 type: string
             default: Message
+          - in: query
+            name: max_connectivity
+            description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
+            schema:
+                type: integer
+            default: 0
         responses:
             200:
                 description: Successfull queued a task
@@ -137,8 +165,19 @@ class AnswerQuestion(Resource):
             return 'max_results should be an integer', 400
         except:
             raise
-        if max_results < 0:
+        if max_results <= 0:
             max_results = None
+        
+        max_connectivity = request.args.get('max_connectivity', default=None)
+        if max_connectivity:
+            try:
+                max_connectivity = int(max_connectivity)
+            except ValueError:
+                return 'max_connectivity should be an integer', 400
+            except:
+                raise
+            if max_connectivity < 0:
+                max_connectivity = None
 
         output_format = request.args.get('output_format', default=output_formats[1])
         if output_format not in output_formats:
@@ -146,7 +185,7 @@ class AnswerQuestion(Resource):
 
         task = answer_question.apply_async(
             args=[request.json],
-            kwargs={'max_results': max_results, 'output_format': output_format}
+            kwargs={'max_results': max_results, 'output_format': output_format, 'max_connectivity': max_connectivity}
         )
         return {'task_id':task.id}, 202
 
@@ -740,16 +779,35 @@ class CypherKnowledgeGraph(Resource):
                     schema:
                         $ref: '#/definitions/Message'
             required: true
+        parameters:
+          - in: query
+            name: max_connectivity
+            description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
+            schema:
+                type: integer
+            default: 0
         responses:
             200:
                 description: A cypher query to retrieve a knowledge graph
                 content:
                     application/txt:
         """
+
+        max_connectivity = request.args.get('max_connectivity', default=None)
+        try:
+            max_connectivity = int(max_connectivity)
+        except ValueError:
+            return 'max_connectivity should be an integer', 400
+        except:
+            raise
+        if max_connectivity < 0:
+            max_connectivity = None
+            
         try:
             message_obj = Message(request.json)
-            c = message_obj.cypher_query_knowledge_graph()
+            c = message_obj.cypher_query_knowledge_graph({'max_connectivity': max_connectivity})
         except:
+            logger.debug(f"Unexpected error: {sys.exc_info()}")
             return "Unable to transpile question to cypher query.", 404
 
         return c, 200
@@ -770,6 +828,13 @@ class CypherAnswers(Resource):
                     schema:
                         $ref: '#/definitions/Message'
             required: true
+        parameters:
+          - in: query
+            name: max_connectivity
+            description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
+            schema:
+                type: integer
+            default: 0
         responses:
             200:
                 description: A cypher query to retrieve a list of potential answer maps
@@ -777,10 +842,22 @@ class CypherAnswers(Resource):
                     application/txt:
         """
         
+        max_connectivity = request.args.get('max_connectivity', default=None)
         try:
-            message_obj = Message(request.json)
-            c = message_obj.cypher_query_answer_map()
+            max_connectivity = int(max_connectivity)
+        except ValueError:
+            return 'max_connectivity should be an integer', 400
         except:
+            raise
+        if max_connectivity < 0:
+            max_connectivity = None
+
+        message_obj = Message(request.json)
+        c = message_obj.cypher_query_answer_map({'max_connectivity': max_connectivity})
+        try:
+            pass
+        except:
+            logger.debug(f"Unexpected error: {sys.exc_info()}")
             return "Unable to transpile question to cypher query.", 404
 
         return c, 200

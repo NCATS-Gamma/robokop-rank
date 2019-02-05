@@ -153,8 +153,8 @@ class Message():
         # initialize all properties
         self.natural_question = ''
         self.question_graph = {}
-        self._knowledge_graph = None
-        self._answer_maps = None
+        self.knowledge_graph = None
+        self.answer_maps = None
 
         # apply json properties to existing attributes
         attributes = self.__dict__.keys()
@@ -182,20 +182,24 @@ class Message():
             for i, e in enumerate(self.question_graph['edges']):
                 e['id'] = chr(ord('a') + i)
 
-    @property
-    def knowledge_graph(self):
-        if self._knowledge_graph is None:
-            self._knowledge_graph = self.fetch_knowledge_graph()
-        return self._knowledge_graph
+    # @property
+    # def knowledge_graph(self):
+    #     if self.knowledge_graph is None:
+    #         logger.debug('Auto-fetching knowledge graph')
+    #         self.knowledge_graph = self.fetchknowledge_graph()
+    #     return self.knowledge_graph
 
-    @knowledge_graph.setter
-    def set_knowledge_graph(self, value):
-        self._knowledge_graph = value
+    # @knowledge_graph.setter
+    # def setknowledge_graph(self, value):
+    #     self.knowledge_graph = value
 
-    def fetch_knowledge_graph(self):
+    def fetch_knowledge_graph(self, max_connectivity=0):
         # get the knowledge graph relevant to the question from the big knowledge graph in Neo4j
         with KnowledgeGraph() as database:
-            query_string = self.cypher_query_knowledge_graph()
+            options = {
+                'max_connectivity': max_connectivity
+            }
+            query_string = self.cypher_query_knowledge_graph(options)
 
             logger.info("Fetching knowledge graph")
             # logger.debug(query_string)
@@ -218,19 +222,21 @@ class Message():
                 node['type'] = node['type'][0]
 
             logger.info('Knowledge graph obtained')
-        return knowledge_graph
+            self.knowledge_graph = knowledge_graph
+        return
 
-    @property
-    def answer_maps(self):
-        if self._answer_maps is None:
-            self._answer_maps = self.fetch_answer_maps()
-        return self._answer_maps
+    # @property
+    # def answer_maps(self):
+    #     if self._answer_maps is None:
+    #         logger.debug('Auto-fetching answer maps')
+    #         self._answer_maps = self.fetch_answer_maps()
+    #     return self._answer_maps
     
-    @answer_maps.setter
-    def set_answer_maps(self, value):
-        self._answer_maps = value
+    # @answer_maps.setter
+    # def set_answer_maps(self, value):
+    #     self._answer_maps = value
 
-    def fetch_answer_maps(self):
+    def fetch_answer_maps(self, max_connectivity=0):
         # get Neo4j connection
         with KnowledgeGraph() as database:
 
@@ -242,7 +248,8 @@ class Message():
             answer_maps = []
             options = {
                 'limit': 1000000,
-                'skip': 0
+                'skip': 0,
+                'max_connectivity': max_connectivity
             }
             
             logger.info('Running answer generation query')
@@ -269,10 +276,9 @@ class Message():
                     # If this batch is less then the page size
                     # It must be the last page
                     break
-
+            self.answer_maps = answer_maps
             logger.info('Answers obtained')
-
-        return answer_maps
+        return
 
     def fetch_knowledge_graph_support(self):
 
@@ -379,7 +385,7 @@ class Message():
             # Next pair
         # Close the supporter
 
-    def rank_answers(self, max_results=250):
+    def rank_answers(self, max_results=250, max_connectivity=0):
         """Rank answers to the question
         
         This is mostly glue around the heavy lifting in ranker_obj.Ranker
@@ -388,27 +394,27 @@ class Message():
         # compute scores with ranker
 
         # Get local knowledge graph for this question
-        local_kg = self.knowledge_graph # This will attempt to fetch from graph db if empty in a getter()
-        if local_kg is None:
+        self.fetch_knowledge_graph(max_connectivity=max_connectivity) # This will attempt to fetch from graph db if empty in a getter()
+        if self.knowledge_graph is None:
             self.answer_maps = None
             logger.info('No possible answers found')
             return
         
         # Actually have a local knowledge graph
-        answer_maps = self.answer_maps # This will attempt to fetch from the graph db if empty in a getter()
-        if answer_maps is None:
+        self.fetch_answer_maps(max_connectivity=max_connectivity) # This will attempt to fetch from the graph db if empty in a getter()
+        if self.answer_maps is None:
             logger.info('No possible answers found')
             return
         
         logger.info('Ranking answers')
-        pr = Ranker(local_kg, self.question_graph)
-        (answer_scores, sorted_answer_maps) = pr.rank(answer_maps, max_results=max_results)
+        pr = Ranker(self.knowledge_graph, self.question_graph)
+        (answer_scores, sorted_answer_maps) = pr.rank(self.answer_maps, max_results=max_results)
         
         # Add the scores to the answer_maps
         for i, answer in enumerate(sorted_answer_maps):
             answer['score'] = answer_scores[i]
 
-        self._answer_maps = sorted_answer_maps
+        self.answer_maps = sorted_answer_maps
 
     def dump(self):
         out = {
@@ -453,7 +459,7 @@ class Message():
 
         return aset.toStandard()
 
-    def cypher_query_fragment_match(self): # cypher_match_string
+    def cypher_query_fragment_match(self, max_connectivity=0): # cypher_match_string
         '''
         Generate a Cypher query fragment to match the nodes and edges that correspond to a question.
 
@@ -480,6 +486,7 @@ class Message():
             match_strings.append(f"MATCH ({node_references[n]})")
 
         # match edges
+        include_size_constraints = bool(max_connectivity)
         for e, eref in zip(edges, edge_references):
             source_node = node_references[e['source_id']]
             target_node = node_references[e['target_id']]
@@ -490,8 +497,16 @@ class Message():
             conditions = [c for c in [source_node.conditions, target_node.conditions, eref.conditions] if c]
             if conditions:
                 match_strings.append("WHERE " + " OR ".join(conditions))
+                if include_size_constraints:
+                    match_strings.append(f"AND size( ({target_node})-[]-() ) < {max_connectivity}")
+            else:
+                if include_size_constraints:
+                    match_strings.append(f"WHERE size( ({target_node})-[]-() ) < {max_connectivity}")
+
+
 
         match_string = ' '.join(match_strings)
+        logger.debug(match_string)
         return match_string
 
     def cypher_query_answer_map(self, options=None):
@@ -501,7 +516,11 @@ class Message():
         Returns the query as a string.
         '''
 
-        match_string = self.cypher_query_fragment_match()
+        max_connectivity = 0
+        if options and 'max_connectivity' in options:
+            max_connectivity = options['max_connectivity']
+        
+        match_string = self.cypher_query_fragment_match(max_connectivity)
 
         nodes, edges = self.question_graph['nodes'], self.question_graph['edges']
         # node_map = {n['id']: n for n in nodes}
@@ -528,14 +547,18 @@ class Message():
 
         return query_string
 
-    def cypher_query_knowledge_graph(self): #kg_query
+    def cypher_query_knowledge_graph(self, options=None): #kg_query
         '''
         Generate a Cypher query to extract the knowledge graph for a question.
 
         Returns the query as a string.
         '''
 
-        match_string = self.cypher_query_fragment_match()
+        max_connectivity = 0
+        if options and 'max_connectivity' in options:
+            max_connectivity = options['max_connectivity']
+
+        match_string = self.cypher_query_fragment_match(max_connectivity)
 
         nodes, edges = self.question_graph['nodes'], self.question_graph['edges']
 
