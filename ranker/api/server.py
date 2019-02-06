@@ -80,15 +80,19 @@ class AnswerQuestionNow(Resource):
             max_results = None
 
         max_connectivity = request.args.get('max_connectivity', default=None)
-        if max_connectivity:
-            try:
-                max_connectivity = int(max_connectivity)
-            except ValueError:
-                return 'max_connectivity should be an integer', 400
-            except:
-                raise
-            if max_connectivity < 0:
+        if max_connectivity and isinstance(max_connectivity, str):
+            if max_connectivity.lower() == 'none':
                 max_connectivity = None
+            else:
+                try:
+                    max_connectivity = int(max_connectivity)
+                except ValueError:
+                    logger.debug(max_connectivity)
+                    return 'max_connectivity should be an integer', 400
+                except:
+                    raise
+                if max_connectivity < 0:
+                    max_connectivity = None
 
         output_format = request.args.get('output_format', default=output_formats[1])
         if output_format not in output_formats:
@@ -169,15 +173,19 @@ class AnswerQuestion(Resource):
             max_results = None
         
         max_connectivity = request.args.get('max_connectivity', default=None)
-        if max_connectivity:
-            try:
-                max_connectivity = int(max_connectivity)
-            except ValueError:
-                return 'max_connectivity should be an integer', 400
-            except:
-                raise
-            if max_connectivity < 0:
+        if max_connectivity and isinstance(max_connectivity, str):
+            if max_connectivity.lower() == 'none':
                 max_connectivity = None
+            else:
+                try:
+                    max_connectivity = int(max_connectivity)
+                except ValueError:
+                    logger.debug(max_connectivity)
+                    return 'max_connectivity should be an integer', 400
+                except:
+                    raise
+                if max_connectivity < 0:
+                    max_connectivity = None
 
         output_format = request.args.get('output_format', default=output_formats[1])
         if output_format not in output_formats:
@@ -794,14 +802,19 @@ class CypherKnowledgeGraph(Resource):
         """
 
         max_connectivity = request.args.get('max_connectivity', default=None)
-        try:
-            max_connectivity = int(max_connectivity)
-        except ValueError:
-            return 'max_connectivity should be an integer', 400
-        except:
-            raise
-        if max_connectivity < 0:
-            max_connectivity = None
+        if max_connectivity and isinstance(max_connectivity, str):
+            if max_connectivity.lower() == 'none':
+                max_connectivity = None
+            else:
+                try:
+                    max_connectivity = int(max_connectivity)
+                except ValueError:
+                    logger.debug(max_connectivity)
+                    return 'max_connectivity should be an integer', 400
+                except:
+                    raise
+                if max_connectivity < 0:
+                    max_connectivity = None
             
         try:
             message_obj = Message(request.json)
@@ -843,14 +856,19 @@ class CypherAnswers(Resource):
         """
         
         max_connectivity = request.args.get('max_connectivity', default=None)
-        try:
-            max_connectivity = int(max_connectivity)
-        except ValueError:
-            return 'max_connectivity should be an integer', 400
-        except:
-            raise
-        if max_connectivity < 0:
-            max_connectivity = None
+        if max_connectivity and isinstance(max_connectivity, str):
+            if max_connectivity.lower() == 'none':
+                max_connectivity = None
+            else:
+                try:
+                    max_connectivity = int(max_connectivity)
+                except ValueError:
+                    logger.debug(max_connectivity)
+                    return 'max_connectivity should be an integer', 400
+                except:
+                    raise
+                if max_connectivity < 0:
+                    max_connectivity = None
 
         message_obj = Message(request.json)
         c = message_obj.cypher_query_answer_map({'max_connectivity': max_connectivity})
