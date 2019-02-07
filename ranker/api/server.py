@@ -30,6 +30,37 @@ cached_prefixes = support_cache.get('OmnicorpPrefixes')
 
 logger = logging.getLogger("ranker")
 
+def parse_args_output_format(req_args):
+    output_format = req_args.get('output_format', default=output_formats[1])
+    if output_format.upper() not in output_formats:
+        raise RuntimeError(f'output_format must be one of [{" ".join(output_formats)}]')
+    
+    return output_format
+
+def parse_args_max_results(req_args):
+    max_results = req_args.get('max_results', default=None)
+    max_results = max_results if max_results is not None else 250
+    return max_results
+
+def parse_args_max_connectivity(req_args):
+    max_connectivity = req_args.get('max_connectivity', default=None)
+    
+    if max_connectivity and isinstance(max_connectivity, str):
+        if max_connectivity.lower() == 'none':
+            max_connectivity = None
+        else:
+            try:
+                max_connectivity = int(max_connectivity)
+            except ValueError:
+                raise RuntimeError(f'max_connectivity should be an integer')
+            except:
+                raise
+            if max_connectivity < 0:
+                max_connectivity = None
+
+    return max_connectivity
+
+
 class AnswerQuestionNow(Resource):
     def post(self):
         """
@@ -52,10 +83,10 @@ class AnswerQuestionNow(Resource):
             default: 250
           - in: query
             name: output_format
-            description: Requested output format. APIStandard or Message
+            description: Requested output format. DENSE, MESSAGE, CSV or ANSWERS
             schema:
                 type: string
-            default: Message
+            default: MESSAGE
           - in: query
             name: max_connectivity
             description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
@@ -70,33 +101,9 @@ class AnswerQuestionNow(Resource):
                         schema:
                             $ref: '#/definitions/Response'
         """
-        max_results = request.args.get('max_results', default=250)
-        # logger.debug("max_results: %s", str(max_results))
-        try:
-            max_results = int(max_results)
-        except ValueError:
-            return 'max_results should be an integer', 400
-        if max_results < 0:
-            max_results = None
-
-        max_connectivity = request.args.get('max_connectivity', default=None)
-        if max_connectivity and isinstance(max_connectivity, str):
-            if max_connectivity.lower() == 'none':
-                max_connectivity = None
-            else:
-                try:
-                    max_connectivity = int(max_connectivity)
-                except ValueError:
-                    logger.debug(max_connectivity)
-                    return 'max_connectivity should be an integer', 400
-                except:
-                    raise
-                if max_connectivity < 0:
-                    max_connectivity = None
-
-        output_format = request.args.get('output_format', default=output_formats[1])
-        if output_format not in output_formats:
-            return f'output_format must be one of [{" ".join(output_formats)}]', 400
+        max_results = parse_args_max_results(request.args)
+        output_format = parse_args_output_format(request.args)
+        max_connectivity = parse_args_max_connectivity(request.args)
 
         try:
             result = answer_question.apply(
@@ -162,34 +169,9 @@ class AnswerQuestion(Resource):
                     application/json:
         """
 
-        max_results = request.args.get('max_results', default=250)
-        try:
-            max_results = int(max_results)
-        except ValueError:
-            return 'max_results should be an integer', 400
-        except:
-            raise
-        if max_results <= 0:
-            max_results = None
-        
-        max_connectivity = request.args.get('max_connectivity', default=None)
-        if max_connectivity and isinstance(max_connectivity, str):
-            if max_connectivity.lower() == 'none':
-                max_connectivity = None
-            else:
-                try:
-                    max_connectivity = int(max_connectivity)
-                except ValueError:
-                    logger.debug(max_connectivity)
-                    return 'max_connectivity should be an integer', 400
-                except:
-                    raise
-                if max_connectivity < 0:
-                    max_connectivity = None
-
-        output_format = request.args.get('output_format', default=output_formats[1])
-        if output_format not in output_formats:
-            return f'output_format must be one of [{" ".join(output_formats)}]', 400
+        max_results = parse_args_max_results(request.args)
+        output_format = parse_args_output_format(request.args)
+        max_connectivity = parse_args_max_connectivity(request.args)
 
         task = answer_question.apply_async(
             args=[request.json],
@@ -693,8 +675,8 @@ class EnrichedExpansion(Resource):
             threshhold = parameters['threshhold']
         else:
             threshhold = 0.05
-        if 'maxresults' in parameters:
-            maxresults = parameters['maxresults']
+        if 'max_results' in parameters:
+            maxresults = parameters['max_results']
         else:
             maxresults = 100
         if 'num_type1' in parameters:
@@ -702,7 +684,7 @@ class EnrichedExpansion(Resource):
         else:
             num_type1 = None
         with KnowledgeGraph() as database:
-            sim_results = database.enrichment_search(identifiers, type1, type2, threshhold, maxresults,num_type1)
+            sim_results = database.enrichment_search(identifiers, type1, type2, threshhold, maxresults, num_type1)
 
         return sim_results, 200
 
@@ -751,7 +733,7 @@ class SimilaritySearch(Resource):
                 type: float
             default: 0.4
           - in: query
-            name: maxresults
+            name: max_results
             description: "The maximum number of results to return. Set to 0 to return all results."
             schema:
                 type: integer
@@ -765,9 +747,11 @@ class SimilaritySearch(Resource):
                             $ref: "#/definitions/SimilarityResult"
         """
         threshhold = request.args.get('threshhold', default = 0.4)
-        maxresults = int(request.args.get('maxresults', default = 100))
+        
+        max_results = parse_args_max_results(request.args)
+
         with KnowledgeGraph() as database:
-            sim_results = database.similarity_search(type1, identifier, type2, by_type, threshhold, maxresults)
+            sim_results = database.similarity_search(type1, identifier, type2, by_type, threshhold, max_results)
 
         return sim_results, 200
 
@@ -801,21 +785,8 @@ class CypherKnowledgeGraph(Resource):
                     application/txt:
         """
 
-        max_connectivity = request.args.get('max_connectivity', default=None)
-        if max_connectivity and isinstance(max_connectivity, str):
-            if max_connectivity.lower() == 'none':
-                max_connectivity = None
-            else:
-                try:
-                    max_connectivity = int(max_connectivity)
-                except ValueError:
-                    logger.debug(max_connectivity)
-                    return 'max_connectivity should be an integer', 400
-                except:
-                    raise
-                if max_connectivity < 0:
-                    max_connectivity = None
-            
+        max_connectivity = parse_args_max_connectivity(request.args)
+
         try:
             message_obj = Message(request.json)
             c = message_obj.cypher_query_knowledge_graph({'max_connectivity': max_connectivity})
@@ -855,20 +826,7 @@ class CypherAnswers(Resource):
                     application/txt:
         """
         
-        max_connectivity = request.args.get('max_connectivity', default=None)
-        if max_connectivity and isinstance(max_connectivity, str):
-            if max_connectivity.lower() == 'none':
-                max_connectivity = None
-            else:
-                try:
-                    max_connectivity = int(max_connectivity)
-                except ValueError:
-                    logger.debug(max_connectivity)
-                    return 'max_connectivity should be an integer', 400
-                except:
-                    raise
-                if max_connectivity < 0:
-                    max_connectivity = None
+        max_connectivity = parse_args_max_connectivity(request.args)
 
         message_obj = Message(request.json)
         c = message_obj.cypher_query_answer_map({'max_connectivity': max_connectivity})

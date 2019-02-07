@@ -26,7 +26,7 @@ from ranker.support.omnicorp import OmnicorpSupport
 
 logger = logging.getLogger('ranker')
 
-output_formats = ['APIStandard', 'Message', 'Answers']
+output_formats = ['DENSE', 'MESSAGE', 'CSV', 'ANSWERS']
 
 class NodeReference():
     """Node reference object."""
@@ -429,8 +429,35 @@ class Message():
             'answers': self.answer_maps
         }
         return out
+    def dump_csv(self):
+        nodes = self.question_graph['nodes']
+        answers = self.answer_maps
+        csv_header = [n['id'] for n in nodes]
+        csv_lines = []
+        for a in answers:
+            this_line = [[] for i in range(len(csv_header))]
+            for n in a['node_bindings']:
+                header_ind = [i for i, s in enumerate(csv_header) if s == n]
 
-    def dump_standard(self):
+                if len(header_ind) < 1:
+                    raise Exception(f'Unspecified question nodes found within an answer')
+                elif len(header_ind) > 1:
+                    raise Exception(f'Too many question nodes identified within an answer')
+                
+                n_values = a['node_bindings'][n]
+                if isinstance(n_values, list):
+                    n_values = n_values.join('|')
+
+                this_line[header_ind[0]] = n_values
+            csv_lines.append(this_line)
+
+        csv = [','.join(csv_header)]
+        csv.extend([','.join(l) for l in csv_lines])
+        csv = '\n'.join(csv)
+
+        return csv
+
+    def dump_dense(self):
 
         def flatten_semilist(x):
             lists = [n if isinstance(n, list) else [n] for n in x]

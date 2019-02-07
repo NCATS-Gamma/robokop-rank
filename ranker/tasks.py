@@ -80,10 +80,12 @@ def answer_question(self, message_json, max_results=250, output_format=output_fo
         result_path = os.path.join(answers_dir, filename)
 
         if output_format == output_formats[0]:
-            message_dump = message.dump_standard()
+            message_dump = message.dump_dense()
         elif output_format == output_formats[1]:
             message_dump = message.dump()
         elif output_format == output_formats[2]:
+            message_dump = message.dump_csv()
+        elif output_format == output_formats[3]:
             message_dump = message.dump_answers()
         else:
             logger.info('Problem encountered during exporting.')
