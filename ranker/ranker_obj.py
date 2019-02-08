@@ -37,8 +37,8 @@ class Ranker:
 
     wt_min = 0.1  # weight at 0 pubs
     wt_max = 1  # maximum weight (at inf pubs)
-    mark95 = 2000 # pubs at 95% of wt_max
-    relevance = 0.5  # portion of cooccurrence pubs relevant to question
+    mark95 = 10  # pubs at 95% of wt_max
+    relevance = 1 / 4000  # portion of cooccurrence pubs relevant to question
     prescreen_count = 2000  # only look at this many graphs more in depth
     teleport_weight = 0.001  # probability to teleport along graph (make random inference) in hitting time calculation
 
@@ -79,8 +79,7 @@ class Ranker:
                 #Original
                 effective_pubs = len(edge['publications']) if 'publications' in edge else 0
                 #Now rescale
-                effective_pubs +=  1 #consider the curation a pub
-                effective_pubs *= self.mark95 / 10.
+                effective_pubs += 1  # consider the curation a pub
 
 
             a = 2 * (self.wt_max - self.wt_min)  # 1.8
