@@ -28,47 +28,60 @@ logger = logging.getLogger('ranker')
 
 output_formats = ['DENSE', 'MESSAGE', 'CSV', 'ANSWERS']
 
+
+def cypher_prop_string(value):
+    """Convert property value to cypher string representation."""
+    if isinstance(value, bool):
+        return str(value).lower()
+    elif isinstance(value, str):
+        return f"'{value}'"
+    else:
+        raise ValueError(f'Unsupported property type: {type(value).__name__}.')
+
+
 class NodeReference():
     """Node reference object."""
+
     def __init__(self, node):
         """Create a node reference."""
-        name = f'{node["id"]}'
-        label = node['type'] if 'type' in node else None
+        node = dict(node)
+        name = f'{node.pop("id")}'
+        label = node.pop('type', None)
+        props = {}
 
         if label == 'biological_process':
             label = 'biological_process_or_activity'
 
-        if 'curie' in node and node['curie'] is not None:
-            if isinstance(node['curie'], str):
+        curie = node.pop("curie", None)
+        if curie is not None:
+            if isinstance(curie, str):
                 # synonymize/normalize curie
-                if 'type' in node:
-                    response = requests.post(f"http://{os.environ['BUILDER_HOST']}:6010/api/synonymize/{node['curie']}/{node['type']}/")
+                if label is not None:
+                    response = requests.post(f"http://{os.environ['BUILDER_HOST']}:6010/api/synonymize/{curie}/{label}/")
                     curie = response.json()['id']
-                else:
-                    curie = node['curie']
-                prop_string = f" {{id: \'{curie}\'}}"
+                props['id'] = curie
                 conditions = ''
-            elif isinstance(node['curie'], list):
+            elif isinstance(curie, list):
                 conditions = []
-                for curie in node['curie']:
+                for ci in curie:
                     # synonymize/normalize curie
-                    if 'type' in node:
-                        response = requests.post(f"http://{os.environ['BUILDER_HOST']}:6010/api/synonymize/{curie}/{node['type']}/")
-                        curie = response.json()['id']
+                    if label is not None:
+                        response = requests.post(f"http://{os.environ['BUILDER_HOST']}:6010/api/synonymize/{ci}/{label}/")
+                        ci = response.json()['id']
                     # generate curie-matching condition
-                    conditions.append(f"{name}.id = '{curie}'")
+                    conditions.append(f"{name}.id = '{ci}'")
                 # OR curie-matching conditions together
-                prop_string = ''
                 conditions = ' OR '.join(conditions)
             else:
                 raise TypeError("Curie should be a string or list of strings.")
         else:
-            prop_string = ''
             conditions = ''
+
+        props.update(node)
 
         self.name = name
         self.label = label
-        self.prop_string = prop_string
+        self.prop_string = ' {' + ', '.join([f"`{key}`: {cypher_prop_string(props[key])}" for key in props]) + '}'
         self._conditions = conditions
         self._num = 0
 
