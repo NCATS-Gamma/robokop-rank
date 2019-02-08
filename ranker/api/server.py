@@ -40,6 +40,7 @@ def parse_args_output_format(req_args):
 def parse_args_max_results(req_args):
     max_results = req_args.get('max_results', default=None)
     max_results = max_results if max_results is not None else 250
+    max_results = int(max_results) if isinstance(max_results, str) else max_results
     return max_results
 
 def parse_args_max_connectivity(req_args):
@@ -651,7 +652,7 @@ class EnrichedExpansion(Resource):
                 type: float
             default: 0.05
           - in: query
-            name: maxresults
+            name: max_results
             description: "The maximum number of results to return. Set to 0 to return all results."
             schema:
                 type: integer
@@ -675,18 +676,21 @@ class EnrichedExpansion(Resource):
             threshhold = parameters['threshhold']
         else:
             threshhold = 0.05
-        if 'max_results' in parameters:
+        if ('max_results' in parameters) and parameters['max_results']:
             maxresults = parameters['max_results']
+            maxresults = int(maxresults) if isinstance(maxresults, str) else maxresults
+            maxresults = maxresults if maxresults is not None else 250
         else:
             maxresults = 100
         if 'num_type1' in parameters:
             num_type1 = parameters['num_type1']
         else:
             num_type1 = None
-        with KnowledgeGraph() as database:
-            sim_results = database.enrichment_search(identifiers, type1, type2, threshhold, maxresults, num_type1)
 
-        return sim_results, 200
+        with KnowledgeGraph() as database:
+            enr_results = database.enrichment_search(identifiers, type1, type2, threshhold, maxresults, num_type1)
+        
+        return enr_results, 200
 
 api.add_resource(EnrichedExpansion, '/enrichment/<type1>/<type2>')
 
