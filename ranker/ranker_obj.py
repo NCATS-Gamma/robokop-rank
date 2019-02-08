@@ -84,7 +84,7 @@ class Ranker:
 
 
             a = 2 * (self.wt_max - self.wt_min)  # 1.8
-            r = 0.95
+            r = 0.95 * self.wt_max
             c = self.wt_max - 2 * self.wt_min  # 0.8
             k = 1 / self.mark95 * (np.log(r + c) - np.log(a - r - c))  # 0.1778
             edge['weight'] = a / (1 + np.exp(-k * effective_pubs)) - c
