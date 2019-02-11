@@ -77,6 +77,8 @@ class NodeReference():
         else:
             conditions = ''
 
+        node.pop('name', None)
+        node.pop('set', False)
         props.update(node)
 
         self.name = name
