@@ -679,9 +679,9 @@ class EnrichedExpansion(Resource):
         if ('max_results' in parameters) and parameters['max_results']:
             maxresults = parameters['max_results']
             maxresults = int(maxresults) if isinstance(maxresults, str) else maxresults
-            maxresults = maxresults if maxresults is not None else 250
+            maxresults = maxresults if maxresults is not None else 0
         else:
-            maxresults = 100
+            maxresults = 250
         if 'num_type1' in parameters:
             num_type1 = parameters['num_type1']
         else:
