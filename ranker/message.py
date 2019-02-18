@@ -532,7 +532,9 @@ class Message():
         for e, eref in zip(edges, edge_references):
             source_node = node_references[e['source_id']]
             target_node = node_references[e['target_id']]
-            if 'type' in e and e['type']:
+            has_type = 'type' in e and e['type']
+            is_directed = e.get('directed', default=has_type)
+            if is_directed:
                 match_strings.append(f"MATCH ({source_node})-[{eref}]->({target_node})")
             else:
                 match_strings.append(f"MATCH ({source_node})-[{eref}]-({target_node})")
