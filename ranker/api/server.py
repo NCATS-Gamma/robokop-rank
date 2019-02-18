@@ -288,6 +288,12 @@ class MultiNodeLookup(Resource):
 api.add_resource(MultiNodeLookup, '/multinode_lookup')
 
 
+def batches(arr, n):
+    """Iterator separating arr into batches of size n."""
+    for i in range(0, len(arr), n):
+        yield arr[i:i + n]
+
+
 def get_node_properties(node_ids, fields=None):
     functions = {
         'labels': 'labels(n)',
@@ -298,15 +304,10 @@ def get_node_properties(node_ids, fields=None):
     else:
         prop_string = ', '.join([f'{key}:{functions[key]}' for key in functions] + ['.*'])
 
-    def batches(arr, n):
-        """Iterator separating arr into batches of size n."""
-        for i in range(0, len(arr), n):
-            yield arr[i:i + n]
-
     output = []
-    n = 100
+    n = 10000
     for batch in batches(node_ids, n):
-        where_string = ' OR '.join([f'n.id="{node_id}"' for node_id in batch])
+        where_string = 'n.id IN [' + ', '.join([f'"{node_id}"' for node_id in batch]) + ']'
         query_string = f'MATCH (n) WHERE {where_string} RETURN n{{{prop_string}}}'
 
         with KnowledgeGraph() as database:
