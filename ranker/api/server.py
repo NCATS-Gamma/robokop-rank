@@ -395,15 +395,21 @@ def get_edge_properties(edge_ids, fields=None):
     else:
         prop_string = ', '.join([f'{key}:{functions[key]}' for key in functions] + ['.*'])
 
-    where_string = ' OR '.join([f'id(e)={edge_id}' for edge_id in edge_ids])
-    query_string = f'MATCH ()-[e]->() WHERE {where_string} RETURN e{{{prop_string}}}'
-    # logger.debug(query_string)
+    output = []
+    n = 10000
+    for batch in batches(edge_ids, n):
+        where_string = 'id(e) IN [' + ', '.join([edge_id for edge_id in batch]) + ']'
+        query_string = f'MATCH ()-[e]->() WHERE {where_string} RETURN e{{{prop_string}}}'
+        # logger.debug(query_string)
 
-    with KnowledgeGraph() as database:
-        with database.driver.session() as session:
-            result = session.run(query_string)
+        with KnowledgeGraph() as database:
+            with database.driver.session() as session:
+                result = session.run(query_string)
 
-    return [record['e'] for record in result]
+        for record in result:
+            output.append(record['e'])
+
+    return output
 
 
 class Tasks(Resource):
