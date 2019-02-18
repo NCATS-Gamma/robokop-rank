@@ -183,6 +183,14 @@ class AnswerQuestion(Resource):
 api.add_resource(AnswerQuestion, '/')
 
 
+def flatten_semilist(x):
+    """Convert a list of (lists and scalars) to a flat list."""
+    # convert to a list of lists
+    lists = [n if isinstance(n, list) else [n] for n in x]
+    # flatten nested list
+    return [e for el in lists for e in el]
+
+
 class QuestionSubgraph(Resource):
     def post(self):
         """
@@ -215,15 +223,15 @@ class QuestionSubgraph(Resource):
 
             return kg, 200
 
-        def flatten_semilist(x):
-            lists = [n if isinstance(n, list) else [n] for n in x]
-            return [e for el in lists for e in el]
-
         # get nodes and edge ids from message answers
         node_ids = [knode_id for answer in message['answers'] for knode_id in answer['node_bindings'].values()]
         edge_ids = [kedge_id for answer in message['answers'] for kedge_id in answer['edge_bindings'].values()]
         node_ids = flatten_semilist(node_ids)
         edge_ids = flatten_semilist(edge_ids)
+
+        # unique over node and edge ids
+        node_ids = list(set(node_ids))
+        edge_ids = list(set(edge_ids))
 
         nodes = get_node_properties(node_ids)
         edges = get_edge_properties(edge_ids)
