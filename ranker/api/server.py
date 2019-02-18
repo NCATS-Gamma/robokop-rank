@@ -298,20 +298,26 @@ def get_node_properties(node_ids, fields=None):
     else:
         prop_string = ', '.join([f'{key}:{functions[key]}' for key in functions] + ['.*'])
 
-
-    where_string = ' OR '.join([f'n.id="{node_id}"' for node_id in node_ids])
-    query_string = f'MATCH (n) WHERE {where_string} RETURN n{{{prop_string}}}'
-
-    with KnowledgeGraph() as database:
-        with database.driver.session() as session:
-            result = session.run(query_string)
+    def batches(arr, n):
+        """Iterator separating arr into batches of size n."""
+        for i in range(0, len(arr), n):
+            yield arr[i:i + n]
 
     output = []
-    for record in result:
-        r = record['n']
-        if 'labels' in r and 'named_thing' in r['labels']:
-            r['labels'].remove('named_thing')
-        output.append(r)
+    n = 100
+    for batch in batches(node_ids, n):
+        where_string = ' OR '.join([f'n.id="{node_id}"' for node_id in batch])
+        query_string = f'MATCH (n) WHERE {where_string} RETURN n{{{prop_string}}}'
+
+        with KnowledgeGraph() as database:
+            with database.driver.session() as session:
+                result = session.run(query_string)
+
+        for record in result:
+            r = record['n']
+            if 'labels' in r and 'named_thing' in r['labels']:
+                r['labels'].remove('named_thing')
+            output.append(r)
 
     return output
 
