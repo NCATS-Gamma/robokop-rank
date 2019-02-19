@@ -1,0 +1,12 @@
+version: "3"
+services:
+  omnicorp:
+    image: postgres
+    container_name: omnicorp
+    environment:
+      - POSTGRES_USER=${OMNICORP_USER}
+      - POSTGRES_DB=${OMNICORP_DB}
+      - POSTGRES_PASSWORD=${OMNICORP_PASSWORD}
+    ports:
+      - "${OMNICORP_PORT}:${OMNICORP_PORT}"
+    command: postgres -p ${OMNICORP_PORT}

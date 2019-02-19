@@ -34,5 +34,5 @@ ENV USER=murphy
 WORKDIR /home/murphy
 RUN rm -r /home/murphy/robokop-rank
 
-ENTRYPOINT ["./robokop-rank/deploy/startup.sh"]
-CMD ["supervisord", "-c", "./robokop-rank/deploy/supervisord.conf"]
+ENTRYPOINT ["./robokop-rank/deploy/ranker/startup.sh"]
+CMD ["supervisord", "-c", "./robokop-rank/deploy/ranker/supervisord.conf"]

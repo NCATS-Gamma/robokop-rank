@@ -16,7 +16,7 @@ else
 fi
 
 echo "Setting up environment..."
-source ./deploy/setenv.sh
+source ./deploy/ranker/setenv.sh
 
 echo "Finding and removing stray pid files..."
 find . -prune -name "*.pid" -exec rm -rf {} \;
