@@ -533,7 +533,7 @@ class Message():
             source_node = node_references[e['source_id']]
             target_node = node_references[e['target_id']]
             has_type = 'type' in e and e['type']
-            is_directed = e.get('directed', default=has_type)
+            is_directed = e.get('directed', has_type)
             if is_directed:
                 match_strings.append(f"MATCH ({source_node})-[{eref}]->({target_node})")
             else:
