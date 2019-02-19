@@ -183,6 +183,14 @@ class AnswerQuestion(Resource):
 api.add_resource(AnswerQuestion, '/')
 
 
+def flatten_semilist(x):
+    """Convert a list of (lists and scalars) to a flat list."""
+    # convert to a list of lists
+    lists = [n if isinstance(n, list) else [n] for n in x]
+    # flatten nested list
+    return [e for el in lists for e in el]
+
+
 class QuestionSubgraph(Resource):
     def post(self):
         """
@@ -215,15 +223,15 @@ class QuestionSubgraph(Resource):
 
             return kg, 200
 
-        def flatten_semilist(x):
-            lists = [n if isinstance(n, list) else [n] for n in x]
-            return [e for el in lists for e in el]
-
         # get nodes and edge ids from message answers
         node_ids = [knode_id for answer in message['answers'] for knode_id in answer['node_bindings'].values()]
         edge_ids = [kedge_id for answer in message['answers'] for kedge_id in answer['edge_bindings'].values()]
         node_ids = flatten_semilist(node_ids)
         edge_ids = flatten_semilist(edge_ids)
+
+        # unique over node and edge ids
+        node_ids = list(set(node_ids))
+        edge_ids = list(set(edge_ids))
 
         nodes = get_node_properties(node_ids)
         edges = get_edge_properties(edge_ids)
@@ -288,6 +296,12 @@ class MultiNodeLookup(Resource):
 api.add_resource(MultiNodeLookup, '/multinode_lookup')
 
 
+def batches(arr, n):
+    """Iterator separating arr into batches of size n."""
+    for i in range(0, len(arr), n):
+        yield arr[i:i + n]
+
+
 def get_node_properties(node_ids, fields=None):
     functions = {
         'labels': 'labels(n)',
@@ -298,20 +312,21 @@ def get_node_properties(node_ids, fields=None):
     else:
         prop_string = ', '.join([f'{key}:{functions[key]}' for key in functions] + ['.*'])
 
-
-    where_string = ' OR '.join([f'n.id="{node_id}"' for node_id in node_ids])
-    query_string = f'MATCH (n) WHERE {where_string} RETURN n{{{prop_string}}}'
-
-    with KnowledgeGraph() as database:
-        with database.driver.session() as session:
-            result = session.run(query_string)
-
     output = []
-    for record in result:
-        r = record['n']
-        if 'labels' in r and 'named_thing' in r['labels']:
-            r['labels'].remove('named_thing')
-        output.append(r)
+    n = 10000
+    for batch in batches(node_ids, n):
+        where_string = 'n.id IN [' + ', '.join([f'"{node_id}"' for node_id in batch]) + ']'
+        query_string = f'MATCH (n) WHERE {where_string} RETURN n{{{prop_string}}}'
+
+        with KnowledgeGraph() as database:
+            with database.driver.session() as session:
+                result = session.run(query_string)
+
+        for record in result:
+            r = record['n']
+            if 'labels' in r and 'named_thing' in r['labels']:
+                r['labels'].remove('named_thing')
+            output.append(r)
 
     return output
 
@@ -380,15 +395,21 @@ def get_edge_properties(edge_ids, fields=None):
     else:
         prop_string = ', '.join([f'{key}:{functions[key]}' for key in functions] + ['.*'])
 
-    where_string = ' OR '.join([f'id(e)={edge_id}' for edge_id in edge_ids])
-    query_string = f'MATCH ()-[e]->() WHERE {where_string} RETURN e{{{prop_string}}}'
-    # logger.debug(query_string)
+    output = []
+    n = 10000
+    for batch in batches(edge_ids, n):
+        where_string = 'id(e) IN [' + ', '.join([edge_id for edge_id in batch]) + ']'
+        query_string = f'MATCH ()-[e]->() WHERE {where_string} RETURN e{{{prop_string}}}'
+        # logger.debug(query_string)
 
-    with KnowledgeGraph() as database:
-        with database.driver.session() as session:
-            result = session.run(query_string)
+        with KnowledgeGraph() as database:
+            with database.driver.session() as session:
+                result = session.run(query_string)
 
-    return [record['e'] for record in result]
+        for record in result:
+            output.append(record['e'])
+
+    return output
 
 
 class Tasks(Resource):
