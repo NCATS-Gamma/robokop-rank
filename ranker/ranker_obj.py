@@ -91,7 +91,7 @@ class Ranker:
     def sum_edge_weights(self, answer):
         """Add edge weights."""
         edge_ids = flatten_semilist(answer['edge_bindings'].values())
-        weights = [e['weight'] for e in self.knowledge_graph['edges'] if e['id'] in edge_ids]
+        weights = [self.kgraph_map[e]['weight'] for e in edge_ids]
         return sum(weights)
 
     def prescreen(self, answer_list, max_results=None):
@@ -122,6 +122,12 @@ class Ranker:
         start = time.time()
         self.set_weights()
         logger.debug(f"{time.time()-start} seconds elapsed.")
+        
+        # build kgraph map
+        self.kgraph_map = {n['id']: n for n in self.knowledge_graph['nodes'] + self.knowledge_graph['edges']}
+        self.kedge_knodes_map = defaultdict(list)
+        for e in self.knowledge_graph['edges']:
+            self.kedge_knodes_map[tuple(sorted([e['source_id'], e['target_id']]))].append(e)
 
         # prescreen
         if max_results is not None:
@@ -135,11 +141,6 @@ class Ranker:
         start = time.time()
         
         graph_stat = []
-        # build kgraph map
-        self.kgraph_map = {n['id']: n for n in self.knowledge_graph['nodes'] + self.knowledge_graph['edges']}
-        self.kedge_knodes_map = defaultdict(list)
-        for e in self.knowledge_graph['edges']:
-            self.kedge_knodes_map[tuple(sorted([e['source_id'], e['target_id']]))].append(e)
         # for sg in tqdm(subgraph_list):
         for sg in answer_list:
             graph_stat.append(self.subgraph_statistic(sg, metric_type='volt'))
