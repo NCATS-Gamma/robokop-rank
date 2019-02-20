@@ -620,7 +620,7 @@ class TaskLog(Resource):
                 description: text
         """
 
-        task_log_file = os.path.join(os.environ['ROBOKOP_HOME'], 'task_logs', f'{task_id}.log')
+        task_log_file = os.path.join(os.environ['ROBOKOP_HOME'], 'logs', 'ranker_task_logs', f'{task_id}.log')
         if os.path.isfile(task_log_file):
             with open(task_log_file, 'r') as log_file:
                 log_contents = log_file.read()
@@ -628,14 +628,6 @@ class TaskLog(Resource):
         else:
             return 'Task ID not found', 404
 
-
-        # task_log_dir = os.path.join(os.environ['ROBOKOP_HOME'], 'task_logs')
-        # task_log_file = f'{task_id}.log'
-
-        # if os.path.isfile(os.path.join(task_log_dir, task_log_file)):
-        #     return send_from_directory(task_log_dir, task_log_file,mimetype='text/plain',as_attachment=False)
-        # else:
-        #     return '', 404
 
 api.add_resource(TaskLog, '/task/<task_id>/log')
 
