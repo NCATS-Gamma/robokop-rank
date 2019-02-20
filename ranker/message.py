@@ -331,7 +331,7 @@ class Message():
                         cache.set(key, support_dict)
                 # add omnicorp_article_count to nodes in networkx graph
                 node.update(support_dict)
-            logger.info(f'Finished support requests for {len(self.knowledge_graph['nodes'])} nodes')
+            logger.info(f'Finished support requests for {len(self.knowledge_graph["nodes"])} nodes')
 
             logger.info('Getting support for answer connected node pairs...')
             # Generate a set of pairs of node curies
