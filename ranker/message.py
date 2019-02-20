@@ -327,7 +327,7 @@ class Message():
                 else:
                     #logger.info(f"exec op: {key}")
                     support_dict = supporter.get_node_info(node['id'])
-                    if cache:
+                    if cache and support_dict['omnicorp_article_count']:
                         cache.set(key, support_dict)
                 # add omnicorp_article_count to nodes in networkx graph
                 node.update(support_dict)
@@ -377,7 +377,7 @@ class Message():
                         #logger.info(f"exec op: {key}")
                         try:
                             support_edge = supporter.term_to_term_count(pair[0], pair[1])
-                            if cache:
+                            if cache and support_edge:
                                 cache.set(key, support_edge)
                         except Exception as e:
                             raise e
