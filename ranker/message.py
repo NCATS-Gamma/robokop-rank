@@ -335,15 +335,16 @@ class Message():
             # Generate a set of pairs of node curies
             pair_to_answer = defaultdict(list)  # a map of node pairs to answers
             for ans_idx, answer_map in enumerate(self.answer_maps):
-                for combo in combinations(answer_map['nodes'], 2):
-                    if isinstance(answer_map['nodes'][combo[0]], str):
-                        sources = [answer_map['nodes'][combo[0]]]
+                nodes = answer_map['node_bindings']
+                for combo in combinations(nodes, 2):
+                    if isinstance(nodes[combo[0]], str):
+                        sources = [nodes[combo[0]]]
                     else:
-                        sources = answer_map['nodes'][combo[0]]
-                    if isinstance(answer_map['nodes'][combo[1]], str):
-                        targets = [answer_map['nodes'][combo[1]]]
+                        sources = nodes[combo[0]]
+                    if isinstance(nodes[combo[1]], str):
+                        targets = [nodes[combo[1]]]
                     else:
-                        targets = answer_map['nodes'][combo[1]]
+                        targets = nodes[combo[1]]
                     for source_id in sources:
                         for target_id in targets:
                             node_i, node_j = sorted([source_id, target_id])
@@ -374,7 +375,7 @@ class Message():
                     else:
                         #logger.info(f"exec op: {key}")
                         try:
-                            support_edge = supporter.term_to_term(pair[0], pair[1])
+                            support_edge = supporter.term_to_term_count(pair[0], pair[1])
                             if cache:
                                 cache.set(key, support_edge)
                         except Exception as e:
@@ -396,7 +397,7 @@ class Message():
                 })
 
                 for sg in pair_to_answer[pair]:
-                    self.answer_maps[sg]['edges'].update({f's{support_idx}': uid})
+                    self.answer_maps[sg]['edge_bindings'].update({f's{support_idx}': uid})
             # Next pair
         # Close the supporter
 
@@ -420,6 +421,8 @@ class Message():
         if self.answer_maps is None:
             logger.info('No possible answers found')
             return
+
+        self.fetch_knowledge_graph_support()
         
         logger.info('Ranking answers')
         pr = Ranker(self.knowledge_graph, self.question_graph)

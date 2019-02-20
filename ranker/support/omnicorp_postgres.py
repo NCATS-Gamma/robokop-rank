@@ -98,19 +98,25 @@ class OmniCorp():
                     f"JOIN omnicorp.{prefix2} b ON a.pubmedid = b.pubmedid\n" + \
                     f"WHERE a.curie = %s\n" + \
                     f"AND b.curie = %s"
-        cur.execute(statement, (id1, id2))
-        pmids = [x[0] for x in cur.fetchall()]
-        cur.close()
-        end = datetime.datetime.now()
-        self.total_pair_call += (end-start)
-        logger.debug(f"Found {len(pmids)} shared ids in {end-start}\n" +
-                     f"Total {self.total_pair_call}")
-        self.npair += 1
-        if self.npair % 100 == 0:
-            logger.info(f"NCalls: {self.npair}\n" +
-                        f"Total time: {self.total_pair_call}\n" +
-                        f"Avg Time: {self.total_pair_call/self.npair}")
-        return pmids
+        try:
+            cur.execute(statement, (id1, id2))
+            pmids = [x[0] for x in cur.fetchall()]
+            cur.close()
+            end = datetime.datetime.now()
+            self.total_pair_call += (end-start)
+            logger.debug(f"Found {len(pmids)} shared ids in {end-start}\n" +
+                        f"Total {self.total_pair_call}")
+            self.npair += 1
+            if self.npair % 100 == 0:
+                logger.info(f"NCalls: {self.npair}\n" +
+                            f"Total time: {self.total_pair_call}\n" +
+                            f"Avg Time: {self.total_pair_call/self.npair}")
+            return pmids
+        except psycopg2.ProgrammingError as err:
+            self.conn.rollback()
+            cur.close()
+            logger.debug(f'OmniCorp query error: {str(err)}\nReturning [].')
+            return []
 
     def postgres_get_shared_pmids_count(self, id1, id2):
         """Get shared PMIDs from postgres?"""
@@ -122,10 +128,16 @@ class OmniCorp():
                     f"JOIN omnicorp.{prefix2} b ON a.pubmedid = b.pubmedid\n" + \
                     f"WHERE a.curie = %s\n" + \
                     f"AND b.curie = %s"
-        cur.execute(statement, (id1, id2))
-        pmid_count = cur.fetchall()[0][0]
-        cur.close()
-        return pmid_count
+        try:
+            cur.execute(statement, (id1, id2))
+            pmid_count = cur.fetchall()[0][0]
+            cur.close()
+            return pmid_count
+        except psycopg2.ProgrammingError as err:
+            self.conn.rollback()
+            cur.close()
+            logger.debug(f'OmniCorp query error: {str(err)}\nReturning 0.')
+            return 0
 
 
     def count_pmids(self, node):
@@ -138,16 +150,22 @@ class OmniCorp():
         cur = self.conn.cursor()
         statement = f"SELECT COUNT(pubmedid) from omnicorp.{prefix}\n" + \
                     "WHERE curie = %s"
-        cur.execute(statement, (identifier,))
-        n = cur.fetchall()[0][0]
-        cur.close()
-        end = datetime.datetime.now()
-        self.total_single_call += (end-start)
-        logger.debug(f"""Found {n} pmids in {end-start}
-                     Total {self.total_single_call}""")
-        self.nsingle += 1
-        if self.nsingle % 100 == 0:
-            logger.info(f"NCalls: {self.nsingle}\n" +
-                        f"Total time: {self.total_single_call}\n" +
-                        f"Avg Time: {self.total_single_call/self.nsingle}")
-        return n
+        try:
+            cur.execute(statement, (identifier,))
+            n = cur.fetchall()[0][0]
+            cur.close()
+            end = datetime.datetime.now()
+            self.total_single_call += (end-start)
+            logger.debug(f"""Found {n} pmids in {end-start}
+                        Total {self.total_single_call}""")
+            self.nsingle += 1
+            if self.nsingle % 100 == 0:
+                logger.info(f"NCalls: {self.nsingle}\n" +
+                            f"Total time: {self.total_single_call}\n" +
+                            f"Avg Time: {self.total_single_call/self.nsingle}")
+            return n
+        except psycopg2.ProgrammingError as err:
+            self.conn.rollback()
+            cur.close()
+            logger.debug(f'OmniCorp query error: {str(err)}\nReturning 0.')
+            return 0
