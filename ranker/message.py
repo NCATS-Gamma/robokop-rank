@@ -4,6 +4,7 @@
 import os
 import sys
 import time
+from copy import deepcopy
 import warnings
 import logging
 import requests
@@ -443,10 +444,18 @@ class Message():
         return out
 
     def dump_answers(self):
+        # remove extra (support) edges from answer maps
+        answer_maps = deepcopy(self.answer_maps)
+        eids = [edge['id'] for edge in self.question_graph['edges']]
+        for answer_map in answer_maps:
+            edge_bindings = answer_map['edge_bindings']
+            answer_map['edge_bindings'] = {key: edge_bindings[key] for key in edge_bindings if key in eids}
+
         out = {
-            'answers': self.answer_maps
+            'answers': answer_maps
         }
         return out
+
     def dump_csv(self):
         nodes = self.question_graph['nodes']
         answers = self.answer_maps
