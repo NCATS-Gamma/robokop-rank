@@ -102,13 +102,13 @@ class Ranker:
         if max_results is None:
             max_results = self.prescreen_count
 
-        logger.debug(f'  Getting {len(answer_list)} prescreen scores...')
+        logger.info(f'  Getting {len(answer_list)} prescreen scores...')
         prescreen_scores = [self.sum_edge_weights(sg) for sg in answer_list]
 
-        logger.debug(f'  Getting top {max_results}...')
+        logger.info(f'  Getting top {max_results}...')
         prescreen_sorting = [x[0] for x in heapq.nlargest(max_results, enumerate(prescreen_scores), key=operator.itemgetter(1))]
 
-        logger.debug('  Returning sorted prescreen results...')
+        logger.info('  Returning sorted prescreen results...')
         return [answer_list[i] for i in prescreen_sorting]
 
     def rank(self, answer_list, max_results=250):
@@ -118,10 +118,10 @@ class Ranker:
             return ([], [])
 
         # add weights to edges
-        logger.debug('Setting weights... ')
+        logger.info('Setting weights... ')
         start = time.time()
         self.set_weights()
-        logger.debug(f"{time.time()-start} seconds elapsed.")
+        logger.info(f"{time.time()-start} seconds elapsed.")
         
         # build kgraph map
         self.kgraph_map = {n['id']: n for n in self.knowledge_graph['nodes'] + self.knowledge_graph['edges']}
@@ -131,20 +131,20 @@ class Ranker:
 
         # prescreen
         if max_results is not None:
-            logger.debug("Prescreening answer_list... ")
+            logger.info("Prescreening answer_list... ")
             start = time.time()
             answer_list = self.prescreen(answer_list, max_results=max([self.prescreen_count, max_results * 2]))
-            logger.debug(f"{time.time()-start} seconds elapsed.")
+            logger.info(f"{time.time()-start} seconds elapsed.")
 
         # get subgraph statistics
-        logger.debug("Calculating subgraph statistics... ")
+        logger.info("Calculating subgraph statistics... ")
         start = time.time()
         
         graph_stat = []
         # for sg in tqdm(subgraph_list):
         for sg in answer_list:
             graph_stat.append(self.subgraph_statistic(sg, metric_type='volt'))
-        logger.debug(f"{time.time()-start} seconds elapsed.")
+        logger.info(f"{time.time()-start} seconds elapsed.")
 
         # Fail safe to nuke nans
         ranking_scores = [r if np.isfinite(r) and r >= 0 else -1 for r in graph_stat]
@@ -156,7 +156,7 @@ class Ranker:
 
         # trim output
         if max_results is not None:
-            logger.debug('Keeping top %d...', max_results)
+            logger.info('Keeping top %d...', max_results)
             answer_list = answer_list[:max_results]
             answer_scores = answer_scores[:max_results]
 
@@ -319,7 +319,7 @@ def mixing_time_from_laplacian(laplacian):
         eigvals = numpy.linalg.eigvals(P)
     except Exception:
         # this should never happen for nonzero teleportation
-        logger.debug(f"Eigenvalue computation failed for P:\n{P}")
+        logger.logger(f"Eigenvalue computation failed for P:\n{P}")
         return -1
 
     eigvals = np.abs(eigvals)

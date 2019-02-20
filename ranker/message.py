@@ -331,6 +331,7 @@ class Message():
                         cache.set(key, support_dict)
                 # add omnicorp_article_count to nodes in networkx graph
                 node.update(support_dict)
+            logger.info(f'Finished support requests for {len(self.knowledge_graph['nodes'])} nodes')
 
             logger.info('Getting support for answer connected node pairs...')
             # Generate a set of pairs of node curies
@@ -400,6 +401,9 @@ class Message():
                 for sg in pair_to_answer[pair]:
                     self.answer_maps[sg]['edge_bindings'].update({f's{support_idx}': uid})
             # Next pair
+
+            logger.info(f'Finished support requests for {len(pair_to_answer)} pairs of nodes')
+
         # Close the supporter
 
     def rank_answers(self, max_results=250, max_connectivity=0):
@@ -562,7 +566,7 @@ class Message():
 
 
         match_string = ' '.join(match_strings)
-        logger.debug(match_string)
+        # logger.debug(match_string)
         return match_string
 
     def cypher_query_answer_map(self, options=None):
