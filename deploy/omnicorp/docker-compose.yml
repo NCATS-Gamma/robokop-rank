@@ -10,3 +10,5 @@ services:
     ports:
       - "${OMNICORP_PORT}:${OMNICORP_PORT}"
     command: postgres -p ${OMNICORP_PORT}
+    volumes:
+      - ../../../omnicorp:/var/lib/postgresql/data
