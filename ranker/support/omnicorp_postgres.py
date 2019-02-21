@@ -104,8 +104,8 @@ class OmniCorp():
             cur.close()
             end = datetime.datetime.now()
             self.total_pair_call += (end-start)
-            logger.debug(f"Found {len(pmids)} shared ids in {end-start}\n" +
-                        f"Total {self.total_pair_call}")
+            # logger.debug(f"Found {len(pmids)} shared ids in {end-start}\n" +
+            #             f"Total {self.total_pair_call}")
             self.npair += 1
             if self.npair % 100 == 0:
                 logger.info(f"NCalls: {self.npair}\n" +
@@ -156,8 +156,8 @@ class OmniCorp():
             cur.close()
             end = datetime.datetime.now()
             self.total_single_call += (end-start)
-            logger.debug(f"""Found {n} pmids in {end-start}
-                        Total {self.total_single_call}""")
+            # logger.debug(f"""Found {n} pmids in {end-start}
+            #             Total {self.total_single_call}""")
             self.nsingle += 1
             if self.nsingle % 100 == 0:
                 logger.info(f"NCalls: {self.nsingle}\n" +
