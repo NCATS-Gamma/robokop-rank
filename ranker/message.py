@@ -406,7 +406,7 @@ class Message():
 
         # Close the supporter
 
-    def rank_answers(self, max_results=250, max_connectivity=0):
+    def rank_answers(self, max_results=None, max_connectivity=0):
         """Rank answers to the question
         
         This is mostly glue around the heavy lifting in ranker_obj.Ranker
@@ -438,6 +438,26 @@ class Message():
             answer['score'] = answer_scores[i]
 
         self.answer_maps = sorted_answer_maps
+
+        # We may have pruned answers using max_results, in which case nodes and edges in the KG are not in answers
+        # We should remove these unused nodes and edges
+        def flatten_semilist(x):
+            lists = [n if isinstance(n, list) else [n] for n in x]
+            return [e for el in lists for e in el]
+
+        node_ids = set()
+        edge_ids = set()
+        for answer in self.answer_maps:
+            these_node_ids = list(answer['node_bindings'].values())
+            these_node_ids = flatten_semilist(these_node_ids)
+            node_ids.update(these_node_ids)
+
+            these_edge_ids = list(answer['edge_bindings'].values())
+            these_edge_ids = flatten_semilist(these_edge_ids)
+            edge_ids.update(these_edge_ids)
+
+        self.knowledge_graph['edges'] = [e for e in self.knowledge_graph['edges'] if e['id'] in edge_ids]
+        self.knowledge_graph['nodes'] = [n for n in self.knowledge_graph['nodes'] if n['id'] in node_ids]
 
     def dump(self):
         out = {
