@@ -30,10 +30,15 @@ cached_prefixes = support_cache.get('OmnicorpPrefixes')
 
 logger = logging.getLogger("ranker")
 
+
+class InvalidUsage(Exception):
+    pass
+
+
 def parse_args_output_format(req_args):
     output_format = req_args.get('output_format', default=output_formats[1])
     if output_format.upper() not in output_formats:
-        raise RuntimeError(f'output_format must be one of [{" ".join(output_formats)}]')
+        raise InvalidUsage(f'output_format must be one of [{" ".join(output_formats)}]')
     
     return output_format
 
@@ -60,6 +65,71 @@ def parse_args_max_connectivity(req_args):
                 max_connectivity = None
 
     return max_connectivity
+
+
+class RankMessage(Resource):
+    def post(self):
+        """
+        Get answers to a question
+        ---
+        tags: [answer]
+        requestBody:
+            description: A message with a machine-readable question graph.
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/definitions/Message'
+            required: true
+        parameters:
+          - in: query
+            name: max_results
+            description: Maximum number of results to return. Provide -1 to indicate no maximum.
+            schema:
+                type: integer
+            default: 250
+          - in: query
+            name: output_format
+            description: Requested output format. DENSE, MESSAGE, CSV or ANSWERS
+            schema:
+                type: string
+            default: MESSAGE
+          - in: query
+            name: max_connectivity
+            description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
+            schema:
+                type: integer
+            default: 0
+        responses:
+            200:
+                description: Answer
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/definitions/Response'
+        """
+        try:
+            max_results = parse_args_max_results(request.args)
+            output_format = parse_args_output_format(request.args)
+        except InvalidUsage as err:
+            return str(err), 400
+        message = Message(request.json)
+
+        message.rank(max_results)
+
+        if output_format.upper() == output_formats[0]:
+            output = message.dump_dense()
+        elif output_format.upper() == output_formats[1]:
+            output = message.dump()
+        elif output_format.upper() == output_formats[2]:
+            output = message.dump_csv()
+        elif output_format.upper() == output_formats[3]:
+            output = message.dump_answers()
+        else:
+            raise RuntimeError("output_format appears to be unrecognized. This should have been caught earlier.")
+
+        return output, 200
+
+api.add_resource(RankMessage, '/rank')
 
 
 class AnswerQuestionNow(Resource):

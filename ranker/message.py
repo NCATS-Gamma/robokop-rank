@@ -164,13 +164,13 @@ class Message():
     def __init__(self, *args, **kwargs):
         """Create a question.
 
-        keyword arguments: question_graph or machine_question, knowledge_graph, answer_maps
+        keyword arguments: question_graph or machine_question, knowledge_graph, answers
         """
         # initialize all properties
         self.natural_question = ''
         self.question_graph = {}
         self.knowledge_graph = None
-        self.answer_maps = None
+        self.answers = None
 
         # apply json properties to existing attributes
         attributes = self.__dict__.keys()
@@ -242,17 +242,17 @@ class Message():
         return
 
     # @property
-    # def answer_maps(self):
-    #     if self._answer_maps is None:
+    # def answers(self):
+    #     if self._answers is None:
     #         logger.debug('Auto-fetching answer maps')
-    #         self._answer_maps = self.fetch_answer_maps()
-    #     return self._answer_maps
+    #         self._answers = self.fetch_answers()
+    #     return self._answers
     
-    # @answer_maps.setter
-    # def set_answer_maps(self, value):
-    #     self._answer_maps = value
+    # @answers.setter
+    # def set_answers(self, value):
+    #     self._answers = value
 
-    def fetch_answer_maps(self, max_connectivity=0):
+    def fetch_answers(self, max_connectivity=0):
         # get Neo4j connection
         with KnowledgeGraph() as database:
 
@@ -261,7 +261,7 @@ class Message():
 
             # get all answer maps relevant to the question from the knowledge graph
             logger.info('Getting answers')
-            answer_maps = []
+            answers = []
             options = {
                 'limit': 1000000,
                 'skip': 0,
@@ -278,21 +278,21 @@ class Message():
                 with database.driver.session() as session:
                     result = session.run(query_string)
             
-                these_answer_maps = [{'node_bindings': r['nodes'], 'edge_bindings': r['edges']} for r in result]
+                these_answers = [{'node_bindings': r['nodes'], 'edge_bindings': r['edges']} for r in result]
                 
                 logger.info(f"{time.time()-start} seconds elapsed")
-                logger.info(f"{len(these_answer_maps)} subgraphs returned.")
+                logger.info(f"{len(these_answers)} subgraphs returned.")
 
                 options['skip'] += options['limit']
-                answer_maps.extend(these_answer_maps)
+                answers.extend(these_answers)
 
-                logger.info(f'{len(answer_maps)} answer_maps: {int(sys.getsizeof(pickle.dumps(answer_maps)) / 1e6):d} MB')
+                logger.info(f'{len(answers)} answers: {int(sys.getsizeof(pickle.dumps(answers)) / 1e6):d} MB')
                 logger.info(f'memory usage: {int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e3):d} MB')
-                if len(these_answer_maps) < options['limit']:
+                if len(these_answers) < options['limit']:
                     # If this batch is less then the page size
                     # It must be the last page
                     break
-            self.answer_maps = answer_maps
+            self.answers = answers
             logger.info('Answers obtained')
         return
 
@@ -336,21 +336,10 @@ class Message():
             logger.info('Getting support for answer connected node pairs...')
             # Generate a set of pairs of node curies
             pair_to_answer = defaultdict(list)  # a map of node pairs to answers
-            for ans_idx, answer_map in enumerate(self.answer_maps):
-                nodes = answer_map['node_bindings']
-                for combo in combinations(nodes, 2):
-                    if isinstance(nodes[combo[0]], str):
-                        sources = [nodes[combo[0]]]
-                    else:
-                        sources = nodes[combo[0]]
-                    if isinstance(nodes[combo[1]], str):
-                        targets = [nodes[combo[1]]]
-                    else:
-                        targets = nodes[combo[1]]
-                    for source_id in sources:
-                        for target_id in targets:
-                            node_i, node_j = sorted([source_id, target_id])
-                            pair_to_answer[(node_i, node_j)].append(ans_idx)
+            for ans_idx, answer_map in enumerate(self.answers):
+                nodes = [nb for nb in answer_map['node_bindings'].values() if isinstance(nb, str)]
+                for node_pair in combinations(nodes, 2):
+                    pair_to_answer[node_pair].append(ans_idx)
 
             cached_prefixes = cache.get('OmnicorpPrefixes') if cache else None
             # get all pair supports
@@ -399,14 +388,15 @@ class Message():
                 })
 
                 for sg in pair_to_answer[pair]:
-                    self.answer_maps[sg]['edge_bindings'].update({f's{support_idx}': uid})
+                    self.answers[sg]['edge_bindings'].update({f's{support_idx}': uid})
             # Next pair
 
             logger.info(f'Finished support requests for {len(pair_to_answer)} pairs of nodes')
 
         # Close the supporter
 
-    def rank_answers(self, max_results=None, max_connectivity=0):
+
+    def fill(self, max_connectivity=0):
         """Rank answers to the question
         
         This is mostly glue around the heavy lifting in ranker_obj.Ranker
@@ -417,27 +407,34 @@ class Message():
         # Get local knowledge graph for this question
         self.fetch_knowledge_graph(max_connectivity=max_connectivity) # This will attempt to fetch from graph db if empty in a getter()
         if self.knowledge_graph is None:
-            self.answer_maps = None
+            self.answers = None
             logger.info('No possible answers found')
             return
         
         # Actually have a local knowledge graph
-        self.fetch_answer_maps(max_connectivity=max_connectivity) # This will attempt to fetch from the graph db if empty in a getter()
-        if self.answer_maps is None:
+        self.fetch_answers(max_connectivity=max_connectivity) # This will attempt to fetch from the graph db if empty in a getter()
+        if self.answers is None:
             logger.info('No possible answers found')
             return
 
         self.fetch_knowledge_graph_support()
+
+
+    def rank(self, max_results=None):
+        """Rank answers to the question
         
+        This is mostly glue around the heavy lifting in ranker_obj.Ranker
+        """
+
         logger.info('Ranking answers')
         pr = Ranker(self.knowledge_graph, self.question_graph)
-        (answer_scores, sorted_answer_maps) = pr.rank(self.answer_maps, max_results=max_results)
-        
-        # Add the scores to the answer_maps
-        for i, answer in enumerate(sorted_answer_maps):
+        (answer_scores, sorted_answers) = pr.rank(self.answers, max_results=max_results)
+
+        # Add the scores to the answers
+        for i, answer in enumerate(sorted_answers):
             answer['score'] = answer_scores[i]
 
-        self.answer_maps = sorted_answer_maps
+        self.answers = sorted_answers
 
         # We may have pruned answers using max_results, in which case nodes and edges in the KG are not in answers
         # We should remove these unused nodes and edges
@@ -447,7 +444,7 @@ class Message():
 
         node_ids = set()
         edge_ids = set()
-        for answer in self.answer_maps:
+        for answer in self.answers:
             these_node_ids = list(answer['node_bindings'].values())
             these_node_ids = flatten_semilist(these_node_ids)
             node_ids.update(these_node_ids)
@@ -459,30 +456,31 @@ class Message():
         self.knowledge_graph['edges'] = [e for e in self.knowledge_graph['edges'] if e['id'] in edge_ids]
         self.knowledge_graph['nodes'] = [n for n in self.knowledge_graph['nodes'] if n['id'] in node_ids]
 
+
     def dump(self):
         out = {
             'question_graph': self.question_graph,
             'knowledge_graph': self.knowledge_graph,
-            'answers': self.answer_maps
+            'answers': self.answers
         }
         return out
 
     def dump_answers(self):
         # remove extra (support) edges from answer maps
-        answer_maps = deepcopy(self.answer_maps)
+        answers = deepcopy(self.answers)
         eids = [edge['id'] for edge in self.question_graph['edges']]
-        for answer_map in answer_maps:
+        for answer_map in answers:
             edge_bindings = answer_map['edge_bindings']
             answer_map['edge_bindings'] = {key: edge_bindings[key] for key in edge_bindings if key in eids}
 
         out = {
-            'answers': answer_maps
+            'answers': answers
         }
         return out
 
     def dump_csv(self):
         nodes = self.question_graph['nodes']
-        answers = self.answer_maps
+        answers = self.answers
         csv_header = [n['id'] for n in nodes]
         csv_lines = []
         for a in answers:
@@ -516,14 +514,14 @@ class Message():
 
         misc_info = {
             'natural_question': self.natural_question,
-            'num_total_paths': len(self.answer_maps)
+            'num_total_paths': len(self.answers)
         }
         aset = Answerset(misc_info=misc_info)
 
-        if self.answer_maps:
+        if self.answers:
             kgraph_map = {n['id']: n for n in self.knowledge_graph['nodes'] + self.knowledge_graph['edges']}
         
-            for answer in self.answer_maps:
+            for answer in self.answers:
                 node_ids = flatten_semilist(answer['node_bindings'].values())
                 nodes = [kgraph_map[n] for n in node_ids]
                 edge_ids = flatten_semilist(answer['edge_bindings'].values())

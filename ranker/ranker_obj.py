@@ -19,6 +19,8 @@ from itertools import combinations
 import numpy as np
 import numpy.linalg
 
+from ranker.dijkstra import dijkstra
+
 logger = logging.getLogger('ranker')
 
 
@@ -260,7 +262,7 @@ class Ranker:
                 idy = np.transpose(idx)
                 L = laplacian[idx, idy]
                 voltages.append(1 / voltage_from_laplacian(L))
-            return sum(voltages)
+            return np.mean(voltages)
         else:
             raise ValueError(f'Unknown metric type "{metric_type}"')
 
@@ -292,11 +294,19 @@ def terminal_nodes(question):
 
     Terminal nodes are those that have degree 1.
     """
+    nodes = question['nodes']
+    simple_edges = [(edge['source_id'], edge['target_id'], 1) for edge in question['edges']]
+    is_named = [node['id'] for node in nodes if node.get('curie', False)]
     degree = defaultdict(int)
-    for edge in question['edges']:
-        degree[edge['source_id']] += 1
-        degree[edge['target_id']] += 1
-    return [f"{key}" for i, key in enumerate(degree) if degree[key] == 1]
+    for edge in simple_edges:
+        degree[edge[0]] += 1
+        degree[edge[1]] += 1
+    is_terminal = [key for key in degree if degree[key] == 1]
+    if len(is_named) >= 2:
+        return list(set(is_terminal + is_named))
+    distances = dijkstra(simple_edges, is_named)
+    is_far_from_named = [key for key in distances if distances[key] == np.max(list(distances.values()))]
+    return list(set(is_terminal + is_named + is_far_from_named))
 
 
 def mixing_time_from_laplacian(laplacian):

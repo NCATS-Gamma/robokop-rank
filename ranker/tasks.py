@@ -60,16 +60,17 @@ def answer_question(self, message_json, max_results=250, output_format=output_fo
         message = Message(message_json)
         
         try:
-            message.rank_answers(max_results, max_connectivity=max_connectivity)
+            message.fill(max_connectivity=max_connectivity)
+            message.rank(max_results)
         except Exception as err:
             logger.exception(f"Something went wrong with question answering: {err}")
             raise err
         
-        if message.answer_maps is None:
+        if message.answers is None:
             logger.info("0 answers found. Returning None.")
             return None
 
-        logger.info(f'{len(message.answer_maps)} answers found.')
+        logger.info(f'{len(message.answers)} answers found.')
 
         self.update_state(state='SAVING')
 
