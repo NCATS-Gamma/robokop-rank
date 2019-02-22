@@ -397,9 +397,9 @@ class Message():
 
 
     def fill(self, max_connectivity=0):
-        """Rank answers to the question
+        """Determine potential answers to the question
         
-        This is mostly glue around the heavy lifting in ranker_obj.Ranker
+        This primarily fectches the knowledge_graph and answers
         """
 
         # compute scores with ranker
