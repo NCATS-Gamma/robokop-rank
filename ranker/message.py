@@ -337,9 +337,19 @@ class Message():
             # Generate a set of pairs of node curies
             pair_to_answer = defaultdict(list)  # a map of node pairs to answers
             for ans_idx, answer_map in enumerate(self.answers):
+                
+                # Get all nodes that are not part of sets and densly connect them
                 nodes = [nb for nb in answer_map['node_bindings'].values() if isinstance(nb, str)]
                 for node_pair in combinations(nodes, 2):
                     pair_to_answer[node_pair].append(ans_idx)
+                
+                # For all nodes that are within sets, connect them to all nodes that are not in sets
+                set_nodes_list_list = [nb for nb in answer_map['node_bindings'].values() if isinstance(nb, list)]
+                set_nodes = [n for el in set_nodes_list_list for n in el]
+                for set_node in set_nodes:
+                    for node in nodes:
+                        pair_to_answer[(node, set_node)].append(ans_idx)
+
 
             cached_prefixes = cache.get('OmnicorpPrefixes') if cache else None
             # get all pair supports
