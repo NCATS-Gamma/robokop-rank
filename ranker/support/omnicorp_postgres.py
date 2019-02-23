@@ -56,8 +56,8 @@ class OmniCorp():
         identifier = node_id
         prefix = Text.get_curie(node_id)
         if prefix not in self.prefixes:
-            logger.debug(f"What kinda tomfoolery is this?\n" +
-                         f"{node_id}")
+            #logger.debug(f"What kinda tomfoolery is this?\n" +
+            #             f"{node_id}")
                          #  f"{node.id} {node.type}\n" +
                          #  f"{node.synonyms}")
             return None
