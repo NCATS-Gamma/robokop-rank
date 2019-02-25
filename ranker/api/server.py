@@ -13,7 +13,7 @@ from flask import request, send_from_directory
 
 from ranker.api.setup import app, api
 from ranker.message import Message, output_formats
-from ranker.tasks import answer_question
+from ranker.tasks import answer_question, celery
 # import ranker.api.definitions
 import ranker.definitions
 from ranker.knowledgegraph import KnowledgeGraph
@@ -30,6 +30,12 @@ cached_prefixes = support_cache.get('OmnicorpPrefixes')
 
 logger = logging.getLogger("ranker")
 
+
+redis_client = redis.Redis(
+    host=os.environ['RESULTS_HOST'],
+    port=os.environ['RESULTS_PORT'],
+    db=os.environ['RANKER_RESULTS_DB'],
+    password=os.environ['RESULTS_PASSWORD'])
 
 class InvalidUsage(Exception):
     pass
@@ -184,7 +190,7 @@ class AnswerQuestionNow(Resource):
             result = result.get()
         except:
             # Celery tasks log errors internally. Just return.
-            return "Internal server error. See the logs for details.", 500
+            return "Error answering question.", 500
         
         if result is None:
             message = request.json
@@ -481,36 +487,6 @@ def get_edge_properties(edge_ids, fields=None):
 
     return output
 
-
-class Tasks(Resource):
-    def get(self):
-        """
-        Fetch queued/active task list
-        ---
-        tags: [tasks]
-        responses:
-            200:
-                description: tasks
-                content:
-                    application/json:
-                        schema:
-                            type: string
-        """
-        r = redis.Redis(
-            host=os.environ['RESULTS_HOST'],
-            port=os.environ['RESULTS_PORT'],
-            db=os.environ['RANKER_RESULTS_DB'],
-            password=os.environ['RESULT_PASSWORD'])
-
-        tasks = []
-        for name in r.scan_iter('*'):
-            name = name.decode() # convert bytes to str
-            tasks.append(json.loads(r.get(name)))
-
-        return tasks
-
-api.add_resource(Tasks, '/tasks/')
-
 class Results(Resource):
     def get(self, task_id):
         """
@@ -656,19 +632,46 @@ class TaskStatus(Resource):
                         schema:
                             $ref: "#/definitions/Graph"
         """
-        r = redis.Redis(
-            host=os.environ['RESULTS_HOST'],
-            port=os.environ['RESULTS_PORT'],
-            db=os.environ['RANKER_RESULTS_DB'],
-            password=os.environ['RESULTS_PASSWORD'])
 
         task_id = 'celery-task-meta-'+task_id
-        task_string = r.get(task_id)
+        task_string = redis_client.get(task_id)
         if task_string is None:
             return 'No such task', 404
         info = json.loads(task_string)
         
         return info, 200
+
+    def delete(self, task_id):
+        """Revoke task
+        ---
+        tags: [tasks]
+        parameters:
+          - in: path
+            name: task_id
+            description: "task id"
+            schema:
+                type: string
+            required: true
+        responses:
+            204:
+                description: task revoked
+                content:
+                    text/plain:
+                        schema:
+                            type: string
+        """
+        
+        task_redis_id = 'celery-task-meta-'+task_id
+        task_string = redis_client.get(task_redis_id)
+        if task_string is None:
+            return 'No such task', 404
+
+        try:
+            celery.control.revoke(task_id, terminate=True)
+        except Exception as err:
+            return 'We failed to revoke the task', 500
+
+        return '', 204
 
 api.add_resource(TaskStatus, '/task/<task_id>')
 
