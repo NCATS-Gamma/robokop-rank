@@ -175,6 +175,7 @@ class AnswerQuestionNow(Resource):
         max_connectivity = parse_args_max_connectivity(request.args)
 
         try:
+            logger.debug(f'Answering question now.')
             result = answer_question.apply(
                 args=[request.json],
                 kwargs={'max_results': max_results, 'output_format': output_format, 'max_connectivity': max_connectivity}

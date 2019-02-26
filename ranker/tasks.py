@@ -67,9 +67,8 @@ def answer_question(self, message_json, max_results=250, output_format=output_fo
             raise err
         
         if message.answers is None:
-            logger.info("0 answers found. Returning None.")
-            return None
-
+            message.answers = []
+        
         logger.info(f'{len(message.answers)} answers found.')
 
         self.update_state(state='SAVING')

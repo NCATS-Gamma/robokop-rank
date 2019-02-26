@@ -417,7 +417,8 @@ class Message():
         # Get local knowledge graph for this question
         self.fetch_knowledge_graph(max_connectivity=max_connectivity) # This will attempt to fetch from graph db if empty in a getter()
         if self.knowledge_graph is None:
-            self.answers = None
+            self.knowledge_graph = {'nodes':[], 'edges': []}
+            self.answers = []
             logger.info('No possible answers found')
             return
         
@@ -435,7 +436,13 @@ class Message():
         
         This is mostly glue around the heavy lifting in ranker_obj.Ranker
         """
-
+        logger.info('Ranking answers')
+        if (not self.knowledge_graph) or (not self.answers) or (('nodes' in self.knowledge_graph) and not self.knowledge_graph['nodes']) or (('edges' in self.knowledge_graph) and not self.knowledge_graph['edges']):
+            logger.info('   No answers to rank.')
+            self.knowledge_graph = {'nodes':[], 'edges': []}
+            self.answers = []
+            return
+        
         logger.info('Ranking answers')
         pr = Ranker(self.knowledge_graph, self.question_graph)
         (answer_scores, sorted_answers) = pr.rank(self.answers, max_results=max_results)
@@ -584,7 +591,7 @@ class Message():
                 match_strings.append(f"MATCH ({source_node})-[{eref}]-({target_node})")
             conditions = [c for c in [source_node.conditions, target_node.conditions, eref.conditions] if c]
             if conditions:
-                match_strings.append("WHERE " + " OR ".join(conditions))
+                match_strings.append("WHERE " + " AND ".join(conditions))
                 if include_size_constraints:
                     match_strings.append(f"AND size( ({target_node})-[]-() ) < {max_connectivity}")
             else:
