@@ -437,7 +437,7 @@ class Message():
         This is mostly glue around the heavy lifting in ranker_obj.Ranker
         """
         logger.info('Ranking answers')
-        if (not self.knowledge_graph) or (not self.answers) or (('nodes' in self.knowledge_graph) and not self.knowledge_graph['nodes']) or (('edges' in self.knowledge_graph) and not self.knowledge_graph['edges']):
+        if (not self.knowledge_graph) or (not self.answers) or ((('nodes' in self.knowledge_graph) and not self.knowledge_graph['nodes']) and (('edges' in self.knowledge_graph) and not self.knowledge_graph['edges'])):
             logger.info('   No answers to rank.')
             self.knowledge_graph = {'nodes':[], 'edges': []}
             self.answers = []
@@ -577,6 +577,8 @@ class Message():
         orphaned_nodes = all_nodes - all_referenced_nodes
         for n in orphaned_nodes:
             match_strings.append(f"MATCH ({node_references[n]})")
+            if node_references[n].conditions:
+                match_strings.append("WHERE " + node_references[n].conditions)
 
         # match edges
         include_size_constraints = bool(max_connectivity)
@@ -661,9 +663,15 @@ class Message():
         node_names = [f"{n['id']}" for n in nodes]
         edge_names = [f"{e['id']}" for e in edges]
 
-        collection_string = f"""WITH {' + '.join([f'collect(distinct {n})' for n in node_names])} as nodes, {'+'.join([f'collect(distinct {e})' for e in edge_names])} as edges
-            UNWIND nodes as n WITH collect(distinct n) as nodes, edges
-            UNWIND edges as e WITH nodes, collect(distinct e) as edges"""
+        collection_string = "WITH "
+        collection_string += ' + '.join([f'collect(distinct {n})' for n in node_names]) + ' as nodes, '
+        if edge_names:
+            collection_string += ' + '.join([f'collect(distinct {e})' for e in edge_names]) + ' as edges'
+        else:
+            collection_string += '[] as edges'
+        collection_string += "\nUNWIND nodes as n WITH collect(distinct n) as nodes, edges"
+        if edge_names:
+            collection_string += "\nUNWIND edges as e WITH nodes, collect(distinct e) as edges"""
         support_string = """WITH
             [r in edges | r{.*, source_id:startNode(r).id, target_id:endNode(r).id, type:type(r), id:toString(id(r))}] as edges,
             [n in nodes | n{.*, type:labels(n)}] as nodes"""
