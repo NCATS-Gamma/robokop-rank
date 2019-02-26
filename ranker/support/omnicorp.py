@@ -52,6 +52,15 @@ class OmnicorpSupport():
         # Dont' put these edges into neo4j, just return the article list
         # Even if articles = [], we want to make an edge for the cache.
         # We can decide later to write it or not.
+    def get_node_publications(self, node):
+        """Get node publications."""
+        pmids = self.omnicorp.get_pmids(node)
+        return pmids
+
+    def get_node_count(self, node):
+        """Get node publication count."""
+        count = self.omnicorp.count_pmids(node)
+        return {COUNT_KEY: count}
 
     def get_node_info(self, node):
         """Get node info."""

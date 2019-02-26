@@ -20,14 +20,6 @@ from ranker.knowledgegraph import KnowledgeGraph
 from ranker.support.omnicorp import OmnicorpSupport
 from ranker.cache import Cache
 
-# get supporter_cache - connect to redis
-support_cache = Cache(
-    redis_host=os.environ['CACHE_HOST'],
-    redis_port=os.environ['CACHE_PORT'],
-    redis_db=os.environ['CACHE_DB'],
-    redis_password=os.environ['CACHE_PASSWORD'])
-cached_prefixes = support_cache.get('OmnicorpPrefixes')
-
 logger = logging.getLogger("ranker")
 
 
@@ -567,49 +559,47 @@ class Omnicorp(Resource):
                             items:
                                 type: string
         """
-        
-        # These are defined above
-        # support_cache
-        # cached_prefixes
-
         with OmnicorpSupport() as supporter:
             # Ids would be cached in sorted order
             ids = [id1,id2]
             ids.sort()
-            key = f"{supporter.__class__.__name__}({ids[0]},{ids[1]})"
-            support_edge = support_cache.get(key)
-            if support_edge is None:
-                # Not found in cache
-                #There are two reasons that we don't get anything back:
-                # 1. We haven't evaluated that pair
-                # 2. We evaluated, and found it to be zero, and it was part
-                #  of a prefix pair that we evaluated all of.  In that case
-                #  we can infer that getting nothing back means an empty list
-                #  check cached_prefixes for this...
-                prefixes = tuple([ ident.split(':')[0].upper() for ident in ids ])
-                if cached_prefixes and prefixes in cached_prefixes:
-                    support_edge = []
-                else:
-                    #logger.info(f"exec op: {key}")
-                    try:
-                        support_edge = supporter.term_to_term(ids[0], ids[1])
-                        # logger.info(f'Support {support_edge}')
-                        support_cache.set(key, support_edge)
-                    except Exception as e:
-                        # raise e
-                        logger.debug('Support error, not caching')
-            # else: # Found in cache
             
-            # support_edge now is either None or the object
-            if support_edge is None:
-                publications = []
-            else:
-                publications = support_edge
+            publications = supporter.term_to_term(ids[0], ids[1])
 
         return publications, 200
 
 api.add_resource(Omnicorp, '/omnicorp/<id1>/<id2>')
 
+class Omnicorp1(Resource):
+    def get(self, id1):
+        """
+        Get publications for a pair of identifiers
+        ---
+        tags: [util]
+        parameters:
+          - in: path
+            name: id1
+            description: "curie of first term"
+            schema:
+                type: string
+            required: true
+            default: "MONDO:0005737"
+        responses:
+            200:
+                description: publications
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                type: string
+        """
+        with OmnicorpSupport() as supporter:
+            publications = supporter.get_node_publications(id1)
+
+        return publications, 200
+
+api.add_resource(Omnicorp1, '/omnicorp/<id1>/')
 
 class TaskStatus(Resource):
     def get(self, task_id):

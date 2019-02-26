@@ -169,3 +169,33 @@ class OmniCorp():
             cur.close()
             logger.debug(f'OmniCorp query error: {str(err)}\nReturning 0.')
             return 0
+    
+    def get_pmids(self, node):
+        """get PMIDs and return result."""
+        identifier = self.get_omni_identifier(node)
+        if identifier is None:
+            return []
+        prefix = Text.get_curie(identifier)
+        start = datetime.datetime.now()
+        cur = self.conn.cursor()
+        statement = f"SELECT pubmedid from omnicorp.{prefix}\n" + \
+                    "WHERE curie = %s"
+        try:
+            cur.execute(statement, (identifier,))
+            pmids = [x[0] for x in cur.fetchall()]
+            cur.close()
+            end = datetime.datetime.now()
+            self.total_single_call += (end-start)
+            # logger.debug(f"""Found {n} pmids in {end-start}
+            #             Total {self.total_single_call}""")
+            self.nsingle += 1
+            if self.nsingle % 100 == 0:
+                logger.info(f"NCalls: {self.nsingle}\n" +
+                            f"Total time: {self.total_single_call}\n" +
+                            f"Avg Time: {self.total_single_call/self.nsingle}")
+            return pmids
+        except psycopg2.ProgrammingError as err:
+            self.conn.rollback()
+            cur.close()
+            logger.debug(f'OmniCorp query error: {str(err)}\nReturning [].')
+            return []
