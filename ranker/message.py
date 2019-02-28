@@ -290,7 +290,10 @@ class Message():
                 logger.info(f'memory usage: {int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e3):d} MB')
                 if len(these_answers) < options['limit']:
                     # If this batch is less then the page size
-                    # It must be the last page
+                    # It must be the last page or you have reached the limit (below)
+                    break
+                elif len(these_answers) >= options['limit']:
+                    logger.warning('Maximum number of potential answers reached. We are going to go forward with these, but there may be other potential answers.')
                     break
             self.answers = answers
             logger.info('Answers obtained')
