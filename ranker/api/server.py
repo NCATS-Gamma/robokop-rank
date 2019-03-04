@@ -71,7 +71,7 @@ class Support(Resource):
         ---
         tags: [answer]
         requestBody:
-            description: A message with a machine-readable question graph.
+            description: A message with knowledge graph and answers.
             content:
                 application/json:
                     schema:
@@ -79,11 +79,11 @@ class Support(Resource):
             required: true
         responses:
             200:
-                description: Answer
+                description: A message with knowledge graph and answers with literature co-occurrence edges.
                 content:
                     application/json:
                         schema:
-                            $ref: '#/definitions/Response'
+                            $ref: '#/definitions/Message'
         """
 
         message = Message(request.json)
@@ -101,7 +101,7 @@ class RankMessage(Resource):
         ---
         tags: [answer]
         requestBody:
-            description: A message with a machine-readable question graph.
+            description: A message with answers.
             content:
                 application/json:
                     schema:
@@ -128,11 +128,11 @@ class RankMessage(Resource):
             default: 0
         responses:
             200:
-                description: Answer
+                description: A message with answers with scores.
                 content:
                     application/json:
                         schema:
-                            $ref: '#/definitions/Response'
+                            $ref: '#/definitions/Message'
         """
         try:
             max_results = parse_args_max_results(request.args)
@@ -166,7 +166,7 @@ class AnswerQuestionNow(Resource):
         ---
         tags: [answer]
         requestBody:
-            description: A message with a machine-readable question graph.
+            description: A message with question graph.
             content:
                 application/json:
                     schema:
@@ -193,11 +193,11 @@ class AnswerQuestionNow(Resource):
             default: 0
         responses:
             200:
-                description: Answer
+                description: A message with knowledge graph and answers.
                 content:
                     application/json:
                         schema:
-                            $ref: '#/definitions/Response'
+                            $ref: '#/definitions/Message'
         """
         max_results = parse_args_max_results(request.args)
         output_format = parse_args_output_format(request.args)
