@@ -288,7 +288,7 @@ class QuestionSubgraph(Resource):
         ---
         tags: [knowledgeGraph]
         requestBody:
-            description: A message with a machine-readable question graph.
+            description: A message with question graph and/or answers.
             content:
                 application/json:
                     schema:
@@ -296,20 +296,18 @@ class QuestionSubgraph(Resource):
             required: true
         responses:
             200:
-                description: Answer
+                description: A knowledge graph.
                 content:
                     application/json:
                         schema:
-                            $ref: '#/definitions/Response'
+                            $ref: '#/definitions/KGraph'
         """
         message = request.json
         if not message.get('answers', []):
             message_obj = Message(request.json)
 
-            try:
-                kg = message_obj.knowledge_graph
-            except:
-                return "Unable to retrieve knowledge graph.", 404
+            message_obj.fetch_knowledge_graph()
+            kg = message_obj.knowledge_graph
 
             return kg, 200
 
