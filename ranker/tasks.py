@@ -4,7 +4,7 @@ import os
 import logging
 import json
 import uuid
-
+import redis
 from celery import Celery, signals
 from kombu import Queue
 from ranker.message import Message, output_formats
@@ -20,7 +20,32 @@ celery.conf.task_queues = (
     Queue('ranker', routing_key='ranker'),
 )
 
+redis_client = redis.Redis(
+    host=os.environ['RESULTS_HOST'],
+    port=os.environ['RESULTS_PORT'],
+    db=os.environ['RANKER_RESULTS_DB'],
+    password=os.environ['RESULTS_PASSWORD'])
+
 logger = logging.getLogger('ranker')
+
+@signals.after_task_publish.connect()
+def initialize_queued_task_results(**kwargs):
+    # headers=None, body=None, exchange=None, routing_key=None
+    task_id = kwargs['headers']['id']
+    logger.info(f'Queuing task: {task_id}')
+
+    redis_key = 'celery-task-meta-'+task_id
+    initial_status = {"status": "QUEUED",
+        "result": None,
+        "traceback": None,
+        "children": [],
+        "task_id": task_id
+    }
+    redis_client.set(redis_key, json.dumps(initial_status))
+
+    # initial_status_again = redis_client.get(redis_key)
+    # logger.info(f'Got initial status {initial_status_again}')
+
 
 @signals.task_prerun.connect()
 def setup_logging(signal=None, sender=None, task_id=None, task=None, *args, **kwargs):
@@ -28,7 +53,7 @@ def setup_logging(signal=None, sender=None, task_id=None, task=None, *args, **kw
     Changes the main logger's handlers so they could log to a task specific log file.    
     """
     logger = logging.getLogger('ranker')
-    logger.info(f'Starting task specific log for task {task_id}')
+    logger.info(f'Starting to work on task {task_id}. Starting task specific log.')
     clear_log_handlers(logger)
     add_task_id_based_handler(logger, task_id)
     logger.info(f'This is a task specific log for task {task_id}')
