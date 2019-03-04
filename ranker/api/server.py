@@ -9,16 +9,14 @@ import sys
 
 import redis
 from flask_restful import Resource
-from flask import request, send_from_directory
+from flask import request
 
 from ranker.api.setup import app, api
 from ranker.message import Message, output_formats
 from ranker.tasks import answer_question, celery
-# import ranker.api.definitions
-import ranker.definitions
 from ranker.knowledgegraph import KnowledgeGraph
 from ranker.support.omnicorp import OmnicorpSupport
-from ranker.cache import Cache
+import ranker.definitions
 
 logger = logging.getLogger("ranker")
 
