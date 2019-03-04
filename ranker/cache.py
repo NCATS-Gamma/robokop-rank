@@ -96,6 +96,29 @@ class Cache:
                     self.cache[key] = result
         return result
 
+    def mget(self, *keys):
+        """Get multiple cached items by key."""
+        result = None
+        if not self.enabled:
+            return result
+        result = []
+        if self.redis:
+            values = self.redis.mget(keys)
+            for rec in values:
+                if rec is not None:
+                    result.append(self.serializer.loads(rec))
+                else:
+                    result.append(None)
+        else:
+            for key in keys:
+                path = os.path.join(self.cache_path, key)
+                if os.path.exists(path):
+                    with open(path, 'rb') as stream:
+                        result.append(self.serializer.loads(stream.read()))
+                else:
+                    result.append(None)
+        return result
+
     def set(self, key, value):
         """Add an item to the cache."""
         if not self.enabled:
