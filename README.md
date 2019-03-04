@@ -1,10 +1,10 @@
 # ROBOKOP Rank - The reasoning engine for ROBOKOP
 
-[ROBOKOP](http://gitbub.com/NCATS-Gamma/robokop) is a system for reasoning over knowledge oriented pathways. This is the reasoning system responsible for returning a ranked list of graphs that are relevant to a user defined question. 
+[ROBOKOP](http://github.com/NCATS-Gamma/robokop) is a system for reasoning over knowledge oriented pathways. This is the reasoning system responsible for returning a ranked list of graphs that are relevant to a user defined question. 
 
 Generating and ranking answers is composed of three parts: Generating answers, converting answers into weighted graphs, and then ranking the weighted graphs based upon their connectivity.
 
-Installation instructions can be found here http://gitbub.com/NCATS-Gamma/robokop
+Installation instructions can be found here http://github.com/NCATS-Gamma/robokop
 
 For a public instance of the API see
 
