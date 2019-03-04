@@ -3,6 +3,14 @@ import warnings
 import json
 
 
+def flatten_semilist(x):
+    """Convert a semi-nested list - a list of (lists and scalars) - to a flat list."""
+    # convert to a list of lists
+    lists = [n if isinstance(n, list) else [n] for n in x]
+    # flatten nested list
+    return [e for el in lists for e in el]
+
+
 class FromDictMixin():
     def __init__(self, *args, **kwargs):
         # apply json properties to existing attributes

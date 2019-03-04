@@ -20,6 +20,7 @@ import numpy as np
 import numpy.linalg
 
 from ranker.dijkstra import dijkstra
+from ranker.util import flatten_semilist
 
 logger = logging.getLogger('ranker')
 
@@ -27,11 +28,6 @@ logger = logging.getLogger('ranker')
 def argsort(x, reverse=False):
     """Return the indices that would sort the array."""
     return [p[0] for p in sorted(enumerate(x), key=lambda elem: elem[1], reverse=reverse)]
-
-
-def flatten_semilist(x):
-    lists = [n if isinstance(n, list) else [n] for n in x]
-    return [e for el in lists for e in el]
 
 
 class Ranker:

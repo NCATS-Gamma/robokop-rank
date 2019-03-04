@@ -24,6 +24,7 @@ from ranker.answer import Answer, Answerset
 from ranker.ranker_obj import Ranker
 from ranker.cache import Cache
 from ranker.support.omnicorp import OmnicorpSupport
+from ranker.util import flatten_semilist
 
 logger = logging.getLogger('ranker')
 
@@ -468,9 +469,6 @@ class Message():
 
         # We may have pruned answers using max_results, in which case nodes and edges in the KG are not in answers
         # We should remove these unused nodes and edges
-        def flatten_semilist(x):
-            lists = [n if isinstance(n, list) else [n] for n in x]
-            return [e for el in lists for e in el]
 
         node_ids = set()
         edge_ids = set()
@@ -537,10 +535,6 @@ class Message():
         return csv
 
     def dump_dense(self):
-
-        def flatten_semilist(x):
-            lists = [n if isinstance(n, list) else [n] for n in x]
-            return [e for el in lists for e in el]
 
         misc_info = {
             'natural_question': self.natural_question,
