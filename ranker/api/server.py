@@ -16,6 +16,7 @@ from ranker.message import Message, output_formats
 from ranker.tasks import answer_question, celery
 from ranker.knowledgegraph import KnowledgeGraph
 from ranker.support.omnicorp import OmnicorpSupport
+from ranker.util import flatten_semilist
 import ranker.definitions
 
 logger = logging.getLogger("ranker")
@@ -278,14 +279,6 @@ class AnswerQuestion(Resource):
         return {'task_id':task.id}, 202
 
 api.add_resource(AnswerQuestion, '/')
-
-
-def flatten_semilist(x):
-    """Convert a list of (lists and scalars) to a flat list."""
-    # convert to a list of lists
-    lists = [n if isinstance(n, list) else [n] for n in x]
-    # flatten nested list
-    return [e for el in lists for e in el]
 
 
 class QuestionSubgraph(Resource):
