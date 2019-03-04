@@ -65,6 +65,36 @@ def parse_args_max_connectivity(req_args):
     return max_connectivity
 
 
+class Support(Resource):
+    def post(self):
+        """
+        Add support to a message
+        ---
+        tags: [answer]
+        requestBody:
+            description: A message with a machine-readable question graph.
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/definitions/Message'
+            required: true
+        responses:
+            200:
+                description: Answer
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/definitions/Response'
+        """
+
+        message = Message(request.json)
+        message.fetch_knowledge_graph_support()
+        output = message.dump()
+        return output, 200
+
+api.add_resource(Support, '/support')
+
+
 class RankMessage(Resource):
     def post(self):
         """
