@@ -3,6 +3,7 @@
 # standard modules
 import os
 import sys
+import time
 import warnings
 import logging
 import requests
@@ -23,13 +24,9 @@ from ranker.ranker_obj import Ranker
 from ranker.cache import Cache
 from ranker.support.omnicorp import OmnicorpSupport
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('ranker')
 
-
-class NoAnswersException(Exception):
-    """Exception when no answers are found."""
-    pass
-
+output_formats = ['DENSE', 'MESSAGE', 'CSV', 'ANSWERS']
 
 class NodeReference():
     """Node reference object."""
@@ -141,47 +138,23 @@ class EdgeReference():
         else:
             return ''
 
+class Message():
+    """Message object.
 
-def record2networkx(records):
-    """Return a networkx graph corresponding to the Neo4j Record.
+    Represents a question and answer object such as "What genetic condition provides protection against disease X?"
 
-    http://neo4j.com/docs/api/java-driver/current/org/neo4j/driver/v1/Record.html
-    """
-    graph = nx.MultiDiGraph()
-    for record in records:
-        if 'nodes' in record:
-            for node in record["nodes"]:
-                graph.add_node(node['id'], **node)
-        if 'edges' in record:
-            for edge in record["edges"]:
-                graph.add_edge(edge['source_id'], edge['target_id'], **edge)
-    return graph
-
-
-class Question():
-    """Question object.
-
-    Represents a question such as "What genetic condition provides protection against disease X?"
-
-    methods:
-    * answer() - a struct containing the ranked answer paths
-    * cypher() - the appropriate Cypher query for the Knowledge Graph
     """
 
     def __init__(self, *args, **kwargs):
         """Create a question.
 
-        keyword arguments: id, user, notes, natural_question, nodes, edges
-        q = Question(kw0=value, ...)
-        q = Question(struct, ...)
+        keyword arguments: question_graph or machine_question, knowledge_graph, answer_maps
         """
         # initialize all properties
-        self.user_id = None
-        self.id = None
-        self.notes = None
-        self.name = None
-        self.natural_question = None
-        self.machine_question = {}
+        self.natural_question = ''
+        self.question_graph = {}
+        self.knowledge_graph = None
+        self.answer_maps = None
 
         # apply json properties to existing attributes
         attributes = self.__dict__.keys()
@@ -190,6 +163,8 @@ class Question():
             for key in struct:
                 if key in attributes:
                     setattr(self, key, struct[key])
+                elif key == 'machine_question':
+                    setattr(self, 'question_graph', struct[key])
                 else:
                     warnings.warn("JSON field {} ignored.".format(key))
 
@@ -197,95 +172,154 @@ class Question():
         for key in kwargs:
             if key in attributes:
                 setattr(self, key, kwargs[key])
+            elif key == 'machine_question':
+                setattr(self, 'question_graph', kwargs[key])
             else:
                 warnings.warn("Keyword argument {} ignored.".format(key))
 
-        # add ids to edges if necessary
-        if not any(['id' in e for e in self.machine_question['edges']]):
-            for i, e in enumerate(self.machine_question['edges']):
+        # add ids to question graph edges if necessary ()
+        if not any(['id' in e for e in self.question_graph['edges']]):
+            for i, e in enumerate(self.question_graph['edges']):
                 e['id'] = chr(ord('a') + i)
 
-    def relevant_knowledge_graph(self):
+    # @property
+    # def knowledge_graph(self):
+    #     if self.knowledge_graph is None:
+    #         logger.debug('Auto-fetching knowledge graph')
+    #         self.knowledge_graph = self.fetchknowledge_graph()
+    #     return self.knowledge_graph
+
+    # @knowledge_graph.setter
+    # def setknowledge_graph(self, value):
+    #     self.knowledge_graph = value
+
+    def fetch_knowledge_graph(self, max_connectivity=0):
         # get the knowledge graph relevant to the question from the big knowledge graph in Neo4j
         with KnowledgeGraph() as database:
-            with database.driver.session() as session:
-                record = list(session.run(self.kg_query()))[0]
-        knowledge_graph = {
-            'nodes': record['nodes'],
-            'edges': record['edges']
-        }
-        for node in knowledge_graph['nodes']:
-            node['type'].remove('named_thing')
-            node['type'] = node['type'][0]
-        return knowledge_graph
+            options = {
+                'max_connectivity': max_connectivity
+            }
+            query_string = self.cypher_query_knowledge_graph(options)
 
-    def fetch_answers(self):
-        # get Neo4j connection
-        with KnowledgeGraph() as database:
-
-            # get knowledge graph
-            logger.debug('Getting knowledge graph...')
-            query_string = self.kg_query()
-            logger.debug(query_string)
+            logger.info("Fetching knowledge graph")
+            # logger.debug(query_string)
             with database.driver.session() as session:
                 result = session.run(query_string)
             if result.peek() is None:
-                logger.debug("No answers found. Returning None.")
+                logger.info("No relevent knowledge graph was found. Returning None.")
                 return None
-            logger.debug('Converting Neo4j Result to dict...')
+            
+            logger.info('Converting neo4j Result to dict')
             result = list(result)
 
             knowledge_graph = {
                 'nodes': result[0]['nodes'],
                 'edges': result[0]['edges']
             }
+            # Remove neo4j oddities
             for node in knowledge_graph['nodes']:
                 node['type'].remove('named_thing')
                 node['type'] = node['type'][0]
 
+            logger.info('Knowledge graph obtained')
+            self.knowledge_graph = knowledge_graph
+        return
+
+    # @property
+    # def answer_maps(self):
+    #     if self._answer_maps is None:
+    #         logger.debug('Auto-fetching answer maps')
+    #         self._answer_maps = self.fetch_answer_maps()
+    #     return self._answer_maps
+    
+    # @answer_maps.setter
+    # def set_answer_maps(self, value):
+    #     self._answer_maps = value
+
+    def fetch_answer_maps(self, max_connectivity=0):
+        # get Neo4j connection
+        with KnowledgeGraph() as database:
+
+            # # get knowledge graph
+            # logger.debug('Getting knowledge graph...')
+
             # get all answer maps relevant to the question from the knowledge graph
-            logger.debug('Getting answer maps...')
-            knowledge_maps = []
+            logger.info('Getting answers')
+            answer_maps = []
             options = {
                 'limit': 1000000,
-                'skip': 0
+                'skip': 0,
+                'max_connectivity': max_connectivity
             }
+            
+            logger.info('Running answer generation query')
             while True:
-                answer_maps = database.query(self, options=options)
+                
+                query_string = self.cypher_query_answer_map(options=options)
+                
+                # logger.debug(query_string)
+                start = time.time()
+                with database.driver.session() as session:
+                    result = session.run(query_string)
+            
+                these_answer_maps = [{'node_bindings': r['nodes'], 'edge_bindings': r['edges']} for r in result]
+                
+                logger.info(f"{time.time()-start} seconds elapsed")
+                logger.info(f"{len(these_answer_maps)} subgraphs returned.")
+
                 options['skip'] += options['limit']
-                answer_maps = [{'node_bindings': g['nodes'], 'edge_bindings': g['edges']} for g in answer_maps]
-                knowledge_maps.extend(answer_maps)
-                logger.debug(f'{len(knowledge_maps)} answer_maps: {int(sys.getsizeof(pickle.dumps(knowledge_maps)) / 1e6):d} MB')
-                logger.debug(f'memory usage: {int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e3):d} MB')
-                if len(answer_maps) < options['limit']:
+                answer_maps.extend(these_answer_maps)
+
+                logger.info(f'{len(answer_maps)} answer_maps: {int(sys.getsizeof(pickle.dumps(answer_maps)) / 1e6):d} MB')
+                logger.info(f'memory usage: {int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e3):d} MB')
+                if len(these_answer_maps) < options['limit']:
+                    # If this batch is less then the page size
+                    # It must be the last page
                     break
+            self.answer_maps = answer_maps
+            logger.info('Answers obtained')
+        return
 
-        return {
-            'knowledge_graph': knowledge_graph,
-            'answers': knowledge_maps
-        }
+    def fetch_knowledge_graph_support(self):
 
-    def get_support(self, knowledge_graph, knowledge_maps, cache=None):
+        #We don't need this generality if everything is omnicorp
+        # get supporter
+        #support_module_name = 'ranker.support.omnicorp'
+        #supporter = import_module(support_module_name).get_supporter()
+
+        # get cache if possible
+        try:
+            cache = Cache(
+                redis_host=os.environ['CACHE_HOST'],
+                redis_port=os.environ['CACHE_PORT'],
+                redis_db=os.environ['CACHE_DB'],
+                redis_password=os.environ['CACHE_PASSWORD'])
+        except Exception as e:
+            logger.info('Could not connect to request cache for support...')
+            cache = None
+
+
         with OmnicorpSupport() as supporter:
             # get all node supports
             logger.info('Getting individual node supports...')
-            for node in knowledge_graph['nodes']:
+            for node in self.knowledge_graph['nodes']:
                 key = f"{supporter.__class__.__name__}({node['id']})"
-                support_dict = cache.get(key)
+                support_dict = cache.get(key) if cache else None
                 if support_dict is not None:
                     #logger.info(f"cache hit: {key} {support_dict}")
                     pass
                 else:
                     #logger.info(f"exec op: {key}")
                     support_dict = supporter.get_node_info(node['id'])
-                    cache.set(key, support_dict)
+                    if cache:
+                        cache.set(key, support_dict)
                 # add omnicorp_article_count to nodes in networkx graph
                 node.update(support_dict)
 
-            logger.info('Getting node pair supports...')
-            # generate a set of pairs of node curies
+            logger.info('Getting support for answer connected node pairs...')
+            # Generate a set of pairs of node curies
             pair_to_answer = defaultdict(list)  # a map of node pairs to answers
-            for ans_idx, answer_map in enumerate(knowledge_maps):
+            for ans_idx, answer_map in enumerate(self.answer_maps):
                 for combo in combinations(answer_map['nodes'], 2):
                     if isinstance(answer_map['nodes'][combo[0]], str):
                         sources = [answer_map['nodes'][combo[0]]]
@@ -300,7 +334,7 @@ class Question():
                             node_i, node_j = sorted([source_id, target_id])
                             pair_to_answer[(node_i, node_j)].append(ans_idx)
 
-            cached_prefixes = cache.get('OmnicorpPrefixes')
+            cached_prefixes = cache.get('OmnicorpPrefixes') if cache else None
             # get all pair supports
             for support_idx, pair in enumerate(pair_to_answer):
                 #logger.info(pair)
@@ -308,7 +342,7 @@ class Question():
                 ids = [pair[0],pair[1]]
                 ids.sort()
                 key = f"{supporter.__class__.__name__}_count({ids[0]},{ids[1]})"
-                support_edge = cache.get(key)
+                support_edge = cache.get(key) if cache else None
                 if support_edge is not None:
                     #logger.info(f"cache hit: {key} {support_edge}")
                     pass
@@ -326,7 +360,8 @@ class Question():
                         #logger.info(f"exec op: {key}")
                         try:
                             support_edge = supporter.term_to_term(pair[0], pair[1])
-                            cache.set(key, support_edge)
+                            if cache:
+                                cache.set(key, support_edge)
                         except Exception as e:
                             raise e
                             # logger.debug('Support error, not caching')
@@ -334,7 +369,7 @@ class Question():
                 if not support_edge:
                     continue
                 uid = str(uuid4())
-                knowledge_graph['edges'].append({
+                self.knowledge_graph['edges'].append({
                     'type': 'literature_co-occurrence',
                     'id': uid,
                     'num_publications': support_edge,
@@ -344,67 +379,123 @@ class Question():
                     'target_id': pair[1],
                     'edge_source': 'omnicorp.term_to_term'
                 })
+
                 for sg in pair_to_answer[pair]:
-                    knowledge_maps[sg]['edges'].update({f's{support_idx}': uid})
-        return knowledge_graph
+                    self.answer_maps[sg]['edges'].update({f's{support_idx}': uid})
+            # Next pair
+        # Close the supporter
 
-
-    def answer(self, max_results=250, use_support=True):
-        """Answer the question.
-
-        Returns the answer struct, something along the lines of:
-        https://docs.google.com/document/d/1O6_sVSdSjgMmXacyI44JJfEVQLATagal9ydWLBgi-vE
+    def rank_answers(self, max_results=250, max_connectivity=0):
+        """Rank answers to the question
+        
+        This is mostly glue around the heavy lifting in ranker_obj.Ranker
         """
 
-        # get cache
-        cache = Cache(
-            redis_host=os.environ['CACHE_HOST'],
-            redis_port=os.environ['CACHE_PORT'],
-            redis_db=os.environ['CACHE_DB'],
-            redis_password=os.environ['CACHE_PASSWORD'])
+        # compute scores with ranker
 
-        answers = self.fetch_answers()
-        if answers is None:
-            return None
-        knowledge_graph = answers['knowledge_graph']
-        knowledge_maps = answers['knowledge_maps']
+        # Get local knowledge graph for this question
+        self.fetch_knowledge_graph(max_connectivity=max_connectivity) # This will attempt to fetch from graph db if empty in a getter()
+        if self.knowledge_graph is None:
+            self.answer_maps = None
+            logger.info('No possible answers found')
+            return
+        
+        # Actually have a local knowledge graph
+        self.fetch_answer_maps(max_connectivity=max_connectivity) # This will attempt to fetch from the graph db if empty in a getter()
+        if self.answer_maps is None:
+            logger.info('No possible answers found')
+            return
+        
+        logger.info('Ranking answers')
+        pr = Ranker(self.knowledge_graph, self.question_graph)
+        (answer_scores, sorted_answer_maps) = pr.rank(self.answer_maps, max_results=max_results)
+        
+        # Add the scores to the answer_maps
+        for i, answer in enumerate(sorted_answer_maps):
+            answer['score'] = answer_scores[i]
 
-        #We don't need this generality if everything is omnicorp
-        # get supporter
-        #support_module_name = 'ranker.support.omnicorp'
-        #supporter = import_module(support_module_name).get_supporter()
+        self.answer_maps = sorted_answer_maps
 
-        if use_support:
-            knowledge_graph = self.get_support(knowledge_graph, knowledge_maps, cache=cache)
+    def dump(self):
+        out = {
+            'question_graph': self.question_graph,
+            'knowledge_graph': self.knowledge_graph,
+            'answers': self.answer_maps
+        }
+        return out
 
-        logger.debug('Ranking...')
-        # compute scores with NAGA, export to json
-        pr = Ranker(knowledge_graph, self.machine_question)
-        subgraphs_with_metadata, subgraphs = pr.report_ranking(knowledge_maps, max_results=max_results)  # returned subgraphs are sorted by rank
+    def dump_answers(self):
+        out = {
+            'answers': self.answer_maps
+        }
+        return out
+    def dump_csv(self):
+        nodes = self.question_graph['nodes']
+        answers = self.answer_maps
+        csv_header = [n['id'] for n in nodes]
+        csv_lines = []
+        for a in answers:
+            this_line = [[] for i in range(len(csv_header))]
+            for n in a['node_bindings']:
+                header_ind = [i for i, s in enumerate(csv_header) if s == n]
+
+                if len(header_ind) < 1:
+                    raise Exception(f'Unspecified question nodes found within an answer')
+                elif len(header_ind) > 1:
+                    raise Exception(f'Too many question nodes identified within an answer')
+                
+                n_values = a['node_bindings'][n]
+                if isinstance(n_values, list):
+                    n_values = n_values.join('|')
+
+                this_line[header_ind[0]] = n_values
+            csv_lines.append(this_line)
+
+        csv = [','.join(csv_header)]
+        csv.extend([','.join(l) for l in csv_lines])
+        csv = '\n'.join(csv)
+
+        return csv
+
+    def dump_dense(self):
+
+        def flatten_semilist(x):
+            lists = [n if isinstance(n, list) else [n] for n in x]
+            return [e for el in lists for e in el]
 
         misc_info = {
             'natural_question': self.natural_question,
-            'num_total_paths': len(subgraphs)
+            'num_total_paths': len(self.answer_maps)
         }
         aset = Answerset(misc_info=misc_info)
-        # for substruct, subgraph in zip(score_struct, subgraphs):
-        for subgraph in subgraphs_with_metadata:
 
-            answer = Answer(nodes=subgraph['nodes'],
-                            edges=subgraph['edges'],
-                            score=subgraph['score'])
-            # TODO: move node/edge details to AnswerSet
-            # node_ids = [node['id'] for node in graph.nodes]
-            # edge_ids = [edge['id'] for edge in graph.edges]
-            # answer = Answer(nodes=node_ids,\
-            #         edges=edge_ids,\
-            #         score=0)
-            aset += answer  # substruct['score'])
+        if self.answer_maps:
+            kgraph_map = {n['id']: n for n in self.knowledge_graph['nodes'] + self.knowledge_graph['edges']}
+        
+            for answer in self.answer_maps:
+                node_ids = flatten_semilist(answer['node_bindings'].values())
+                nodes = [kgraph_map[n] for n in node_ids]
+                edge_ids = flatten_semilist(answer['edge_bindings'].values())
+                edges = [kgraph_map[e] for e in edge_ids]
 
-        return aset
+                answer = Answer(nodes=nodes,
+                            edges=edges,
+                            score=answer['score'])
+            
+                aset += answer
 
-    def cypher_match_string(self):
-        nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
+        return aset.toStandard()
+
+    def cypher_query_fragment_match(self, max_connectivity=0): # cypher_match_string
+        '''
+        Generate a Cypher query fragment to match the nodes and edges that correspond to a question.
+
+        This is used internally for cypher_query_answer_map and cypher_query_knowledge_graph
+
+        Returns the query fragment as a string.
+        '''
+
+        nodes, edges = self.question_graph['nodes'], self.question_graph['edges']
 
         # generate internal node and edge variable names
         node_references = {n['id']: NodeReference(n) for n in nodes}
@@ -422,6 +513,7 @@ class Question():
             match_strings.append(f"MATCH ({node_references[n]})")
 
         # match edges
+        include_size_constraints = bool(max_connectivity)
         for e, eref in zip(edges, edge_references):
             source_node = node_references[e['source_id']]
             target_node = node_references[e['target_id']]
@@ -432,21 +524,33 @@ class Question():
             conditions = [c for c in [source_node.conditions, target_node.conditions, eref.conditions] if c]
             if conditions:
                 match_strings.append("WHERE " + " OR ".join(conditions))
+                if include_size_constraints:
+                    match_strings.append(f"AND size( ({target_node})-[]-() ) < {max_connectivity}")
+            else:
+                if include_size_constraints:
+                    match_strings.append(f"WHERE size( ({target_node})-[]-() ) < {max_connectivity}")
+
+
 
         match_string = ' '.join(match_strings)
+        logger.debug(match_string)
         return match_string
 
-    def cypher(self, options=None):
+    def cypher_query_answer_map(self, options=None):
         '''
-        Generate a Cypher query to extract the portion of the Knowledge Graph necessary to answer the question.
+        Generate a Cypher query to extract the answer maps for a question.
 
         Returns the query as a string.
         '''
 
-        match_string = self.cypher_match_string()
+        max_connectivity = 0
+        if options and 'max_connectivity' in options:
+            max_connectivity = options['max_connectivity']
+        
+        match_string = self.cypher_query_fragment_match(max_connectivity)
 
-        nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
-        node_map = {n['id']: n for n in nodes}
+        nodes, edges = self.question_graph['nodes'], self.question_graph['edges']
+        # node_map = {n['id']: n for n in nodes}
 
         # generate internal node and edge variable names
         node_names = [f"{n['id']}" for n in nodes]
@@ -470,10 +574,20 @@ class Question():
 
         return query_string
 
-    def kg_query(self):
-        match_string = self.cypher_match_string()
+    def cypher_query_knowledge_graph(self, options=None): #kg_query
+        '''
+        Generate a Cypher query to extract the knowledge graph for a question.
 
-        nodes, edges = self.machine_question['nodes'], self.machine_question['edges']
+        Returns the query as a string.
+        '''
+
+        max_connectivity = 0
+        if options and 'max_connectivity' in options:
+            max_connectivity = options['max_connectivity']
+
+        match_string = self.cypher_query_fragment_match(max_connectivity)
+
+        nodes, edges = self.question_graph['nodes'], self.question_graph['edges']
 
         # generate internal node and edge variable names
         node_names = [f"{n['id']}" for n in nodes]

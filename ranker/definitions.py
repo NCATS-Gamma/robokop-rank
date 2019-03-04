@@ -316,15 +316,15 @@ class Answer():
             oneOf:
                 - type: string
                 - type: array
-                items:
-                    type: string
+                  items:
+                      type: string
         edge_bindings:
             additionalProperties:
             oneOf:
                 - type: string
                 - type: array
-                items:
-                    type: string
+                  items:
+                      type: string
     """
 
     pass
@@ -407,6 +407,7 @@ class Message(FromDictMixin2):
         nodes:
           - id: "n00"
             type: "disease"
+            curie: "MONDO:0005737"
           - id: "n01"
             type: "gene"
           - id: "n02"
@@ -424,8 +425,11 @@ class Message(FromDictMixin2):
             name: "Ebola hemorrhagic fever"
             type: "disease"
         edges: []
-      knowledge_maps:
-        - n00: "MONDO:0005737"
+      answers:
+        - node_bindings:
+            n00: "MONDO:0005737"
+          edge_bindings:
+            e00: "636"
     """
 
     constructors = {

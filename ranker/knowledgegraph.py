@@ -117,21 +117,3 @@ class KnowledgeGraph:
             logger.error(e)
             return {},500
 
-
-    def query(self, question, options=None):
-        if isinstance(question, str):
-            query_string = question
-        else:
-            query_string = question.cypher(options=options)
-
-        logger.debug('Running query... ')
-        logger.debug(query_string)
-        start = time.time()
-        with self.driver.session() as session:
-            result = session.run(query_string)
-        records = [{'nodes': r['nodes'], 'edges': r['edges']} for r in result]
-        logger.debug(f"{time.time()-start} seconds elapsed")
-
-        logger.debug(f"{len(records)} subgraphs returned.")
-
-        return records

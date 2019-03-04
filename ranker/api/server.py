@@ -5,18 +5,18 @@
 import os
 import logging
 import json
+import sys
 
 import redis
 from flask_restful import Resource
 from flask import request, send_from_directory
 
 from ranker.api.setup import app, api
-from ranker.question import Question, NoAnswersException
-from ranker.answer import Answerset
+from ranker.message import Message, output_formats
 from ranker.tasks import answer_question
-import ranker.api.definitions
+# import ranker.api.definitions
+import ranker.definitions
 from ranker.knowledgegraph import KnowledgeGraph
-from ranker.definitions import Message
 from ranker.support.omnicorp import OmnicorpSupport
 from ranker.cache import Cache
 
@@ -30,65 +30,35 @@ cached_prefixes = support_cache.get('OmnicorpPrefixes')
 
 logger = logging.getLogger("ranker")
 
-class PassMessage(Resource):
-    def post(self):
-        """
-        Get answers to a question
-        ---
-        tags: [answer]
-        requestBody:
-            description: Input message
-            required: true
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/definitions/Message'
-        responses:
-            200:
-                description: Output message
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/definitions/Message'
-        """
-        message = Message(request.json)
+def parse_args_output_format(req_args):
+    output_format = req_args.get('output_format', default=output_formats[1])
+    if output_format.upper() not in output_formats:
+        raise RuntimeError(f'output_format must be one of [{" ".join(output_formats)}]')
+    
+    return output_format
 
-        if not message.answers:
-            message.answers.append({
-                "node_bindings": {},
-                "edge_bindings": {}
-            })
-        logger.info(f"{len(message.answers)} questions.")
-        big_answerset = None
-        for i, kmap in enumerate(message.answers):
-            logger.info(f"Answering question {i}...")
-            question_json = message.question_graph.apply(kmap)
-            question = Question(question_json)
+def parse_args_max_results(req_args):
+    max_results = req_args.get('max_results', default=None)
+    max_results = max_results if max_results is not None else 250
+    return max_results
 
-            answerset = question.fetch_answers()
-            if answerset is None:
-                continue
-            logger.debug(answerset)
-            answerset = Message(answerset)
-            logger.info("%d answers found.", len(answerset.answers))
-            answerset.answers = [{
-                "node_bindings": {**kmap['node_bindings'], **km['node_bindings']},
-                "edge_bindings": {**kmap['edge_bindings'], **km['edge_bindings']}
-            } for km in answerset.answers]
-            if big_answerset is None:
-                big_answerset = answerset
-                big_answerset.knowledge_graph.merge(message.knowledge_graph)
-            else:
-                big_answerset.knowledge_graph.merge(answerset.knowledge_graph)
-                big_answerset.answers = big_answerset.answers + answerset.answers
+def parse_args_max_connectivity(req_args):
+    max_connectivity = req_args.get('max_connectivity', default=None)
+    
+    if max_connectivity and isinstance(max_connectivity, str):
+        if max_connectivity.lower() == 'none':
+            max_connectivity = None
+        else:
+            try:
+                max_connectivity = int(max_connectivity)
+            except ValueError:
+                raise RuntimeError(f'max_connectivity should be an integer')
+            except:
+                raise
+            if max_connectivity < 0:
+                max_connectivity = None
 
-        if big_answerset is None:
-            logger.info("0 answers found. Returning None.")
-            return None, 200
-        big_answerset.question_graph = message.question_graph
-        return big_answerset.dump(), 200
-
-api.add_resource(PassMessage, '/ti')
+    return max_connectivity
 
 
 class AnswerQuestionNow(Resource):
@@ -98,11 +68,11 @@ class AnswerQuestionNow(Resource):
         ---
         tags: [answer]
         requestBody:
-            description: The machine-readable question graph.
+            description: A message with a machine-readable question graph.
             content:
                 application/json:
                     schema:
-                        $ref: '#/definitions/Question'
+                        $ref: '#/definitions/Message'
             required: true
         parameters:
           - in: query
@@ -111,6 +81,18 @@ class AnswerQuestionNow(Resource):
             schema:
                 type: integer
             default: 250
+          - in: query
+            name: output_format
+            description: Requested output format. DENSE, MESSAGE, CSV or ANSWERS
+            schema:
+                type: string
+            default: MESSAGE
+          - in: query
+            name: max_connectivity
+            description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
+            schema:
+                type: integer
+            default: 0
         responses:
             200:
                 description: Answer
@@ -119,32 +101,32 @@ class AnswerQuestionNow(Resource):
                         schema:
                             $ref: '#/definitions/Response'
         """
-        max_results = request.args.get('max_results', default=250)
-        logger.debug("max_results: %s", str(max_results))
-        try:
-            max_results = int(max_results)
-        except ValueError:
-            return 'max_results should be an integer', 400
-        if max_results < 0:
-            max_results = None
+        max_results = parse_args_max_results(request.args)
+        output_format = parse_args_output_format(request.args)
+        max_connectivity = parse_args_max_connectivity(request.args)
 
         try:
             result = answer_question.apply(
                 args=[request.json],
-                kwargs={'max_results': max_results}
+                kwargs={'max_results': max_results, 'output_format': output_format, 'max_connectivity': max_connectivity}
             )
             result = result.get()
         except:
             # Celery tasks log errors internally. Just return.
             return "Internal server error. See the logs for details.", 500
+        
         if result is None:
-            return None, 200
-        logger.debug(f'Answerset file: {result}')
+            message = request.json
+            message['knowledge_graph'] = []
+            message['answers'] = []
+            return message, 200
+
+        logger.debug(f'Fetching answerset file: {result}')
         filename = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', result)
         with open(filename, 'r') as f:
-            answers = json.load(f)
+            output = json.load(f)
         os.remove(filename)
-        return answers, 200
+        return output, 200
 
 api.add_resource(AnswerQuestionNow, '/now')
 
@@ -155,11 +137,11 @@ class AnswerQuestion(Resource):
         ---
         tags: [answer]
         requestBody:
-            description: The machine-readable question graph.
+            description: A message with a machine-readable question graph.
             content:
                 application/json:
                     schema:
-                        $ref: '#/definitions/Question'
+                        $ref: '#/definitions/Message'
             required: true
         parameters:
           - in: query
@@ -168,6 +150,51 @@ class AnswerQuestion(Resource):
             schema:
                 type: integer
             default: 250
+          - in: query
+            name: output_format
+            description: Requested output format. APIStandard, Message, Answers
+            schema:
+                type: string
+            default: Message
+          - in: query
+            name: max_connectivity
+            description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
+            schema:
+                type: integer
+            default: 0
+        responses:
+            200:
+                description: Successfull queued a task
+                content:
+                    application/json:
+        """
+
+        max_results = parse_args_max_results(request.args)
+        output_format = parse_args_output_format(request.args)
+        max_connectivity = parse_args_max_connectivity(request.args)
+
+        task = answer_question.apply_async(
+            args=[request.json],
+            kwargs={'max_results': max_results, 'output_format': output_format, 'max_connectivity': max_connectivity}
+        )
+        return {'task_id':task.id}, 202
+
+api.add_resource(AnswerQuestion, '/')
+
+
+class QuestionSubgraph(Resource):
+    def post(self):
+        """
+        Get knowledge graph for message.
+        ---
+        tags: [knowledgeGraph]
+        requestBody:
+            description: A message with a machine-readable question graph.
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/definitions/Message'
+            required: true
         responses:
             200:
                 description: Answer
@@ -176,65 +203,199 @@ class AnswerQuestion(Resource):
                         schema:
                             $ref: '#/definitions/Response'
         """
-        max_results = request.args.get('max_results', default=50)
-        logger.debug("max_results: %s", str(max_results))
-        try:
-            max_results = int(max_results)
-        except ValueError:
-            return 'max_results should be an integer', 400
-        except:
-            raise
-        if max_results < 0:
-            max_results = None
+        message = request.json
+        if not message.get('answers', []):
+            message_obj = Message(request.json)
 
-        task = answer_question.apply_async(
-            args=[request.json],
-            kwargs={'max_results': max_results}
-        )
-        return {'task_id':task.id}, 202
+            try:
+                kg = message_obj.knowledge_graph
+            except:
+                return "Unable to retrieve knowledge graph.", 404
 
-api.add_resource(AnswerQuestion, '/')
+            return kg, 200
 
-class QuestionSubgraph(Resource):
+        def flatten_semilist(x):
+            lists = [n if isinstance(n, list) else [n] for n in x]
+            return [e for el in lists for e in el]
+
+        # get nodes and edge ids from message answers
+        node_ids = [knode_id for answer in message['answers'] for knode_id in answer['node_bindings'].values()]
+        edge_ids = [kedge_id for answer in message['answers'] for kedge_id in answer['edge_bindings'].values()]
+        node_ids = flatten_semilist(node_ids)
+        edge_ids = flatten_semilist(edge_ids)
+
+        nodes = get_node_properties(node_ids)
+        edges = get_edge_properties(edge_ids)
+
+        kg = {
+            'nodes': nodes,
+            'edges': edges
+        }
+        return kg, 200
+
+api.add_resource(QuestionSubgraph, '/knowledge_graph')
+
+
+class MultiNodeLookup(Resource):
+    """Multi-node lookup endpoints."""
+
     def post(self):
         """
-        Get question subgraph
+        Get properties of nodes by id.
+        Ignores nodes that are not found.
+        If 'fields' is provided, returns only the requested fields.
+        Returns null for any unknown fields.
+
+        RESULTS MAY NOT BE SORTED!
         ---
-        tags: [util]
+        tags: [knowledgeGraph]
         requestBody:
-            name: question
-            description: The machine-readable question graph.
+            name: request
+            description: The node ids for lookup.
             content:
                 application/json:
                     schema:
-                        $ref: '#/definitions/Question'
+                        required:
+                          - node_ids
+                        properties:
+                            node_ids:
+                                type: array
+                                items:
+                                    type: string
+                            fields:
+                                type: array
+                                items:
+                                    type: string
+                        example:
+                            node_ids:
+                              - "MONDO:0005737"
+                              - "HGNC:16361"
             required: true
         responses:
             200:
-                description: Knowledge subgraph
+                description: Node
                 content:
                     application/json:
                         schema:
-                            $ref: '#/definitions/Question'
+                            $ref: '#/definitions/KNode'
         """
+        node_ids = request.json['node_ids']
+        fields = request.json.get('fields', None)
 
-        question = Question(request.json)
-        
-        try:
-            subgraph = question.relevant_knowledge_graph()
-        except NoAnswersException:
-            return "Question not found in neo4j cache.", 404
+        return get_node_properties(node_ids, fields), 200
 
-        return subgraph, 200
+api.add_resource(MultiNodeLookup, '/multinode_lookup')
 
-api.add_resource(QuestionSubgraph, '/subgraph')
+
+def get_node_properties(node_ids, fields=None):
+    functions = {
+        'labels': 'labels(n)',
+    }
+
+    if fields is not None:
+        prop_string = ', '.join([f'{key}:{functions[key]}' if key in functions else f'{key}:n.{key}' for key in fields])
+    else:
+        prop_string = ', '.join([f'{key}:{functions[key]}' for key in functions] + ['.*'])
+
+
+    where_string = ' OR '.join([f'n.id="{node_id}"' for node_id in node_ids])
+    query_string = f'MATCH (n) WHERE {where_string} RETURN n{{{prop_string}}}'
+
+    with KnowledgeGraph() as database:
+        with database.driver.session() as session:
+            result = session.run(query_string)
+
+    output = []
+    for record in result:
+        r = record['n']
+        if 'labels' in r and 'named_thing' in r['labels']:
+            r['labels'].remove('named_thing')
+        output.append(r)
+
+    return output
+
+
+class MultiEdgeLookup(Resource):
+    """Multi-edge lookup endpoints."""
+
+    def post(self):
+        """
+        Get properties of edges by id.
+        Ignores edges that are not found.
+        If 'fields' is provided, returns only the requested fields.
+        Returns null for any unknown fields.
+
+        RESULTS MAY NOT BE SORTED!
+        ---
+        tags: [knowledgeGraph]
+        requestBody:
+            name: request
+            description: The edge id for lookup
+            content:
+                application/json:
+                    schema:
+                        required:
+                          - edge_ids
+                        properties:
+                            edge_ids:
+                                type: array
+                                items:
+                                    type: string
+                            fields:
+                                type: array
+                                items:
+                                    type: string
+                        example:
+                            edge_ids:
+                              - "636"
+                              - "634"
+            required: true
+        responses:
+            200:
+                description: Edge
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/definitions/KEdge'
+        """
+        edge_ids = request.json['edge_ids']
+        fields = request.json.get('fields', None)
+
+        return get_edge_properties(edge_ids, fields), 200
+
+api.add_resource(MultiEdgeLookup, '/multiedge_lookup')
+
+
+def get_edge_properties(edge_ids, fields=None):
+    functions = {
+        'source_id': 'startNode(e).id',
+        'target_id': 'endNode(e).id',
+        'type': 'type(e)',
+        'id': 'toString(id(e))'
+    }
+
+    if fields is not None:
+        prop_string = ', '.join([f'{key}:{functions[key]}' if key in functions else f'{key}:e.{key}' for key in fields])
+    else:
+        prop_string = ', '.join([f'{key}:{functions[key]}' for key in functions] + ['.*'])
+
+    where_string = ' OR '.join([f'id(e)={edge_id}' for edge_id in edge_ids])
+    query_string = f'MATCH ()-[e]->() WHERE {where_string} RETURN e{{{prop_string}}}'
+    # logger.debug(query_string)
+
+    with KnowledgeGraph() as database:
+        with database.driver.session() as session:
+            result = session.run(query_string)
+
+    return [record['e'] for record in result]
+
 
 class Tasks(Resource):
     def get(self):
         """
         Fetch queued/active task list
         ---
-        tags: [util]
+        tags: [tasks]
         responses:
             200:
                 description: tasks
@@ -263,7 +424,7 @@ class Results(Resource):
         """
         Fetch results from task
         ---
-        tags: [util]
+        tags: [tasks]
         parameters:
           - in: path
             name: task_id
@@ -271,12 +432,6 @@ class Results(Resource):
             schema:
                 type: string
             required: true
-          - in: query
-            name: standardize
-            description: Convert the output to RTX standard format?
-            schema:
-                type: boolean
-            default: false
         responses:
             200:
                 description: result
@@ -307,15 +462,11 @@ class Results(Resource):
                 file_contents = json.load(f)
             os.remove(result_path)
 
-            if request.args.get('standardize') == 'true':
-                return Answerset(file_contents).toStandard()
-            else:
-                return file_contents
-        else: 
+            return file_contents, 200
+        else:
             return 'No results found', 200
 
-api.add_resource(Results, '/result/<task_id>')
-
+api.add_resource(Results, '/task/<task_id>/result/')
 
 class Omnicorp(Resource):
     def get(self, id1, id2):
@@ -397,7 +548,7 @@ class TaskStatus(Resource):
         """
         Get status of task
         ---
-        tags: [util]
+        tags: [tasks]
         parameters:
           - in: path
             name: task_id
@@ -434,7 +585,7 @@ class TaskLog(Resource):
         """
         Get activity log for a task
         ---
-        tags: [util]
+        tags: [tasks]
         parameters:
           - in: path
             name: task_id
@@ -471,7 +622,7 @@ class EnrichedExpansion(Resource):
         """
         Enriched search in the local knowledge graph
         ---
-        tags: [util]
+        tags: [simple]
         parameters:
           - in: path
             name: type1
@@ -524,8 +675,8 @@ class EnrichedExpansion(Resource):
             threshhold = parameters['threshhold']
         else:
             threshhold = 0.05
-        if 'maxresults' in parameters:
-            maxresults = parameters['maxresults']
+        if 'max_results' in parameters:
+            maxresults = parameters['max_results']
         else:
             maxresults = 100
         if 'num_type1' in parameters:
@@ -533,7 +684,7 @@ class EnrichedExpansion(Resource):
         else:
             num_type1 = None
         with KnowledgeGraph() as database:
-            sim_results = database.enrichment_search(identifiers, type1, type2, threshhold, maxresults,num_type1)
+            sim_results = database.enrichment_search(identifiers, type1, type2, threshhold, maxresults, num_type1)
 
         return sim_results, 200
 
@@ -545,7 +696,7 @@ class SimilaritySearch(Resource):
         """
         Similarity search in the local knowledge graph
         ---
-        tags: [util]
+        tags: [simple]
         parameters:
           - in: path
             name: type1
@@ -582,7 +733,7 @@ class SimilaritySearch(Resource):
                 type: float
             default: 0.4
           - in: query
-            name: maxresults
+            name: max_results
             description: "The maximum number of results to return. Set to 0 to return all results."
             schema:
                 type: integer
@@ -596,13 +747,98 @@ class SimilaritySearch(Resource):
                             $ref: "#/definitions/SimilarityResult"
         """
         threshhold = request.args.get('threshhold', default = 0.4)
-        maxresults = int(request.args.get('maxresults', default = 100))
+        
+        max_results = parse_args_max_results(request.args)
+
         with KnowledgeGraph() as database:
-            sim_results = database.similarity_search(type1, identifier, type2, by_type, threshhold, maxresults)
+            sim_results = database.similarity_search(type1, identifier, type2, by_type, threshhold, max_results)
 
         return sim_results, 200
 
 api.add_resource(SimilaritySearch, '/similarity/<type1>/<identifier>/<type2>/<by_type>')
+
+
+class CypherKnowledgeGraph(Resource):
+    def post(self):
+        """
+        Transpile a question into a cypher query to retrieve a knowledge graph
+        ---
+        tags: [cypher]
+        requestBody:
+            description: A message with a machine-readable question graph.
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/definitions/Message'
+            required: true
+        parameters:
+          - in: query
+            name: max_connectivity
+            description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
+            schema:
+                type: integer
+            default: 0
+        responses:
+            200:
+                description: A cypher query to retrieve a knowledge graph
+                content:
+                    application/txt:
+        """
+
+        max_connectivity = parse_args_max_connectivity(request.args)
+
+        try:
+            message_obj = Message(request.json)
+            c = message_obj.cypher_query_knowledge_graph({'max_connectivity': max_connectivity})
+        except:
+            logger.debug(f"Unexpected error: {sys.exc_info()}")
+            return "Unable to transpile question to cypher query.", 404
+
+        return c, 200
+
+api.add_resource(CypherKnowledgeGraph, '/cypher/knowledge_graph/')
+
+
+class CypherAnswers(Resource):
+    def post(self):
+        """
+        Transpile question into a cypher query to retrieve a list of potential answer maps
+        ---
+        tags: [cypher]
+        requestBody:
+            description: A message with a machine-readable question graph.
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/definitions/Message'
+            required: true
+        parameters:
+          - in: query
+            name: max_connectivity
+            description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
+            schema:
+                type: integer
+            default: 0
+        responses:
+            200:
+                description: A cypher query to retrieve a list of potential answer maps
+                content:
+                    application/txt:
+        """
+        
+        max_connectivity = parse_args_max_connectivity(request.args)
+
+        message_obj = Message(request.json)
+        c = message_obj.cypher_query_answer_map({'max_connectivity': max_connectivity})
+        try:
+            pass
+        except:
+            logger.debug(f"Unexpected error: {sys.exc_info()}")
+            return "Unable to transpile question to cypher query.", 404
+
+        return c, 200
+
+api.add_resource(CypherAnswers, '/cypher/answers/')
 
 
 if __name__ == '__main__':
