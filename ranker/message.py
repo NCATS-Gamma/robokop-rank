@@ -317,13 +317,20 @@ class Message():
             logger.info('Could not connect to request cache for support...')
             cache = None
 
+        redis_batch_size = 100
 
         with OmnicorpSupport() as supporter:
             # get all node supports
             logger.info('Getting individual node supports...')
-            for node in self.knowledge_graph['nodes']:
-                key = f"{supporter.__class__.__name__}({node['id']})"
-                support_dict = cache.get(key) if cache else None
+
+            keys = [f"{supporter.__class__.__name__}({node['id']})" for node in self.knowledge_graph['nodes']]
+            values = []
+            for batch in batches(keys, redis_batch_size):
+                values.extend(cache.mget(*batch))
+
+            for node, value, key in zip(self.knowledge_graph['nodes'], values, keys):
+                support_dict = value
+
                 if support_dict is not None:
                     #logger.info(f"cache hit: {key} {support_dict}")
                     pass
@@ -351,18 +358,21 @@ class Message():
                 set_nodes = [n for el in set_nodes_list_list for n in el]
                 for set_node in set_nodes:
                     for node in nodes:
-                        pair_to_answer[(node, set_node)].append(ans_idx)
+                        node_pair = tuple(sorted((node, set_node)))
+                        pair_to_answer[node_pair].append(ans_idx)
 
 
-            cached_prefixes = cache.get('OmnicorpPrefixes') if cache else None
             # get all pair supports
-            for support_idx, pair in enumerate(pair_to_answer):
-                #logger.info(pair)
-                #The id's are in the cache sorted.
-                ids = [pair[0],pair[1]]
-                ids.sort()
-                key = f"{supporter.__class__.__name__}_count({ids[0]},{ids[1]})"
-                support_edge = cache.get(key) if cache else None
+            cached_prefixes = cache.get('OmnicorpPrefixes') if cache else None
+
+            keys = [f"{supporter.__class__.__name__}_count({pair[0]},{pair[1]})" for pair in pair_to_answer]
+            values = []
+            for batch in batches(keys, redis_batch_size):
+                values.extend(cache.mget(*batch))
+
+            for support_idx, (pair, value, key) in enumerate(zip(pair_to_answer, values, keys)):
+                support_edge = value
+
                 if support_edge is not None:
                     #logger.info(f"cache hit: {key} {support_edge}")
                     pass
@@ -373,7 +383,7 @@ class Message():
                     #  of a prefix pair that we evaluated all of.  In that case
                     #  we can infer that getting nothing back means an empty list
                     #  check cached_prefixes for this...
-                    prefixes = tuple([ ident.split(':')[0].upper() for ident in ids ])
+                    prefixes = tuple([ ident.split(':')[0].upper() for ident in pair ])
                     if cached_prefixes and prefixes in cached_prefixes:
                         support_edge = []
                     else:
@@ -682,3 +692,9 @@ class Message():
         query_string = "\n".join([match_string, collection_string, support_string, return_string])
 
         return query_string
+
+
+def batches(arr, n):
+    """Iterator separating arr into batches of size n."""
+    for i in range(0, len(arr), n):
+        yield arr[i:i + n]
