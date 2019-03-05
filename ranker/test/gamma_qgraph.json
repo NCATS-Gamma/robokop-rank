@@ -1,0 +1,31 @@
+{
+  "question_graph": {
+    "edges": [
+      {
+        "source_id": "n0",
+        "target_id": "n1",
+        "id": "a"
+      },
+      {
+        "source_id": "n1",
+        "target_id": "n2",
+        "id": "b"
+      }
+    ],
+    "nodes": [
+      {
+        "curie": "MONDO:0005737",
+        "id": "n0",
+        "type": "disease"
+      },
+      {
+        "id": "n1",
+        "type": "gene"
+      },
+      {
+        "id": "n2",
+        "type": "genetic_condition"
+      }
+    ]
+  }
+}

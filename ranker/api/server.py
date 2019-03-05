@@ -373,7 +373,7 @@ def batches(arr, n):
 
 def get_node_properties(node_ids, fields=None):
     functions = {
-        'labels': 'labels(n)',
+        'type': 'labels(n)',
     }
 
     if fields is not None:
@@ -393,8 +393,9 @@ def get_node_properties(node_ids, fields=None):
 
         for record in result:
             r = record['n']
-            if 'labels' in r and 'named_thing' in r['labels']:
-                r['labels'].remove('named_thing')
+            if 'type' in r and 'named_thing' in r['type']:
+                r['type'].remove('named_thing')
+
             output.append(r)
 
     return output
