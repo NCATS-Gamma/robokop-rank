@@ -15,8 +15,8 @@ post_data = as8
 post_data['question_graph'] = qgraph
 
 response = requests.post('http://127.0.0.1:6011/api/normalize/', json=post_data)
-# print(response)
-# print(response.text)
+print(response)
+print(response.text)
 
 message = response.json()
 

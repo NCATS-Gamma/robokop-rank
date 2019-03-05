@@ -266,6 +266,7 @@ class Message():
                 
                 edge_id = e['id']
                 e['source'] = e['provided_by']
+                e['source_database'] = e['provided_by']
                 
                 if edge_id not in edge_ids:
                     edge_ids.add(edge_id)

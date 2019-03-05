@@ -8,6 +8,7 @@ import json
 import sys
 
 import redis
+import requests
 from flask_restful import Resource
 from flask import request, send_from_directory
 
@@ -971,9 +972,16 @@ class Normalize(Resource):
         else:
             return 'could not determine the format of the input answerset', 400
 
-        return message.dump(), 200
+        # Call the builder normalize service to fix various identifiers
+        response = requests.post( f'http://{os.environ["BUILDER_HOST"]}:{os.environ["BUILDER_PORT"]}/api/normalize', json=message.dump())
+        if not response.ok:
+            logger.info(response.status_code)
+            logger.info(response.text)
+            return 'There was a problem concting the Robokop builder', 500
 
-api.add_resource(Normalize, '/normalize/')
+        return response.json(), 200
+
+api.add_resource(Normalize, '/normalize')
 
 if __name__ == '__main__':
 
