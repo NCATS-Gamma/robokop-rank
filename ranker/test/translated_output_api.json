@@ -1983,15 +1983,9 @@
   "answers": [
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0009757"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0009757"
       },
       "edge_bindings": {
         "a": [
@@ -2008,15 +2002,9 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:1119"
-        ],
-        "n2": [
-          "MONDO:0005109"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0005109"
       },
       "edge_bindings": {
         "a": [
@@ -2033,15 +2021,9 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:1119"
-        ],
-        "n2": [
-          "MONDO:0009061"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0009061"
       },
       "edge_bindings": {
         "a": [
@@ -2057,15 +2039,9 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0001982"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0001982"
       },
       "edge_bindings": {
         "a": [
@@ -2081,20 +2057,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:20818"
-        ],
-        "n2": [
-          "MONDO:0004993"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:20818",
+        "n2": "MONDO:0004993"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:20818)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:20818)",
         "b": [
           "(MONDO:0004993)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:20818)",
           "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:20818)",
@@ -2105,15 +2073,9 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:4441"
-        ],
-        "n2": [
-          "MONDO:0004993"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:4441",
+        "n2": "MONDO:0004993"
       },
       "edge_bindings": {
         "a": [
@@ -2129,15 +2091,9 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0017719"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0017719"
       },
       "edge_bindings": {
         "a": [
@@ -2153,15 +2109,9 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0004993"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0004993"
       },
       "edge_bindings": {
         "a": [
@@ -2177,20 +2127,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:17770"
-        ],
-        "n2": [
-          "MONDO:0004993"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0004993"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
         "b": [
           "(MONDO:0004993)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:17770)",
           "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)"
@@ -2200,20 +2142,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:4669"
-        ],
-        "n2": [
-          "MONDO:0004993"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:4669",
+        "n2": "MONDO:0004993"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:4669)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:4669)",
         "b": [
           "(MONDO:0004993)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:4669)",
           "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:4669)"
@@ -2223,20 +2157,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:29249"
-        ],
-        "n2": [
-          "MONDO:0004993"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:29249",
+        "n2": "MONDO:0004993"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:29249)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:29249)",
         "b": [
           "(MONDO:0004993)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:29249)",
           "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:29249)"
@@ -2246,15 +2172,9 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0010017"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0010017"
       },
       "edge_bindings": {
         "a": [
@@ -2270,135 +2190,87 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0016058"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016058"
       },
       "edge_bindings": {
         "a": [
           "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
           "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
         ],
-        "b": [
-          "(HGNC:7897)-(has_phenotype;biolink.gene_get_phenotype)-(MONDO:0016058)"
-        ]
+        "b": "(HGNC:7897)-(has_phenotype;biolink.gene_get_phenotype)-(MONDO:0016058)"
       },
       "score": 0.26644405287999934
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0001386"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0001386"
       },
       "edge_bindings": {
         "a": [
           "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
           "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
         ],
-        "b": [
-          "(HGNC:7897)-(has_phenotype;biolink.gene_get_phenotype)-(MONDO:0001386)"
-        ]
+        "b": "(HGNC:7897)-(has_phenotype;biolink.gene_get_phenotype)-(MONDO:0001386)"
       },
       "score": 0.26644405287999934
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0008062"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0008062"
       },
       "edge_bindings": {
         "a": [
           "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
           "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
         ],
-        "b": [
-          "(HGNC:7897)-(has_phenotype;biolink.gene_get_phenotype)-(MONDO:0008062)"
-        ]
+        "b": "(HGNC:7897)-(has_phenotype;biolink.gene_get_phenotype)-(MONDO:0008062)"
       },
       "score": 0.26644405287999934
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0015597"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0015597"
       },
       "edge_bindings": {
         "a": [
           "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
           "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
         ],
-        "b": [
-          "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
-        ]
+        "b": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
       },
       "score": 0.2519567147122626
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:1119"
-        ],
-        "n2": [
-          "MONDO:0015597"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0015597"
       },
       "edge_bindings": {
         "a": [
           "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
           "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:1119)"
         ],
-        "b": [
-          "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)"
-        ]
+        "b": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)"
       },
       "score": 0.2517407150878321
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:13236"
-        ],
-        "n2": [
-          "MONDO:0004993"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13236",
+        "n2": "MONDO:0004993"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
         "b": [
           "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
           "(HGNC:13236)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0004993)"
@@ -2408,20 +2280,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:16361"
-        ],
-        "n2": [
-          "MONDO:0019200"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0019200"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
         "b": [
           "(MONDO:0019200)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
           "(HGNC:16361)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0019200)"
@@ -2431,15 +2295,9 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0011719"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0011719"
       },
       "edge_bindings": {
         "a": [
@@ -2455,147 +2313,81 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:30922"
-        ],
-        "n2": [
-          "MONDO:0004993"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0004993"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
-        ],
-        "b": [
-          "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "b": "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
       },
       "score": 0.2306631975789103
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:16361"
-        ],
-        "n2": [
-          "MONDO:0004993"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0004993"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ],
-        "b": [
-          "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
       },
       "score": 0.2306631975789103
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:13415"
-        ],
-        "n2": [
-          "MONDO:0015597"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13415",
+        "n2": "MONDO:0015597"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13415)"
-        ],
-        "b": [
-          "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13415)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13415)",
+        "b": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13415)"
       },
       "score": 0.2306631975789103
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:17770"
-        ],
-        "n2": [
-          "MONDO:0015597"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0015597"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)"
-        ],
-        "b": [
-          "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
+        "b": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)"
       },
       "score": 0.2306631975789103
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:24867"
-        ],
-        "n2": [
-          "MONDO:0015597"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:24867",
+        "n2": "MONDO:0015597"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)"
-        ],
-        "b": [
-          "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)",
+        "b": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)"
       },
       "score": 0.2306631975789103
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:16361"
-        ],
-        "n2": [
-          "MONDO:0015597"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0015597"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ],
-        "b": [
-          "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
       },
       "score": 0.2306631975789103
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:1119"
-        ],
-        "n2": [
-          "MONDO:0005615"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0005615"
       },
       "edge_bindings": {
         "a": [
@@ -2612,15 +2404,9 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:1119"
-        ],
-        "n2": [
-          "MONDO:0007959"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0007959"
       },
       "edge_bindings": {
         "a": [
@@ -2636,15 +2422,9 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:1119"
-        ],
-        "n2": [
-          "MONDO:0002791"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0002791"
       },
       "edge_bindings": {
         "a": [
@@ -2660,15 +2440,9 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:1119"
-        ],
-        "n2": [
-          "MONDO:0005028"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0005028"
       },
       "edge_bindings": {
         "a": [
@@ -2684,20 +2458,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:16361"
-        ],
-        "n2": [
-          "MONDO:0012662"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0012662"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
         "b": [
           "(MONDO:0012662)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
           "(HGNC:16361)-(gene_associated_with_condition;biolink.gene_get_disease)-(MONDO:0012662)",
@@ -2708,20 +2474,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:30922"
-        ],
-        "n2": [
-          "MONDO:0013702"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0013702"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
         "b": [
           "(HGNC:30922)-(biomarker_for;biolink.gene_get_disease)-(MONDO:0013702)",
           "(MONDO:0013702)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
@@ -2731,20 +2489,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:16361"
-        ],
-        "n2": [
-          "MONDO:0016484"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0016484"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
         "b": [
           "(HGNC:16361)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016484)",
           "(MONDO:0016484)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
@@ -2755,20 +2505,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:17770"
-        ],
-        "n2": [
-          "MONDO:0008947"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0008947"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
         "b": [
           "(MONDO:0008947)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:17770)",
           "(MONDO:0008947)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
@@ -2779,15 +2521,9 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0018150"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0018150"
       },
       "edge_bindings": {
         "a": [
@@ -2803,15 +2539,9 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:1119"
-        ],
-        "n2": [
-          "MONDO:0009693"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0009693"
       },
       "edge_bindings": {
         "a": [
@@ -2827,20 +2557,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:24867"
-        ],
-        "n2": [
-          "MONDO:0008449"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:24867",
+        "n2": "MONDO:0008449"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)",
         "b": [
           "(MONDO:0008449)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:24867)",
           "(MONDO:0008449)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)"
@@ -2850,20 +2572,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:30922"
-        ],
-        "n2": [
-          "MONDO:0019502"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0019502"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
         "b": [
           "(HGNC:30922)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0019502)",
           "(MONDO:0019502)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
@@ -2873,20 +2587,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:17770"
-        ],
-        "n2": [
-          "MONDO:0008243"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0008243"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
         "b": [
           "(MONDO:0008243)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:17770)",
           "(MONDO:0008243)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)"
@@ -2896,20 +2602,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:24867"
-        ],
-        "n2": [
-          "MONDO:0007959"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:24867",
+        "n2": "MONDO:0007959"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)",
         "b": [
           "(MONDO:0007959)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:24867)",
           "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)"
@@ -2919,20 +2617,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:4669"
-        ],
-        "n2": [
-          "MONDO:0010383"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:4669",
+        "n2": "MONDO:0010383"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:4669)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:4669)",
         "b": [
           "(MONDO:0010383)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:4669)",
           "(MONDO:0010383)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:4669)"
@@ -2942,20 +2632,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:20818"
-        ],
-        "n2": [
-          "MONDO:0019262"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:20818",
+        "n2": "MONDO:0019262"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:20818)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:20818)",
         "b": [
           "(MONDO:0019262)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:20818)",
           "(MONDO:0019262)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:20818)"
@@ -2965,250 +2647,162 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0016308"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016308"
       },
       "edge_bindings": {
         "a": [
           "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
           "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
         ],
-        "b": [
-          "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016308)"
-        ]
+        "b": "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016308)"
       },
       "score": 0.15195671471226277
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0007959"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0007959"
       },
       "edge_bindings": {
         "a": [
           "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
           "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
         ],
-        "b": [
-          "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
-        ]
+        "b": "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
       },
       "score": 0.15195671471226277
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0016306"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016306"
       },
       "edge_bindings": {
         "a": [
           "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
           "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
         ],
-        "b": [
-          "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016306)"
-        ]
+        "b": "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016306)"
       },
       "score": 0.15195671471226277
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0020380"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0020380"
       },
       "edge_bindings": {
         "a": [
           "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
           "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
         ],
-        "b": [
-          "(MONDO:0020380)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
-        ]
+        "b": "(MONDO:0020380)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
       },
       "score": 0.15195671471226277
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0002791"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0002791"
       },
       "edge_bindings": {
         "a": [
           "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
           "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
         ],
-        "b": [
-          "(MONDO:0002791)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
-        ]
+        "b": "(MONDO:0002791)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
       },
       "score": 0.15195671471226277
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0016307"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016307"
       },
       "edge_bindings": {
         "a": [
           "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
           "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
         ],
-        "b": [
-          "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016307)"
-        ]
+        "b": "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016307)"
       },
       "score": 0.15195671471226277
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0016309"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016309"
       },
       "edge_bindings": {
         "a": [
           "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
           "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
         ],
-        "b": [
-          "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016309)"
-        ]
+        "b": "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016309)"
       },
       "score": 0.15195671471226277
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0016310"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016310"
       },
       "edge_bindings": {
         "a": [
           "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
           "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
         ],
-        "b": [
-          "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016310)"
-        ]
+        "b": "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016310)"
       },
       "score": 0.15195671471226277
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0005181"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0005181"
       },
       "edge_bindings": {
         "a": [
           "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
           "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
         ],
-        "b": [
-          "(MONDO:0005181)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
-        ]
+        "b": "(MONDO:0005181)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
       },
       "score": 0.15195671471226277
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:7897"
-        ],
-        "n2": [
-          "MONDO:0008608"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0008608"
       },
       "edge_bindings": {
         "a": [
           "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
           "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
         ],
-        "b": [
-          "(MONDO:0008608)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
-        ]
+        "b": "(MONDO:0008608)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
       },
       "score": 0.15195671471226277
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:16361"
-        ],
-        "n2": [
-          "MONDO:0019501"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0019501"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
         "b": [
           "(MONDO:0019501)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
           "(HGNC:16361)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0019501)"
@@ -3218,20 +2812,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:16361"
-        ],
-        "n2": [
-          "MONDO:0011767"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0011767"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
         "b": [
           "(MONDO:0011767)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
           "(HGNC:16361)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0011767)"
@@ -3241,20 +2827,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:16361"
-        ],
-        "n2": [
-          "MONDO:0017312"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0017312"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
         "b": [
           "(MONDO:0017312)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
           "(HGNC:16361)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0017312)"
@@ -3264,20 +2842,12 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:13236"
-        ],
-        "n2": [
-          "MONDO:0009693"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13236",
+        "n2": "MONDO:0009693"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)"
-        ],
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
         "b": [
           "(MONDO:0009693)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
           "(HGNC:13236)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0009693)"
@@ -3287,463 +2857,253 @@
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:16361"
-        ],
-        "n2": [
-          "MONDO:0019588"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0019588"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ],
-        "b": [
-          "(HGNC:16361)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0019588)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(HGNC:16361)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0019588)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:30922"
-        ],
-        "n2": [
-          "MONDO:0007959"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0007959"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
-        ],
-        "b": [
-          "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "b": "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:13236"
-        ],
-        "n2": [
-          "MONDO:0007959"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13236",
+        "n2": "MONDO:0007959"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)"
-        ],
-        "b": [
-          "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
+        "b": "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:16361"
-        ],
-        "n2": [
-          "MONDO:0010576"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0010576"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ],
-        "b": [
-          "(MONDO:0010576)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0010576)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:30922"
-        ],
-        "n2": [
-          "MONDO:0008243"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0008243"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
-        ],
-        "b": [
-          "(MONDO:0008243)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "b": "(MONDO:0008243)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:20818"
-        ],
-        "n2": [
-          "MONDO:0005340"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:20818",
+        "n2": "MONDO:0005340"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:20818)"
-        ],
-        "b": [
-          "(MONDO:0005340)-(negatively_regulates__entity_to_entity;hetio.gene_to_disease)-(HGNC:20818)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:20818)",
+        "b": "(MONDO:0005340)-(negatively_regulates__entity_to_entity;hetio.gene_to_disease)-(HGNC:20818)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:17770"
-        ],
-        "n2": [
-          "MONDO:0008345"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0008345"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)"
-        ],
-        "b": [
-          "(MONDO:0008345)-(negatively_regulates__entity_to_entity;hetio.gene_to_disease)-(HGNC:17770)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
+        "b": "(MONDO:0008345)-(negatively_regulates__entity_to_entity;hetio.gene_to_disease)-(HGNC:17770)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:13236"
-        ],
-        "n2": [
-          "MONDO:0005615"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13236",
+        "n2": "MONDO:0005615"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)"
-        ],
-        "b": [
-          "(MONDO:0005615)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
+        "b": "(MONDO:0005615)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:24867"
-        ],
-        "n2": [
-          "MONDO:0019351"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:24867",
+        "n2": "MONDO:0019351"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)"
-        ],
-        "b": [
-          "(MONDO:0019351)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)",
+        "b": "(MONDO:0019351)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:30922"
-        ],
-        "n2": [
-          "MONDO:0019351"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0019351"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
-        ],
-        "b": [
-          "(MONDO:0019351)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "b": "(MONDO:0019351)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:30922"
-        ],
-        "n2": [
-          "MONDO:0008449"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0008449"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
-        ],
-        "b": [
-          "(MONDO:0008449)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "b": "(MONDO:0008449)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:24867"
-        ],
-        "n2": [
-          "MONDO:0005100"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:24867",
+        "n2": "MONDO:0005100"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)"
-        ],
-        "b": [
-          "(MONDO:0005100)-(positively_regulates__entity_to_entity;hetio.gene_to_disease)-(HGNC:24867)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)",
+        "b": "(MONDO:0005100)-(positively_regulates__entity_to_entity;hetio.gene_to_disease)-(HGNC:24867)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:16361"
-        ],
-        "n2": [
-          "MONDO:0011080"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0011080"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ],
-        "b": [
-          "(MONDO:0011080)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0011080)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:16361"
-        ],
-        "n2": [
-          "MONDO:0002791"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0002791"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ],
-        "b": [
-          "(MONDO:0002791)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0002791)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:17770"
-        ],
-        "n2": [
-          "MONDO:0024538"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0024538"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)"
-        ],
-        "b": [
-          "(MONDO:0024538)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
+        "b": "(MONDO:0024538)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:16361"
-        ],
-        "n2": [
-          "MONDO:0000455"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0000455"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ],
-        "b": [
-          "(MONDO:0000455)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0000455)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:30922"
-        ],
-        "n2": [
-          "MONDO:0019037"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0019037"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
-        ],
-        "b": [
-          "(MONDO:0019037)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "b": "(MONDO:0019037)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:13236"
-        ],
-        "n2": [
-          "MONDO:0013674"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13236",
+        "n2": "MONDO:0013674"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)"
-        ],
-        "b": [
-          "(MONDO:0013674)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
+        "b": "(MONDO:0013674)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:16361"
-        ],
-        "n2": [
-          "MONDO:0008243"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0008243"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ],
-        "b": [
-          "(MONDO:0008243)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0008243)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:16361"
-        ],
-        "n2": [
-          "MONDO:0019497"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0019497"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ],
-        "b": [
-          "(MONDO:0019497)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0019497)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
       },
       "score": 0.1306631975789104
     },
     {
       "node_bindings": {
-        "n0": [
-          "MONDO:0005737"
-        ],
-        "n1": [
-          "HGNC:16361"
-        ],
-        "n2": [
-          "MONDO:0007959"
-        ]
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0007959"
       },
       "edge_bindings": {
-        "a": [
-          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ],
-        "b": [
-          "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
-        ]
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
       },
       "score": 0.1306631975789104
     }

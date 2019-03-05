@@ -41,6 +41,7 @@ for qe in qgraph['edges']:
         qedge_types[qe_types] = qe['id']
         qedge_ids[qe['id']] = qe_types
 
+print(qedge_ids)
 # If we made it to this point we know that,
 # 1) We only have question nodes with unique types
 # 2) We only have question edges with unique sets of source and target node types
@@ -95,26 +96,17 @@ for r in as8['result_list']:
         new_answer['node_bindings'][qn_id] = [n['id'] for n in these_nodes]
     
     edge_id_tuples = {}
+    edge_id_tuples2 = {}
     for e in ans_edges:
-
-        n_source = [n for n in ans_nodes if n['id'] == e['source_id']]
-        if len(n_source) > 1:
-            raise RuntimeError('Invalid question graph for conversion. This question graph contains multiple nodes with the id.')
-        n_source = n_source[0]
-        n_target = [n for n in ans_nodes if n['id'] == e['target_id']]
-        if len(n_target) > 1:
-            raise RuntimeError('Invalid question graph for conversion. This question graph contains multiple nodes with the id.')
-        n_target = n_target[0]
+        n_source = next(n for n in ans_nodes if n['id'] == e['source_id'])
+        n_target = next(n for n in ans_nodes if n['id'] == e['target_id'])
         
         edge_id_tuples[edge_id_fun(e)] = (n_source['type'], n_target['type'])
-
-    # print(edge_id_tuples)
+        edge_id_tuples2[edge_id_fun(e)] = (n_target['type'], n_source['type'])
 
     for qe_id in qedge_ids:
-        these_edges = [e for e in ans_edges if edge_id_tuples[edge_id_fun(e)] == qedge_ids[qe_id]]
-        # print(f'{qe_id} - {edge_id_fun(e)} - {these_edges}')
+        these_edges = [e for e in ans_edges if edge_id_tuples[edge_id_fun(e)] == qedge_ids[qe_id] or edge_id_tuples2[edge_id_fun(e)] == qedge_ids[qe_id]]
         new_answer['edge_bindings'][qe_id] = [e['id'] for e in these_edges]
-    
 
     new_answer['score'] = r['confidence']
     

@@ -923,6 +923,58 @@ class CypherAnswers(Resource):
 api.add_resource(CypherAnswers, '/cypher/answers/')
 
 
+
+class Normalize(Resource):
+    def post(self):
+        """
+        Transform and normalize an answerset into a standardized MESSAGE format
+        ---
+        tags: [normalize]
+        requestBody:
+            description: A 0.8 answerset or 0.9 answerset or a question graph.
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/definitions/Message'
+            required: true
+        responses:
+            200:
+                description: A normalized message
+                schema:
+                    $ref: '#/definitions/Message'
+        """
+        
+        logger.info('Normalizing answerset')
+        logger.info(request)
+        provided = request.json
+        if 'question_graph' not in provided:
+            if 'machine_question' not in provided:
+                return 'input must contain the field question_graph', 400
+            else:
+                question_graph = provided['machine_question']
+        else:
+            question_graph = provided['question_graph']
+
+        # Detect if we have a dense or a message
+        if 'result_list' in provided:
+            logger.info('  Detected dense answerset, converting')
+            # Assume dense
+            # If dense, we need to translate
+            message = Message(question_graph = question_graph)
+            message.from_dense(provided)
+            logger.info('  Conversion complete')
+
+        elif 'knowledge_graph' in provided and 'answers' in provided:
+            # Assume message
+            logger.info('  Detected message')
+            message = Message(question_graph=question_graph, knowledge_graph=provided['knowledge_graph'], answers=provided['answers'])
+        else:
+            return 'could not determine the format of the input answerset', 400
+
+        return message.dump(), 200
+
+api.add_resource(Normalize, '/normalize/')
+
 if __name__ == '__main__':
 
     # Get host and port from environmental variables
