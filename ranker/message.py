@@ -287,7 +287,7 @@ class Message():
                 these_nodes = [n for n in ans_nodes if n['type'] == qnode_ids[qn_id]]
                 new_answer['node_bindings'][qn_id] = [n['id'] for n in these_nodes]
 
-                if isinstance(new_answer['node_bindings'][qn_id],list) and len(new_answer['node_bindings'][qn_id]):
+                if isinstance(new_answer['node_bindings'][qn_id],list) and len(new_answer['node_bindings'][qn_id]) == 1:
                     new_answer['node_bindings'][qn_id] = new_answer['node_bindings'][qn_id][0]
             
             edge_id_tuples = {}
