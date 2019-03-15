@@ -598,7 +598,7 @@ class Message():
                 match_strings.append(f"MATCH ({source_node})-[{eref}]->({target_node})")
             else:
                 match_strings.append(f"MATCH ({source_node})-[{eref}]-({target_node})")
-            conditions = [c for c in [source_node.conditions, target_node.conditions, eref.conditions] if c]
+            conditions = [f'({c})' for c in [source_node.conditions, target_node.conditions, eref.conditions] if c]
             if conditions:
                 match_strings.append("WHERE " + " AND ".join(conditions))
                 if include_size_constraints:
