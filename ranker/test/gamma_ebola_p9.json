@@ -1,0 +1,5004 @@
+{
+  "question_graph": {
+    "edges": [
+      {
+        "source_id": "n0",
+        "target_id": "n1",
+        "id": "a"
+      },
+      {
+        "source_id": "n1",
+        "target_id": "n2",
+        "id": "b"
+      }
+    ],
+    "nodes": [
+      {
+        "curie": "MONDO:0005737",
+        "id": "n0",
+        "type": "disease"
+      },
+      {
+        "id": "n1",
+        "type": "gene"
+      },
+      {
+        "id": "n2",
+        "type": "genetic_condition"
+      }
+    ]
+  },
+  "knowledge_graph": {
+    "nodes": [
+      {
+        "name": "Ebola hemorrhagic fever",
+        "transmissible_disease": true,
+        "id": "MONDO:0005737",
+        "equivalent_identifiers": [
+          "MEDDRA:10014072",
+          "MEDDRA:10014074",
+          "MEDDRA:10055245",
+          "MESH:D019142",
+          "ORPHANET:319218",
+          "MONDO:0005737",
+          "UMLS:C0282687",
+          "MEDDRA:10014071",
+          "DOID:4325"
+        ],
+        "rare_disease": true,
+        "transmissible disease": true,
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 7071
+      },
+      {
+        "name": "NPC1",
+        "location": "18q11.2",
+        "locus_group": "protein-coding gene",
+        "gene_family": [
+          "Solute carriers"
+        ],
+        "chromosome": "18",
+        "id": "HGNC:7897",
+        "equivalent_identifiers": [
+          "UniProtKB:O15118",
+          "HGNC:7897",
+          "ENSEMBL:ENSG00000141458",
+          "UniProtKB:K7ENZ0",
+          "UniProtKB:K7ERM4",
+          "UniProtKB:K7EQ23",
+          "UniProtKB:K7ERW2",
+          "NCBIGENE:4864",
+          "UniProtKB:K7EIH7"
+        ],
+        "taxon": "9606",
+        "gene_family_id": [
+          752
+        ],
+        "type": "gene",
+        "omnicorp_article_count": 984
+      },
+      {
+        "name": "LINS1",
+        "location": "15q26.3",
+        "locus_group": "protein-coding gene",
+        "chromosome": "15",
+        "id": "HGNC:30922",
+        "equivalent_identifiers": [
+          "UniProtKB:H3BNM9",
+          "UniProtKB:Q8NG48",
+          "ENSEMBL:ENSG00000140471",
+          "UniProtKB:H0YMQ0",
+          "UniProtKB:S4R3B7",
+          "UniProtKB:H3BNS6",
+          "UniProtKB:H0YKU3",
+          "HGNC:30922",
+          "UniProtKB:H0YM78",
+          "UniProtKB:H0YMK4",
+          "NCBIGENE:55180"
+        ],
+        "taxon": "9606",
+        "type": "gene",
+        "omnicorp_article_count": 2
+      },
+      {
+        "name": "WHRN",
+        "location": "9q32",
+        "locus_group": "protein-coding gene",
+        "gene_family": [
+          "Deafness associated genes",
+          "PDZ domain containing",
+          "USH2 complex "
+        ],
+        "chromosome": "9",
+        "id": "HGNC:16361",
+        "equivalent_identifiers": [
+          "UniProtKB:B9EGE6",
+          "UniProtKB:A0A0C4DFN4",
+          "UniProtKB:Q9P202",
+          "HGNC:16361",
+          "NCBIGENE:25861",
+          "UniProtKB:A0A0A0MRR8",
+          "ENSEMBL:ENSG00000095397"
+        ],
+        "taxon": "9606",
+        "gene_family_id": [
+          1152,
+          1220,
+          1244
+        ],
+        "type": "gene",
+        "omnicorp_article_count": 35
+      },
+      {
+        "name": "GLTP",
+        "location": "12q24.11",
+        "locus_group": "protein-coding gene",
+        "chromosome": "12",
+        "id": "HGNC:24867",
+        "equivalent_identifiers": [
+          "UniProtKB:F5GZ49",
+          "HGNC:24867",
+          "ENSEMBL:ENSG00000139433",
+          "UniProtKB:H0YFS9",
+          "UniProtKB:A0A024RBI7",
+          "UniProtKB:F5H0U5",
+          "UniProtKB:Q9NZD2",
+          "NCBIGENE:51228"
+        ],
+        "taxon": "9606",
+        "type": "gene",
+        "omnicorp_article_count": 93
+      },
+      {
+        "name": "BST2",
+        "location": "19p13.11",
+        "locus_group": "protein-coding gene",
+        "gene_family": [
+          "CD molecules"
+        ],
+        "chromosome": "19",
+        "id": "HGNC:1119",
+        "equivalent_identifiers": [
+          "UniProtKB:Q10589",
+          "HGNC:1119",
+          "NCBIGENE:684",
+          "UniProtKB:A0A024R7H5",
+          "ENSEMBL:ENSG00000130303"
+        ],
+        "taxon": "9606",
+        "gene_family_id": [
+          471
+        ],
+        "type": "gene",
+        "omnicorp_article_count": 443
+      },
+      {
+        "name": "URI1",
+        "location": "19q12",
+        "locus_group": "protein-coding gene",
+        "gene_family": [
+          "Protein phosphatase 1 regulatory subunits",
+          "Prefoldin subunits"
+        ],
+        "chromosome": "19",
+        "id": "HGNC:13236",
+        "equivalent_identifiers": [
+          "NCBIGENE:8725",
+          "UniProtKB:I3L280",
+          "ENSEMBL:ENSG00000105176",
+          "UniProtKB:I3L0K5",
+          "UniProtKB:I3L467",
+          "UniProtKB:K7EQZ9",
+          "UniProtKB:I3L104",
+          "UniProtKB:I3L2V7",
+          "HGNC:13236",
+          "UniProtKB:O94763",
+          "UniProtKB:I3L130",
+          "UniProtKB:I3NI51"
+        ],
+        "taxon": "9606",
+        "gene_family_id": [
+          694,
+          956
+        ],
+        "type": "gene",
+        "omnicorp_article_count": 38
+      },
+      {
+        "name": "GTPBP1",
+        "location": "22q13.1",
+        "locus_group": "protein-coding gene",
+        "chromosome": "22",
+        "id": "HGNC:4669",
+        "equivalent_identifiers": [
+          "UniProtKB:H0YH10",
+          "NCBIGENE:9567",
+          "HGNC:4669",
+          "UniProtKB:F5H7C0",
+          "ENSEMBL:ENSG00000100226",
+          "UniProtKB:B0QY59",
+          "UniProtKB:H0YGA8",
+          "UniProtKB:O00178",
+          "UniProtKB:F5H716",
+          "UniProtKB:F5H257",
+          "UniProtKB:F8WAZ4",
+          "UniProtKB:H0YF75"
+        ],
+        "taxon": "9606",
+        "type": "gene",
+        "omnicorp_article_count": 6
+      },
+      {
+        "name": "RALGAPA1",
+        "location": "14q13.2",
+        "locus_group": "protein-coding gene",
+        "chromosome": "14",
+        "id": "HGNC:17770",
+        "equivalent_identifiers": [
+          "UniProtKB:Q6GYQ0",
+          "NCBIGENE:253959",
+          "HGNC:17770",
+          "ENSEMBL:ENSG00000174373",
+          "UniProtKB:A0A1B0GUI1",
+          "UniProtKB:H0YJ04",
+          "UniProtKB:H0YJB5"
+        ],
+        "taxon": "9606",
+        "type": "gene",
+        "omnicorp_article_count": 8
+      },
+      {
+        "name": "LRRC15",
+        "location": "3q29",
+        "locus_group": "protein-coding gene",
+        "chromosome": "3",
+        "id": "HGNC:20818",
+        "equivalent_identifiers": [
+          "HGNC:20818",
+          "UniProtKB:Q8TF66",
+          "ENSEMBL:ENSG00000172061",
+          "NCBIGENE:131578",
+          "UniProtKB:B3KWI4"
+        ],
+        "taxon": "9606",
+        "type": "gene",
+        "omnicorp_article_count": 16
+      },
+      {
+        "name": "FBXO42",
+        "location": "1p36.13",
+        "locus_group": "protein-coding gene",
+        "gene_family": [
+          "F-boxes other"
+        ],
+        "chromosome": "1",
+        "id": "HGNC:29249",
+        "equivalent_identifiers": [
+          "UniProtKB:X6RKU3",
+          "UniProtKB:Q6P3S6",
+          "ENSEMBL:ENSG00000037637",
+          "UniProtKB:A0A024QZB0",
+          "NCBIGENE:54455",
+          "HGNC:29249"
+        ],
+        "taxon": "9606",
+        "gene_family_id": [
+          560
+        ],
+        "type": "gene",
+        "omnicorp_article_count": 2
+      },
+      {
+        "name": "GP2",
+        "location": "16p12.3",
+        "locus_group": "protein-coding gene",
+        "chromosome": "16",
+        "id": "HGNC:4441",
+        "equivalent_identifiers": [
+          "NCBIGENE:2813",
+          "UniProtKB:I3L2Z7",
+          "UniProtKB:B7Z1G2",
+          "UniProtKB:Q68D34",
+          "HGNC:4441",
+          "ENSEMBL:ENSG00000169347",
+          "UniProtKB:I3L3I2",
+          "UniProtKB:I3L486",
+          "UniProtKB:I3L324",
+          "UniProtKB:I3L4Y3",
+          "UniProtKB:P55259"
+        ],
+        "taxon": "9606",
+        "type": "gene",
+        "omnicorp_article_count": 529
+      },
+      {
+        "name": "PNCK",
+        "location": "Xq28",
+        "locus_group": "protein-coding gene",
+        "gene_family": [
+          "Calmodulin dependent protein kinases"
+        ],
+        "chromosome": "Xq",
+        "id": "HGNC:13415",
+        "equivalent_identifiers": [
+          "NCBIGENE:139728",
+          "UniProtKB:C9J2B9",
+          "UniProtKB:C9JB09",
+          "UniProtKB:C9JEC5",
+          "ENSEMBL:ENSG00000130822",
+          "UniProtKB:F8WBU7",
+          "UniProtKB:Q6P2M8",
+          "UniProtKB:C9JJ18",
+          "HGNC:13415",
+          "UniProtKB:F8WAQ5",
+          "UniProtKB:C9J8P0",
+          "UniProtKB:H7BZQ5"
+        ],
+        "taxon": "9606",
+        "gene_family_id": [
+          1630
+        ],
+        "type": "gene",
+        "omnicorp_article_count": 72
+      },
+      {
+        "congenital abnormality": true,
+        "name": "progressive external ophthalmoplegia",
+        "nutritional or metabolic disease": true,
+        "id": "MONDO:0005181",
+        "equivalent_identifiers": [
+          "MEDDRA:10015830",
+          "DOID:12558",
+          "MEDDRA:10048525",
+          "UMLS:C0029089",
+          "MEDDRA:10033807",
+          "MEDDRA:10069852",
+          "MEDDRA:10030878",
+          "MEDDRA:10036802",
+          "MONDO:0005181",
+          "MEDDRA:10028324",
+          "UMLS:C0162674",
+          "MEDDRA:10030075",
+          "MEDDRA:10033820",
+          "MESH:D017246",
+          "DOID:539",
+          "MEDDRA:10015953",
+          "UMLS:C0155338",
+          "MONDO:0003425",
+          "MEDDRA:10044103",
+          "MESH:D009886",
+          "UMLS:C0339693",
+          "MEDDRA:10033561",
+          "MEDDRA:10015754",
+          "MEDDRA:10030875",
+          "UMLS:C0751401",
+          "UMLS:C0162292",
+          "MEDDRA:10030877",
+          "MEDDRA:10030876"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 464
+      },
+      {
+        "name": "sea-blue histiocyte syndrome",
+        "systemic or rheumatic disease": true,
+        "nutritional or metabolic disease": true,
+        "id": "MONDO:0010017",
+        "equivalent_identifiers": [
+          "MONDO:0010017",
+          "UMLS:C0036489",
+          "OMIM:269600",
+          "DOID:4423",
+          "MESH:D012618",
+          "ORPHANET:158029"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "syndromic disease": true,
+        "omnicorp_article_count": 90
+      },
+      {
+        "name": "progressive supranuclear palsy",
+        "degenerative disorder": true,
+        "id": "MONDO:0019037",
+        "equivalent_identifiers": [
+          "MESH:D013494",
+          "MEDDRA:10036813",
+          "DOID:678",
+          "ORPHANET:683",
+          "UMLS:C0038868",
+          "MONDO:0019037",
+          "UMLS:CN205522",
+          "MEDDRA:10054970"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "syndromic disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 3238
+      },
+      {
+        "congenital abnormality": true,
+        "name": "retinitis pigmentosa",
+        "id": "MONDO:0019200",
+        "equivalent_identifiers": [
+          "OMIM:268000",
+          "MONDO:0000455",
+          "MEDDRA:10038914",
+          "ORPHANET:1871",
+          "MONDO:0019200",
+          "UMLS:C0035334",
+          "UMLS:C4072872",
+          "UMLS:C0730290",
+          "DOID:10584",
+          "UMLS:C4072827",
+          "MEDDRA:10054856",
+          "DOID:0050795",
+          "ORPHANET:791",
+          "MESH:D012174",
+          "UMLS:C0271092"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 9167
+      },
+      {
+        "congenital abnormality": true,
+        "name": "autosomal dominant cerebellar ataxia",
+        "monogenic disease": true,
+        "autosomal genetic disease": true,
+        "autosomal dominant disease": true,
+        "degenerative disorder": true,
+        "id": "MONDO:0020380",
+        "equivalent_identifiers": [
+          "MONDO:0000437",
+          "MONDO:0020380",
+          "ORPHANET:99",
+          "MEDDRA:10057660",
+          "UMLS:C0007758",
+          "MESH:D002524",
+          "UMLS:CN227858",
+          "UMLS:C0234162",
+          "DOID:0050753",
+          "MESH:D020754",
+          "MEDDRA:10008025",
+          "ORPHANET:102002",
+          "MEDDRA:10003592",
+          "DOID:1441",
+          "UMLS:C0087012",
+          "MEDDRA:10013936"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "syndromic disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 513
+      },
+      {
+        "name": "Niemann-Pick disease",
+        "monogenic disease": true,
+        "autosomal genetic disease": true,
+        "systemic or rheumatic disease": true,
+        "nutritional or metabolic disease": true,
+        "id": "MONDO:0001982",
+        "equivalent_identifiers": [
+          "DOID:14504",
+          "MEDDRA:10029403",
+          "MESH:D009542",
+          "MEDDRA:10041515",
+          "MONDO:0001982",
+          "UMLS:C0028064"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "autosomal recessive disease": true,
+        "omnicorp_article_count": 1844
+      },
+      {
+        "name": "medulloblastoma",
+        "id": "MONDO:0007959",
+        "equivalent_identifiers": [
+          "MONDO:0007959",
+          "DOID:0050902",
+          "ORPHANET:616",
+          "UMLS:C0025149",
+          "UMLS:C1334410",
+          "DOID:0060104",
+          "MEDDRA:10027107",
+          "OMIM:155255",
+          "MESH:D008527"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 8533
+      },
+      {
+        "name": "plasma cell myeloma",
+        "id": "MONDO:0009693",
+        "equivalent_identifiers": [
+          "UMLS:C0032131",
+          "MEDDRA:10073875",
+          "DOID:3721",
+          "MEDDRA:10035226",
+          "MEDDRA:10035484",
+          "MONDO:0005615",
+          "MESH:D010954",
+          "MEDDRA:10028566",
+          "MONDO:0009693",
+          "DOID:9538",
+          "ORPHANET:29073",
+          "MEDDRA:10035229",
+          "MEDDRA:10028569",
+          "MEDDRA:10028232",
+          "OMIM:254500",
+          "MESH:D009101",
+          "ORPHANET:86855",
+          "MEDDRA:10034613",
+          "MEDDRA:10028228",
+          "MEDDRA:10074470",
+          "UMLS:C0026764",
+          "MEDDRA:10028568"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 45000
+      },
+      {
+        "congenital abnormality": true,
+        "name": "down syndrome",
+        "id": "MONDO:0008608",
+        "equivalent_identifiers": [
+          "MEDDRA:10013616",
+          "MEDDRA:10042801",
+          "MEDDRA:10044688",
+          "MONDO:0008608",
+          "OMIM:190685",
+          "DOID:14250",
+          "ORPHANET:870",
+          "MEDDRA:10027816",
+          "MESH:D004314",
+          "UMLS:C0013080"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "syndromic disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 29037
+      },
+      {
+        "congenital abnormality": true,
+        "name": "Gaucher disease",
+        "nutritional or metabolic disease": true,
+        "id": "MONDO:0018150",
+        "equivalent_identifiers": [
+          "MEDDRA:10018446",
+          "MEDDRA:10018048",
+          "MESH:D005776",
+          "DOID:1926",
+          "ORPHANET:355",
+          "MONDO:0018150",
+          "UMLS:C0017205"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 4944
+      },
+      {
+        "name": "plasmacytoma",
+        "id": "MONDO:0005615",
+        "equivalent_identifiers": [
+          "DOID:3721",
+          "MEDDRA:10035226",
+          "UMLS:C0032131",
+          "MEDDRA:10028232",
+          "MEDDRA:10028228",
+          "MEDDRA:10034613",
+          "MEDDRA:10028569",
+          "MONDO:0005615",
+          "ORPHANET:86855",
+          "MONDO:0009693",
+          "ORPHANET:29073",
+          "MESH:D009101",
+          "MEDDRA:10074470",
+          "MEDDRA:10028566",
+          "MEDDRA:10073875",
+          "DOID:9538",
+          "MEDDRA:10035484",
+          "MEDDRA:10028568",
+          "MESH:D010954",
+          "OMIM:254500",
+          "MEDDRA:10035229",
+          "UMLS:C0026764"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 9834
+      },
+      {
+        "name": "HIV infectious disease",
+        "id": "MONDO:0005109",
+        "equivalent_identifiers": [
+          "MEDDRA:10020443",
+          "MESH:D015658",
+          "MEDDRA:10020160",
+          "MONDO:0005109",
+          "MEDDRA:10020161",
+          "DOID:526",
+          "MEDDRA:10020441",
+          "UMLS:C0019693",
+          "MEDDRA:10020172"
+        ],
+        "transmissible disease": true,
+        "type": "disease",
+        "omnicorp_article_count": 189819
+      },
+      {
+        "congenital abnormality": true,
+        "name": "Niemann-Pick disease, type C1",
+        "monogenic disease": true,
+        "autosomal genetic disease": true,
+        "systemic or rheumatic disease": true,
+        "nutritional or metabolic disease": true,
+        "id": "MONDO:0009757",
+        "equivalent_identifiers": [
+          "DOID:0070113",
+          "OMIM:257220",
+          "MONDO:0009757",
+          "UMLS:C3179455"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "autosomal recessive disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 74
+      },
+      {
+        "name": "cystic fibrosis",
+        "monogenic disease": true,
+        "autosomal genetic disease": true,
+        "id": "MONDO:0009061",
+        "equivalent_identifiers": [
+          "UMLS:C0010674",
+          "MEDDRA:10011762",
+          "MEDDRA:10011764",
+          "DOID:1485",
+          "OMIM:219700",
+          "MEDDRA:10028141",
+          "MESH:D003550",
+          "ORPHANET:586",
+          "MONDO:0009061"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "autosomal recessive disease": true,
+        "omnicorp_article_count": 50748
+      },
+      {
+        "name": "systemic sclerosis",
+        "systemic or rheumatic disease": true,
+        "id": "MONDO:0005100",
+        "equivalent_identifiers": [
+          "MONDO:0005100",
+          "MEDDRA:10036814",
+          "ORPHANET:801",
+          "UMLS:C0011644",
+          "MONDO:0019562",
+          "DOID:419",
+          "ORPHANET:90291",
+          "MESH:D012595",
+          "UMLS:C1527383",
+          "MEDDRA:10027979",
+          "MONDO:0019340",
+          "DOID:418",
+          "MEDDRA:10009206",
+          "MEDDRA:10039712",
+          "UMLS:C0036421",
+          "UMLS:C0036420",
+          "ORPHANET:90289",
+          "MEDDRA:10012517",
+          "MESH:D012594",
+          "MEDDRA:10078638",
+          "DOID:8472",
+          "MEDDRA:10027982",
+          "UMLS:CN206012",
+          "MEDDRA:10039710",
+          "MEDDRA:10042953",
+          "UMLS:C1274865"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 25635
+      },
+      {
+        "name": "gastrointestinal stromal tumor",
+        "id": "MONDO:0011719",
+        "equivalent_identifiers": [
+          "OMIM:606764",
+          "MEDDRA:10051066",
+          "MESH:D046152",
+          "MEDDRA:10062427",
+          "UMLS:C3179349",
+          "ORPHANET:44890",
+          "MONDO:0011719",
+          "UMLS:C0238198",
+          "DOID:9253"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 9286
+      },
+      {
+        "congenital abnormality": true,
+        "name": "fragile X syndrome",
+        "X-linked disease": true,
+        "monogenic disease": true,
+        "nutritional or metabolic disease": true,
+        "id": "MONDO:0010383",
+        "equivalent_identifiers": [
+          "DOID:14261",
+          "MONDO:0010383",
+          "MEDDRA:10017324",
+          "UMLS:C0751156",
+          "ORPHANET:908",
+          "UMLS:C0016667",
+          "OMIM:300624",
+          "MESH:D005600"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "syndromic disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 5823
+      },
+      {
+        "name": "idiopathic pulmonary fibrosis",
+        "id": "MONDO:0008345",
+        "equivalent_identifiers": [
+          "MEDDRA:10011495",
+          "DOID:0050156",
+          "ORPHANET:2032",
+          "MESH:D054990",
+          "UMLS:C1800706",
+          "MONDO:0008345",
+          "OMIM:178500",
+          "MEDDRA:10021240"
+        ],
+        "transmissible disease": true,
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 13360
+      },
+      {
+        "congenital abnormality": true,
+        "name": "X-linked mixed deafness with perilymphatic gusher",
+        "X-linked disease": true,
+        "monogenic disease": true,
+        "id": "MONDO:0010576",
+        "equivalent_identifiers": [
+          "UMLS:C1844678",
+          "OMIM:601449",
+          "UMLS:C1832354",
+          "DOID:10003",
+          "MESH:C563316",
+          "ORPHANET:3235",
+          "ORPHANET:383",
+          "OMIM:304400",
+          "MONDO:0010576",
+          "MONDO:0011080"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "syndromic disease": true,
+        "omnicorp_article_count": 17
+      },
+      {
+        "name": "esophageal adenocarcinoma",
+        "id": "MONDO:0005028",
+        "equivalent_identifiers": [
+          "DOID:4914",
+          "MEDDRA:10001173",
+          "MEDDRA:10056092",
+          "MEDDRA:10055458",
+          "MEDDRA:10030139",
+          "MONDO:0005028",
+          "MEDDRA:10030137",
+          "ORPHANET:99976",
+          "UMLS:C0279628"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 5012
+      },
+      {
+        "name": "bilateral striopallidodentate calcinosis",
+        "degenerative disorder": true,
+        "id": "MONDO:0008947",
+        "equivalent_identifiers": [
+          "MEDDRA:10059626",
+          "MONDO:0024538",
+          "UMLS:CN852731",
+          "ORPHANET:1980",
+          "OMIM:213600",
+          "DOID:0060230",
+          "UMLS:C0393590",
+          "UMLS:C0393589",
+          "MESH:C536275",
+          "MONDO:0008947"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 189
+      },
+      {
+        "name": "narcolepsy 1",
+        "id": "MONDO:0008062",
+        "equivalent_identifiers": [
+          "OMIM:161400",
+          "MESH:D002385",
+          "MEDDRA:10007737",
+          "UMLS:C1834372",
+          "MONDO:0008062",
+          "UMLS:C0007384"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 103
+      },
+      {
+        "congenital abnormality": true,
+        "name": "Usher syndrome type 2",
+        "monogenic disease": true,
+        "autosomal genetic disease": true,
+        "id": "MONDO:0016484",
+        "equivalent_identifiers": [
+          "MONDO:0016484",
+          "UMLS:C0339534",
+          "UMLS:C1568249",
+          "ORPHANET:231178",
+          "DOID:0110827"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "syndromic disease": true,
+        "autosomal recessive disease": true,
+        "omnicorp_article_count": 112
+      },
+      {
+        "congenital abnormality": true,
+        "name": "isolated spina bifida",
+        "id": "MONDO:0019351",
+        "equivalent_identifiers": [
+          "UMLS:C0080178",
+          "MESH:D016135",
+          "OMIM:182940",
+          "MONDO:0008449",
+          "ORPHANET:823",
+          "DOID:0080016",
+          "MEDDRA:10041524",
+          "MONDO:0019351"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 16
+      },
+      {
+        "name": "neurodegeneration with brain iron accumulation 4",
+        "degenerative disorder": true,
+        "nutritional or metabolic disease": true,
+        "id": "MONDO:0013674",
+        "equivalent_identifiers": [
+          "UMLS:C3280371",
+          "DOID:0110738",
+          "MONDO:0013674",
+          "ORPHANET:289560",
+          "OMIM:614298"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "syndromic disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 38
+      },
+      {
+        "congenital abnormality": true,
+        "name": "Usher syndrome",
+        "monogenic disease": true,
+        "autosomal genetic disease": true,
+        "id": "MONDO:0019501",
+        "equivalent_identifiers": [
+          "MESH:D052245",
+          "UMLS:C0271097",
+          "ORPHANET:886",
+          "DOID:0050439",
+          "MEDDRA:10063396",
+          "MONDO:0019501"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "syndromic disease": true,
+        "autosomal recessive disease": true,
+        "omnicorp_article_count": 1061
+      },
+      {
+        "congenital abnormality": true,
+        "name": "juvenile neuronal ceroid lipofuscinosis",
+        "degenerative disorder": true,
+        "nutritional or metabolic disease": true,
+        "id": "MONDO:0019262",
+        "equivalent_identifiers": [
+          "MEDDRA:10052073",
+          "MONDO:0019262",
+          "MEDDRA:10054968",
+          "DOID:0050756",
+          "MEDDRA:10052082",
+          "ORPHANET:79264",
+          "UMLS:C0751383",
+          "MEDDRA:10054985"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 805
+      },
+      {
+        "name": "Pick disease",
+        "degenerative disorder": true,
+        "id": "MONDO:0008243",
+        "equivalent_identifiers": [
+          "OMIM:172700",
+          "MONDO:0008243",
+          "MEDDRA:10009204",
+          "UMLS:C0236642",
+          "DOID:11870",
+          "MEDDRA:10035003",
+          "MESH:D020774"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 1128
+      },
+      {
+        "congenital abnormality": true,
+        "name": "spina bifida (disease)",
+        "id": "MONDO:0008449",
+        "equivalent_identifiers": [
+          "UMLS:C0080178",
+          "MESH:D016135",
+          "ORPHANET:823",
+          "MONDO:0008449",
+          "MEDDRA:10041524",
+          "OMIM:182940",
+          "DOID:0080016",
+          "MONDO:0019351"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 5546
+      },
+      {
+        "congenital abnormality": true,
+        "name": "mental retardation, autosomal recessive 27",
+        "monogenic disease": true,
+        "autosomal genetic disease": true,
+        "id": "MONDO:0013702",
+        "equivalent_identifiers": [
+          "OMIM:614340",
+          "UMLS:C3280538",
+          "MONDO:0013702",
+          "MONDO:0013702"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "autosomal recessive disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 0
+      },
+      {
+        "congenital abnormality": true,
+        "name": "cone dystrophy",
+        "id": "MONDO:0000455",
+        "equivalent_identifiers": [
+          "UMLS:C0730290",
+          "ORPHANET:1871",
+          "MONDO:0019200",
+          "MONDO:0000455",
+          "MEDDRA:10054856",
+          "ORPHANET:791",
+          "DOID:10584",
+          "UMLS:C4072872",
+          "MESH:D012174",
+          "UMLS:C0271092",
+          "MEDDRA:10038914",
+          "OMIM:268000",
+          "DOID:0050795",
+          "UMLS:C0035334",
+          "UMLS:C4072827"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 329
+      },
+      {
+        "congenital abnormality": true,
+        "name": "autosomal recessive nonsyndromic deafness 31",
+        "monogenic disease": true,
+        "autosomal genetic disease": true,
+        "id": "MONDO:0011767",
+        "equivalent_identifiers": [
+          "DOID:0110490",
+          "OMIM:607084",
+          "UMLS:C1846839",
+          "MONDO:0011767",
+          "MESH:C564629"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "autosomal recessive disease": true,
+        "omnicorp_article_count": 45
+      },
+      {
+        "congenital abnormality": true,
+        "name": "Usher syndrome type 2D",
+        "monogenic disease": true,
+        "autosomal genetic disease": true,
+        "id": "MONDO:0012662",
+        "equivalent_identifiers": [
+          "DOID:0110840",
+          "MONDO:0012662",
+          "OMIM:611383"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "syndromic disease": true,
+        "autosomal recessive disease": true,
+        "omnicorp_article_count": 14
+      },
+      {
+        "congenital abnormality": true,
+        "name": "progressive deafness with stapes fixation",
+        "X-linked disease": true,
+        "monogenic disease": true,
+        "id": "MONDO:0011080",
+        "equivalent_identifiers": [
+          "UMLS:C1844678",
+          "OMIM:601449",
+          "UMLS:C1832354",
+          "DOID:10003",
+          "MESH:C563316",
+          "ORPHANET:3235",
+          "ORPHANET:383",
+          "OMIM:304400",
+          "MONDO:0010576",
+          "MONDO:0011080"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "syndromic disease": true,
+        "omnicorp_article_count": 4
+      },
+      {
+        "name": "alopecia areata",
+        "id": "MONDO:0005340",
+        "equivalent_identifiers": [
+          "MESH:D000506",
+          "DOID:986",
+          "MONDO:0005340",
+          "MEDDRA:10001761",
+          "UMLS:C0002171"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 3737
+      },
+      {
+        "name": "visual epilepsy",
+        "id": "MONDO:0001386",
+        "equivalent_identifiers": [
+          "MESH:D004827",
+          "MONDO:0005027",
+          "UMLS:C0234533",
+          "MEDDRA:10010920",
+          "UMLS:C0494475",
+          "UMLS:C1833488",
+          "MESH:D012640",
+          "MEDDRA:10062448",
+          "MEDDRA:10018662",
+          "MEDDRA:10016735",
+          "MEDDRA:10015046",
+          "MEDDRA:10016843",
+          "UMLS:C0036572",
+          "MEDDRA:10003791",
+          "MEDDRA:10018079",
+          "UMLS:C0751495",
+          "MEDDRA:10010914",
+          "MEDDRA:10039910",
+          "MEDDRA:10015042",
+          "MEDDRA:10010906",
+          "MEDDRA:10018663",
+          "UMLS:C0236018",
+          "MEDDRA:10016736",
+          "MEDDRA:10016838",
+          "UMLS:C0270824",
+          "MEDDRA:10061334",
+          "MEDDRA:10018100",
+          "MEDDRA:10034089",
+          "MEDDRA:10018101",
+          "DOID:11832",
+          "DOID:1826",
+          "MEDDRA:10018661",
+          "MEDDRA:10051375",
+          "MEDDRA:10015037",
+          "MEDDRA:10010916",
+          "MONDO:0001386",
+          "MEDDRA:10039906",
+          "MEDDRA:10010904",
+          "MEDDRA:10016731",
+          "MEDDRA:10010917",
+          "MEDDRA:10039909",
+          "MEDDRA:10044000",
+          "UMLS:C0014544",
+          "MEDDRA:10010922"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 72
+      },
+      {
+        "name": "paroxysmal dystonia",
+        "id": "MONDO:0016058",
+        "equivalent_identifiers": [
+          "UMLS:C0393588",
+          "MESH:D004421",
+          "UMLS:C4020871",
+          "MEDDRA:10013983",
+          "ORPHANET:200037",
+          "UMLS:C0751093",
+          "MONDO:0016058",
+          "UMLS:C0013421",
+          "MEDDRA:10013985"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 262
+      },
+      {
+        "id": "MONDO:0004993",
+        "name": "carcinoma",
+        "equivalent_identifiers": [
+          "MESH:D002277",
+          "DOID:305",
+          "MONDO:0004993",
+          "UMLS:C0007097",
+          "MEDDRA:10007284",
+          "MEDDRA:10007423"
+        ],
+        "type": "disease",
+        "omnicorp_article_count": 496704
+      },
+      {
+        "name": "large cell medulloblastoma",
+        "id": "MONDO:0002791",
+        "equivalent_identifiers": [
+          "DOID:3857",
+          "UMLS:C1266180",
+          "MONDO:0002791"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 18
+      },
+      {
+        "congenital abnormality": true,
+        "name": "gangliosidosis",
+        "nutritional or metabolic disease": true,
+        "id": "MONDO:0017719",
+        "equivalent_identifiers": [
+          "DOID:2368",
+          "MONDO:0017719",
+          "UMLS:C0017083",
+          "ORPHANET:309144"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 930
+      },
+      {
+        "congenital abnormality": true,
+        "name": "Perrault syndrome",
+        "monogenic disease": true,
+        "autosomal genetic disease": true,
+        "nutritional or metabolic disease": true,
+        "id": "MONDO:0017312",
+        "equivalent_identifiers": [
+          "DOID:0050857",
+          "UMLS:CN239459",
+          "MONDO:0017312",
+          "ORPHANET:2855",
+          "UMLS:C0685838"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "syndromic disease": true,
+        "autosomal recessive disease": true,
+        "omnicorp_article_count": 44
+      },
+      {
+        "congenital abnormality": true,
+        "name": "autosomal recessive nonsyndromic deafness",
+        "monogenic disease": true,
+        "autosomal genetic disease": true,
+        "id": "MONDO:0019588",
+        "equivalent_identifiers": [
+          "MESH:C564609",
+          "DOID:0050565",
+          "MONDO:0019588",
+          "UMLS:C1846647",
+          "OMIM:607197",
+          "ORPHANET:90636",
+          "UMLS:CN206424"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "autosomal recessive disease": true,
+        "omnicorp_article_count": 54
+      },
+      {
+        "name": "pustulosis palmaris et plantaris",
+        "id": "MONDO:0015597",
+        "equivalent_identifiers": [
+          "MESH:D011565",
+          "MONDO:0002985",
+          "DOID:8893",
+          "UMLS:C0030246",
+          "MONDO:0015597",
+          "UMLS:C0033860",
+          "ORPHANET:163927",
+          "DOID:4398",
+          "MEDDRA:10037153",
+          "MONDO:0005083",
+          "MEDDRA:10050185"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 4738
+      },
+      {
+        "congenital abnormality": true,
+        "name": "Niemann-Pick disease type C, severe perinatal form",
+        "monogenic disease": true,
+        "autosomal genetic disease": true,
+        "systemic or rheumatic disease": true,
+        "nutritional or metabolic disease": true,
+        "id": "MONDO:0016306",
+        "equivalent_identifiers": [
+          "ORPHANET:216972",
+          "UMLS:CN201112",
+          "MONDO:0016306"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "autosomal recessive disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 0
+      },
+      {
+        "congenital abnormality": true,
+        "name": "Niemann-Pick disease type C, severe early infantile neurologic onset",
+        "monogenic disease": true,
+        "autosomal genetic disease": true,
+        "systemic or rheumatic disease": true,
+        "nutritional or metabolic disease": true,
+        "id": "MONDO:0016307",
+        "equivalent_identifiers": [
+          "ORPHANET:216975",
+          "UMLS:CN201113",
+          "MONDO:0016307"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "autosomal recessive disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 0
+      },
+      {
+        "congenital abnormality": true,
+        "name": "Niemann-Pick disease type C, late infantile neurologic onset",
+        "monogenic disease": true,
+        "autosomal genetic disease": true,
+        "systemic or rheumatic disease": true,
+        "nutritional or metabolic disease": true,
+        "id": "MONDO:0016308",
+        "equivalent_identifiers": [
+          "UMLS:CN201114",
+          "ORPHANET:216978",
+          "MONDO:0016308"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "autosomal recessive disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 0
+      },
+      {
+        "congenital abnormality": true,
+        "name": "Niemann-Pick disease type C, juvenile neurologic onset",
+        "monogenic disease": true,
+        "autosomal genetic disease": true,
+        "systemic or rheumatic disease": true,
+        "nutritional or metabolic disease": true,
+        "id": "MONDO:0016309",
+        "equivalent_identifiers": [
+          "MONDO:0016309",
+          "ORPHANET:216981",
+          "UMLS:CN201115"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "autosomal recessive disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 0
+      },
+      {
+        "congenital abnormality": true,
+        "name": "Niemann-Pick disease type C, adult neurologic onset",
+        "monogenic disease": true,
+        "autosomal genetic disease": true,
+        "systemic or rheumatic disease": true,
+        "nutritional or metabolic disease": true,
+        "id": "MONDO:0016310",
+        "equivalent_identifiers": [
+          "ORPHANET:216986",
+          "UMLS:CN201116",
+          "MONDO:0016310"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "autosomal recessive disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 0
+      },
+      {
+        "name": "nonsyndromic genetic deafness",
+        "id": "MONDO:0019497",
+        "equivalent_identifiers": [
+          "UMLS:CN043648",
+          "MESH:C580334",
+          "MONDO:0019497",
+          "ORPHANET:87884",
+          "DOID:0050563"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "omnicorp_article_count": 465
+      },
+      {
+        "congenital abnormality": true,
+        "name": "autosomal recessive non-syndromic intellectual disability",
+        "monogenic disease": true,
+        "autosomal genetic disease": true,
+        "id": "MONDO:0019502",
+        "equivalent_identifiers": [
+          "UMLS:CN206293",
+          "DOID:0060308",
+          "MONDO:0019502",
+          "ORPHANET:88616"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "autosomal recessive disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 44
+      },
+      {
+        "name": "basal ganglia calcification, idiopathic, 1",
+        "degenerative disorder": true,
+        "id": "MONDO:0024538",
+        "equivalent_identifiers": [
+          "UMLS:C0393590",
+          "MESH:C536275",
+          "OMIM:213600",
+          "UMLS:CN852731",
+          "ORPHANET:1980",
+          "MEDDRA:10059626",
+          "MONDO:0024538",
+          "UMLS:C0393589",
+          "DOID:0060230",
+          "MONDO:0008947"
+        ],
+        "type": "disease",
+        "rare disease": true,
+        "psychiatric disorder": true,
+        "omnicorp_article_count": 0
+      }
+    ],
+    "edges": [
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:7897",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2646182",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005737",
+        "type": "disease_to_gene_association",
+        "ctime": 1550589274.616481,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:30922",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2646176",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005737",
+        "type": "disease_to_gene_association",
+        "ctime": 1550589274.6163785,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:16361",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2646203",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005737",
+        "type": "disease_to_gene_association",
+        "ctime": 1550589274.616685,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:24867",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2646161",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005737",
+        "type": "disease_to_gene_association",
+        "ctime": 1550589274.6162758,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:1119",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2646141",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005737",
+        "type": "disease_to_gene_association",
+        "ctime": 1550589274.616043,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:13236",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2646193",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005737",
+        "type": "disease_to_gene_association",
+        "ctime": 1550589274.616583,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:4669",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2646158",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005737",
+        "type": "disease_to_gene_association",
+        "ctime": 1550589274.616224,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:17770",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2646186",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005737",
+        "type": "disease_to_gene_association",
+        "ctime": 1550589274.6165326,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:20818",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2646180",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005737",
+        "type": "disease_to_gene_association",
+        "ctime": 1550589274.6164298,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:29249",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2646149",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005737",
+        "type": "disease_to_gene_association",
+        "ctime": 1550589274.616116,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:4441",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2646154",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005737",
+        "type": "disease_to_gene_association",
+        "ctime": 1550589274.6161716,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:13415",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2646172",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005737",
+        "type": "disease_to_gene_association",
+        "ctime": 1550589274.6163278,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:7897",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "6610568",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005181",
+        "type": "disease_to_gene_association",
+        "ctime": 1543723070.5507746,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "RO:0002200",
+        "target_id": "MONDO:0010017",
+        "edge_source": "biolink.gene_get_phenotype",
+        "publications": [
+          "PMID:16098014",
+          "PMID:17160617",
+          "PMID:22065762",
+          "PMID:19013089",
+          "PMID:11333381",
+          "PMID:26206375",
+          "PMID:15465421",
+          "PMID:25131710",
+          "PMID:27139891",
+          "PMID:24676439",
+          "PMID:20826119",
+          "PMID:23653225",
+          "PMID:23430855",
+          "PMID:12401890",
+          "PMID:11182931",
+          "PMID:26981555",
+          "PMID:11479732",
+          "PMID:15459971",
+          "PMID:19206179",
+          "PMID:15130691",
+          "PMID:15596783",
+          "PMID:21245028",
+          "PMID:23773996",
+          "PMID:19744920",
+          "PMID:11545687",
+          "PMID:23142039",
+          "PMID:19223215",
+          "PMID:4795418",
+          "PMID:24915861",
+          "PMID:22326530",
+          "PMID:24035292",
+          "PMID:20718790",
+          "PMID:11754101",
+          "PMID:22704015",
+          "PMID:24570279",
+          "PMID:18216017",
+          "PMID:22750297",
+          "PMID:10480349",
+          "PMID:24386122",
+          "PMID:9211849",
+          "PMID:26937389",
+          "PMID:17003072",
+          "PMID:23433426",
+          "PMID:25236789",
+          "PMID:12955717",
+          "PMID:19609713",
+          "PMID:3378364",
+          "PMID:16126423",
+          "PMID:9634529",
+          "PMID:12205649",
+          "PMID:11349231",
+          "PMID:12408188",
+          "PMID:23774949",
+          "PMID:23146215",
+          "PMID:22505584",
+          "PMID:12974729",
+          "PMID:22476655",
+          "PMID:22676771",
+          "PMID:26666848",
+          "PMID:23427322",
+          "PMID:16720792",
+          "PMID:19900398",
+          "PMID:10521297",
+          "PMID:24001525",
+          "PMID:19252935",
+          "PMID:12554680",
+          "PMID:10521290",
+          "PMID:19307542",
+          "PMID:16778374"
+        ],
+        "id": "7930031",
+        "predicate_id": "RO:0002200",
+        "source_database": "biolink",
+        "source_id": "HGNC:7897",
+        "type": "has_phenotype",
+        "ctime": 1549992764.7107172,
+        "relation_label": "has phenotype",
+        "weight": 0.9999999999720233
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:30922",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4266838",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0019037",
+        "type": "disease_to_gene_association",
+        "ctime": 1543740194.1618216,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:16361",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4225254",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0019200",
+        "type": "disease_to_gene_association",
+        "ctime": 1543741098.9865637,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:7897",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "6629061",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0020380",
+        "type": "disease_to_gene_association",
+        "ctime": 1543738375.6416912,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:7897",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2580147",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0001982",
+        "type": "disease_to_gene_association",
+        "ctime": 1543725944.3784027,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:24867",
+        "edge_source": "pharos.gene_get_disease",
+        "publications": [],
+        "id": "6912148",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0007959",
+        "type": "disease_to_gene_association",
+        "ctime": 1543590108.6432385,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:1119",
+        "edge_source": "pharos.gene_get_disease",
+        "publications": [],
+        "id": "6912142",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0007959",
+        "type": "disease_to_gene_association",
+        "ctime": 1543589961.8517022,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:16361",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2709472",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0007959",
+        "type": "disease_to_gene_association",
+        "ctime": 1543730620.3508115,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:13236",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2701274",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0007959",
+        "type": "disease_to_gene_association",
+        "ctime": 1543730620.2943006,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:7897",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2697207",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0007959",
+        "type": "disease_to_gene_association",
+        "ctime": 1543730620.2272742,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:30922",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2692822",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0007959",
+        "type": "disease_to_gene_association",
+        "ctime": 1543730620.1959083,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:24867",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2689273",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0007959",
+        "type": "disease_to_gene_association",
+        "ctime": 1543730620.1715202,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:1119",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2680592",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0007959",
+        "type": "disease_to_gene_association",
+        "ctime": 1543730620.1124449,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:13236",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2748380",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0009693",
+        "type": "disease_to_gene_association",
+        "ctime": 1543732225.2577407,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:1119",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2744333",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0009693",
+        "type": "disease_to_gene_association",
+        "ctime": 1543732225.2306619,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:7897",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2763813",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0008608",
+        "type": "disease_to_gene_association",
+        "ctime": 1543732211.0021105,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:7897",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4224895",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0018150",
+        "type": "disease_to_gene_association",
+        "ctime": 1543737715.9866233,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:1119",
+        "edge_source": "pharos.gene_get_disease",
+        "publications": [],
+        "id": "6912144",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005615",
+        "type": "disease_to_gene_association",
+        "ctime": 1543589961.852102,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:13236",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2631128",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005615",
+        "type": "disease_to_gene_association",
+        "ctime": 1543727101.636244,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:1119",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2626411",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005615",
+        "type": "disease_to_gene_association",
+        "ctime": 1543727101.6097608,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:1119",
+        "edge_source": "pharos.gene_get_disease",
+        "publications": [],
+        "id": "6912139",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005109",
+        "type": "disease_to_gene_association",
+        "ctime": 1543589961.850733,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:1119",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "6622997",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005109",
+        "type": "disease_to_gene_association",
+        "ctime": 1543728836.700451,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:7897",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2699896",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0009757",
+        "type": "disease_to_gene_association",
+        "ctime": 1543733098.8987267,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "GENO:0000840",
+        "target_id": "MONDO:0009757",
+        "edge_source": "biolink.gene_get_disease",
+        "publications": [
+          "PMID:16098014",
+          "PMID:17160617",
+          "PMID:22065762",
+          "PMID:19013089",
+          "PMID:11333381",
+          "PMID:26206375",
+          "PMID:15465421",
+          "PMID:25131710",
+          "PMID:27139891",
+          "PMID:24676439",
+          "PMID:20826119",
+          "PMID:23653225",
+          "PMID:23430855",
+          "PMID:12401890",
+          "PMID:11182931",
+          "PMID:26981555",
+          "PMID:11479732",
+          "PMID:15459971",
+          "PMID:19206179",
+          "PMID:15130691",
+          "PMID:15596783",
+          "PMID:21245028",
+          "PMID:23773996",
+          "PMID:19744920",
+          "PMID:11545687",
+          "PMID:23142039",
+          "PMID:19223215",
+          "PMID:4795418",
+          "PMID:24915861",
+          "PMID:22326530",
+          "PMID:24035292",
+          "PMID:20718790",
+          "PMID:11754101",
+          "PMID:22704015",
+          "PMID:24570279",
+          "PMID:18216017",
+          "PMID:22750297",
+          "PMID:10480349",
+          "PMID:24386122",
+          "PMID:9211849",
+          "PMID:26937389",
+          "PMID:9802331",
+          "PMID:17003072",
+          "PMID:23433426",
+          "PMID:25236789",
+          "PMID:12955717",
+          "PMID:22216111",
+          "PMID:19609713",
+          "PMID:3378364",
+          "PMID:16126423",
+          "PMID:9634529",
+          "PMID:12205649",
+          "PMID:11349231",
+          "PMID:12408188",
+          "PMID:23774949",
+          "PMID:23146215",
+          "PMID:22505584",
+          "PMID:12974729",
+          "PMID:22476655",
+          "PMID:22676771",
+          "PMID:26666848",
+          "PMID:23427322",
+          "PMID:16720792",
+          "PMID:19900398",
+          "PMID:10521297",
+          "PMID:24001525",
+          "PMID:19252935",
+          "PMID:12554680",
+          "PMID:10521290",
+          "PMID:19307542",
+          "PMID:16778374"
+        ],
+        "id": "6912168",
+        "predicate_id": "BIOLINK:0000001",
+        "source_database": "biolink",
+        "source_id": "HGNC:7897",
+        "type": "gene_associated_with_condition",
+        "ctime": 1543590171.4285283,
+        "relation_label": "pathogenic_for_condition",
+        "weight": 0.9999999999862601
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:1119",
+        "edge_source": "pharos.gene_get_disease",
+        "publications": [],
+        "id": "6912140",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0009061",
+        "type": "disease_to_gene_association",
+        "ctime": 1543589961.8514094,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:1119",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2747335",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0009061",
+        "type": "disease_to_gene_association",
+        "ctime": 1543731394.320586,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "hetio:UPREGULATES_DuG",
+        "target_id": "HGNC:24867",
+        "edge_source": "hetio.gene_to_disease",
+        "publications": [],
+        "id": "6912155",
+        "predicate_id": "RO:0002450",
+        "source_database": "hetio",
+        "source_id": "MONDO:0005100",
+        "type": "positively_regulates__entity_to_entity",
+        "ctime": 1543590092.4683685,
+        "relation_label": "UPREGULATES_DuG",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:7897",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4208614",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0011719",
+        "type": "disease_to_gene_association",
+        "ctime": 1543733032.862297,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "RO:0002607",
+        "target_id": "MONDO:0011719",
+        "edge_source": "biolink.gene_get_disease",
+        "publications": [
+          "PMID:27793025"
+        ],
+        "id": "6912165",
+        "predicate_id": "RO:0002607",
+        "source_database": "biolink",
+        "source_id": "HGNC:7897",
+        "type": "biomarker_for",
+        "ctime": 1543590171.4284706,
+        "relation_label": "is marker for",
+        "weight": 0.4071474314830641
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:4669",
+        "edge_source": "pharos.gene_get_disease",
+        "publications": [],
+        "id": "6912147",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0010383",
+        "type": "disease_to_gene_association",
+        "ctime": 1543590082.490719,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:4669",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2727023",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0010383",
+        "type": "disease_to_gene_association",
+        "ctime": 1543727606.6709683,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "hetio:DOWNREGULATES_DdG",
+        "target_id": "HGNC:17770",
+        "edge_source": "hetio.gene_to_disease",
+        "publications": [],
+        "id": "6912167",
+        "predicate_id": "RO:0002449",
+        "source_database": "hetio",
+        "source_id": "MONDO:0008345",
+        "type": "negatively_regulates__entity_to_entity",
+        "ctime": 1543590248.662826,
+        "relation_label": "DOWNREGULATES_DdG",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:16361",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2748466",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0010576",
+        "type": "disease_to_gene_association",
+        "ctime": 1543729813.1254594,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:1119",
+        "edge_source": "pharos.gene_get_disease",
+        "publications": [],
+        "id": "6912141",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005028",
+        "type": "disease_to_gene_association",
+        "ctime": 1543589961.8515775,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:1119",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2758295",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0005028",
+        "type": "disease_to_gene_association",
+        "ctime": 1543727407.152025,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:17770",
+        "edge_source": "pharos.gene_get_disease",
+        "publications": [],
+        "id": "6912153",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0008947",
+        "type": "disease_to_gene_association",
+        "ctime": 1543590252.9817576,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:17770",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2734122",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0008947",
+        "type": "disease_to_gene_association",
+        "ctime": 1543729928.6173277,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "RO:0002200",
+        "target_id": "MONDO:0008062",
+        "edge_source": "biolink.gene_get_phenotype",
+        "publications": [
+          "PMID:16098014",
+          "PMID:17160617",
+          "PMID:22065762",
+          "PMID:19013089",
+          "PMID:11333381",
+          "PMID:26206375",
+          "PMID:15465421",
+          "PMID:25131710",
+          "PMID:27139891",
+          "PMID:24676439",
+          "PMID:20826119",
+          "PMID:23653225",
+          "PMID:23430855",
+          "PMID:12401890",
+          "PMID:11182931",
+          "PMID:26981555",
+          "PMID:11479732",
+          "PMID:15459971",
+          "PMID:19206179",
+          "PMID:15130691",
+          "PMID:15596783",
+          "PMID:21245028",
+          "PMID:23773996",
+          "PMID:19744920",
+          "PMID:11545687",
+          "PMID:23142039",
+          "PMID:19223215",
+          "PMID:4795418",
+          "PMID:24915861",
+          "PMID:22326530",
+          "PMID:24035292",
+          "PMID:20718790",
+          "PMID:11754101",
+          "PMID:22704015",
+          "PMID:24570279",
+          "PMID:18216017",
+          "PMID:22750297",
+          "PMID:10480349",
+          "PMID:24386122",
+          "PMID:9211849",
+          "PMID:26937389",
+          "PMID:17003072",
+          "PMID:23433426",
+          "PMID:25236789",
+          "PMID:12955717",
+          "PMID:19609713",
+          "PMID:3378364",
+          "PMID:16126423",
+          "PMID:9634529",
+          "PMID:12205649",
+          "PMID:11349231",
+          "PMID:12408188",
+          "PMID:23774949",
+          "PMID:23146215",
+          "PMID:22505584",
+          "PMID:12974729",
+          "PMID:22476655",
+          "PMID:22676771",
+          "PMID:26666848",
+          "PMID:23427322",
+          "PMID:16720792",
+          "PMID:19900398",
+          "PMID:10521297",
+          "PMID:24001525",
+          "PMID:19252935",
+          "PMID:12554680",
+          "PMID:10521290",
+          "PMID:19307542",
+          "PMID:16778374"
+        ],
+        "id": "7930029",
+        "predicate_id": "RO:0002200",
+        "source_database": "biolink",
+        "source_id": "HGNC:7897",
+        "type": "has_phenotype",
+        "ctime": 1549992764.7094264,
+        "relation_label": "has phenotype",
+        "weight": 0.9999999999720233
+      },
+      {
+        "relation": "RO:0002200",
+        "target_id": "MONDO:0016484",
+        "edge_source": "biolink.gene_get_disease",
+        "publications": [],
+        "id": "6912162",
+        "predicate_id": "RO:0002200",
+        "source_database": "biolink",
+        "source_id": "HGNC:16361",
+        "type": "has_phenotype",
+        "ctime": 1543590295.1616356,
+        "relation_label": "has phenotype",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:16361",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4215389",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0016484",
+        "type": "disease_to_gene_association",
+        "ctime": 1543735228.1003373,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:30922",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "6629645",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0019351",
+        "type": "disease_to_gene_association",
+        "ctime": 1543738497.0204356,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:24867",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "6629517",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0019351",
+        "type": "disease_to_gene_association",
+        "ctime": 1543738497.0000284,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:13236",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4208668",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0013674",
+        "type": "disease_to_gene_association",
+        "ctime": 1543733765.5671747,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:16361",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4264083",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0019501",
+        "type": "disease_to_gene_association",
+        "ctime": 1543739535.3970392,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:20818",
+        "edge_source": "pharos.gene_get_disease",
+        "publications": [],
+        "id": "6912151",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0019262",
+        "type": "disease_to_gene_association",
+        "ctime": 1543590157.486788,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:20818",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4239142",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0019262",
+        "type": "disease_to_gene_association",
+        "ctime": 1543737842.2780206,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:17770",
+        "edge_source": "pharos.gene_get_disease",
+        "publications": [],
+        "id": "6912154",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0008243",
+        "type": "disease_to_gene_association",
+        "ctime": 1543590252.9823644,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:16361",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2715286",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0008243",
+        "type": "disease_to_gene_association",
+        "ctime": 1543727837.857239,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:17770",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2712364",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0008243",
+        "type": "disease_to_gene_association",
+        "ctime": 1543727837.8168461,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:30922",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2708901",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0008243",
+        "type": "disease_to_gene_association",
+        "ctime": 1543727837.7995143,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:24867",
+        "edge_source": "pharos.gene_get_disease",
+        "publications": [],
+        "id": "6912149",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0008449",
+        "type": "disease_to_gene_association",
+        "ctime": 1543590108.6433623,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:30922",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2749022",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0008449",
+        "type": "disease_to_gene_association",
+        "ctime": 1543730290.3389854,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:24867",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2748318",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0008449",
+        "type": "disease_to_gene_association",
+        "ctime": 1543730290.3346832,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:30922",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4209079",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0013702",
+        "type": "disease_to_gene_association",
+        "ctime": 1543734046.436261,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "RO:0002607",
+        "target_id": "MONDO:0013702",
+        "edge_source": "biolink.gene_get_disease",
+        "publications": [
+          "PMID:21937992",
+          "PMID:23773660"
+        ],
+        "id": "6912164",
+        "predicate_id": "RO:0002607",
+        "source_database": "biolink",
+        "source_id": "HGNC:30922",
+        "type": "biomarker_for",
+        "ctime": 1543590129.7496774,
+        "relation_label": "is marker for",
+        "weight": 0.5391111411287752
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:16361",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2604564",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0000455",
+        "type": "disease_to_gene_association",
+        "ctime": 1543724324.1502764,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:16361",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2742289",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0011767",
+        "type": "disease_to_gene_association",
+        "ctime": 1543733595.2953675,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:16361",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4201189",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0012662",
+        "type": "disease_to_gene_association",
+        "ctime": 1543734436.064681,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "GENO:0000840",
+        "target_id": "MONDO:0012662",
+        "edge_source": "biolink.gene_get_disease",
+        "publications": [
+          "PMID:22147658",
+          "PMID:17171570"
+        ],
+        "id": "6912169",
+        "predicate_id": "BIOLINK:0000001",
+        "source_database": "biolink",
+        "source_id": "HGNC:16361",
+        "type": "gene_associated_with_condition",
+        "ctime": 1543590295.1617482,
+        "relation_label": "pathogenic_for_condition",
+        "weight": 0.5391111411287752
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:16361",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2750785",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0011080",
+        "type": "disease_to_gene_association",
+        "ctime": 1543730690.067439,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "hetio:DOWNREGULATES_DdG",
+        "target_id": "HGNC:20818",
+        "edge_source": "hetio.gene_to_disease",
+        "publications": [],
+        "id": "6912166",
+        "predicate_id": "RO:0002449",
+        "source_database": "hetio",
+        "source_id": "MONDO:0005340",
+        "type": "negatively_regulates__entity_to_entity",
+        "ctime": 1543590147.5578988,
+        "relation_label": "DOWNREGULATES_DdG",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "RO:0002200",
+        "target_id": "MONDO:0001386",
+        "edge_source": "biolink.gene_get_phenotype",
+        "publications": [
+          "PMID:16098014",
+          "PMID:17160617",
+          "PMID:22065762",
+          "PMID:19013089",
+          "PMID:11333381",
+          "PMID:26206375",
+          "PMID:15465421",
+          "PMID:25131710",
+          "PMID:27139891",
+          "PMID:24676439",
+          "PMID:20826119",
+          "PMID:23653225",
+          "PMID:23430855",
+          "PMID:12401890",
+          "PMID:11182931",
+          "PMID:26981555",
+          "PMID:11479732",
+          "PMID:15459971",
+          "PMID:19206179",
+          "PMID:15130691",
+          "PMID:15596783",
+          "PMID:21245028",
+          "PMID:23773996",
+          "PMID:19744920",
+          "PMID:11545687",
+          "PMID:23142039",
+          "PMID:19223215",
+          "PMID:4795418",
+          "PMID:24915861",
+          "PMID:22326530",
+          "PMID:24035292",
+          "PMID:20718790",
+          "PMID:11754101",
+          "PMID:22704015",
+          "PMID:24570279",
+          "PMID:18216017",
+          "PMID:22750297",
+          "PMID:10480349",
+          "PMID:24386122",
+          "PMID:9211849",
+          "PMID:26937389",
+          "PMID:17003072",
+          "PMID:23433426",
+          "PMID:25236789",
+          "PMID:12955717",
+          "PMID:19609713",
+          "PMID:3378364",
+          "PMID:16126423",
+          "PMID:9634529",
+          "PMID:12205649",
+          "PMID:11349231",
+          "PMID:12408188",
+          "PMID:23774949",
+          "PMID:23146215",
+          "PMID:22505584",
+          "PMID:12974729",
+          "PMID:22476655",
+          "PMID:22676771",
+          "PMID:26666848",
+          "PMID:23427322",
+          "PMID:16720792",
+          "PMID:19900398",
+          "PMID:10521297",
+          "PMID:24001525",
+          "PMID:19252935",
+          "PMID:12554680",
+          "PMID:10521290",
+          "PMID:19307542",
+          "PMID:16778374"
+        ],
+        "id": "7930028",
+        "predicate_id": "RO:0002200",
+        "source_database": "biolink",
+        "source_id": "HGNC:7897",
+        "type": "has_phenotype",
+        "ctime": 1549992764.7061694,
+        "relation_label": "has phenotype",
+        "weight": 0.9999999999720233
+      },
+      {
+        "relation": "RO:0002200",
+        "target_id": "MONDO:0016058",
+        "edge_source": "biolink.gene_get_phenotype",
+        "publications": [
+          "PMID:16098014",
+          "PMID:17160617",
+          "PMID:22065762",
+          "PMID:19013089",
+          "PMID:11333381",
+          "PMID:26206375",
+          "PMID:15465421",
+          "PMID:25131710",
+          "PMID:27139891",
+          "PMID:24676439",
+          "PMID:20826119",
+          "PMID:23653225",
+          "PMID:23430855",
+          "PMID:12401890",
+          "PMID:11182931",
+          "PMID:26981555",
+          "PMID:11479732",
+          "PMID:15459971",
+          "PMID:19206179",
+          "PMID:15130691",
+          "PMID:15596783",
+          "PMID:21245028",
+          "PMID:23773996",
+          "PMID:19744920",
+          "PMID:11545687",
+          "PMID:23142039",
+          "PMID:19223215",
+          "PMID:4795418",
+          "PMID:24915861",
+          "PMID:22326530",
+          "PMID:24035292",
+          "PMID:20718790",
+          "PMID:11754101",
+          "PMID:22704015",
+          "PMID:24570279",
+          "PMID:18216017",
+          "PMID:22750297",
+          "PMID:10480349",
+          "PMID:24386122",
+          "PMID:9211849",
+          "PMID:26937389",
+          "PMID:17003072",
+          "PMID:23433426",
+          "PMID:25236789",
+          "PMID:12955717",
+          "PMID:19609713",
+          "PMID:3378364",
+          "PMID:16126423",
+          "PMID:9634529",
+          "PMID:12205649",
+          "PMID:11349231",
+          "PMID:12408188",
+          "PMID:23774949",
+          "PMID:23146215",
+          "PMID:22505584",
+          "PMID:12974729",
+          "PMID:22476655",
+          "PMID:22676771",
+          "PMID:26666848",
+          "PMID:23427322",
+          "PMID:16720792",
+          "PMID:19900398",
+          "PMID:10521297",
+          "PMID:24001525",
+          "PMID:19252935",
+          "PMID:12554680",
+          "PMID:10521290",
+          "PMID:19307542",
+          "PMID:16778374"
+        ],
+        "id": "7930030",
+        "predicate_id": "RO:0002200",
+        "source_database": "biolink",
+        "source_id": "HGNC:7897",
+        "type": "has_phenotype",
+        "ctime": 1549992764.7105138,
+        "relation_label": "has phenotype",
+        "weight": 0.9999999999720233
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:4669",
+        "edge_source": "pharos.gene_get_disease",
+        "publications": [],
+        "id": "6912146",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0004993",
+        "type": "disease_to_gene_association",
+        "ctime": 1543590082.4904675,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:29249",
+        "edge_source": "pharos.gene_get_disease",
+        "publications": [],
+        "id": "6912145",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0004993",
+        "type": "disease_to_gene_association",
+        "ctime": 1543590051.889971,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:20818",
+        "edge_source": "pharos.gene_get_disease",
+        "publications": [],
+        "id": "6912150",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0004993",
+        "type": "disease_to_gene_association",
+        "ctime": 1543590157.4866967,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:17770",
+        "edge_source": "pharos.gene_get_disease",
+        "publications": [],
+        "id": "6912152",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0004993",
+        "type": "disease_to_gene_association",
+        "ctime": 1543590252.9816308,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:16361",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2715586",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0004993",
+        "type": "disease_to_gene_association",
+        "ctime": 1543726263.270869,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:13236",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2701061",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0004993",
+        "type": "disease_to_gene_association",
+        "ctime": 1543726263.1810606,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:17770",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2700732",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0004993",
+        "type": "disease_to_gene_association",
+        "ctime": 1543726263.178179,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:7897",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2692906",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0004993",
+        "type": "disease_to_gene_association",
+        "ctime": 1543726263.1177893,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:20818",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2688472",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0004993",
+        "type": "disease_to_gene_association",
+        "ctime": 1543726263.0874119,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:30922",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2685796",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0004993",
+        "type": "disease_to_gene_association",
+        "ctime": 1543726263.0681345,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:4669",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2679068",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0004993",
+        "type": "disease_to_gene_association",
+        "ctime": 1543726263.0274332,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:4441",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2678051",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0004993",
+        "type": "disease_to_gene_association",
+        "ctime": 1543726263.0230765,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:29249",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2675228",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0004993",
+        "type": "disease_to_gene_association",
+        "ctime": 1543726263.0090928,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:1119",
+        "edge_source": "pharos.gene_get_disease",
+        "publications": [],
+        "id": "6912143",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0002791",
+        "type": "disease_to_gene_association",
+        "ctime": 1543589961.8519335,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:16361",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2634382",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0002791",
+        "type": "disease_to_gene_association",
+        "ctime": 1543723288.1029434,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:7897",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2620237",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0002791",
+        "type": "disease_to_gene_association",
+        "ctime": 1543723287.8693368,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:1119",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "2607325",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0002791",
+        "type": "disease_to_gene_association",
+        "ctime": 1543723287.6872656,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:7897",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4226413",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0017719",
+        "type": "disease_to_gene_association",
+        "ctime": 1543737779.2793245,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:16361",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4249663",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0017312",
+        "type": "disease_to_gene_association",
+        "ctime": 1543738060.671803,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "RO:0002200",
+        "target_id": "MONDO:0019588",
+        "edge_source": "biolink.gene_get_disease",
+        "publications": [],
+        "id": "6912163",
+        "predicate_id": "RO:0002200",
+        "source_database": "biolink",
+        "source_id": "HGNC:16361",
+        "type": "has_phenotype",
+        "ctime": 1543590295.161665,
+        "relation_label": "has phenotype",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:16361",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4208336",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0015597",
+        "type": "disease_to_gene_association",
+        "ctime": 1543735632.0253315,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:17770",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4206465",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0015597",
+        "type": "disease_to_gene_association",
+        "ctime": 1543735631.9700825,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:7897",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4205533",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0015597",
+        "type": "disease_to_gene_association",
+        "ctime": 1543735631.9383621,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:13415",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4204532",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0015597",
+        "type": "disease_to_gene_association",
+        "ctime": 1543735631.9050462,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:24867",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4203818",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0015597",
+        "type": "disease_to_gene_association",
+        "ctime": 1543735631.8809283,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:1119",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4202022",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0015597",
+        "type": "disease_to_gene_association",
+        "ctime": 1543735631.7956936,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "RO:0002200",
+        "target_id": "MONDO:0016306",
+        "edge_source": "biolink.gene_get_disease",
+        "publications": [],
+        "id": "6912157",
+        "predicate_id": "RO:0002200",
+        "source_database": "biolink",
+        "source_id": "HGNC:7897",
+        "type": "has_phenotype",
+        "ctime": 1543590171.4282458,
+        "relation_label": "has phenotype",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "RO:0002200",
+        "target_id": "MONDO:0016307",
+        "edge_source": "biolink.gene_get_disease",
+        "publications": [],
+        "id": "6912159",
+        "predicate_id": "RO:0002200",
+        "source_database": "biolink",
+        "source_id": "HGNC:7897",
+        "type": "has_phenotype",
+        "ctime": 1543590171.4283552,
+        "relation_label": "has phenotype",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "RO:0002200",
+        "target_id": "MONDO:0016308",
+        "edge_source": "biolink.gene_get_disease",
+        "publications": [],
+        "id": "6912160",
+        "predicate_id": "RO:0002200",
+        "source_database": "biolink",
+        "source_id": "HGNC:7897",
+        "type": "has_phenotype",
+        "ctime": 1543590171.4286487,
+        "relation_label": "has phenotype",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "RO:0002200",
+        "target_id": "MONDO:0016309",
+        "edge_source": "biolink.gene_get_disease",
+        "publications": [],
+        "id": "6912158",
+        "predicate_id": "RO:0002200",
+        "source_database": "biolink",
+        "source_id": "HGNC:7897",
+        "type": "has_phenotype",
+        "ctime": 1543590171.4283261,
+        "relation_label": "has phenotype",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "RO:0002200",
+        "target_id": "MONDO:0016310",
+        "edge_source": "biolink.gene_get_disease",
+        "publications": [],
+        "id": "6912161",
+        "predicate_id": "RO:0002200",
+        "source_database": "biolink",
+        "source_id": "HGNC:7897",
+        "type": "has_phenotype",
+        "ctime": 1543590171.4286728,
+        "relation_label": "has phenotype",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:16361",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4263994",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0019497",
+        "type": "disease_to_gene_association",
+        "ctime": 1543739492.1061351,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "RO:0002200",
+        "target_id": "MONDO:0019502",
+        "edge_source": "biolink.gene_get_disease",
+        "publications": [],
+        "id": "6912156",
+        "predicate_id": "RO:0002200",
+        "source_database": "biolink",
+        "source_id": "HGNC:30922",
+        "type": "has_phenotype",
+        "ctime": 1543590129.7496307,
+        "relation_label": "has phenotype",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:30922",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "4264089",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0019502",
+        "type": "disease_to_gene_association",
+        "ctime": 1543739549.5421898,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "relation": "PHAROS:gene_involved",
+        "target_id": "HGNC:17770",
+        "edge_source": "pharos.disease_get_gene",
+        "publications": [],
+        "id": "6636250",
+        "predicate_id": "NCIT:R176",
+        "source_database": "pharos",
+        "source_id": "MONDO:0024538",
+        "type": "disease_to_gene_association",
+        "ctime": 1543740137.7510984,
+        "relation_label": "gene_involved",
+        "weight": 0.25832639515782074
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1",
+        "num_publications": 48,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:7897",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.1019098887386245
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "4fb20d34-ca09-4569-99f2-aa3630103664",
+        "num_publications": 14,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "MONDO:0005737",
+        "target_id": "MONDO:0004993",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.09999999999999998
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "5bab4777-9955-4a93-8a20-1209b0366eb4",
+        "num_publications": 3,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:20818",
+        "target_id": "MONDO:0004993",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10010857518014638
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "5eee8f7c-711a-4f16-9731-21196e4de22d",
+        "num_publications": 1,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:16361",
+        "target_id": "MONDO:0017312",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.1000399954531509
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "bd8cc6cd-158b-4f99-8961-eb2271894cbf",
+        "num_publications": 8,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:16361",
+        "target_id": "MONDO:0016484",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10031997568019713
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "a5fed19a-6617-4212-ab28-b40f2c3ff444",
+        "num_publications": 1,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "MONDO:0005737",
+        "target_id": "MONDO:0015597",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.09999999999999998
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "4f26096d-9edb-44c3-a5c2-866a7ac92b9c",
+        "num_publications": 6,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0018150",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10023299660375007
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "221a1a23-0b3e-48b4-8582-fcbc9abeeb6d",
+        "num_publications": 1,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:17770",
+        "target_id": "MONDO:0008947",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10003999549337839
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "4c39f480-805c-4e52-a0a5-c898b848571c",
+        "num_publications": 1,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "MONDO:0005737",
+        "target_id": "MONDO:0017719",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10003054989809679
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "04c5a50c-d9e8-4a71-a12d-eb5e13e6d58f",
+        "num_publications": 2,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0017719",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.1000786805803271
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "b263f661-fa4b-46c2-bfc4-3b4812b6c08b",
+        "num_publications": 10,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:16361",
+        "target_id": "MONDO:0011767",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10039997436778625
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "42a5aedd-3989-4bc3-b564-1655a2b9359c",
+        "num_publications": 66,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:4441",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10263446435849377
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "0f251631-c785-4542-adfd-a62055e6223b",
+        "num_publications": 6,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:4441",
+        "target_id": "MONDO:0004993",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.09999999999999998
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "76de3b81-1547-4bfe-85e0-661a3b6cab23",
+        "num_publications": 4,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0004993",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.09999999999999998
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "608d063d-6d31-4ce1-8c97-e1f7673159a4",
+        "num_publications": 17,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:1119",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10067545980172399
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "9dbd16ba-6843-4f00-889f-4ad2ffd31be9",
+        "num_publications": 1,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:1119",
+        "target_id": "MONDO:0005615",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10003373874647059
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "291b279b-35fe-4a12-bc8a-db32e2a7a142",
+        "num_publications": 16,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:16361",
+        "target_id": "MONDO:0019501",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10063990919146437
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "94ca9df8-294e-4c0b-a902-97a722643253",
+        "num_publications": 88,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "MONDO:0005737",
+        "target_id": "MONDO:0005109",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.1015914426050859
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "82a792e2-2c48-4cb0-86bf-414466984206",
+        "num_publications": 82,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:1119",
+        "target_id": "MONDO:0005109",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.1031589839618765
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "584e143b-cb80-4fa9-90d8-e61e5b6602ee",
+        "num_publications": 12,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:13236",
+        "target_id": "MONDO:0004993",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10045285463612774
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "38e4373c-b488-4f6a-8f4d-8b6f0ddc6f9e",
+        "num_publications": 1,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "MONDO:0005737",
+        "target_id": "MONDO:0019200",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.09999999999999998
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "d9283ca0-e6ec-496d-828b-e4bb9a59fc40",
+        "num_publications": 3,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:16361",
+        "target_id": "MONDO:0019200",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10011953203907908
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "fe9d0725-e1c7-4244-b32e-61bb7f4cbd9c",
+        "num_publications": 11,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "MONDO:0005737",
+        "target_id": "MONDO:0009061",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.09999999999999998
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "7b95fc01-e0db-4dca-a248-05740d39cd96",
+        "num_publications": 1,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0010017",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10003987043171181
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "25e6e084-b58c-4671-89ef-d54524a238c1",
+        "num_publications": 4,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:16361",
+        "target_id": "MONDO:0012662",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10015998995709985
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "a2b2ae0d-a9d3-4c31-bdec-07f3224f9e1c",
+        "num_publications": 2,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "MONDO:0005737",
+        "target_id": "MONDO:0001982",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10006126233836021
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "0328d752-7fbe-4422-93f9-d73330192f7f",
+        "num_publications": 283,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0001982",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.11131613611971536
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "29c0be31-bbde-4b43-b165-64dc98d69738",
+        "num_publications": 1,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:13236",
+        "target_id": "MONDO:0009693",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10003754091249706
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "dfd4201e-8988-41cb-baba-583cd0ad6780",
+        "num_publications": 2,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "MONDO:0005737",
+        "target_id": "MONDO:0009757",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10007924357332798
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "8b573b6e-371d-4530-a61c-dda0cea2dbf6",
+        "num_publications": 65,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0009757",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10259973642462139
+      },
+      {
+        "type": "literature_co-occurrence",
+        "id": "62db701a-e45b-4a14-b11e-ce79de5ffb5b",
+        "num_publications": 26,
+        "publications": [],
+        "source_database": "omnicorp",
+        "source_id": "HGNC:1119",
+        "target_id": "MONDO:0009693",
+        "edge_source": "omnicorp.term_to_term",
+        "weight": 0.10101129831247213
+      }
+    ]
+  },
+  "answers": [
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0009757"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "2699896",
+          "6912168"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1",
+        "s131": "dfd4201e-8988-41cb-baba-583cd0ad6780",
+        "s132": "8b573b6e-371d-4530-a61c-dda0cea2dbf6"
+      },
+      "score": 0.3865875220118033
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0005109"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646141"
+        ],
+        "b": [
+          "6912139",
+          "6622997"
+        ],
+        "s77": "608d063d-6d31-4ce1-8c97-e1f7673159a4",
+        "s88": "94ca9df8-294e-4c0b-a902-97a722643253",
+        "s89": "82a792e2-2c48-4cb0-86bf-414466984206"
+      },
+      "score": 0.3304567410252145
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0009061"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646141"
+        ],
+        "b": [
+          "6912140",
+          "2747335"
+        ],
+        "s77": "608d063d-6d31-4ce1-8c97-e1f7673159a4",
+        "s100": "fe9d0725-e1c7-4244-b32e-61bb7f4cbd9c"
+      },
+      "score": 0.31333404932322073
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0001982"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "2580147"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1",
+        "s122": "a2b2ae0d-a9d3-4c31-bdec-07f3224f9e1c",
+        "s123": "0328d752-7fbe-4422-93f9-d73330192f7f"
+      },
+      "score": 0.2840007434064671
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:20818",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646180"
+        ],
+        "b": [
+          "6912150",
+          "2688472"
+        ],
+        "s15": "4fb20d34-ca09-4569-99f2-aa3630103664",
+        "s16": "5bab4777-9955-4a93-8a20-1209b0366eb4"
+      },
+      "score": 0.2836519935273213
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:4441",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646154"
+        ],
+        "b": [
+          "2678051"
+        ],
+        "s15": "4fb20d34-ca09-4569-99f2-aa3630103664",
+        "s66": "42a5aedd-3989-4bc3-b564-1655a2b9359c",
+        "s67": "0f251631-c785-4542-adfd-a62055e6223b"
+      },
+      "score": 0.28131940810736134
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0017719"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "4226413"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1",
+        "s37": "4c39f480-805c-4e52-a0a5-c898b848571c",
+        "s38": "04c5a50c-d9e8-4a71-a12d-eb5e13e6d58f"
+      },
+      "score": 0.2811897264946224
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "2692906"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1",
+        "s15": "4fb20d34-ca09-4569-99f2-aa3630103664",
+        "s74": "76de3b81-1547-4bfe-85e0-661a3b6cab23"
+      },
+      "score": 0.2811394041987864
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646186"
+        ],
+        "b": [
+          "6912152",
+          "2700732"
+        ],
+        "s15": "4fb20d34-ca09-4569-99f2-aa3630103664"
+      },
+      "score": 0.2737730093234622
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:4669",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646158"
+        ],
+        "b": [
+          "6912146",
+          "2679068"
+        ],
+        "s15": "4fb20d34-ca09-4569-99f2-aa3630103664"
+      },
+      "score": 0.2737730093234622
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:29249",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646149"
+        ],
+        "b": [
+          "6912145",
+          "2675228"
+        ],
+        "s15": "4fb20d34-ca09-4569-99f2-aa3630103664"
+      },
+      "score": 0.2737730093234622
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0010017"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "7930031"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1",
+        "s105": "7b95fc01-e0db-4dca-a248-05740d39cd96"
+      },
+      "score": 0.2729975635496964
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016058"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "7930030"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1"
+      },
+      "score": 0.26644405287999934
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0001386"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "7930028"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1"
+      },
+      "score": 0.26644405287999934
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0008062"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "7930029"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1"
+      },
+      "score": 0.26644405287999934
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0015597"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "4205533"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1",
+        "s21": "a5fed19a-6617-4212-ab28-b40f2c3ff444"
+      },
+      "score": 0.2519567147122626
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0015597"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646141"
+        ],
+        "b": [
+          "4202022"
+        ],
+        "s21": "a5fed19a-6617-4212-ab28-b40f2c3ff444",
+        "s77": "608d063d-6d31-4ce1-8c97-e1f7673159a4"
+      },
+      "score": 0.2517407150878321
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13236",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646193"
+        ],
+        "b": [
+          "2701061"
+        ],
+        "s15": "4fb20d34-ca09-4569-99f2-aa3630103664",
+        "s90": "584e143b-cb80-4fa9-90d8-e61e5b6602ee"
+      },
+      "score": 0.2517016721014039
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0019200"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646203"
+        ],
+        "b": [
+          "4225254"
+        ],
+        "s94": "38e4373c-b488-4f6a-8f4d-8b6f0ddc6f9e",
+        "s95": "d9283ca0-e6ec-496d-828b-e4bb9a59fc40"
+      },
+      "score": 0.25164315772788604
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0011719"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "4208614",
+          "6912165"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1"
+      },
+      "score": 0.23526307280768136
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646176"
+        ],
+        "b": [
+          "2685796"
+        ],
+        "s15": "4fb20d34-ca09-4569-99f2-aa3630103664"
+      },
+      "score": 0.2306631975789103
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646203"
+        ],
+        "b": [
+          "2715586"
+        ],
+        "s15": "4fb20d34-ca09-4569-99f2-aa3630103664"
+      },
+      "score": 0.2306631975789103
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13415",
+        "n2": "MONDO:0015597"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646172"
+        ],
+        "b": [
+          "4204532"
+        ],
+        "s21": "a5fed19a-6617-4212-ab28-b40f2c3ff444"
+      },
+      "score": 0.2306631975789103
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0015597"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646186"
+        ],
+        "b": [
+          "4206465"
+        ],
+        "s21": "a5fed19a-6617-4212-ab28-b40f2c3ff444"
+      },
+      "score": 0.2306631975789103
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:24867",
+        "n2": "MONDO:0015597"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646161"
+        ],
+        "b": [
+          "4203818"
+        ],
+        "s21": "a5fed19a-6617-4212-ab28-b40f2c3ff444"
+      },
+      "score": 0.2306631975789103
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0015597"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646203"
+        ],
+        "b": [
+          "4208336"
+        ],
+        "s21": "a5fed19a-6617-4212-ab28-b40f2c3ff444"
+      },
+      "score": 0.2306631975789103
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0005615"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646141"
+        ],
+        "b": [
+          "6912144",
+          "2626411"
+        ],
+        "s77": "608d063d-6d31-4ce1-8c97-e1f7673159a4",
+        "s78": "9dbd16ba-6843-4f00-889f-4ad2ffd31be9"
+      },
+      "score": 0.22844291522743246
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0007959"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646141"
+        ],
+        "b": [
+          "6912142",
+          "2680592"
+        ],
+        "s77": "608d063d-6d31-4ce1-8c97-e1f7673159a4"
+      },
+      "score": 0.21333404932322073
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0002791"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646141"
+        ],
+        "b": [
+          "6912143",
+          "2607325"
+        ],
+        "s77": "608d063d-6d31-4ce1-8c97-e1f7673159a4"
+      },
+      "score": 0.21333404932322073
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0005028"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646141"
+        ],
+        "b": [
+          "6912141",
+          "2758295"
+        ],
+        "s77": "608d063d-6d31-4ce1-8c97-e1f7673159a4"
+      },
+      "score": 0.21333404932322073
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0012662"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646203"
+        ],
+        "b": [
+          "4201189",
+          "6912169"
+        ],
+        "s109": "25e6e084-b58c-4671-89ef-d54524a238c1"
+      },
+      "score": 0.20224815877062136
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0013702"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646176"
+        ],
+        "b": [
+          "6912164",
+          "4209079"
+        ]
+      },
+      "score": 0.1967487128164333
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0016484"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646203"
+        ],
+        "b": [
+          "6912162",
+          "4215389"
+        ],
+        "s20": "bd8cc6cd-158b-4f99-8961-eb2271894cbf"
+      },
+      "score": 0.183670469558718
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0008947"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646186"
+        ],
+        "b": [
+          "6912153",
+          "2734122"
+        ],
+        "s31": "221a1a23-0b3e-48b4-8582-fcbc9abeeb6d"
+      },
+      "score": 0.18364599787003014
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0018150"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "4224895"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1",
+        "s26": "4f26096d-9edb-44c3-a5c2-866a7ac92b9c"
+      },
+      "score": 0.1811979436148015
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0009693"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646141"
+        ],
+        "b": [
+          "2744333"
+        ],
+        "s77": "608d063d-6d31-4ce1-8c97-e1f7673159a4",
+        "s135": "62db701a-e45b-4a14-b11e-ce79de5ffb5b"
+      },
+      "score": 0.1810848479635913
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:24867",
+        "n2": "MONDO:0008449"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646161"
+        ],
+        "b": [
+          "6912149",
+          "2748318"
+        ]
+      },
+      "score": 0.17377300932346215
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0019502"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646176"
+        ],
+        "b": [
+          "6912156",
+          "4264089"
+        ]
+      },
+      "score": 0.17377300932346215
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0008243"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646186"
+        ],
+        "b": [
+          "6912154",
+          "2712364"
+        ]
+      },
+      "score": 0.17377300932346215
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:24867",
+        "n2": "MONDO:0007959"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646161"
+        ],
+        "b": [
+          "6912148",
+          "2689273"
+        ]
+      },
+      "score": 0.17377300932346215
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:4669",
+        "n2": "MONDO:0010383"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646158"
+        ],
+        "b": [
+          "6912147",
+          "2727023"
+        ]
+      },
+      "score": 0.17377300932346215
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:20818",
+        "n2": "MONDO:0019262"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646180"
+        ],
+        "b": [
+          "6912151",
+          "4239142"
+        ]
+      },
+      "score": 0.17377300932346215
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016308"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "6912160"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0007959"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "2697207"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016306"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "6912157"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0020380"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "6629061"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0002791"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "2620237"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016307"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "6912159"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016309"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "6912158"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016310"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "6912161"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0005181"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "6610568"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0008608"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646182"
+        ],
+        "b": [
+          "2763813"
+        ],
+        "s3": "b08d1dd6-4072-4c82-b3a7-002d32ba1bc1"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0019501"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646203"
+        ],
+        "b": [
+          "4264083"
+        ],
+        "s86": "291b279b-35fe-4a12-bc8a-db32e2a7a142"
+      },
+      "score": 0.15173448170708165
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0011767"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646203"
+        ],
+        "b": [
+          "2742289"
+        ],
+        "s64": "b263f661-fa4b-46c2-bfc4-3b4812b6c08b"
+      },
+      "score": 0.1516923932404872
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0017312"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646203"
+        ],
+        "b": [
+          "4249663"
+        ],
+        "s18": "5eee8f7c-711a-4f16-9731-21196e4de22d"
+      },
+      "score": 0.15162918586034263
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13236",
+        "n2": "MONDO:0009693"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646193"
+        ],
+        "b": [
+          "2748380"
+        ],
+        "s129": "29c0be31-bbde-4b43-b165-64dc98d69738"
+      },
+      "score": 0.15162875462405903
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0019588"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646203"
+        ],
+        "b": [
+          "6912163"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0007959"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646176"
+        ],
+        "b": [
+          "2692822"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13236",
+        "n2": "MONDO:0007959"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646193"
+        ],
+        "b": [
+          "2701274"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0010576"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646203"
+        ],
+        "b": [
+          "2748466"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0008243"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646176"
+        ],
+        "b": [
+          "2708901"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:20818",
+        "n2": "MONDO:0005340"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646180"
+        ],
+        "b": [
+          "6912166"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0008345"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646186"
+        ],
+        "b": [
+          "6912167"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13236",
+        "n2": "MONDO:0005615"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646193"
+        ],
+        "b": [
+          "2631128"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:24867",
+        "n2": "MONDO:0019351"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646161"
+        ],
+        "b": [
+          "6629517"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0019351"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646176"
+        ],
+        "b": [
+          "6629645"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0008449"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646176"
+        ],
+        "b": [
+          "2749022"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:24867",
+        "n2": "MONDO:0005100"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646161"
+        ],
+        "b": [
+          "6912155"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0011080"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646203"
+        ],
+        "b": [
+          "2750785"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0002791"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646203"
+        ],
+        "b": [
+          "2634382"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0024538"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646186"
+        ],
+        "b": [
+          "6636250"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0000455"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646203"
+        ],
+        "b": [
+          "2604564"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0019037"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646176"
+        ],
+        "b": [
+          "4266838"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13236",
+        "n2": "MONDO:0013674"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646193"
+        ],
+        "b": [
+          "4208668"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0008243"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646203"
+        ],
+        "b": [
+          "2715286"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0019497"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646203"
+        ],
+        "b": [
+          "4263994"
+        ]
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0007959"
+      },
+      "edge_bindings": {
+        "a": [
+          "2646203"
+        ],
+        "b": [
+          "2709472"
+        ]
+      },
+      "score": 0.1306631975789104
+    }
+  ]
+}

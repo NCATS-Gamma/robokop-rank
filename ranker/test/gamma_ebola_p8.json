@@ -1,0 +1,4541 @@
+{
+  "datetime": "2019-03-04T21:50:29.056740",
+  "id": "",
+  "message": "77 answers found. 77 returned.",
+  "response_code": "OK",
+  "result_list": [
+    {
+      "confidence": 0.3865875220118033,
+      "id": "34493e29-4011-433d-af43-0e078fc88cc8",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "Niemann-Pick disease, type C1",
+            "id": "MONDO:0009757",
+            "name": "Niemann-Pick disease, type C1",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0009757",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.9999999999862601,
+            "provided_by": "biolink.gene_get_disease",
+            "source_id": "HGNC:7897",
+            "target_id": "MONDO:0009757",
+            "type": "gene_associated_with_condition",
+            "num_publications": null,
+            "publications": "PMID:16098014,PMID:17160617,PMID:22065762,PMID:19013089,PMID:11333381,PMID:26206375,PMID:15465421,PMID:25131710,PMID:27139891,PMID:24676439,PMID:20826119,PMID:23653225,PMID:23430855,PMID:12401890,PMID:11182931,PMID:26981555,PMID:11479732,PMID:15459971,PMID:19206179,PMID:15130691,PMID:15596783,PMID:21245028,PMID:23773996,PMID:19744920,PMID:11545687,PMID:23142039,PMID:19223215,PMID:4795418,PMID:24915861,PMID:22326530,PMID:24035292,PMID:20718790,PMID:11754101,PMID:22704015,PMID:24570279,PMID:18216017,PMID:22750297,PMID:10480349,PMID:24386122,PMID:9211849,PMID:26937389,PMID:9802331,PMID:17003072,PMID:23433426,PMID:25236789,PMID:12955717,PMID:22216111,PMID:19609713,PMID:3378364,PMID:16126423,PMID:9634529,PMID:12205649,PMID:11349231,PMID:12408188,PMID:23774949,PMID:23146215,PMID:22505584,PMID:12974729,PMID:22476655,PMID:22676771,PMID:26666848,PMID:23427322,PMID:16720792,PMID:19900398,PMID:10521297,PMID:24001525,PMID:19252935,PMID:12554680,PMID:10521290,PMID:19307542,PMID:16778374"
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10007924357332798,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0009757",
+            "type": "literature_co-occurrence",
+            "num_publications": 2,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10259973642462139,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:7897",
+            "target_id": "MONDO:0009757",
+            "type": "literature_co-occurrence",
+            "num_publications": 65,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "Niemann-Pick disease, type C1"
+    },
+    {
+      "confidence": 0.3304567410252145,
+      "id": "5da76a55-7b5a-45e4-b0d3-589daa60daa9",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "BST2",
+            "id": "HGNC:1119",
+            "name": "BST2",
+            "type": "gene"
+          },
+          {
+            "description": "HIV infectious disease",
+            "id": "MONDO:0005109",
+            "name": "HIV infectious disease",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.gene_get_disease",
+            "source_id": "MONDO:0005109",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005109",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10067545980172399,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:1119",
+            "type": "literature_co-occurrence",
+            "num_publications": 17,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1015914426050859,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0005109",
+            "type": "literature_co-occurrence",
+            "num_publications": 88,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1031589839618765,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:1119",
+            "target_id": "MONDO:0005109",
+            "type": "literature_co-occurrence",
+            "num_publications": 82,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "HIV infectious disease"
+    },
+    {
+      "confidence": 0.31333404932322073,
+      "id": "db7dd443-b251-4f29-b4ca-8a8e7f0f8b91",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "BST2",
+            "id": "HGNC:1119",
+            "name": "BST2",
+            "type": "gene"
+          },
+          {
+            "description": "cystic fibrosis",
+            "id": "MONDO:0009061",
+            "name": "cystic fibrosis",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.gene_get_disease",
+            "source_id": "MONDO:0009061",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0009061",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10067545980172399,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:1119",
+            "type": "literature_co-occurrence",
+            "num_publications": 17,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0009061",
+            "type": "literature_co-occurrence",
+            "num_publications": 11,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "cystic fibrosis"
+    },
+    {
+      "confidence": 0.2840007434064671,
+      "id": "dad6e490-5eb9-417c-b4ac-f1160aefbf64",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "Niemann-Pick disease",
+            "id": "MONDO:0001982",
+            "name": "Niemann-Pick disease",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0001982",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10006126233836021,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0001982",
+            "type": "literature_co-occurrence",
+            "num_publications": 2,
+            "publications": ""
+          },
+          {
+            "confidence": 0.11131613611971536,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:7897",
+            "target_id": "MONDO:0001982",
+            "type": "literature_co-occurrence",
+            "num_publications": 283,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "Niemann-Pick disease"
+    },
+    {
+      "confidence": 0.2836519935273213,
+      "id": "ca47d2a0-f8f6-4374-8544-3a0e27d0619c",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "LRRC15",
+            "id": "HGNC:20818",
+            "name": "LRRC15",
+            "type": "gene"
+          },
+          {
+            "description": "carcinoma",
+            "id": "MONDO:0004993",
+            "name": "carcinoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:20818",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.gene_get_disease",
+            "source_id": "MONDO:0004993",
+            "target_id": "HGNC:20818",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0004993",
+            "target_id": "HGNC:20818",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0004993",
+            "type": "literature_co-occurrence",
+            "num_publications": 14,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10010857518014638,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:20818",
+            "target_id": "MONDO:0004993",
+            "type": "literature_co-occurrence",
+            "num_publications": 3,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "carcinoma"
+    },
+    {
+      "confidence": 0.28131940810736134,
+      "id": "b688560e-cdf3-4908-b809-e059acda61b6",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "GP2",
+            "id": "HGNC:4441",
+            "name": "GP2",
+            "type": "gene"
+          },
+          {
+            "description": "carcinoma",
+            "id": "MONDO:0004993",
+            "name": "carcinoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:4441",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0004993",
+            "target_id": "HGNC:4441",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0004993",
+            "type": "literature_co-occurrence",
+            "num_publications": 14,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10263446435849377,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:4441",
+            "type": "literature_co-occurrence",
+            "num_publications": 66,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:4441",
+            "target_id": "MONDO:0004993",
+            "type": "literature_co-occurrence",
+            "num_publications": 6,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "carcinoma"
+    },
+    {
+      "confidence": 0.2811897264946224,
+      "id": "d895db43-b2db-45a8-81ed-e0ae4630e6a0",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "gangliosidosis",
+            "id": "MONDO:0017719",
+            "name": "gangliosidosis",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0017719",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10003054989809679,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0017719",
+            "type": "literature_co-occurrence",
+            "num_publications": 1,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1000786805803271,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:7897",
+            "target_id": "MONDO:0017719",
+            "type": "literature_co-occurrence",
+            "num_publications": 2,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "gangliosidosis"
+    },
+    {
+      "confidence": 0.2811394041987864,
+      "id": "28e5d268-9cfa-45ce-9873-708e6218193f",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "carcinoma",
+            "id": "MONDO:0004993",
+            "name": "carcinoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0004993",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0004993",
+            "type": "literature_co-occurrence",
+            "num_publications": 14,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:7897",
+            "target_id": "MONDO:0004993",
+            "type": "literature_co-occurrence",
+            "num_publications": 4,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "carcinoma"
+    },
+    {
+      "confidence": 0.2737730093234622,
+      "id": "2f72481b-45eb-4789-b552-7d47a82afe71",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "RALGAPA1",
+            "id": "HGNC:17770",
+            "name": "RALGAPA1",
+            "type": "gene"
+          },
+          {
+            "description": "carcinoma",
+            "id": "MONDO:0004993",
+            "name": "carcinoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:17770",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.gene_get_disease",
+            "source_id": "MONDO:0004993",
+            "target_id": "HGNC:17770",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0004993",
+            "target_id": "HGNC:17770",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0004993",
+            "type": "literature_co-occurrence",
+            "num_publications": 14,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "carcinoma"
+    },
+    {
+      "confidence": 0.2737730093234622,
+      "id": "acbd360c-8fcb-4542-a7a7-4907618a7fec",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "GTPBP1",
+            "id": "HGNC:4669",
+            "name": "GTPBP1",
+            "type": "gene"
+          },
+          {
+            "description": "carcinoma",
+            "id": "MONDO:0004993",
+            "name": "carcinoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:4669",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.gene_get_disease",
+            "source_id": "MONDO:0004993",
+            "target_id": "HGNC:4669",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0004993",
+            "target_id": "HGNC:4669",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0004993",
+            "type": "literature_co-occurrence",
+            "num_publications": 14,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "carcinoma"
+    },
+    {
+      "confidence": 0.2737730093234622,
+      "id": "62a3a6eb-b689-4dd0-838a-f6c338a96398",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "FBXO42",
+            "id": "HGNC:29249",
+            "name": "FBXO42",
+            "type": "gene"
+          },
+          {
+            "description": "carcinoma",
+            "id": "MONDO:0004993",
+            "name": "carcinoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:29249",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.gene_get_disease",
+            "source_id": "MONDO:0004993",
+            "target_id": "HGNC:29249",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0004993",
+            "target_id": "HGNC:29249",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0004993",
+            "type": "literature_co-occurrence",
+            "num_publications": 14,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "carcinoma"
+    },
+    {
+      "confidence": 0.2729975635496964,
+      "id": "1d44451e-c172-465d-9cfc-75041caba300",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "sea-blue histiocyte syndrome",
+            "id": "MONDO:0010017",
+            "name": "sea-blue histiocyte syndrome",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.9999999999720233,
+            "provided_by": "biolink.gene_get_phenotype",
+            "source_id": "HGNC:7897",
+            "target_id": "MONDO:0010017",
+            "type": "has_phenotype",
+            "num_publications": null,
+            "publications": "PMID:16098014,PMID:17160617,PMID:22065762,PMID:19013089,PMID:11333381,PMID:26206375,PMID:15465421,PMID:25131710,PMID:27139891,PMID:24676439,PMID:20826119,PMID:23653225,PMID:23430855,PMID:12401890,PMID:11182931,PMID:26981555,PMID:11479732,PMID:15459971,PMID:19206179,PMID:15130691,PMID:15596783,PMID:21245028,PMID:23773996,PMID:19744920,PMID:11545687,PMID:23142039,PMID:19223215,PMID:4795418,PMID:24915861,PMID:22326530,PMID:24035292,PMID:20718790,PMID:11754101,PMID:22704015,PMID:24570279,PMID:18216017,PMID:22750297,PMID:10480349,PMID:24386122,PMID:9211849,PMID:26937389,PMID:17003072,PMID:23433426,PMID:25236789,PMID:12955717,PMID:19609713,PMID:3378364,PMID:16126423,PMID:9634529,PMID:12205649,PMID:11349231,PMID:12408188,PMID:23774949,PMID:23146215,PMID:22505584,PMID:12974729,PMID:22476655,PMID:22676771,PMID:26666848,PMID:23427322,PMID:16720792,PMID:19900398,PMID:10521297,PMID:24001525,PMID:19252935,PMID:12554680,PMID:10521290,PMID:19307542,PMID:16778374"
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10003987043171181,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:7897",
+            "target_id": "MONDO:0010017",
+            "type": "literature_co-occurrence",
+            "num_publications": 1,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "sea-blue histiocyte syndrome"
+    },
+    {
+      "confidence": 0.26644405287999934,
+      "id": "7b17d7ed-b291-466e-b6a7-0dd63a3d1569",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "paroxysmal dystonia",
+            "id": "MONDO:0016058",
+            "name": "paroxysmal dystonia",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.9999999999720233,
+            "provided_by": "biolink.gene_get_phenotype",
+            "source_id": "HGNC:7897",
+            "target_id": "MONDO:0016058",
+            "type": "has_phenotype",
+            "num_publications": null,
+            "publications": "PMID:16098014,PMID:17160617,PMID:22065762,PMID:19013089,PMID:11333381,PMID:26206375,PMID:15465421,PMID:25131710,PMID:27139891,PMID:24676439,PMID:20826119,PMID:23653225,PMID:23430855,PMID:12401890,PMID:11182931,PMID:26981555,PMID:11479732,PMID:15459971,PMID:19206179,PMID:15130691,PMID:15596783,PMID:21245028,PMID:23773996,PMID:19744920,PMID:11545687,PMID:23142039,PMID:19223215,PMID:4795418,PMID:24915861,PMID:22326530,PMID:24035292,PMID:20718790,PMID:11754101,PMID:22704015,PMID:24570279,PMID:18216017,PMID:22750297,PMID:10480349,PMID:24386122,PMID:9211849,PMID:26937389,PMID:17003072,PMID:23433426,PMID:25236789,PMID:12955717,PMID:19609713,PMID:3378364,PMID:16126423,PMID:9634529,PMID:12205649,PMID:11349231,PMID:12408188,PMID:23774949,PMID:23146215,PMID:22505584,PMID:12974729,PMID:22476655,PMID:22676771,PMID:26666848,PMID:23427322,PMID:16720792,PMID:19900398,PMID:10521297,PMID:24001525,PMID:19252935,PMID:12554680,PMID:10521290,PMID:19307542,PMID:16778374"
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "paroxysmal dystonia"
+    },
+    {
+      "confidence": 0.26644405287999934,
+      "id": "3cf216b8-cffa-4428-94cd-ee9d6d2d9d2e",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "visual epilepsy",
+            "id": "MONDO:0001386",
+            "name": "visual epilepsy",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.9999999999720233,
+            "provided_by": "biolink.gene_get_phenotype",
+            "source_id": "HGNC:7897",
+            "target_id": "MONDO:0001386",
+            "type": "has_phenotype",
+            "num_publications": null,
+            "publications": "PMID:16098014,PMID:17160617,PMID:22065762,PMID:19013089,PMID:11333381,PMID:26206375,PMID:15465421,PMID:25131710,PMID:27139891,PMID:24676439,PMID:20826119,PMID:23653225,PMID:23430855,PMID:12401890,PMID:11182931,PMID:26981555,PMID:11479732,PMID:15459971,PMID:19206179,PMID:15130691,PMID:15596783,PMID:21245028,PMID:23773996,PMID:19744920,PMID:11545687,PMID:23142039,PMID:19223215,PMID:4795418,PMID:24915861,PMID:22326530,PMID:24035292,PMID:20718790,PMID:11754101,PMID:22704015,PMID:24570279,PMID:18216017,PMID:22750297,PMID:10480349,PMID:24386122,PMID:9211849,PMID:26937389,PMID:17003072,PMID:23433426,PMID:25236789,PMID:12955717,PMID:19609713,PMID:3378364,PMID:16126423,PMID:9634529,PMID:12205649,PMID:11349231,PMID:12408188,PMID:23774949,PMID:23146215,PMID:22505584,PMID:12974729,PMID:22476655,PMID:22676771,PMID:26666848,PMID:23427322,PMID:16720792,PMID:19900398,PMID:10521297,PMID:24001525,PMID:19252935,PMID:12554680,PMID:10521290,PMID:19307542,PMID:16778374"
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "visual epilepsy"
+    },
+    {
+      "confidence": 0.26644405287999934,
+      "id": "fc4e8328-d512-46d0-af32-91cf231fbba3",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "narcolepsy 1",
+            "id": "MONDO:0008062",
+            "name": "narcolepsy 1",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.9999999999720233,
+            "provided_by": "biolink.gene_get_phenotype",
+            "source_id": "HGNC:7897",
+            "target_id": "MONDO:0008062",
+            "type": "has_phenotype",
+            "num_publications": null,
+            "publications": "PMID:16098014,PMID:17160617,PMID:22065762,PMID:19013089,PMID:11333381,PMID:26206375,PMID:15465421,PMID:25131710,PMID:27139891,PMID:24676439,PMID:20826119,PMID:23653225,PMID:23430855,PMID:12401890,PMID:11182931,PMID:26981555,PMID:11479732,PMID:15459971,PMID:19206179,PMID:15130691,PMID:15596783,PMID:21245028,PMID:23773996,PMID:19744920,PMID:11545687,PMID:23142039,PMID:19223215,PMID:4795418,PMID:24915861,PMID:22326530,PMID:24035292,PMID:20718790,PMID:11754101,PMID:22704015,PMID:24570279,PMID:18216017,PMID:22750297,PMID:10480349,PMID:24386122,PMID:9211849,PMID:26937389,PMID:17003072,PMID:23433426,PMID:25236789,PMID:12955717,PMID:19609713,PMID:3378364,PMID:16126423,PMID:9634529,PMID:12205649,PMID:11349231,PMID:12408188,PMID:23774949,PMID:23146215,PMID:22505584,PMID:12974729,PMID:22476655,PMID:22676771,PMID:26666848,PMID:23427322,PMID:16720792,PMID:19900398,PMID:10521297,PMID:24001525,PMID:19252935,PMID:12554680,PMID:10521290,PMID:19307542,PMID:16778374"
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "narcolepsy 1"
+    },
+    {
+      "confidence": 0.2519567147122626,
+      "id": "a406a5c7-32e8-4ed4-a53d-fdb483bac229",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "pustulosis palmaris et plantaris",
+            "id": "MONDO:0015597",
+            "name": "pustulosis palmaris et plantaris",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0015597",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0015597",
+            "type": "literature_co-occurrence",
+            "num_publications": 1,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "pustulosis palmaris et plantaris"
+    },
+    {
+      "confidence": 0.2517407150878321,
+      "id": "746382f2-5c5d-4eb4-b178-864b37c001b8",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "BST2",
+            "id": "HGNC:1119",
+            "name": "BST2",
+            "type": "gene"
+          },
+          {
+            "description": "pustulosis palmaris et plantaris",
+            "id": "MONDO:0015597",
+            "name": "pustulosis palmaris et plantaris",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0015597",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0015597",
+            "type": "literature_co-occurrence",
+            "num_publications": 1,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10067545980172399,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:1119",
+            "type": "literature_co-occurrence",
+            "num_publications": 17,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "pustulosis palmaris et plantaris"
+    },
+    {
+      "confidence": 0.2517016721014039,
+      "id": "e8529755-622d-409c-af61-d317bd0d9c44",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "URI1",
+            "id": "HGNC:13236",
+            "name": "URI1",
+            "type": "gene"
+          },
+          {
+            "description": "carcinoma",
+            "id": "MONDO:0004993",
+            "name": "carcinoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:13236",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0004993",
+            "target_id": "HGNC:13236",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0004993",
+            "type": "literature_co-occurrence",
+            "num_publications": 14,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10045285463612774,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:13236",
+            "target_id": "MONDO:0004993",
+            "type": "literature_co-occurrence",
+            "num_publications": 12,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "carcinoma"
+    },
+    {
+      "confidence": 0.25164315772788604,
+      "id": "364aee34-9e37-4bac-95e6-7e44bb50b9da",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "WHRN",
+            "id": "HGNC:16361",
+            "name": "WHRN",
+            "type": "gene"
+          },
+          {
+            "description": "retinitis pigmentosa",
+            "id": "MONDO:0019200",
+            "name": "retinitis pigmentosa",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0019200",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0019200",
+            "type": "literature_co-occurrence",
+            "num_publications": 1,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10011953203907908,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:16361",
+            "target_id": "MONDO:0019200",
+            "type": "literature_co-occurrence",
+            "num_publications": 3,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "retinitis pigmentosa"
+    },
+    {
+      "confidence": 0.23526307280768136,
+      "id": "53244afd-a08b-49a6-945c-d995cd3d8fee",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "gastrointestinal stromal tumor",
+            "id": "MONDO:0011719",
+            "name": "gastrointestinal stromal tumor",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0011719",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.4071474314830641,
+            "provided_by": "biolink.gene_get_disease",
+            "source_id": "HGNC:7897",
+            "target_id": "MONDO:0011719",
+            "type": "biomarker_for",
+            "num_publications": null,
+            "publications": "PMID:27793025"
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "gastrointestinal stromal tumor"
+    },
+    {
+      "confidence": 0.2306631975789103,
+      "id": "a042ff60-d913-468f-961e-4d657ac9b33d",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "LINS1",
+            "id": "HGNC:30922",
+            "name": "LINS1",
+            "type": "gene"
+          },
+          {
+            "description": "carcinoma",
+            "id": "MONDO:0004993",
+            "name": "carcinoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:30922",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0004993",
+            "target_id": "HGNC:30922",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0004993",
+            "type": "literature_co-occurrence",
+            "num_publications": 14,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "carcinoma"
+    },
+    {
+      "confidence": 0.2306631975789103,
+      "id": "b00b0a18-27fc-4a6a-9c9b-6b65d9d00e5c",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "WHRN",
+            "id": "HGNC:16361",
+            "name": "WHRN",
+            "type": "gene"
+          },
+          {
+            "description": "carcinoma",
+            "id": "MONDO:0004993",
+            "name": "carcinoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0004993",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0004993",
+            "type": "literature_co-occurrence",
+            "num_publications": 14,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "carcinoma"
+    },
+    {
+      "confidence": 0.2306631975789103,
+      "id": "1bc45b6b-7a33-477d-b3b5-f5ff126bb503",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "PNCK",
+            "id": "HGNC:13415",
+            "name": "PNCK",
+            "type": "gene"
+          },
+          {
+            "description": "pustulosis palmaris et plantaris",
+            "id": "MONDO:0015597",
+            "name": "pustulosis palmaris et plantaris",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:13415",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0015597",
+            "target_id": "HGNC:13415",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0015597",
+            "type": "literature_co-occurrence",
+            "num_publications": 1,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "pustulosis palmaris et plantaris"
+    },
+    {
+      "confidence": 0.2306631975789103,
+      "id": "ca9fe5ca-4037-441f-8a5c-5820b27f0e9a",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "RALGAPA1",
+            "id": "HGNC:17770",
+            "name": "RALGAPA1",
+            "type": "gene"
+          },
+          {
+            "description": "pustulosis palmaris et plantaris",
+            "id": "MONDO:0015597",
+            "name": "pustulosis palmaris et plantaris",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:17770",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0015597",
+            "target_id": "HGNC:17770",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0015597",
+            "type": "literature_co-occurrence",
+            "num_publications": 1,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "pustulosis palmaris et plantaris"
+    },
+    {
+      "confidence": 0.2306631975789103,
+      "id": "a0d0c5a5-c7c7-41a4-9989-d473f64d575d",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "GLTP",
+            "id": "HGNC:24867",
+            "name": "GLTP",
+            "type": "gene"
+          },
+          {
+            "description": "pustulosis palmaris et plantaris",
+            "id": "MONDO:0015597",
+            "name": "pustulosis palmaris et plantaris",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:24867",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0015597",
+            "target_id": "HGNC:24867",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0015597",
+            "type": "literature_co-occurrence",
+            "num_publications": 1,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "pustulosis palmaris et plantaris"
+    },
+    {
+      "confidence": 0.2306631975789103,
+      "id": "b2213e0a-d5f2-4096-8948-7df3d7029fad",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "WHRN",
+            "id": "HGNC:16361",
+            "name": "WHRN",
+            "type": "gene"
+          },
+          {
+            "description": "pustulosis palmaris et plantaris",
+            "id": "MONDO:0015597",
+            "name": "pustulosis palmaris et plantaris",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0015597",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.09999999999999998,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "MONDO:0015597",
+            "type": "literature_co-occurrence",
+            "num_publications": 1,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "pustulosis palmaris et plantaris"
+    },
+    {
+      "confidence": 0.22844291522743246,
+      "id": "ed36e667-20f3-4f92-ae9d-e5528d395e21",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "BST2",
+            "id": "HGNC:1119",
+            "name": "BST2",
+            "type": "gene"
+          },
+          {
+            "description": "plasmacytoma",
+            "id": "MONDO:0005615",
+            "name": "plasmacytoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.gene_get_disease",
+            "source_id": "MONDO:0005615",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005615",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10067545980172399,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:1119",
+            "type": "literature_co-occurrence",
+            "num_publications": 17,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10003373874647059,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:1119",
+            "target_id": "MONDO:0005615",
+            "type": "literature_co-occurrence",
+            "num_publications": 1,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "plasmacytoma"
+    },
+    {
+      "confidence": 0.21333404932322073,
+      "id": "bb36b402-cd08-4099-a907-2ad4fd08a387",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "BST2",
+            "id": "HGNC:1119",
+            "name": "BST2",
+            "type": "gene"
+          },
+          {
+            "description": "medulloblastoma",
+            "id": "MONDO:0007959",
+            "name": "medulloblastoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.gene_get_disease",
+            "source_id": "MONDO:0007959",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0007959",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10067545980172399,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:1119",
+            "type": "literature_co-occurrence",
+            "num_publications": 17,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "medulloblastoma"
+    },
+    {
+      "confidence": 0.21333404932322073,
+      "id": "0d74eebc-a62f-428e-aced-4e71ee317577",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "BST2",
+            "id": "HGNC:1119",
+            "name": "BST2",
+            "type": "gene"
+          },
+          {
+            "description": "large cell medulloblastoma",
+            "id": "MONDO:0002791",
+            "name": "large cell medulloblastoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.gene_get_disease",
+            "source_id": "MONDO:0002791",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0002791",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10067545980172399,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:1119",
+            "type": "literature_co-occurrence",
+            "num_publications": 17,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "large cell medulloblastoma"
+    },
+    {
+      "confidence": 0.21333404932322073,
+      "id": "f4e5e702-4ebb-4807-9010-7839c21860c1",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "BST2",
+            "id": "HGNC:1119",
+            "name": "BST2",
+            "type": "gene"
+          },
+          {
+            "description": "esophageal adenocarcinoma",
+            "id": "MONDO:0005028",
+            "name": "esophageal adenocarcinoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.gene_get_disease",
+            "source_id": "MONDO:0005028",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005028",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10067545980172399,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:1119",
+            "type": "literature_co-occurrence",
+            "num_publications": 17,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "esophageal adenocarcinoma"
+    },
+    {
+      "confidence": 0.20224815877062136,
+      "id": "e4390cbf-df16-4e21-8519-17cd62f7d431",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "WHRN",
+            "id": "HGNC:16361",
+            "name": "WHRN",
+            "type": "gene"
+          },
+          {
+            "description": "Usher syndrome type 2D",
+            "id": "MONDO:0012662",
+            "name": "Usher syndrome type 2D",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0012662",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.5391111411287752,
+            "provided_by": "biolink.gene_get_disease",
+            "source_id": "HGNC:16361",
+            "target_id": "MONDO:0012662",
+            "type": "gene_associated_with_condition",
+            "num_publications": null,
+            "publications": "PMID:22147658,PMID:17171570"
+          },
+          {
+            "confidence": 0.10015998995709985,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:16361",
+            "target_id": "MONDO:0012662",
+            "type": "literature_co-occurrence",
+            "num_publications": 4,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "Usher syndrome type 2D"
+    },
+    {
+      "confidence": 0.1967487128164333,
+      "id": "e0b9109c-defd-4fbc-8e69-8e51891f8c4a",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "LINS1",
+            "id": "HGNC:30922",
+            "name": "LINS1",
+            "type": "gene"
+          },
+          {
+            "description": "mental retardation, autosomal recessive 27",
+            "id": "MONDO:0013702",
+            "name": "mental retardation, autosomal recessive 27",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:30922",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.5391111411287752,
+            "provided_by": "biolink.gene_get_disease",
+            "source_id": "HGNC:30922",
+            "target_id": "MONDO:0013702",
+            "type": "biomarker_for",
+            "num_publications": null,
+            "publications": "PMID:21937992,PMID:23773660"
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0013702",
+            "target_id": "HGNC:30922",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "mental retardation, autosomal recessive 27"
+    },
+    {
+      "confidence": 0.183670469558718,
+      "id": "d2a521f6-01d9-43c5-b153-d945cc05f8c3",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "WHRN",
+            "id": "HGNC:16361",
+            "name": "WHRN",
+            "type": "gene"
+          },
+          {
+            "description": "Usher syndrome type 2",
+            "id": "MONDO:0016484",
+            "name": "Usher syndrome type 2",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "biolink.gene_get_disease",
+            "source_id": "HGNC:16361",
+            "target_id": "MONDO:0016484",
+            "type": "has_phenotype",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0016484",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10031997568019713,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:16361",
+            "target_id": "MONDO:0016484",
+            "type": "literature_co-occurrence",
+            "num_publications": 8,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "Usher syndrome type 2"
+    },
+    {
+      "confidence": 0.18364599787003014,
+      "id": "3c22b617-c39a-4568-8a97-90cb625146ed",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "RALGAPA1",
+            "id": "HGNC:17770",
+            "name": "RALGAPA1",
+            "type": "gene"
+          },
+          {
+            "description": "bilateral striopallidodentate calcinosis",
+            "id": "MONDO:0008947",
+            "name": "bilateral striopallidodentate calcinosis",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:17770",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.gene_get_disease",
+            "source_id": "MONDO:0008947",
+            "target_id": "HGNC:17770",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0008947",
+            "target_id": "HGNC:17770",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10003999549337839,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:17770",
+            "target_id": "MONDO:0008947",
+            "type": "literature_co-occurrence",
+            "num_publications": 1,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "bilateral striopallidodentate calcinosis"
+    },
+    {
+      "confidence": 0.1811979436148015,
+      "id": "a3817d54-057b-477d-805e-68a0c38f5dcd",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "Gaucher disease",
+            "id": "MONDO:0018150",
+            "name": "Gaucher disease",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0018150",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10023299660375007,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:7897",
+            "target_id": "MONDO:0018150",
+            "type": "literature_co-occurrence",
+            "num_publications": 6,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "Gaucher disease"
+    },
+    {
+      "confidence": 0.1810848479635913,
+      "id": "6205937e-e1dd-40af-b5cf-883fd4d8e5ca",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "BST2",
+            "id": "HGNC:1119",
+            "name": "BST2",
+            "type": "gene"
+          },
+          {
+            "description": "plasma cell myeloma",
+            "id": "MONDO:0009693",
+            "name": "plasma cell myeloma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0009693",
+            "target_id": "HGNC:1119",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10067545980172399,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:1119",
+            "type": "literature_co-occurrence",
+            "num_publications": 17,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10101129831247213,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:1119",
+            "target_id": "MONDO:0009693",
+            "type": "literature_co-occurrence",
+            "num_publications": 26,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "plasma cell myeloma"
+    },
+    {
+      "confidence": 0.17377300932346215,
+      "id": "228088c3-c98a-4332-992a-0c0e350f70bc",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "GLTP",
+            "id": "HGNC:24867",
+            "name": "GLTP",
+            "type": "gene"
+          },
+          {
+            "description": "spina bifida (disease)",
+            "id": "MONDO:0008449",
+            "name": "spina bifida (disease)",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:24867",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.gene_get_disease",
+            "source_id": "MONDO:0008449",
+            "target_id": "HGNC:24867",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0008449",
+            "target_id": "HGNC:24867",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "spina bifida (disease)"
+    },
+    {
+      "confidence": 0.17377300932346215,
+      "id": "d712f7fe-d34e-47eb-8a6e-89f6b441eb46",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "LINS1",
+            "id": "HGNC:30922",
+            "name": "LINS1",
+            "type": "gene"
+          },
+          {
+            "description": "autosomal recessive non-syndromic intellectual disability",
+            "id": "MONDO:0019502",
+            "name": "autosomal recessive non-syndromic intellectual disability",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:30922",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "biolink.gene_get_disease",
+            "source_id": "HGNC:30922",
+            "target_id": "MONDO:0019502",
+            "type": "has_phenotype",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0019502",
+            "target_id": "HGNC:30922",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "autosomal recessive non-syndromic intellectual disability"
+    },
+    {
+      "confidence": 0.17377300932346215,
+      "id": "52e30372-519f-495e-99e2-53f8cf1ec057",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "RALGAPA1",
+            "id": "HGNC:17770",
+            "name": "RALGAPA1",
+            "type": "gene"
+          },
+          {
+            "description": "Pick disease",
+            "id": "MONDO:0008243",
+            "name": "Pick disease",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:17770",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.gene_get_disease",
+            "source_id": "MONDO:0008243",
+            "target_id": "HGNC:17770",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0008243",
+            "target_id": "HGNC:17770",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "Pick disease"
+    },
+    {
+      "confidence": 0.17377300932346215,
+      "id": "a64dcdd1-8105-46db-b8f3-9351c8f01ab7",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "GLTP",
+            "id": "HGNC:24867",
+            "name": "GLTP",
+            "type": "gene"
+          },
+          {
+            "description": "medulloblastoma",
+            "id": "MONDO:0007959",
+            "name": "medulloblastoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:24867",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.gene_get_disease",
+            "source_id": "MONDO:0007959",
+            "target_id": "HGNC:24867",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0007959",
+            "target_id": "HGNC:24867",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "medulloblastoma"
+    },
+    {
+      "confidence": 0.17377300932346215,
+      "id": "f5a51092-662e-48af-84c8-119a4e1f7313",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "GTPBP1",
+            "id": "HGNC:4669",
+            "name": "GTPBP1",
+            "type": "gene"
+          },
+          {
+            "description": "fragile X syndrome",
+            "id": "MONDO:0010383",
+            "name": "fragile X syndrome",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:4669",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.gene_get_disease",
+            "source_id": "MONDO:0010383",
+            "target_id": "HGNC:4669",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0010383",
+            "target_id": "HGNC:4669",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "fragile X syndrome"
+    },
+    {
+      "confidence": 0.17377300932346215,
+      "id": "5b2204fc-4482-4597-9519-c7e240df72e6",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "LRRC15",
+            "id": "HGNC:20818",
+            "name": "LRRC15",
+            "type": "gene"
+          },
+          {
+            "description": "juvenile neuronal ceroid lipofuscinosis",
+            "id": "MONDO:0019262",
+            "name": "juvenile neuronal ceroid lipofuscinosis",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:20818",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.gene_get_disease",
+            "source_id": "MONDO:0019262",
+            "target_id": "HGNC:20818",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0019262",
+            "target_id": "HGNC:20818",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "juvenile neuronal ceroid lipofuscinosis"
+    },
+    {
+      "confidence": 0.15195671471226277,
+      "id": "5437623d-022c-45f8-a051-ed109933dcc4",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "Niemann-Pick disease type C, late infantile neurologic onset",
+            "id": "MONDO:0016308",
+            "name": "Niemann-Pick disease type C, late infantile neurologic onset",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "biolink.gene_get_disease",
+            "source_id": "HGNC:7897",
+            "target_id": "MONDO:0016308",
+            "type": "has_phenotype",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "Niemann-Pick disease type C, late infantile neurologic onset"
+    },
+    {
+      "confidence": 0.15195671471226277,
+      "id": "9cafc331-8e33-4c85-a0c3-278791c33801",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "medulloblastoma",
+            "id": "MONDO:0007959",
+            "name": "medulloblastoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0007959",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "medulloblastoma"
+    },
+    {
+      "confidence": 0.15195671471226277,
+      "id": "8f69da7a-85d0-4aea-9684-bce1b5955afb",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "Niemann-Pick disease type C, severe perinatal form",
+            "id": "MONDO:0016306",
+            "name": "Niemann-Pick disease type C, severe perinatal form",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "biolink.gene_get_disease",
+            "source_id": "HGNC:7897",
+            "target_id": "MONDO:0016306",
+            "type": "has_phenotype",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "Niemann-Pick disease type C, severe perinatal form"
+    },
+    {
+      "confidence": 0.15195671471226277,
+      "id": "d52fe2b1-861e-4f3e-8ca8-218e78fa1dc5",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "autosomal dominant cerebellar ataxia",
+            "id": "MONDO:0020380",
+            "name": "autosomal dominant cerebellar ataxia",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0020380",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "autosomal dominant cerebellar ataxia"
+    },
+    {
+      "confidence": 0.15195671471226277,
+      "id": "80e68cf2-90aa-4d45-8a21-ab1c20facd1b",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "large cell medulloblastoma",
+            "id": "MONDO:0002791",
+            "name": "large cell medulloblastoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0002791",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "large cell medulloblastoma"
+    },
+    {
+      "confidence": 0.15195671471226277,
+      "id": "a17a6dd4-bf4b-4583-be72-5c156f057eb6",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "Niemann-Pick disease type C, severe early infantile neurologic onset",
+            "id": "MONDO:0016307",
+            "name": "Niemann-Pick disease type C, severe early infantile neurologic onset",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "biolink.gene_get_disease",
+            "source_id": "HGNC:7897",
+            "target_id": "MONDO:0016307",
+            "type": "has_phenotype",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "Niemann-Pick disease type C, severe early infantile neurologic onset"
+    },
+    {
+      "confidence": 0.15195671471226277,
+      "id": "fdb6608d-9c7e-453f-b1f5-aba514d396b6",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "Niemann-Pick disease type C, juvenile neurologic onset",
+            "id": "MONDO:0016309",
+            "name": "Niemann-Pick disease type C, juvenile neurologic onset",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "biolink.gene_get_disease",
+            "source_id": "HGNC:7897",
+            "target_id": "MONDO:0016309",
+            "type": "has_phenotype",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "Niemann-Pick disease type C, juvenile neurologic onset"
+    },
+    {
+      "confidence": 0.15195671471226277,
+      "id": "3ed27491-f44e-48cb-9b4b-3906f1af40cb",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "Niemann-Pick disease type C, adult neurologic onset",
+            "id": "MONDO:0016310",
+            "name": "Niemann-Pick disease type C, adult neurologic onset",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "biolink.gene_get_disease",
+            "source_id": "HGNC:7897",
+            "target_id": "MONDO:0016310",
+            "type": "has_phenotype",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "Niemann-Pick disease type C, adult neurologic onset"
+    },
+    {
+      "confidence": 0.15195671471226277,
+      "id": "198ba96e-34b9-4ad9-91bd-31b26ddf88c0",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "progressive external ophthalmoplegia",
+            "id": "MONDO:0005181",
+            "name": "progressive external ophthalmoplegia",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005181",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "progressive external ophthalmoplegia"
+    },
+    {
+      "confidence": 0.15195671471226277,
+      "id": "1c3be43b-9163-48e7-9262-711e026f885f",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "NPC1",
+            "id": "HGNC:7897",
+            "name": "NPC1",
+            "type": "gene"
+          },
+          {
+            "description": "down syndrome",
+            "id": "MONDO:0008608",
+            "name": "down syndrome",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0008608",
+            "target_id": "HGNC:7897",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1019098887386245,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:7897",
+            "type": "literature_co-occurrence",
+            "num_publications": 48,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "down syndrome"
+    },
+    {
+      "confidence": 0.15173448170708165,
+      "id": "a1c9b87c-4f61-487e-8aee-61b99b6a43e0",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "WHRN",
+            "id": "HGNC:16361",
+            "name": "WHRN",
+            "type": "gene"
+          },
+          {
+            "description": "Usher syndrome",
+            "id": "MONDO:0019501",
+            "name": "Usher syndrome",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0019501",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10063990919146437,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:16361",
+            "target_id": "MONDO:0019501",
+            "type": "literature_co-occurrence",
+            "num_publications": 16,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "Usher syndrome"
+    },
+    {
+      "confidence": 0.1516923932404872,
+      "id": "dcdde1a1-1ff8-48ed-8a79-8e1543a17315",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "WHRN",
+            "id": "HGNC:16361",
+            "name": "WHRN",
+            "type": "gene"
+          },
+          {
+            "description": "autosomal recessive nonsyndromic deafness 31",
+            "id": "MONDO:0011767",
+            "name": "autosomal recessive nonsyndromic deafness 31",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0011767",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10039997436778625,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:16361",
+            "target_id": "MONDO:0011767",
+            "type": "literature_co-occurrence",
+            "num_publications": 10,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "autosomal recessive nonsyndromic deafness 31"
+    },
+    {
+      "confidence": 0.15162918586034263,
+      "id": "58c436a5-79a0-4839-9c40-feea9733f663",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "WHRN",
+            "id": "HGNC:16361",
+            "name": "WHRN",
+            "type": "gene"
+          },
+          {
+            "description": "Perrault syndrome",
+            "id": "MONDO:0017312",
+            "name": "Perrault syndrome",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0017312",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.1000399954531509,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:16361",
+            "target_id": "MONDO:0017312",
+            "type": "literature_co-occurrence",
+            "num_publications": 1,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "Perrault syndrome"
+    },
+    {
+      "confidence": 0.15162875462405903,
+      "id": "f94a03fd-206a-462b-9ddb-05cd2729ce07",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "URI1",
+            "id": "HGNC:13236",
+            "name": "URI1",
+            "type": "gene"
+          },
+          {
+            "description": "plasma cell myeloma",
+            "id": "MONDO:0009693",
+            "name": "plasma cell myeloma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:13236",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0009693",
+            "target_id": "HGNC:13236",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.10003754091249706,
+            "provided_by": "omnicorp.term_to_term",
+            "source_id": "HGNC:13236",
+            "target_id": "MONDO:0009693",
+            "type": "literature_co-occurrence",
+            "num_publications": 1,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "plasma cell myeloma"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "0cfd277b-eb00-4a6a-9c58-30caa2b8bd86",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "WHRN",
+            "id": "HGNC:16361",
+            "name": "WHRN",
+            "type": "gene"
+          },
+          {
+            "description": "autosomal recessive nonsyndromic deafness",
+            "id": "MONDO:0019588",
+            "name": "autosomal recessive nonsyndromic deafness",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "biolink.gene_get_disease",
+            "source_id": "HGNC:16361",
+            "target_id": "MONDO:0019588",
+            "type": "has_phenotype",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "autosomal recessive nonsyndromic deafness"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "23d915f1-9222-40fa-88d2-4e9376f3399f",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "LINS1",
+            "id": "HGNC:30922",
+            "name": "LINS1",
+            "type": "gene"
+          },
+          {
+            "description": "medulloblastoma",
+            "id": "MONDO:0007959",
+            "name": "medulloblastoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:30922",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0007959",
+            "target_id": "HGNC:30922",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "medulloblastoma"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "998c1422-897c-4edf-92ac-eb2d343c28f9",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "URI1",
+            "id": "HGNC:13236",
+            "name": "URI1",
+            "type": "gene"
+          },
+          {
+            "description": "medulloblastoma",
+            "id": "MONDO:0007959",
+            "name": "medulloblastoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:13236",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0007959",
+            "target_id": "HGNC:13236",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "medulloblastoma"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "c89fc932-820e-46ea-9e4c-329b91d5ee49",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "WHRN",
+            "id": "HGNC:16361",
+            "name": "WHRN",
+            "type": "gene"
+          },
+          {
+            "description": "X-linked mixed deafness with perilymphatic gusher",
+            "id": "MONDO:0010576",
+            "name": "X-linked mixed deafness with perilymphatic gusher",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0010576",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "X-linked mixed deafness with perilymphatic gusher"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "db831c80-8ba1-4886-92c6-4a66b19de354",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "LINS1",
+            "id": "HGNC:30922",
+            "name": "LINS1",
+            "type": "gene"
+          },
+          {
+            "description": "Pick disease",
+            "id": "MONDO:0008243",
+            "name": "Pick disease",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:30922",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0008243",
+            "target_id": "HGNC:30922",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "Pick disease"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "4f3936b4-b4ef-443f-94ed-36a0485244b4",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "LRRC15",
+            "id": "HGNC:20818",
+            "name": "LRRC15",
+            "type": "gene"
+          },
+          {
+            "description": "alopecia areata",
+            "id": "MONDO:0005340",
+            "name": "alopecia areata",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:20818",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "hetio.gene_to_disease",
+            "source_id": "MONDO:0005340",
+            "target_id": "HGNC:20818",
+            "type": "negatively_regulates__entity_to_entity",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "alopecia areata"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "e28154bc-fb24-4c40-a361-710a102219d2",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "RALGAPA1",
+            "id": "HGNC:17770",
+            "name": "RALGAPA1",
+            "type": "gene"
+          },
+          {
+            "description": "idiopathic pulmonary fibrosis",
+            "id": "MONDO:0008345",
+            "name": "idiopathic pulmonary fibrosis",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:17770",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "hetio.gene_to_disease",
+            "source_id": "MONDO:0008345",
+            "target_id": "HGNC:17770",
+            "type": "negatively_regulates__entity_to_entity",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "idiopathic pulmonary fibrosis"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "569764c6-cfce-4072-acdd-04ab77f6a0d3",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "URI1",
+            "id": "HGNC:13236",
+            "name": "URI1",
+            "type": "gene"
+          },
+          {
+            "description": "plasmacytoma",
+            "id": "MONDO:0005615",
+            "name": "plasmacytoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:13236",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005615",
+            "target_id": "HGNC:13236",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "plasmacytoma"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "092488bc-bc57-42b6-936d-0b7e4f6ef92b",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "GLTP",
+            "id": "HGNC:24867",
+            "name": "GLTP",
+            "type": "gene"
+          },
+          {
+            "description": "isolated spina bifida",
+            "id": "MONDO:0019351",
+            "name": "isolated spina bifida",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:24867",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0019351",
+            "target_id": "HGNC:24867",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "isolated spina bifida"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "17d1b1d0-c91d-4974-9008-1de145192df6",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "LINS1",
+            "id": "HGNC:30922",
+            "name": "LINS1",
+            "type": "gene"
+          },
+          {
+            "description": "isolated spina bifida",
+            "id": "MONDO:0019351",
+            "name": "isolated spina bifida",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:30922",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0019351",
+            "target_id": "HGNC:30922",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "isolated spina bifida"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "d0eb9686-2c66-4d8d-8456-43fd564bed94",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "LINS1",
+            "id": "HGNC:30922",
+            "name": "LINS1",
+            "type": "gene"
+          },
+          {
+            "description": "spina bifida (disease)",
+            "id": "MONDO:0008449",
+            "name": "spina bifida (disease)",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:30922",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0008449",
+            "target_id": "HGNC:30922",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "spina bifida (disease)"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "609483e3-bbbe-42ac-ae77-99fc13eb8e4a",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "GLTP",
+            "id": "HGNC:24867",
+            "name": "GLTP",
+            "type": "gene"
+          },
+          {
+            "description": "systemic sclerosis",
+            "id": "MONDO:0005100",
+            "name": "systemic sclerosis",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:24867",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "hetio.gene_to_disease",
+            "source_id": "MONDO:0005100",
+            "target_id": "HGNC:24867",
+            "type": "positively_regulates__entity_to_entity",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "systemic sclerosis"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "57bfc4aa-54b2-4e05-836d-12773beafe5c",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "WHRN",
+            "id": "HGNC:16361",
+            "name": "WHRN",
+            "type": "gene"
+          },
+          {
+            "description": "progressive deafness with stapes fixation",
+            "id": "MONDO:0011080",
+            "name": "progressive deafness with stapes fixation",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0011080",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "progressive deafness with stapes fixation"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "9c8b074a-f111-4cd9-8ff9-9b939fc707c9",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "WHRN",
+            "id": "HGNC:16361",
+            "name": "WHRN",
+            "type": "gene"
+          },
+          {
+            "description": "large cell medulloblastoma",
+            "id": "MONDO:0002791",
+            "name": "large cell medulloblastoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0002791",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "large cell medulloblastoma"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "c645afe8-041a-42af-97aa-d18a225e0639",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "RALGAPA1",
+            "id": "HGNC:17770",
+            "name": "RALGAPA1",
+            "type": "gene"
+          },
+          {
+            "description": "basal ganglia calcification, idiopathic, 1",
+            "id": "MONDO:0024538",
+            "name": "basal ganglia calcification, idiopathic, 1",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:17770",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0024538",
+            "target_id": "HGNC:17770",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "basal ganglia calcification, idiopathic, 1"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "f21a42e5-bd75-45cf-9f26-7744e640ab08",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "WHRN",
+            "id": "HGNC:16361",
+            "name": "WHRN",
+            "type": "gene"
+          },
+          {
+            "description": "cone dystrophy",
+            "id": "MONDO:0000455",
+            "name": "cone dystrophy",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0000455",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "cone dystrophy"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "7bac72eb-2e47-491b-88a5-14282209cf95",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "LINS1",
+            "id": "HGNC:30922",
+            "name": "LINS1",
+            "type": "gene"
+          },
+          {
+            "description": "progressive supranuclear palsy",
+            "id": "MONDO:0019037",
+            "name": "progressive supranuclear palsy",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:30922",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0019037",
+            "target_id": "HGNC:30922",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "progressive supranuclear palsy"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "94f3c67d-f938-4dfa-85d3-14eca36391ab",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "URI1",
+            "id": "HGNC:13236",
+            "name": "URI1",
+            "type": "gene"
+          },
+          {
+            "description": "neurodegeneration with brain iron accumulation 4",
+            "id": "MONDO:0013674",
+            "name": "neurodegeneration with brain iron accumulation 4",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:13236",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0013674",
+            "target_id": "HGNC:13236",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "neurodegeneration with brain iron accumulation 4"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "6d2a669f-9559-4a16-a5a8-73c1e4ebe70b",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "WHRN",
+            "id": "HGNC:16361",
+            "name": "WHRN",
+            "type": "gene"
+          },
+          {
+            "description": "Pick disease",
+            "id": "MONDO:0008243",
+            "name": "Pick disease",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0008243",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "Pick disease"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "8bc72fb1-f2eb-4d62-8c13-ef4966ed23da",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "WHRN",
+            "id": "HGNC:16361",
+            "name": "WHRN",
+            "type": "gene"
+          },
+          {
+            "description": "nonsyndromic genetic deafness",
+            "id": "MONDO:0019497",
+            "name": "nonsyndromic genetic deafness",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0019497",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "nonsyndromic genetic deafness"
+    },
+    {
+      "confidence": 0.1306631975789104,
+      "id": "4615568a-fdc6-4776-8a23-3d0eaacb4fb2",
+      "result_graph": {
+        "node_list": [
+          {
+            "description": "Ebola hemorrhagic fever",
+            "id": "MONDO:0005737",
+            "name": "Ebola hemorrhagic fever",
+            "type": "disease"
+          },
+          {
+            "description": "WHRN",
+            "id": "HGNC:16361",
+            "name": "WHRN",
+            "type": "gene"
+          },
+          {
+            "description": "medulloblastoma",
+            "id": "MONDO:0007959",
+            "name": "medulloblastoma",
+            "type": "genetic_condition"
+          }
+        ],
+        "edge_list": [
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0005737",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          },
+          {
+            "confidence": 0.25832639515782074,
+            "provided_by": "pharos.disease_get_gene",
+            "source_id": "MONDO:0007959",
+            "target_id": "HGNC:16361",
+            "type": "disease_to_gene_association",
+            "num_publications": null,
+            "publications": ""
+          }
+        ]
+      },
+      "result_type": "individual query answer",
+      "text": "medulloblastoma"
+    }
+  ]
+}

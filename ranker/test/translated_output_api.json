@@ -1,0 +1,3111 @@
+{
+  "question_graph": {
+    "edges": [
+      {
+        "source_id": "n0",
+        "target_id": "n1",
+        "id": "a"
+      },
+      {
+        "source_id": "n1",
+        "target_id": "n2",
+        "id": "b"
+      }
+    ],
+    "nodes": [
+      {
+        "curie": "MONDO:0005737",
+        "id": "n0",
+        "type": "disease"
+      },
+      {
+        "id": "n1",
+        "type": "gene"
+      },
+      {
+        "id": "n2",
+        "type": "genetic_condition"
+      }
+    ]
+  },
+  "knowledge_graph": {
+    "nodes": [
+      {
+        "description": "Ebola hemorrhagic fever",
+        "id": "MONDO:0005737",
+        "name": "Ebola hemorrhagic fever",
+        "type": "disease"
+      },
+      {
+        "description": "NPC1",
+        "id": "HGNC:7897",
+        "name": "NPC1",
+        "type": "gene"
+      },
+      {
+        "description": "Niemann-Pick disease, type C1",
+        "id": "MONDO:0009757",
+        "name": "Niemann-Pick disease, type C1",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "BST2",
+        "id": "HGNC:1119",
+        "name": "BST2",
+        "type": "gene"
+      },
+      {
+        "description": "HIV infectious disease",
+        "id": "MONDO:0005109",
+        "name": "HIV infectious disease",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "cystic fibrosis",
+        "id": "MONDO:0009061",
+        "name": "cystic fibrosis",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "Niemann-Pick disease",
+        "id": "MONDO:0001982",
+        "name": "Niemann-Pick disease",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "LRRC15",
+        "id": "HGNC:20818",
+        "name": "LRRC15",
+        "type": "gene"
+      },
+      {
+        "description": "carcinoma",
+        "id": "MONDO:0004993",
+        "name": "carcinoma",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "GP2",
+        "id": "HGNC:4441",
+        "name": "GP2",
+        "type": "gene"
+      },
+      {
+        "description": "gangliosidosis",
+        "id": "MONDO:0017719",
+        "name": "gangliosidosis",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "RALGAPA1",
+        "id": "HGNC:17770",
+        "name": "RALGAPA1",
+        "type": "gene"
+      },
+      {
+        "description": "GTPBP1",
+        "id": "HGNC:4669",
+        "name": "GTPBP1",
+        "type": "gene"
+      },
+      {
+        "description": "FBXO42",
+        "id": "HGNC:29249",
+        "name": "FBXO42",
+        "type": "gene"
+      },
+      {
+        "description": "sea-blue histiocyte syndrome",
+        "id": "MONDO:0010017",
+        "name": "sea-blue histiocyte syndrome",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "paroxysmal dystonia",
+        "id": "MONDO:0016058",
+        "name": "paroxysmal dystonia",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "visual epilepsy",
+        "id": "MONDO:0001386",
+        "name": "visual epilepsy",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "narcolepsy 1",
+        "id": "MONDO:0008062",
+        "name": "narcolepsy 1",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "pustulosis palmaris et plantaris",
+        "id": "MONDO:0015597",
+        "name": "pustulosis palmaris et plantaris",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "URI1",
+        "id": "HGNC:13236",
+        "name": "URI1",
+        "type": "gene"
+      },
+      {
+        "description": "WHRN",
+        "id": "HGNC:16361",
+        "name": "WHRN",
+        "type": "gene"
+      },
+      {
+        "description": "retinitis pigmentosa",
+        "id": "MONDO:0019200",
+        "name": "retinitis pigmentosa",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "gastrointestinal stromal tumor",
+        "id": "MONDO:0011719",
+        "name": "gastrointestinal stromal tumor",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "LINS1",
+        "id": "HGNC:30922",
+        "name": "LINS1",
+        "type": "gene"
+      },
+      {
+        "description": "PNCK",
+        "id": "HGNC:13415",
+        "name": "PNCK",
+        "type": "gene"
+      },
+      {
+        "description": "GLTP",
+        "id": "HGNC:24867",
+        "name": "GLTP",
+        "type": "gene"
+      },
+      {
+        "description": "plasmacytoma",
+        "id": "MONDO:0005615",
+        "name": "plasmacytoma",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "medulloblastoma",
+        "id": "MONDO:0007959",
+        "name": "medulloblastoma",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "large cell medulloblastoma",
+        "id": "MONDO:0002791",
+        "name": "large cell medulloblastoma",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "esophageal adenocarcinoma",
+        "id": "MONDO:0005028",
+        "name": "esophageal adenocarcinoma",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "Usher syndrome type 2D",
+        "id": "MONDO:0012662",
+        "name": "Usher syndrome type 2D",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "mental retardation, autosomal recessive 27",
+        "id": "MONDO:0013702",
+        "name": "mental retardation, autosomal recessive 27",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "Usher syndrome type 2",
+        "id": "MONDO:0016484",
+        "name": "Usher syndrome type 2",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "bilateral striopallidodentate calcinosis",
+        "id": "MONDO:0008947",
+        "name": "bilateral striopallidodentate calcinosis",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "Gaucher disease",
+        "id": "MONDO:0018150",
+        "name": "Gaucher disease",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "plasma cell myeloma",
+        "id": "MONDO:0009693",
+        "name": "plasma cell myeloma",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "spina bifida (disease)",
+        "id": "MONDO:0008449",
+        "name": "spina bifida (disease)",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "autosomal recessive non-syndromic intellectual disability",
+        "id": "MONDO:0019502",
+        "name": "autosomal recessive non-syndromic intellectual disability",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "Pick disease",
+        "id": "MONDO:0008243",
+        "name": "Pick disease",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "fragile X syndrome",
+        "id": "MONDO:0010383",
+        "name": "fragile X syndrome",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "juvenile neuronal ceroid lipofuscinosis",
+        "id": "MONDO:0019262",
+        "name": "juvenile neuronal ceroid lipofuscinosis",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "Niemann-Pick disease type C, late infantile neurologic onset",
+        "id": "MONDO:0016308",
+        "name": "Niemann-Pick disease type C, late infantile neurologic onset",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "Niemann-Pick disease type C, severe perinatal form",
+        "id": "MONDO:0016306",
+        "name": "Niemann-Pick disease type C, severe perinatal form",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "autosomal dominant cerebellar ataxia",
+        "id": "MONDO:0020380",
+        "name": "autosomal dominant cerebellar ataxia",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "Niemann-Pick disease type C, severe early infantile neurologic onset",
+        "id": "MONDO:0016307",
+        "name": "Niemann-Pick disease type C, severe early infantile neurologic onset",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "Niemann-Pick disease type C, juvenile neurologic onset",
+        "id": "MONDO:0016309",
+        "name": "Niemann-Pick disease type C, juvenile neurologic onset",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "Niemann-Pick disease type C, adult neurologic onset",
+        "id": "MONDO:0016310",
+        "name": "Niemann-Pick disease type C, adult neurologic onset",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "progressive external ophthalmoplegia",
+        "id": "MONDO:0005181",
+        "name": "progressive external ophthalmoplegia",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "down syndrome",
+        "id": "MONDO:0008608",
+        "name": "down syndrome",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "Usher syndrome",
+        "id": "MONDO:0019501",
+        "name": "Usher syndrome",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "autosomal recessive nonsyndromic deafness 31",
+        "id": "MONDO:0011767",
+        "name": "autosomal recessive nonsyndromic deafness 31",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "Perrault syndrome",
+        "id": "MONDO:0017312",
+        "name": "Perrault syndrome",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "autosomal recessive nonsyndromic deafness",
+        "id": "MONDO:0019588",
+        "name": "autosomal recessive nonsyndromic deafness",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "X-linked mixed deafness with perilymphatic gusher",
+        "id": "MONDO:0010576",
+        "name": "X-linked mixed deafness with perilymphatic gusher",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "alopecia areata",
+        "id": "MONDO:0005340",
+        "name": "alopecia areata",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "idiopathic pulmonary fibrosis",
+        "id": "MONDO:0008345",
+        "name": "idiopathic pulmonary fibrosis",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "isolated spina bifida",
+        "id": "MONDO:0019351",
+        "name": "isolated spina bifida",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "systemic sclerosis",
+        "id": "MONDO:0005100",
+        "name": "systemic sclerosis",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "progressive deafness with stapes fixation",
+        "id": "MONDO:0011080",
+        "name": "progressive deafness with stapes fixation",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "basal ganglia calcification, idiopathic, 1",
+        "id": "MONDO:0024538",
+        "name": "basal ganglia calcification, idiopathic, 1",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "cone dystrophy",
+        "id": "MONDO:0000455",
+        "name": "cone dystrophy",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "progressive supranuclear palsy",
+        "id": "MONDO:0019037",
+        "name": "progressive supranuclear palsy",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "neurodegeneration with brain iron accumulation 4",
+        "id": "MONDO:0013674",
+        "name": "neurodegeneration with brain iron accumulation 4",
+        "type": "genetic_condition"
+      },
+      {
+        "description": "nonsyndromic genetic deafness",
+        "id": "MONDO:0019497",
+        "name": "nonsyndromic genetic deafness",
+        "type": "genetic_condition"
+      }
+    ],
+    "edges": [
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:7897",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0009757",
+        "target_id": "HGNC:7897",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0009757)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.9999999999862601,
+        "provided_by": "biolink.gene_get_disease",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0009757",
+        "type": "gene_associated_with_condition",
+        "num_publications": null,
+        "publications": "PMID:16098014,PMID:17160617,PMID:22065762,PMID:19013089,PMID:11333381,PMID:26206375,PMID:15465421,PMID:25131710,PMID:27139891,PMID:24676439,PMID:20826119,PMID:23653225,PMID:23430855,PMID:12401890,PMID:11182931,PMID:26981555,PMID:11479732,PMID:15459971,PMID:19206179,PMID:15130691,PMID:15596783,PMID:21245028,PMID:23773996,PMID:19744920,PMID:11545687,PMID:23142039,PMID:19223215,PMID:4795418,PMID:24915861,PMID:22326530,PMID:24035292,PMID:20718790,PMID:11754101,PMID:22704015,PMID:24570279,PMID:18216017,PMID:22750297,PMID:10480349,PMID:24386122,PMID:9211849,PMID:26937389,PMID:9802331,PMID:17003072,PMID:23433426,PMID:25236789,PMID:12955717,PMID:22216111,PMID:19609713,PMID:3378364,PMID:16126423,PMID:9634529,PMID:12205649,PMID:11349231,PMID:12408188,PMID:23774949,PMID:23146215,PMID:22505584,PMID:12974729,PMID:22476655,PMID:22676771,PMID:26666848,PMID:23427322,PMID:16720792,PMID:19900398,PMID:10521297,PMID:24001525,PMID:19252935,PMID:12554680,PMID:10521290,PMID:19307542,PMID:16778374",
+        "id": "(HGNC:7897)-(gene_associated_with_condition;biolink.gene_get_disease)-(MONDO:0009757)",
+        "source": "biolink.gene_get_disease"
+      },
+      {
+        "confidence": 0.1019098887386245,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:7897",
+        "type": "literature_co-occurrence",
+        "num_publications": 48,
+        "publications": "",
+        "id": "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.10007924357332798,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "MONDO:0005737",
+        "target_id": "MONDO:0009757",
+        "type": "literature_co-occurrence",
+        "num_publications": 2,
+        "publications": "",
+        "id": "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0009757)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.10259973642462139,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0009757",
+        "type": "literature_co-occurrence",
+        "num_publications": 65,
+        "publications": "",
+        "id": "(HGNC:7897)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0009757)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:1119",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.gene_get_disease",
+        "source_id": "MONDO:0005109",
+        "target_id": "HGNC:1119",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005109)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:1119)",
+        "source": "pharos.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0005109",
+        "target_id": "HGNC:1119",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005109)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.10067545980172399,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:1119",
+        "type": "literature_co-occurrence",
+        "num_publications": 17,
+        "publications": "",
+        "id": "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:1119)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.1015914426050859,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "MONDO:0005737",
+        "target_id": "MONDO:0005109",
+        "type": "literature_co-occurrence",
+        "num_publications": 88,
+        "publications": "",
+        "id": "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0005109)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.1031589839618765,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:1119",
+        "target_id": "MONDO:0005109",
+        "type": "literature_co-occurrence",
+        "num_publications": 82,
+        "publications": "",
+        "id": "(HGNC:1119)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0005109)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.gene_get_disease",
+        "source_id": "MONDO:0009061",
+        "target_id": "HGNC:1119",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0009061)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:1119)",
+        "source": "pharos.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0009061",
+        "target_id": "HGNC:1119",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0009061)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.09999999999999998,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "MONDO:0005737",
+        "target_id": "MONDO:0009061",
+        "type": "literature_co-occurrence",
+        "num_publications": 11,
+        "publications": "",
+        "id": "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0009061)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0001982",
+        "target_id": "HGNC:7897",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0001982)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.10006126233836021,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "MONDO:0005737",
+        "target_id": "MONDO:0001982",
+        "type": "literature_co-occurrence",
+        "num_publications": 2,
+        "publications": "",
+        "id": "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0001982)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.11131613611971536,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0001982",
+        "type": "literature_co-occurrence",
+        "num_publications": 283,
+        "publications": "",
+        "id": "(HGNC:7897)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0001982)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:20818",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:20818)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.gene_get_disease",
+        "source_id": "MONDO:0004993",
+        "target_id": "HGNC:20818",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0004993)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:20818)",
+        "source": "pharos.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0004993",
+        "target_id": "HGNC:20818",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:20818)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.09999999999999998,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "MONDO:0005737",
+        "target_id": "MONDO:0004993",
+        "type": "literature_co-occurrence",
+        "num_publications": 14,
+        "publications": "",
+        "id": "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0004993)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.10010857518014638,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:20818",
+        "target_id": "MONDO:0004993",
+        "type": "literature_co-occurrence",
+        "num_publications": 3,
+        "publications": "",
+        "id": "(HGNC:20818)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0004993)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:4441",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:4441)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0004993",
+        "target_id": "HGNC:4441",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:4441)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.10263446435849377,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:4441",
+        "type": "literature_co-occurrence",
+        "num_publications": 66,
+        "publications": "",
+        "id": "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:4441)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.09999999999999998,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:4441",
+        "target_id": "MONDO:0004993",
+        "type": "literature_co-occurrence",
+        "num_publications": 6,
+        "publications": "",
+        "id": "(HGNC:4441)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0004993)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0017719",
+        "target_id": "HGNC:7897",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0017719)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.10003054989809679,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "MONDO:0005737",
+        "target_id": "MONDO:0017719",
+        "type": "literature_co-occurrence",
+        "num_publications": 1,
+        "publications": "",
+        "id": "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0017719)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.1000786805803271,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0017719",
+        "type": "literature_co-occurrence",
+        "num_publications": 2,
+        "publications": "",
+        "id": "(HGNC:7897)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0017719)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0004993",
+        "target_id": "HGNC:7897",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.09999999999999998,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0004993",
+        "type": "literature_co-occurrence",
+        "num_publications": 4,
+        "publications": "",
+        "id": "(HGNC:7897)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0004993)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:17770",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.gene_get_disease",
+        "source_id": "MONDO:0004993",
+        "target_id": "HGNC:17770",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0004993)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:17770)",
+        "source": "pharos.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0004993",
+        "target_id": "HGNC:17770",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:4669",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:4669)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.gene_get_disease",
+        "source_id": "MONDO:0004993",
+        "target_id": "HGNC:4669",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0004993)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:4669)",
+        "source": "pharos.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0004993",
+        "target_id": "HGNC:4669",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:4669)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:29249",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:29249)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.gene_get_disease",
+        "source_id": "MONDO:0004993",
+        "target_id": "HGNC:29249",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0004993)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:29249)",
+        "source": "pharos.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0004993",
+        "target_id": "HGNC:29249",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:29249)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.9999999999720233,
+        "provided_by": "biolink.gene_get_phenotype",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0010017",
+        "type": "has_phenotype",
+        "num_publications": null,
+        "publications": "PMID:16098014,PMID:17160617,PMID:22065762,PMID:19013089,PMID:11333381,PMID:26206375,PMID:15465421,PMID:25131710,PMID:27139891,PMID:24676439,PMID:20826119,PMID:23653225,PMID:23430855,PMID:12401890,PMID:11182931,PMID:26981555,PMID:11479732,PMID:15459971,PMID:19206179,PMID:15130691,PMID:15596783,PMID:21245028,PMID:23773996,PMID:19744920,PMID:11545687,PMID:23142039,PMID:19223215,PMID:4795418,PMID:24915861,PMID:22326530,PMID:24035292,PMID:20718790,PMID:11754101,PMID:22704015,PMID:24570279,PMID:18216017,PMID:22750297,PMID:10480349,PMID:24386122,PMID:9211849,PMID:26937389,PMID:17003072,PMID:23433426,PMID:25236789,PMID:12955717,PMID:19609713,PMID:3378364,PMID:16126423,PMID:9634529,PMID:12205649,PMID:11349231,PMID:12408188,PMID:23774949,PMID:23146215,PMID:22505584,PMID:12974729,PMID:22476655,PMID:22676771,PMID:26666848,PMID:23427322,PMID:16720792,PMID:19900398,PMID:10521297,PMID:24001525,PMID:19252935,PMID:12554680,PMID:10521290,PMID:19307542,PMID:16778374",
+        "id": "(HGNC:7897)-(has_phenotype;biolink.gene_get_phenotype)-(MONDO:0010017)",
+        "source": "biolink.gene_get_phenotype"
+      },
+      {
+        "confidence": 0.10003987043171181,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0010017",
+        "type": "literature_co-occurrence",
+        "num_publications": 1,
+        "publications": "",
+        "id": "(HGNC:7897)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0010017)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.9999999999720233,
+        "provided_by": "biolink.gene_get_phenotype",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0016058",
+        "type": "has_phenotype",
+        "num_publications": null,
+        "publications": "PMID:16098014,PMID:17160617,PMID:22065762,PMID:19013089,PMID:11333381,PMID:26206375,PMID:15465421,PMID:25131710,PMID:27139891,PMID:24676439,PMID:20826119,PMID:23653225,PMID:23430855,PMID:12401890,PMID:11182931,PMID:26981555,PMID:11479732,PMID:15459971,PMID:19206179,PMID:15130691,PMID:15596783,PMID:21245028,PMID:23773996,PMID:19744920,PMID:11545687,PMID:23142039,PMID:19223215,PMID:4795418,PMID:24915861,PMID:22326530,PMID:24035292,PMID:20718790,PMID:11754101,PMID:22704015,PMID:24570279,PMID:18216017,PMID:22750297,PMID:10480349,PMID:24386122,PMID:9211849,PMID:26937389,PMID:17003072,PMID:23433426,PMID:25236789,PMID:12955717,PMID:19609713,PMID:3378364,PMID:16126423,PMID:9634529,PMID:12205649,PMID:11349231,PMID:12408188,PMID:23774949,PMID:23146215,PMID:22505584,PMID:12974729,PMID:22476655,PMID:22676771,PMID:26666848,PMID:23427322,PMID:16720792,PMID:19900398,PMID:10521297,PMID:24001525,PMID:19252935,PMID:12554680,PMID:10521290,PMID:19307542,PMID:16778374",
+        "id": "(HGNC:7897)-(has_phenotype;biolink.gene_get_phenotype)-(MONDO:0016058)",
+        "source": "biolink.gene_get_phenotype"
+      },
+      {
+        "confidence": 0.9999999999720233,
+        "provided_by": "biolink.gene_get_phenotype",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0001386",
+        "type": "has_phenotype",
+        "num_publications": null,
+        "publications": "PMID:16098014,PMID:17160617,PMID:22065762,PMID:19013089,PMID:11333381,PMID:26206375,PMID:15465421,PMID:25131710,PMID:27139891,PMID:24676439,PMID:20826119,PMID:23653225,PMID:23430855,PMID:12401890,PMID:11182931,PMID:26981555,PMID:11479732,PMID:15459971,PMID:19206179,PMID:15130691,PMID:15596783,PMID:21245028,PMID:23773996,PMID:19744920,PMID:11545687,PMID:23142039,PMID:19223215,PMID:4795418,PMID:24915861,PMID:22326530,PMID:24035292,PMID:20718790,PMID:11754101,PMID:22704015,PMID:24570279,PMID:18216017,PMID:22750297,PMID:10480349,PMID:24386122,PMID:9211849,PMID:26937389,PMID:17003072,PMID:23433426,PMID:25236789,PMID:12955717,PMID:19609713,PMID:3378364,PMID:16126423,PMID:9634529,PMID:12205649,PMID:11349231,PMID:12408188,PMID:23774949,PMID:23146215,PMID:22505584,PMID:12974729,PMID:22476655,PMID:22676771,PMID:26666848,PMID:23427322,PMID:16720792,PMID:19900398,PMID:10521297,PMID:24001525,PMID:19252935,PMID:12554680,PMID:10521290,PMID:19307542,PMID:16778374",
+        "id": "(HGNC:7897)-(has_phenotype;biolink.gene_get_phenotype)-(MONDO:0001386)",
+        "source": "biolink.gene_get_phenotype"
+      },
+      {
+        "confidence": 0.9999999999720233,
+        "provided_by": "biolink.gene_get_phenotype",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0008062",
+        "type": "has_phenotype",
+        "num_publications": null,
+        "publications": "PMID:16098014,PMID:17160617,PMID:22065762,PMID:19013089,PMID:11333381,PMID:26206375,PMID:15465421,PMID:25131710,PMID:27139891,PMID:24676439,PMID:20826119,PMID:23653225,PMID:23430855,PMID:12401890,PMID:11182931,PMID:26981555,PMID:11479732,PMID:15459971,PMID:19206179,PMID:15130691,PMID:15596783,PMID:21245028,PMID:23773996,PMID:19744920,PMID:11545687,PMID:23142039,PMID:19223215,PMID:4795418,PMID:24915861,PMID:22326530,PMID:24035292,PMID:20718790,PMID:11754101,PMID:22704015,PMID:24570279,PMID:18216017,PMID:22750297,PMID:10480349,PMID:24386122,PMID:9211849,PMID:26937389,PMID:17003072,PMID:23433426,PMID:25236789,PMID:12955717,PMID:19609713,PMID:3378364,PMID:16126423,PMID:9634529,PMID:12205649,PMID:11349231,PMID:12408188,PMID:23774949,PMID:23146215,PMID:22505584,PMID:12974729,PMID:22476655,PMID:22676771,PMID:26666848,PMID:23427322,PMID:16720792,PMID:19900398,PMID:10521297,PMID:24001525,PMID:19252935,PMID:12554680,PMID:10521290,PMID:19307542,PMID:16778374",
+        "id": "(HGNC:7897)-(has_phenotype;biolink.gene_get_phenotype)-(MONDO:0008062)",
+        "source": "biolink.gene_get_phenotype"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0015597",
+        "target_id": "HGNC:7897",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.09999999999999998,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "MONDO:0005737",
+        "target_id": "MONDO:0015597",
+        "type": "literature_co-occurrence",
+        "num_publications": 1,
+        "publications": "",
+        "id": "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0015597)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0015597",
+        "target_id": "HGNC:1119",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:13236",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0004993",
+        "target_id": "HGNC:13236",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.10045285463612774,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:13236",
+        "target_id": "MONDO:0004993",
+        "type": "literature_co-occurrence",
+        "num_publications": 12,
+        "publications": "",
+        "id": "(HGNC:13236)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0004993)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:16361",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0019200",
+        "target_id": "HGNC:16361",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0019200)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.09999999999999998,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "MONDO:0005737",
+        "target_id": "MONDO:0019200",
+        "type": "literature_co-occurrence",
+        "num_publications": 1,
+        "publications": "",
+        "id": "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0019200)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.10011953203907908,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:16361",
+        "target_id": "MONDO:0019200",
+        "type": "literature_co-occurrence",
+        "num_publications": 3,
+        "publications": "",
+        "id": "(HGNC:16361)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0019200)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0011719",
+        "target_id": "HGNC:7897",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0011719)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.4071474314830641,
+        "provided_by": "biolink.gene_get_disease",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0011719",
+        "type": "biomarker_for",
+        "num_publications": null,
+        "publications": "PMID:27793025",
+        "id": "(HGNC:7897)-(biomarker_for;biolink.gene_get_disease)-(MONDO:0011719)",
+        "source": "biolink.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:30922",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0004993",
+        "target_id": "HGNC:30922",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0004993",
+        "target_id": "HGNC:16361",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:13415",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13415)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0015597",
+        "target_id": "HGNC:13415",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13415)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0015597",
+        "target_id": "HGNC:17770",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0005737",
+        "target_id": "HGNC:24867",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0015597",
+        "target_id": "HGNC:24867",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0015597",
+        "target_id": "HGNC:16361",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.gene_get_disease",
+        "source_id": "MONDO:0005615",
+        "target_id": "HGNC:1119",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005615)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:1119)",
+        "source": "pharos.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0005615",
+        "target_id": "HGNC:1119",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005615)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.10003373874647059,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:1119",
+        "target_id": "MONDO:0005615",
+        "type": "literature_co-occurrence",
+        "num_publications": 1,
+        "publications": "",
+        "id": "(HGNC:1119)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0005615)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.gene_get_disease",
+        "source_id": "MONDO:0007959",
+        "target_id": "HGNC:1119",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0007959)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:1119)",
+        "source": "pharos.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0007959",
+        "target_id": "HGNC:1119",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.gene_get_disease",
+        "source_id": "MONDO:0002791",
+        "target_id": "HGNC:1119",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0002791)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:1119)",
+        "source": "pharos.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0002791",
+        "target_id": "HGNC:1119",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0002791)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.gene_get_disease",
+        "source_id": "MONDO:0005028",
+        "target_id": "HGNC:1119",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005028)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:1119)",
+        "source": "pharos.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0005028",
+        "target_id": "HGNC:1119",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005028)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0012662",
+        "target_id": "HGNC:16361",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0012662)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.5391111411287752,
+        "provided_by": "biolink.gene_get_disease",
+        "source_id": "HGNC:16361",
+        "target_id": "MONDO:0012662",
+        "type": "gene_associated_with_condition",
+        "num_publications": null,
+        "publications": "PMID:22147658,PMID:17171570",
+        "id": "(HGNC:16361)-(gene_associated_with_condition;biolink.gene_get_disease)-(MONDO:0012662)",
+        "source": "biolink.gene_get_disease"
+      },
+      {
+        "confidence": 0.10015998995709985,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:16361",
+        "target_id": "MONDO:0012662",
+        "type": "literature_co-occurrence",
+        "num_publications": 4,
+        "publications": "",
+        "id": "(HGNC:16361)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0012662)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.5391111411287752,
+        "provided_by": "biolink.gene_get_disease",
+        "source_id": "HGNC:30922",
+        "target_id": "MONDO:0013702",
+        "type": "biomarker_for",
+        "num_publications": null,
+        "publications": "PMID:21937992,PMID:23773660",
+        "id": "(HGNC:30922)-(biomarker_for;biolink.gene_get_disease)-(MONDO:0013702)",
+        "source": "biolink.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0013702",
+        "target_id": "HGNC:30922",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0013702)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "biolink.gene_get_disease",
+        "source_id": "HGNC:16361",
+        "target_id": "MONDO:0016484",
+        "type": "has_phenotype",
+        "num_publications": null,
+        "publications": "",
+        "id": "(HGNC:16361)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016484)",
+        "source": "biolink.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0016484",
+        "target_id": "HGNC:16361",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0016484)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.10031997568019713,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:16361",
+        "target_id": "MONDO:0016484",
+        "type": "literature_co-occurrence",
+        "num_publications": 8,
+        "publications": "",
+        "id": "(HGNC:16361)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0016484)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.gene_get_disease",
+        "source_id": "MONDO:0008947",
+        "target_id": "HGNC:17770",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0008947)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:17770)",
+        "source": "pharos.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0008947",
+        "target_id": "HGNC:17770",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0008947)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.10003999549337839,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:17770",
+        "target_id": "MONDO:0008947",
+        "type": "literature_co-occurrence",
+        "num_publications": 1,
+        "publications": "",
+        "id": "(HGNC:17770)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0008947)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0018150",
+        "target_id": "HGNC:7897",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0018150)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.10023299660375007,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0018150",
+        "type": "literature_co-occurrence",
+        "num_publications": 6,
+        "publications": "",
+        "id": "(HGNC:7897)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0018150)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0009693",
+        "target_id": "HGNC:1119",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0009693)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.10101129831247213,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:1119",
+        "target_id": "MONDO:0009693",
+        "type": "literature_co-occurrence",
+        "num_publications": 26,
+        "publications": "",
+        "id": "(HGNC:1119)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0009693)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.gene_get_disease",
+        "source_id": "MONDO:0008449",
+        "target_id": "HGNC:24867",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0008449)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:24867)",
+        "source": "pharos.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0008449",
+        "target_id": "HGNC:24867",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0008449)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "biolink.gene_get_disease",
+        "source_id": "HGNC:30922",
+        "target_id": "MONDO:0019502",
+        "type": "has_phenotype",
+        "num_publications": null,
+        "publications": "",
+        "id": "(HGNC:30922)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0019502)",
+        "source": "biolink.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0019502",
+        "target_id": "HGNC:30922",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0019502)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.gene_get_disease",
+        "source_id": "MONDO:0008243",
+        "target_id": "HGNC:17770",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0008243)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:17770)",
+        "source": "pharos.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0008243",
+        "target_id": "HGNC:17770",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0008243)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.gene_get_disease",
+        "source_id": "MONDO:0007959",
+        "target_id": "HGNC:24867",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0007959)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:24867)",
+        "source": "pharos.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0007959",
+        "target_id": "HGNC:24867",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.gene_get_disease",
+        "source_id": "MONDO:0010383",
+        "target_id": "HGNC:4669",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0010383)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:4669)",
+        "source": "pharos.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0010383",
+        "target_id": "HGNC:4669",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0010383)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:4669)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.gene_get_disease",
+        "source_id": "MONDO:0019262",
+        "target_id": "HGNC:20818",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0019262)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:20818)",
+        "source": "pharos.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0019262",
+        "target_id": "HGNC:20818",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0019262)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:20818)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "biolink.gene_get_disease",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0016308",
+        "type": "has_phenotype",
+        "num_publications": null,
+        "publications": "",
+        "id": "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016308)",
+        "source": "biolink.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0007959",
+        "target_id": "HGNC:7897",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "biolink.gene_get_disease",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0016306",
+        "type": "has_phenotype",
+        "num_publications": null,
+        "publications": "",
+        "id": "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016306)",
+        "source": "biolink.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0020380",
+        "target_id": "HGNC:7897",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0020380)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0002791",
+        "target_id": "HGNC:7897",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0002791)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "biolink.gene_get_disease",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0016307",
+        "type": "has_phenotype",
+        "num_publications": null,
+        "publications": "",
+        "id": "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016307)",
+        "source": "biolink.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "biolink.gene_get_disease",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0016309",
+        "type": "has_phenotype",
+        "num_publications": null,
+        "publications": "",
+        "id": "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016309)",
+        "source": "biolink.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "biolink.gene_get_disease",
+        "source_id": "HGNC:7897",
+        "target_id": "MONDO:0016310",
+        "type": "has_phenotype",
+        "num_publications": null,
+        "publications": "",
+        "id": "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016310)",
+        "source": "biolink.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0005181",
+        "target_id": "HGNC:7897",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005181)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0008608",
+        "target_id": "HGNC:7897",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0008608)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0019501",
+        "target_id": "HGNC:16361",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0019501)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.10063990919146437,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:16361",
+        "target_id": "MONDO:0019501",
+        "type": "literature_co-occurrence",
+        "num_publications": 16,
+        "publications": "",
+        "id": "(HGNC:16361)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0019501)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0011767",
+        "target_id": "HGNC:16361",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0011767)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.10039997436778625,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:16361",
+        "target_id": "MONDO:0011767",
+        "type": "literature_co-occurrence",
+        "num_publications": 10,
+        "publications": "",
+        "id": "(HGNC:16361)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0011767)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0017312",
+        "target_id": "HGNC:16361",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0017312)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.1000399954531509,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:16361",
+        "target_id": "MONDO:0017312",
+        "type": "literature_co-occurrence",
+        "num_publications": 1,
+        "publications": "",
+        "id": "(HGNC:16361)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0017312)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0009693",
+        "target_id": "HGNC:13236",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0009693)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.10003754091249706,
+        "provided_by": "omnicorp.term_to_term",
+        "source_id": "HGNC:13236",
+        "target_id": "MONDO:0009693",
+        "type": "literature_co-occurrence",
+        "num_publications": 1,
+        "publications": "",
+        "id": "(HGNC:13236)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0009693)",
+        "source": "omnicorp.term_to_term"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "biolink.gene_get_disease",
+        "source_id": "HGNC:16361",
+        "target_id": "MONDO:0019588",
+        "type": "has_phenotype",
+        "num_publications": null,
+        "publications": "",
+        "id": "(HGNC:16361)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0019588)",
+        "source": "biolink.gene_get_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0007959",
+        "target_id": "HGNC:30922",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0007959",
+        "target_id": "HGNC:13236",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0010576",
+        "target_id": "HGNC:16361",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0010576)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0008243",
+        "target_id": "HGNC:30922",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0008243)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "hetio.gene_to_disease",
+        "source_id": "MONDO:0005340",
+        "target_id": "HGNC:20818",
+        "type": "negatively_regulates__entity_to_entity",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005340)-(negatively_regulates__entity_to_entity;hetio.gene_to_disease)-(HGNC:20818)",
+        "source": "hetio.gene_to_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "hetio.gene_to_disease",
+        "source_id": "MONDO:0008345",
+        "target_id": "HGNC:17770",
+        "type": "negatively_regulates__entity_to_entity",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0008345)-(negatively_regulates__entity_to_entity;hetio.gene_to_disease)-(HGNC:17770)",
+        "source": "hetio.gene_to_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0005615",
+        "target_id": "HGNC:13236",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005615)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0019351",
+        "target_id": "HGNC:24867",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0019351)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0019351",
+        "target_id": "HGNC:30922",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0019351)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0008449",
+        "target_id": "HGNC:30922",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0008449)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "hetio.gene_to_disease",
+        "source_id": "MONDO:0005100",
+        "target_id": "HGNC:24867",
+        "type": "positively_regulates__entity_to_entity",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0005100)-(positively_regulates__entity_to_entity;hetio.gene_to_disease)-(HGNC:24867)",
+        "source": "hetio.gene_to_disease"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0011080",
+        "target_id": "HGNC:16361",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0011080)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0002791",
+        "target_id": "HGNC:16361",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0002791)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0024538",
+        "target_id": "HGNC:17770",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0024538)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0000455",
+        "target_id": "HGNC:16361",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0000455)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0019037",
+        "target_id": "HGNC:30922",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0019037)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0013674",
+        "target_id": "HGNC:13236",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0013674)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0008243",
+        "target_id": "HGNC:16361",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0008243)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0019497",
+        "target_id": "HGNC:16361",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0019497)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "source": "pharos.disease_get_gene"
+      },
+      {
+        "confidence": 0.25832639515782074,
+        "provided_by": "pharos.disease_get_gene",
+        "source_id": "MONDO:0007959",
+        "target_id": "HGNC:16361",
+        "type": "disease_to_gene_association",
+        "num_publications": null,
+        "publications": "",
+        "id": "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "source": "pharos.disease_get_gene"
+      }
+    ]
+  },
+  "answers": [
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0009757"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": [
+          "(MONDO:0009757)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(HGNC:7897)-(gene_associated_with_condition;biolink.gene_get_disease)-(MONDO:0009757)",
+          "(HGNC:7897)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0009757)"
+        ]
+      },
+      "score": 0.3865875220118033
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0005109"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:1119)"
+        ],
+        "b": [
+          "(MONDO:0005109)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:1119)",
+          "(MONDO:0005109)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+          "(HGNC:1119)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0005109)"
+        ]
+      },
+      "score": 0.3304567410252145
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0009061"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:1119)"
+        ],
+        "b": [
+          "(MONDO:0009061)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:1119)",
+          "(MONDO:0009061)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)"
+        ]
+      },
+      "score": 0.31333404932322073
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0001982"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": [
+          "(MONDO:0001982)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(HGNC:7897)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0001982)"
+        ]
+      },
+      "score": 0.2840007434064671
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:20818",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:20818)",
+        "b": [
+          "(MONDO:0004993)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:20818)",
+          "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:20818)",
+          "(HGNC:20818)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0004993)"
+        ]
+      },
+      "score": 0.2836519935273213
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:4441",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:4441)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:4441)"
+        ],
+        "b": [
+          "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:4441)",
+          "(HGNC:4441)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0004993)"
+        ]
+      },
+      "score": 0.28131940810736134
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0017719"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": [
+          "(MONDO:0017719)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(HGNC:7897)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0017719)"
+        ]
+      },
+      "score": 0.2811897264946224
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": [
+          "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(HGNC:7897)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0004993)"
+        ]
+      },
+      "score": 0.2811394041987864
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
+        "b": [
+          "(MONDO:0004993)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:17770)",
+          "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)"
+        ]
+      },
+      "score": 0.2737730093234622
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:4669",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:4669)",
+        "b": [
+          "(MONDO:0004993)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:4669)",
+          "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:4669)"
+        ]
+      },
+      "score": 0.2737730093234622
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:29249",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:29249)",
+        "b": [
+          "(MONDO:0004993)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:29249)",
+          "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:29249)"
+        ]
+      },
+      "score": 0.2737730093234622
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0010017"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": [
+          "(HGNC:7897)-(has_phenotype;biolink.gene_get_phenotype)-(MONDO:0010017)",
+          "(HGNC:7897)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0010017)"
+        ]
+      },
+      "score": 0.2729975635496964
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016058"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": "(HGNC:7897)-(has_phenotype;biolink.gene_get_phenotype)-(MONDO:0016058)"
+      },
+      "score": 0.26644405287999934
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0001386"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": "(HGNC:7897)-(has_phenotype;biolink.gene_get_phenotype)-(MONDO:0001386)"
+      },
+      "score": 0.26644405287999934
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0008062"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": "(HGNC:7897)-(has_phenotype;biolink.gene_get_phenotype)-(MONDO:0008062)"
+      },
+      "score": 0.26644405287999934
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0015597"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
+      },
+      "score": 0.2519567147122626
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0015597"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:1119)"
+        ],
+        "b": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)"
+      },
+      "score": 0.2517407150878321
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13236",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
+        "b": [
+          "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
+          "(HGNC:13236)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0004993)"
+        ]
+      },
+      "score": 0.2517016721014039
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0019200"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": [
+          "(MONDO:0019200)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+          "(HGNC:16361)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0019200)"
+        ]
+      },
+      "score": 0.25164315772788604
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0011719"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": [
+          "(MONDO:0011719)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(HGNC:7897)-(biomarker_for;biolink.gene_get_disease)-(MONDO:0011719)"
+        ]
+      },
+      "score": 0.23526307280768136
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "b": "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
+      },
+      "score": 0.2306631975789103
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0004993"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0004993)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
+      },
+      "score": 0.2306631975789103
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13415",
+        "n2": "MONDO:0015597"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13415)",
+        "b": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13415)"
+      },
+      "score": 0.2306631975789103
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0015597"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
+        "b": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)"
+      },
+      "score": 0.2306631975789103
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:24867",
+        "n2": "MONDO:0015597"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)",
+        "b": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)"
+      },
+      "score": 0.2306631975789103
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0015597"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0015597)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
+      },
+      "score": 0.2306631975789103
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0005615"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:1119)"
+        ],
+        "b": [
+          "(MONDO:0005615)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:1119)",
+          "(MONDO:0005615)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+          "(HGNC:1119)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0005615)"
+        ]
+      },
+      "score": 0.22844291522743246
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0007959"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:1119)"
+        ],
+        "b": [
+          "(MONDO:0007959)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:1119)",
+          "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)"
+        ]
+      },
+      "score": 0.21333404932322073
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0002791"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:1119)"
+        ],
+        "b": [
+          "(MONDO:0002791)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:1119)",
+          "(MONDO:0002791)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)"
+        ]
+      },
+      "score": 0.21333404932322073
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0005028"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:1119)"
+        ],
+        "b": [
+          "(MONDO:0005028)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:1119)",
+          "(MONDO:0005028)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)"
+        ]
+      },
+      "score": 0.21333404932322073
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0012662"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": [
+          "(MONDO:0012662)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+          "(HGNC:16361)-(gene_associated_with_condition;biolink.gene_get_disease)-(MONDO:0012662)",
+          "(HGNC:16361)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0012662)"
+        ]
+      },
+      "score": 0.20224815877062136
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0013702"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "b": [
+          "(HGNC:30922)-(biomarker_for;biolink.gene_get_disease)-(MONDO:0013702)",
+          "(MONDO:0013702)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
+        ]
+      },
+      "score": 0.1967487128164333
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0016484"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": [
+          "(HGNC:16361)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016484)",
+          "(MONDO:0016484)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+          "(HGNC:16361)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0016484)"
+        ]
+      },
+      "score": 0.183670469558718
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0008947"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
+        "b": [
+          "(MONDO:0008947)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:17770)",
+          "(MONDO:0008947)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
+          "(HGNC:17770)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0008947)"
+        ]
+      },
+      "score": 0.18364599787003014
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0018150"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": [
+          "(MONDO:0018150)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(HGNC:7897)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0018150)"
+        ]
+      },
+      "score": 0.1811979436148015
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:1119",
+        "n2": "MONDO:0009693"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:1119)"
+        ],
+        "b": [
+          "(MONDO:0009693)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:1119)",
+          "(HGNC:1119)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0009693)"
+        ]
+      },
+      "score": 0.1810848479635913
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:24867",
+        "n2": "MONDO:0008449"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)",
+        "b": [
+          "(MONDO:0008449)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:24867)",
+          "(MONDO:0008449)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)"
+        ]
+      },
+      "score": 0.17377300932346215
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0019502"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "b": [
+          "(HGNC:30922)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0019502)",
+          "(MONDO:0019502)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
+        ]
+      },
+      "score": 0.17377300932346215
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0008243"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
+        "b": [
+          "(MONDO:0008243)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:17770)",
+          "(MONDO:0008243)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)"
+        ]
+      },
+      "score": 0.17377300932346215
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:24867",
+        "n2": "MONDO:0007959"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)",
+        "b": [
+          "(MONDO:0007959)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:24867)",
+          "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)"
+        ]
+      },
+      "score": 0.17377300932346215
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:4669",
+        "n2": "MONDO:0010383"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:4669)",
+        "b": [
+          "(MONDO:0010383)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:4669)",
+          "(MONDO:0010383)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:4669)"
+        ]
+      },
+      "score": 0.17377300932346215
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:20818",
+        "n2": "MONDO:0019262"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:20818)",
+        "b": [
+          "(MONDO:0019262)-(disease_to_gene_association;pharos.gene_get_disease)-(HGNC:20818)",
+          "(MONDO:0019262)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:20818)"
+        ]
+      },
+      "score": 0.17377300932346215
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016308"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016308)"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0007959"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016306"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016306)"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0020380"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": "(MONDO:0020380)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0002791"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": "(MONDO:0002791)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016307"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016307)"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016309"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016309)"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0016310"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": "(HGNC:7897)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0016310)"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0005181"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": "(MONDO:0005181)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:7897",
+        "n2": "MONDO:0008608"
+      },
+      "edge_bindings": {
+        "a": [
+          "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)",
+          "(MONDO:0005737)-(literature_co-occurrence;omnicorp.term_to_term)-(HGNC:7897)"
+        ],
+        "b": "(MONDO:0008608)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:7897)"
+      },
+      "score": 0.15195671471226277
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0019501"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": [
+          "(MONDO:0019501)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+          "(HGNC:16361)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0019501)"
+        ]
+      },
+      "score": 0.15173448170708165
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0011767"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": [
+          "(MONDO:0011767)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+          "(HGNC:16361)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0011767)"
+        ]
+      },
+      "score": 0.1516923932404872
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0017312"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": [
+          "(MONDO:0017312)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+          "(HGNC:16361)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0017312)"
+        ]
+      },
+      "score": 0.15162918586034263
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13236",
+        "n2": "MONDO:0009693"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
+        "b": [
+          "(MONDO:0009693)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
+          "(HGNC:13236)-(literature_co-occurrence;omnicorp.term_to_term)-(MONDO:0009693)"
+        ]
+      },
+      "score": 0.15162875462405903
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0019588"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(HGNC:16361)-(has_phenotype;biolink.gene_get_disease)-(MONDO:0019588)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0007959"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "b": "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13236",
+        "n2": "MONDO:0007959"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
+        "b": "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0010576"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0010576)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0008243"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "b": "(MONDO:0008243)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:20818",
+        "n2": "MONDO:0005340"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:20818)",
+        "b": "(MONDO:0005340)-(negatively_regulates__entity_to_entity;hetio.gene_to_disease)-(HGNC:20818)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0008345"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
+        "b": "(MONDO:0008345)-(negatively_regulates__entity_to_entity;hetio.gene_to_disease)-(HGNC:17770)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13236",
+        "n2": "MONDO:0005615"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
+        "b": "(MONDO:0005615)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:24867",
+        "n2": "MONDO:0019351"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)",
+        "b": "(MONDO:0019351)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0019351"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "b": "(MONDO:0019351)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0008449"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "b": "(MONDO:0008449)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:24867",
+        "n2": "MONDO:0005100"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:24867)",
+        "b": "(MONDO:0005100)-(positively_regulates__entity_to_entity;hetio.gene_to_disease)-(HGNC:24867)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0011080"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0011080)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0002791"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0002791)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:17770",
+        "n2": "MONDO:0024538"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)",
+        "b": "(MONDO:0024538)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:17770)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0000455"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0000455)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:30922",
+        "n2": "MONDO:0019037"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)",
+        "b": "(MONDO:0019037)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:30922)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:13236",
+        "n2": "MONDO:0013674"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)",
+        "b": "(MONDO:0013674)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:13236)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0008243"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0008243)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0019497"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0019497)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
+      },
+      "score": 0.1306631975789104
+    },
+    {
+      "node_bindings": {
+        "n0": "MONDO:0005737",
+        "n1": "HGNC:16361",
+        "n2": "MONDO:0007959"
+      },
+      "edge_bindings": {
+        "a": "(MONDO:0005737)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)",
+        "b": "(MONDO:0007959)-(disease_to_gene_association;pharos.disease_get_gene)-(HGNC:16361)"
+      },
+      "score": 0.1306631975789104
+    }
+  ]
+}
