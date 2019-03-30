@@ -18,6 +18,7 @@ from ranker.tasks import answer_question, celery
 from ranker.knowledgegraph import KnowledgeGraph
 from ranker.support.omnicorp import OmnicorpSupport
 from ranker.util import flatten_semilist
+from ranker.api.compliance import message2std, std2message
 import ranker.definitions
 
 logger = logging.getLogger("ranker")
@@ -158,6 +159,80 @@ class RankMessage(Resource):
         return output, 200
 
 api.add_resource(RankMessage, '/rank')
+
+
+class AnswerQuestionStd(Resource):
+    def post(self):
+        """
+        Get answers to a question
+        ---
+        tags: [answer]
+        requestBody:
+            description: A message with question graph.
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/definitions/Message'
+            required: true
+        parameters:
+          - in: query
+            name: max_results
+            description: Maximum number of results to return. Provide -1 to indicate no maximum.
+            schema:
+                type: integer
+            default: 250
+          - in: query
+            name: output_format
+            description: Requested output format. DENSE, MESSAGE, CSV or ANSWERS
+            schema:
+                type: string
+            default: MESSAGE
+          - in: query
+            name: max_connectivity
+            description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
+            schema:
+                type: integer
+            default: 0
+        responses:
+            200:
+                description: A message with knowledge graph and answers.
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/definitions/Message'
+        """
+        max_results = parse_args_max_results(request.args)
+        output_format = parse_args_output_format(request.args)
+        max_connectivity = parse_args_max_connectivity(request.args)
+
+        message = std2message(request.json)
+
+        try:
+            logger.debug(f'Answering question now.')
+            result = answer_question.apply(
+                args=[message],
+                kwargs={'max_results': max_results, 'output_format': output_format, 'max_connectivity': max_connectivity}
+            )
+            result = result.get()
+        except:
+            # Celery tasks log errors internally. Just return.
+            return "Error answering question.", 500
+
+        if result is None:
+            message = request.json
+            message['knowledge_graph'] = []
+            message['answers'] = []
+            return message, 200
+
+        logger.debug(f'Fetching answerset file: {result}')
+        filename = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', result)
+        with open(filename, 'r') as f:
+            output = json.load(f)
+        os.remove(filename)
+        output = message2std(output)
+        return output, 200
+
+api.add_resource(AnswerQuestionStd, '/query')
 
 
 class AnswerQuestionNow(Resource):
