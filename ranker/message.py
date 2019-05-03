@@ -86,6 +86,10 @@ class NodeReference():
         self.name = name
         self.label = label
         self.prop_string = ' {' + ', '.join([f"`{key}`: {cypher_prop_string(props[key])}" for key in props]) + '}'
+        if curie:
+            self._extras = f' USING INDEX {name}:{label}(id)'
+        else:
+            self._extras = ''
         self._conditions = conditions
         self._num = 0
 
@@ -108,6 +112,18 @@ class NodeReference():
             return self._conditions
         else:
             return ''
+
+    @property
+    def extras(self):
+        """Return extras for the cypher node reference.
+
+        To be appended to the MATCH clause.
+        """
+        if self._num == 1:
+            return self._extras
+        else:
+            return ''
+
 
 class EdgeReference():
     """Edge reference object."""
@@ -737,6 +753,7 @@ class Message():
         orphaned_nodes = all_nodes - all_referenced_nodes
         for n in orphaned_nodes:
             match_strings.append(f"MATCH ({node_references[n]})")
+            match_strings[-1] += node_references[n].extras
             if node_references[n].conditions:
                 match_strings.append("WHERE " + node_references[n].conditions)
 
@@ -751,6 +768,7 @@ class Message():
                 match_strings.append(f"MATCH ({source_node})-[{eref}]->({target_node})")
             else:
                 match_strings.append(f"MATCH ({source_node})-[{eref}]-({target_node})")
+            match_strings[-1] += source_node.extras + target_node.extras
             conditions = [f'({c})' for c in [source_node.conditions, target_node.conditions, eref.conditions] if c]
             if conditions:
                 match_strings.append("WHERE " + " AND ".join(conditions))
