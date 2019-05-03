@@ -469,6 +469,7 @@ def batches(arr, n):
 def get_node_properties(node_ids, fields=None):
     functions = {
         'type': 'labels(n)',
+        'degree': 'size((n)-[]-())'
     }
 
     if fields is not None:
