@@ -48,7 +48,7 @@ class NodeReference():
         """Create a node reference."""
         node = dict(node)
         name = f'{node.pop("id")}'
-        label = node.pop('type', None)
+        label = node.pop('type', 'named_thing')
         props = {}
 
         if label == 'biological_process':
@@ -58,7 +58,7 @@ class NodeReference():
         if curie is not None:
             if isinstance(curie, str):
                 # synonymize/normalize curie
-                if label is not None:
+                if label != 'named_thing':
                     response = requests.post(f"http://{os.environ['BUILDER_HOST']}:6010/api/synonymize/{curie}/{label}/")
                     curie = response.json()['id']
                 props['id'] = curie
@@ -67,7 +67,7 @@ class NodeReference():
                 conditions = []
                 for ci in curie:
                     # synonymize/normalize curie
-                    if label is not None:
+                    if label != 'named_thing':
                         response = requests.post(f"http://{os.environ['BUILDER_HOST']}:6010/api/synonymize/{ci}/{label}/")
                         ci = response.json()['id']
                     # generate curie-matching condition
@@ -94,7 +94,7 @@ class NodeReference():
         self._num += 1
         if self._num == 1:
             return f'{self.name}' + \
-                   f'{":" + self.label if self.label else ""}' + \
+                   f':{self.label}' + \
                    f'{self.prop_string}'
         return self.name
 
