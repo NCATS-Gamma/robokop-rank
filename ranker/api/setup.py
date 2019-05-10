@@ -49,7 +49,22 @@ app.config['SWAGGER'] = {
     'title': 'ROBOKOP Ranker API',
     'uiversion': 3
 }
-swagger = Swagger(app, template=template)
+swagger_config = {
+    "headers": [
+    ],
+    "specs": [
+        {
+            "endpoint": 'apispec_1',
+            "route": '/ranker/spec',
+            "rule_filter": lambda rule: True,  # all in
+            "model_filter": lambda tag: True,  # all in
+        }
+    ],
+    "swagger_ui": True,
+    "specs_route": "/apidocs/",
+    "openapi": "3.0.1"
+}
+swagger = Swagger(app, template=template, config=swagger_config)
 
 # Should be catching werkzeug.exceptions.InternalServerError instead?
 @app.errorhandler(Exception)
