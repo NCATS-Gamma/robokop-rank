@@ -806,7 +806,7 @@ class Message():
 
         # deal with sets
         node_id_accessor = [f"collect(distinct {n['id']}.id) as {n['id']}" if 'set' in n and n['set'] else f"{n['id']}.id as {n['id']}" for n in nodes]
-        edge_id_accessor = [f"collect(distinct toString(id({e['id']}))) as {e['id']}" for e in edges]
+        edge_id_accessor = [f"collect(distinct {e['id']}.id) as {e['id']}" for e in edges]
         with_string = f"WITH {', '.join(node_id_accessor+edge_id_accessor)}"
 
         # add bound fields and return map
@@ -851,7 +851,7 @@ class Message():
         if edge_names:
             collection_string += "\nUNWIND edges as e WITH nodes, collect(distinct e) as edges"""
         support_string = """WITH
-            [r in edges | r{.*, source_id:startNode(r).id, target_id:endNode(r).id, type:type(r), id:toString(id(r))}] as edges,
+            [r in edges | r{.*, source_id:startNode(r).id, target_id:endNode(r).id, type:type(r)}] as edges,
             [n in nodes | n{.*, type:labels(n)}] as nodes"""
         return_string = 'RETURN nodes, edges'
         query_string = "\n".join([match_string, collection_string, support_string, return_string])

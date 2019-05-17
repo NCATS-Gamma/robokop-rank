@@ -554,8 +554,7 @@ def get_edge_properties(edge_ids, fields=None):
     functions = {
         'source_id': 'startNode(e).id',
         'target_id': 'endNode(e).id',
-        'type': 'type(e)',
-        'id': 'toString(id(e))'
+        'type': 'type(e)'
     }
 
     if fields is not None:
@@ -566,7 +565,7 @@ def get_edge_properties(edge_ids, fields=None):
     output = []
     n = 10000
     for batch in batches(edge_ids, n):
-        where_string = 'id(e) IN [' + ', '.join([edge_id for edge_id in batch]) + ']'
+        where_string = 'e.id IN [' + ', '.join([f'"{edge_id}"' for edge_id in batch]) + ']'
         query_string = f'MATCH ()-[e]->() WHERE {where_string} RETURN e{{{prop_string}}}'
         # logger.debug(query_string)
 
