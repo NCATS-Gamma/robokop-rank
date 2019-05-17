@@ -468,11 +468,13 @@ def batches(arr, n):
 
 def get_node_properties(node_ids, fields=None):
     functions = {
-        'type': 'labels(n)',
-        'degree': 'size((n)-[]-())'
+        'type': 'labels(n)'
     }
 
     if fields is not None:
+        functions.update({
+            'degree': 'size((n)-[]-())'
+        })
         prop_string = ', '.join([f'{key}:{functions[key]}' if key in functions else f'{key}:n.{key}' for key in fields])
     else:
         prop_string = ', '.join([f'{key}:{functions[key]}' for key in functions] + ['.*'])
