@@ -563,18 +563,16 @@ def get_edge_properties(edge_ids, fields=None):
         prop_string = ', '.join([f'{key}:{functions[key]}' for key in functions] + ['.*'])
 
     output = []
-    n = 10000
-    for batch in batches(edge_ids, n):
-        where_string = 'e.id IN [' + ', '.join([f'"{edge_id}"' for edge_id in batch]) + ']'
-        query_string = f'MATCH ()-[e]->() WHERE {where_string} RETURN e{{{prop_string}}}'
-        # logger.debug(query_string)
+    statement = f"CALL db.index.fulltext.queryRelationships('edge_id_index', {{edge_ids}}) YIELD relationship WITH relationship as e RETURN e{{{prop_string}}}"
+    with KnowledgeGraph() as database:
+        with database.driver.session() as session:
+            tx = session.begin_transaction()
+            for batch in batches(edge_ids, 1024):
+                result = tx.run(statement, {'edge_ids': ' '.join(batch)})
 
-        with KnowledgeGraph() as database:
-            with database.driver.session() as session:
-                result = session.run(query_string)
-
-        for record in result:
-            output.append(record['e'])
+                for record in result:
+                    output.append(record['e'])
+            tx.commit()
 
     return output
 
