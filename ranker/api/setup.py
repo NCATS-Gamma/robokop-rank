@@ -7,7 +7,7 @@ import logging.config
 
 from flask import Flask, Blueprint, request
 from flask_restful import Api
-from flasgger import Swagger, LazyJSONEncoder, LazyStrings
+from flasgger import Swagger, LazyJSONEncoder, LazyString
 from flask_cors import CORS
 
 from ranker.api.logging_config import setup_main_logger
