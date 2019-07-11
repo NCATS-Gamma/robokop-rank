@@ -44,7 +44,7 @@ template = {
         "http",
         "https"
     ],
-    'swaggerUiPrefix': LazyString (lambda : request.environ.get('HTTP_X_PREFIX_SWAGGER', ''))
+    'swaggerUiPrefix': LazyString (lambda : request.environ.get('HTTP_X_SWAGGER_PREFIX', ''))
 }
 app.json_encoder = LazyJSONEncoder
 app.config['SWAGGER'] = {
