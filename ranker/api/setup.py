@@ -5,9 +5,9 @@ Set up Flask server
 import logging
 import logging.config
 
-from flask import Flask, Blueprint
+from flask import Flask, Blueprint, request
 from flask_restful import Api
-from flasgger import Swagger
+from flasgger import Swagger, LazyJSONEncoder
 from flask_cors import CORS
 
 from ranker.api.logging_config import setup_main_logger
@@ -43,8 +43,10 @@ template = {
     "schemes": [
         "http",
         "https"
-    ]
+    ],
+    'swaggerUiPrefix': LazyString (lambda : request.environ.get('X-Swagger-Prefix', ''))
 }
+app.json_encoder = LazyJSONEncoder
 app.config['SWAGGER'] = {
     'title': 'ROBOKOP Ranker API',
     'uiversion': 3
