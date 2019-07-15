@@ -93,7 +93,7 @@ class Support(Resource):
         output = message.dump()
         return output, 200
 
-api.add_resource(Support, '/support')
+api.add_resource(Support, '/support/')
 
 
 class RankMessage(Resource):
@@ -158,7 +158,7 @@ class RankMessage(Resource):
 
         return output, 200
 
-api.add_resource(RankMessage, '/rank')
+api.add_resource(RankMessage, '/rank/')
 
 
 class AnswerQuestionStd(Resource):
@@ -232,7 +232,7 @@ class AnswerQuestionStd(Resource):
         output = message2std(output)
         return output, 200
 
-api.add_resource(AnswerQuestionStd, '/query')
+api.add_resource(AnswerQuestionStd, '/query/')
 
 
 class AnswerQuestionNow(Resource):
@@ -303,7 +303,7 @@ class AnswerQuestionNow(Resource):
         os.remove(filename)
         return output, 200
 
-api.add_resource(AnswerQuestionNow, '/now')
+api.add_resource(AnswerQuestionNow, '/now/')
 
 class AnswerQuestion(Resource):
     def post(self):
@@ -406,7 +406,7 @@ class QuestionSubgraph(Resource):
         }
         return kg, 200
 
-api.add_resource(QuestionSubgraph, '/knowledge_graph')
+api.add_resource(QuestionSubgraph, '/knowledge_graph/')
 
 
 class MultiNodeLookup(Resource):
@@ -457,7 +457,7 @@ class MultiNodeLookup(Resource):
 
         return get_node_properties(node_ids, fields), 200
 
-api.add_resource(MultiNodeLookup, '/multinode_lookup')
+api.add_resource(MultiNodeLookup, '/multinode_lookup/')
 
 
 def batches(arr, n):
@@ -547,7 +547,7 @@ class MultiEdgeLookup(Resource):
 
         return get_edge_properties(edge_ids, fields), 200
 
-api.add_resource(MultiEdgeLookup, '/multiedge_lookup')
+api.add_resource(MultiEdgeLookup, '/multiedge_lookup/')
 
 
 def get_edge_properties(edge_ids, fields=None):
@@ -665,7 +665,7 @@ class Omnicorp(Resource):
 
         return publications, 200
 
-api.add_resource(Omnicorp, '/omnicorp/<id1>/<id2>')
+api.add_resource(Omnicorp, '/omnicorp/<id1>/<id2>/')
 
 class Omnicorp1(Resource):
     def get(self, id1):
@@ -760,7 +760,7 @@ class TaskStatus(Resource):
 
         return '', 204
 
-api.add_resource(TaskStatus, '/task/<task_id>')
+api.add_resource(TaskStatus, '/task/<task_id>/')
 
 class TaskLog(Resource):
     def get(self, task_id):
@@ -789,7 +789,7 @@ class TaskLog(Resource):
             return 'Task ID not found', 404
 
 
-api.add_resource(TaskLog, '/task/<task_id>/log')
+api.add_resource(TaskLog, '/task/<task_id>/log/')
 
 class EnrichedExpansion(Resource):
     def post(self, type1, type2):
@@ -865,7 +865,7 @@ class EnrichedExpansion(Resource):
         
         return enr_results, 200
 
-api.add_resource(EnrichedExpansion, '/enrichment/<type1>/<type2>')
+api.add_resource(EnrichedExpansion, '/enrichment/<type1>/<type2>/')
 
 
 class SimilaritySearch(Resource):
@@ -932,7 +932,7 @@ class SimilaritySearch(Resource):
 
         return sim_results, 200
 
-api.add_resource(SimilaritySearch, '/similarity/<type1>/<identifier>/<type2>/<by_type>')
+api.add_resource(SimilaritySearch, '/similarity/<type1>/<identifier>/<type2>/<by_type>/')
 
 
 class CypherKnowledgeGraph(Resource):
@@ -1075,7 +1075,7 @@ class Normalize(Resource):
 
         return response.json(), 200
 
-api.add_resource(Normalize, '/normalize')
+api.add_resource(Normalize, '/normalize/')
 
 if __name__ == '__main__':
 
