@@ -811,30 +811,40 @@ class EnrichedExpansion(Resource):
             schema:
                 type: string
             required: true
-            default: "disease"
-          - in: query
-            name: identifiers
-            description: "identifiers of query nodes"
-            schema:
-                type: list
-            required: true
-          - in: query
-            name: threshhold
-            description: "Number between 0 and 1 indicating the maximum p-value to return"
-            schema:
-                type: float
-            default: 0.05
-          - in: query
-            name: max_results
-            description: "The maximum number of results to return. Set to 0 to return all results."
-            schema:
-                type: integer
-            default: 100
-          - in: query
-            name: num_type1
-            description: "The total number of type1 entities that can exist.  If not specified, this is estimated from the cache"
-            schema:
-                type: integer
+            default: "phenotypic_feature"
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            identifiers:
+                                description: "identifiers of query nodes"
+                                schema:
+                                    type: list
+                                default:
+                                  - MONDO:0005737
+                            threshhold:
+                                description: "Number between 0 and 1 indicating the maximum p-value to return"
+                                schema:
+                                    type: float
+                                default: 0.05
+                            max_results:
+                                description: "The maximum number of results to return. Set to 0 to return all results."
+                                schema:
+                                    type: integer
+                                default: 100
+                            num_type1:
+                                description: "The total number of type1 entities that can exist.  If not specified, this is estimated from the cache"
+                                schema:
+                                    type: integer
+                        required:
+                          - identifiers
+                        example:
+                            identifiers:
+                              - MONDO:0005737
+                            threshhold: 0.05
+                            max_results: 100
         responses:
             200:
                 description: result
@@ -907,7 +917,7 @@ class SimilaritySearch(Resource):
             name: threshold
             description: "Number between 0 and 1 indicating the minimum similarity to return"
             schema:
-                type: float
+                type: number
             default: 0.4
           - in: query
             name: max_results
@@ -923,7 +933,7 @@ class SimilaritySearch(Resource):
                         schema:
                             $ref: "#/definitions/SimilarityResult"
         """
-        threshold = request.args.get('threshold', default = 0.4)
+        threshold = request.args.get('threshold', default=0.4)
         
         max_results = parse_args_max_results(request.args)
 
