@@ -1071,7 +1071,7 @@ class Normalize(Resource):
         if not response.ok:
             logger.info(response.status_code)
             logger.info(response.text)
-            return 'There was a problem concting the Robokop builder', 500
+            return 'There was a problem connecting to the ROBOKOP builder', 500
 
         return response.json(), 200
 
