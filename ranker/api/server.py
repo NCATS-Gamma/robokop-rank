@@ -531,8 +531,8 @@ class MultiEdgeLookup(Resource):
                                     type: string
                         example:
                             edge_ids:
-                              - "636"
-                              - "634"
+                              - "1e3b89d466ad612b6cf93c846d6f3323"
+                              - "ab556faa169c3ecf9f4beaec395958d4"
             required: true
         responses:
             200:
