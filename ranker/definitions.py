@@ -379,6 +379,22 @@ class Credentials():
     pass
 
 
+@swagger.definition('SimilarityResult')
+class SimilarityResult():
+    """
+    Similarity result
+    ---
+    type: array
+    items:
+        type: object
+        properties:
+            id:
+                type: string
+            name:
+                type: string
+    """
+
+
 @swagger.definition('ex_yanked')
 class ex_yanked():
     """
