@@ -904,7 +904,7 @@ class SimilaritySearch(Resource):
             required: true
             default: "phenotypic_feature"
           - in: query
-            name: threshhold
+            name: threshold
             description: "Number between 0 and 1 indicating the minimum similarity to return"
             schema:
                 type: float
@@ -923,12 +923,12 @@ class SimilaritySearch(Resource):
                         schema:
                             $ref: "#/definitions/SimilarityResult"
         """
-        threshhold = request.args.get('threshhold', default = 0.4)
+        threshold = request.args.get('threshold', default = 0.4)
         
         max_results = parse_args_max_results(request.args)
 
         with KnowledgeGraph() as database:
-            sim_results = database.similarity_search(type1, identifier, type2, by_type, threshhold, max_results)
+            sim_results = database.similarity_search(type1, identifier, type2, by_type, threshold, max_results)
 
         return sim_results, 200
 
