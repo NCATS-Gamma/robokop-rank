@@ -1067,7 +1067,7 @@ class Normalize(Resource):
             return 'could not determine the format of the input answerset', 400
 
         # Call the builder normalize service to fix various identifiers
-        response = requests.post( f'http://{os.environ["BUILDER_HOST"]}:{os.environ["BUILDER_PORT"]}/api/normalize', json=message.dump())
+        response = requests.post( f'http://{os.environ["BUILDER_HOST"]}:{os.environ["BUILDER_PORT"]}/api/normalize/', json=message.dump())
         if not response.ok:
             logger.info(response.status_code)
             logger.info(response.text)
