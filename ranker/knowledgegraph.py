@@ -28,8 +28,8 @@ class KnowledgeGraph:
         synsets = [r['n'].properties['equivalent_identifiers'] for r in records]
         return {syn:id for id, synset in zip(ids,synsets) for syn in synset}
 
-    def similarity_search(self, type1, identifier, type2, by_type, threshhold, maxresults):
-        cypher = f"""MATCH (query:{type1} {{id:"{identifier}"}})--(b:{by_type})--(result:{type2}) 
+    def similarity_search(self, type1, id1, type2, by_type, threshhold, maxresults):
+        cypher = f"""MATCH (query:{type1} {{id:"{id1}"}})--(b:{by_type})--(result:{type2}) 
                     WITH query, result, count(distinct b) as intersection, collect(distinct b.id) as i
                     MATCH (query)--(qm:{by_type})
                     WITH query,result, intersection,i, COLLECT(distinct qm.id) AS s1
@@ -49,7 +49,7 @@ class KnowledgeGraph:
             retres = [{'id':r['result'].properties['id'],
                        'name':r['result'].properties['name'] if 'name' in r['result'].properties else r['result'].properties['id'],
                        'similarity':r['jaccard']} for r in records]
-            retres = list(filter(lambda x: x['id'] != identifier,retres))
+            retres = list(filter(lambda x: x['id'] != id1,retres))
             return retres
         except Exception as e:
             logger.error(e)

@@ -869,7 +869,7 @@ api.add_resource(EnrichedExpansion, '/enrichment/<type1>/<type2>/')
 
 
 class SimilaritySearch(Resource):
-    def get(self, type1, identifier, type2, by_type):
+    def get(self, type1, id1, type2, by_type):
         """
         Similarity search in the local knowledge graph
         ---
@@ -928,11 +928,11 @@ class SimilaritySearch(Resource):
         max_results = parse_args_max_results(request.args)
 
         with KnowledgeGraph() as database:
-            sim_results = database.similarity_search(type1, identifier, type2, by_type, threshold, max_results)
+            sim_results = database.similarity_search(type1, id1, type2, by_type, threshold, max_results)
 
         return sim_results, 200
 
-api.add_resource(SimilaritySearch, '/similarity/<type1>/<identifier>/<type2>/<by_type>/')
+api.add_resource(SimilaritySearch, '/similarity/<type1>/<id1>/<type2>/<by_type>/')
 
 
 class CypherKnowledgeGraph(Resource):
