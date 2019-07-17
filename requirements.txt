@@ -3,7 +3,7 @@ eventlet
 flask
 flask-restful
 flask-cors
-flasgger
+-e git+https://github.com/patrickkwang/flasgger@master#egg=flasgger
 gunicorn
 kombu
 lru-dict
