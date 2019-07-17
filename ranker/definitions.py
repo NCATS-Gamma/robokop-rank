@@ -429,7 +429,7 @@ class Message(FromDictMixin2):
         - node_bindings:
             n00: "MONDO:0005737"
           edge_bindings:
-            e00: "636"
+            e00: "f30686d3a5edb8d62e319fa34920fec9"
     """
 
     constructors = {
