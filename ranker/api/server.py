@@ -78,6 +78,9 @@ class Support(Resource):
                 application/json:
                     schema:
                         $ref: '#/definitions/Message'
+                    examples:
+                        yanked:
+                            $ref: "#/definitions/ex_yanked"
             required: true
         responses:
             200:
