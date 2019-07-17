@@ -399,19 +399,19 @@ class ex_yanked():
         knowledge_graph:
             nodes:
               - id: "MONDO:0005737"
-              - id: "HGNC:16361"
+              - id: "HGNC:7897"
             edges:
-              - target_id: "HGNC:16361"
+              - target_id: "HGNC:7897"
                 source_id: "MONDO:0005737"
                 publications: []
-                id: "f30686d3a5edb8d62e319fa34920fec9"
+                id: "5579d0ec3e69cf5bd79fd643942d8536"
                 type: "disease_to_gene_association"
         answers:
           - node_bindings:
                 n00: "MONDO:0005737"
-                n01: "HGNC:16361"
+                n01: "HGNC:7897"
             edge_bindings:
-                e00: "f30686d3a5edb8d62e319fa34920fec9"
+                e00: "5579d0ec3e69cf5bd79fd643942d8536"
     """
 
     pass
