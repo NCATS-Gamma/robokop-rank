@@ -379,6 +379,44 @@ class Credentials():
     pass
 
 
+@swagger.definition('ex_yanked')
+class ex_yanked():
+    """
+    Yanked example
+    ---
+    value:
+        question_graph:
+            nodes:
+              - id: "n00"
+                type: "disease"
+                curie: "MONDO:0005737"
+              - id: "n01"
+                type: "gene"
+            edges:
+              - id: "e00"
+                source_id: "n00"
+                target_id: "n01"
+        knowledge_graph:
+            nodes:
+              - id: "MONDO:0005737"
+              - id: "HGNC:16361"
+            edges:
+              - target_id: "HGNC:16361"
+                source_id: "MONDO:0005737"
+                publications: []
+                id: "f30686d3a5edb8d62e319fa34920fec9"
+                type: "disease_to_gene_association"
+        answers:
+          - node_bindings:
+                n00: "MONDO:0005737"
+                n01: "HGNC:16361"
+            edge_bindings:
+                e00: "f30686d3a5edb8d62e319fa34920fec9"
+    """
+
+    pass
+
+
 @swagger.definition('Message')
 class Message(FromDictMixin2):
     """
