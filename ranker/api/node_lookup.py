@@ -11,8 +11,10 @@ logger = logging.getLogger(__name__)
 
 def get_nodes_by_name(name):
     """Search for nodes by id."""
+    terms = name.split(' ')
+    patterns = [f"/.*{term}.*/" for term in terms]
     statement = f"""CALL db.index.fulltext.queryNodes('node_name_index', '{
-        ' AND '.join(name.split(' '))
+        ' AND '.join(patterns)
     }') YIELD node, score RETURN node.id as curie, node.name as name"""
     logger.debug(statement)
     driver = GraphDatabase.driver(
