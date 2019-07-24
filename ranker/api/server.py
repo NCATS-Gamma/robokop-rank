@@ -19,6 +19,7 @@ from ranker.knowledgegraph import KnowledgeGraph
 from ranker.support.omnicorp import OmnicorpSupport
 from ranker.util import flatten_semilist
 from ranker.api.compliance import message2std, std2message
+from ranker.api.node_lookup import get_nodes_by_name
 import ranker.definitions
 
 logger = logging.getLogger("ranker")
@@ -64,6 +65,42 @@ def parse_args_max_connectivity(req_args):
                 max_connectivity = None
 
     return max_connectivity
+
+
+class NodeLookup(Resource):
+    def post(self):
+        """
+        Look up biomedical entities by name.
+        ---
+        tags: [util]
+        requestBody:
+            description: A string contained in the entity name.
+            content:
+                text/plain:
+                    schema:
+                        type: string
+            required: true
+        responses:
+            200:
+                description: A list of entities and scores.
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    curie:
+                                        type: string
+                                    name:
+                                        type: string
+                                    score:
+                                        type: number
+        """
+
+        return get_nodes_by_name(request.data.decode('utf-8')), 200
+
+api.add_resource(NodeLookup, '/entity_lookup/')
 
 
 class Support(Resource):
