@@ -19,6 +19,7 @@ from ranker.knowledgegraph import KnowledgeGraph
 from ranker.support.omnicorp import OmnicorpSupport
 from ranker.util import flatten_semilist
 from ranker.api.compliance import message2std, std2message
+from ranker.api.node_lookup import get_nodes_by_name, count_connections
 import ranker.definitions
 
 logger = logging.getLogger("ranker")
@@ -64,6 +65,80 @@ def parse_args_max_connectivity(req_args):
                 max_connectivity = None
 
     return max_connectivity
+
+
+class CountConnections(Resource):
+    def post(self):
+        """
+        Count connections to a biomedical entity.
+        ---
+        tags: [util]
+        parameters:
+          - in: query
+            name: to_type
+            description: "Type of entities to connect to."
+            schema:
+                type: string
+            example: gene
+        requestBody:
+            description: CURIE
+            content:
+                text/plain:
+                    schema:
+                        type: string
+                        example: MONDO:0005737
+            required: true
+        responses:
+            200:
+                description: Number of connections.
+                content:
+                    application/json:
+                        schema:
+                            type: number
+        """
+
+        return count_connections(
+            request.data.decode('utf-8'),
+            to_type=request.args.get('to_type', None),
+        ), 200
+
+api.add_resource(CountConnections, '/count_connections/')
+
+
+class NodeLookup(Resource):
+    def post(self):
+        """
+        Look up biomedical entities by name.
+        ---
+        tags: [util]
+        requestBody:
+            description: A string contained in the entity name.
+            content:
+                text/plain:
+                    schema:
+                        type: string
+            required: true
+        responses:
+            200:
+                description: A list of entities and scores.
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    curie:
+                                        type: string
+                                    name:
+                                        type: string
+                                    score:
+                                        type: number
+        """
+
+        return get_nodes_by_name(request.data.decode('utf-8')), 200
+
+api.add_resource(NodeLookup, '/entity_lookup/')
 
 
 class Support(Resource):
