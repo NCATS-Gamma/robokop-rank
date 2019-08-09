@@ -73,13 +73,6 @@ class CountConnections(Resource):
         Count connections to a biomedical entity.
         ---
         tags: [util]
-        parameters:
-          - in: query
-            name: to_type
-            description: "Type of entities to connect to."
-            schema:
-                type: string
-            example: gene
         requestBody:
             description: CURIE
             content:
@@ -98,8 +91,7 @@ class CountConnections(Resource):
         """
 
         return count_connections(
-            request.data.decode('utf-8'),
-            to_type=request.args.get('to_type', None),
+            request.data.decode('utf-8')
         ), 200
 
 api.add_resource(CountConnections, '/count_connections/')
@@ -117,6 +109,13 @@ class NodeLookup(Resource):
                 text/plain:
                     schema:
                         type: string
+                    examples:
+                        ebola:
+                            summary: "Find the identifier for ebola"
+                            value: "ebola"
+                        cog:
+                            summary: "Find anything containing 'cog'"
+                            value: "cog"
             required: true
         responses:
             200:
@@ -132,14 +131,66 @@ class NodeLookup(Resource):
                                         type: string
                                     name:
                                         type: string
-                                    score:
-                                        type: number
+                                    type:
+                                        type: array
+                                        items:
+                                            type: string
         """
+        
+        results = get_nodes_by_name(request.data.decode('utf-8'))
+        return results, 200
 
-        return get_nodes_by_name(request.data.decode('utf-8')), 200
+api.add_resource(NodeLookup, '/entity_lookup')
 
-api.add_resource(NodeLookup, '/entity_lookup/')
+class NodeLookupFilter(Resource):
+    def post(self,node_type):
+        """
+        Look up biomedical entities by name.
+        ---
+        tags: [util]
+        parameters:
+          - in: path
+            name: node_type
+            description: type of search term of interest
+            schema:
+                type: string
+            required: true
+            example: "disease"
+        requestBody:
+            description: A string contained in the entity name.
+            content:
+                text/plain:
+                    schema:
+                        type: string
+                    examples:
+                        ebola:
+                            summary: "Find the identifier for ebola"
+                            value: "ebola"
+            required: true
+        responses:
+            200:
+                description: A list of entities and scores.
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    curie:
+                                        type: string
+                                    name:
+                                        type: string
+                                    type:
+                                        type: array
+                                        items:
+                                            type: string
+        """
+        
+        results = get_nodes_by_name(request.data.decode('utf-8'), node_type=node_type)
+        return results, 200
 
+api.add_resource(NodeLookupFilter, '/entity_lookup/<node_type>')
 
 class Support(Resource):
     def post(self):
