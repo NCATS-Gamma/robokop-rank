@@ -140,7 +140,7 @@ class NodeLookup(Resource):
         results = get_nodes_by_name(request.data.decode('utf-8'))
         return results, 200
 
-api.add_resource(NodeLookup, '/entity_lookup')
+api.add_resource(NodeLookup, '/entity_lookup/')
 
 class NodeLookupFilter(Resource):
     def post(self,node_type):
@@ -190,7 +190,7 @@ class NodeLookupFilter(Resource):
         results = get_nodes_by_name(request.data.decode('utf-8'), node_type=node_type)
         return results, 200
 
-api.add_resource(NodeLookupFilter, '/entity_lookup/<node_type>')
+api.add_resource(NodeLookupFilter, '/entity_lookup/<node_type>/')
 
 class Support(Resource):
     def post(self):
