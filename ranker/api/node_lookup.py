@@ -4,6 +4,7 @@ CALL db.index.fulltext.createNodeIndex("node_name_index", ["named_thing"], ["nam
 """
 import logging
 import os
+import re
 from neo4j.v1 import GraphDatabase, basic_auth
 
 logger = logging.getLogger(__name__)
@@ -12,7 +13,7 @@ logger = logging.getLogger(__name__)
 def get_nodes_by_name(name, node_type=None):
     """Search for nodes by id."""
     terms = name.split(' ')
-    patterns = [f"/.*{term}.*/" for term in terms]
+    patterns = ["/.*" + re.sub(r'\\', r'\\\\', re.escape(term)) + ".*/" for term in terms]
     statement = f"""CALL db.index.fulltext.queryNodes('node_name_index', '{
         ' AND '.join(patterns)
     }') YIELD node, score"""
