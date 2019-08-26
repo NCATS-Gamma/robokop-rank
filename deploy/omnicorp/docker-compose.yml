@@ -3,6 +3,7 @@ services:
   omnicorp:
     image: postgres
     container_name: omnicorp
+    shm_size: '${OMNICORP_SHM_SIZE}'
     environment:
       - POSTGRES_USER=${OMNICORP_USER}
       - POSTGRES_DB=${OMNICORP_DB}
