@@ -5,6 +5,7 @@ import logging
 import json
 import uuid
 import redis
+import requests
 from celery import Celery, signals
 from kombu import Queue
 from ranker.message import Message, output_formats
@@ -81,20 +82,30 @@ def answer_question(self, message_json, max_results=250, output_format=output_fo
     logger.info("Answering Question")
     logger.info(message_json)
 
+    plan = [
+        'normalize',
+        'answer',
+        'weight_novelty',
+        'yank',
+        'support',
+        'weight_correctness',
+        'score',
+    ]
     try:
-        message = Message(message_json)
-        
-        try:
-            message.fill(max_connectivity=max_connectivity)
-            message.rank(max_results)
-        except Exception as err:
-            logger.exception(f"Something went wrong with question answering: {err}")
-            raise err
-        
-        if message.answers is None:
-            message.answers = []
-        
-        logger.info(f'{len(message.answers)} answers found.')
+        for action in plan:
+            logger.debug('Calling /%s...', action)
+            response = requests.post(
+                f"http://{os.environ['MESSENGER_HOST']}:{os.environ['MESSENGER_PORT']}/{action}",
+                json={
+                    'message': message_json,
+                    'options': {}
+                }
+            )
+            if response.status_code != 200:
+                raise RuntimeError(response.content)
+            message_json = response.json()
+
+        logger.info('%d answers found.', len(message_json["results"]))
 
         self.update_state(state='SAVING')
 
@@ -104,27 +115,15 @@ def answer_question(self, message_json, max_results=250, output_format=output_fo
             os.makedirs(answers_dir)
         result_path = os.path.join(answers_dir, filename)
 
-        if output_format.upper() == output_formats[0]:
-            message_dump = message.dump_dense()
-        elif output_format.upper() == output_formats[1]:
-            message_dump = message.dump()
-        elif output_format.upper() == output_formats[2]:
-            message_dump = message.dump_csv()
-        elif output_format.upper() == output_formats[3]:
-            message_dump = message.dump_answers()
-        else:
-            logger.info('Problem encountered during exporting.')
-            raise Exception('Problem encountered during exporting.') 
-
         try:
             with open(result_path, 'w') as f:
-                json.dump(message_dump, f)
+                json.dump(message_json, f)
         except Exception as err:
             logger.exception(err)
             raise err
 
         logger.info("Answers saved.")
-    
+
         return filename
 
     except Exception as err:
