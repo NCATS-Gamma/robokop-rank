@@ -19,8 +19,9 @@ from ranker.knowledgegraph import KnowledgeGraph
 from ranker.support.omnicorp import OmnicorpSupport
 from ranker.util import flatten_semilist
 from ranker.api.compliance import message2std, std2message
-from ranker.api.node_lookup import get_nodes_by_name, count_connections
+from ranker.api.node_lookup import get_nodes_by_name
 import ranker.definitions
+import ranker.api.utilities
 
 logger = logging.getLogger("ranker")
 
@@ -65,36 +66,6 @@ def parse_args_max_connectivity(req_args):
                 max_connectivity = None
 
     return max_connectivity
-
-
-class CountConnections(Resource):
-    def post(self):
-        """
-        Count connections to a biomedical entity.
-        ---
-        tags: [util]
-        requestBody:
-            description: CURIE
-            content:
-                text/plain:
-                    schema:
-                        type: string
-                        example: MONDO:0005737
-            required: true
-        responses:
-            200:
-                description: Number of connections.
-                content:
-                    application/json:
-                        schema:
-                            type: number
-        """
-
-        return count_connections(
-            request.data.decode('utf-8')
-        ), 200
-
-api.add_resource(CountConnections, '/count_connections/')
 
 
 class NodeLookup(Resource):

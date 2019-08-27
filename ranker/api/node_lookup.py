@@ -30,24 +30,3 @@ def get_nodes_by_name(name, node_type=None):
     driver.close()
 
     return [dict(record) for record in result]
-
-def count_connections(curie):
-    """Count connections to curie.
-
-    Optionally count only connections to a particular type of node.
-    """
-    
-    statement = f"""MATCH (n:named_thing {{id:'{curie}'}})--(m)
-    WITH DISTINCT [label IN labels(m) WHERE label <> "named_thing" | label] AS types, count(m) AS nums
-    UNWIND types AS type
-    RETURN type, sum(nums) AS num"""
-    logger.debug(statement)
-    driver = GraphDatabase.driver(
-        f"bolt://{os.environ['NEO4J_HOST']}:{os.environ['NEO4J_BOLT_PORT']}",
-        auth=basic_auth("neo4j", os.environ["NEO4J_PASSWORD"])
-    )
-    with driver.session() as session:
-        result = session.run(statement)
-    driver.close()
-
-    return [dict(record) for record in result]
