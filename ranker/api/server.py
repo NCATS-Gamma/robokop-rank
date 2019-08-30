@@ -21,6 +21,7 @@ from ranker.util import flatten_semilist
 from ranker.api.compliance import message2std, std2message
 from ranker.api.node_lookup import get_nodes_by_name, count_connections
 import ranker.definitions
+from ranker.core import run, dense, to_robokop, strip_kg, csv
 
 logger = logging.getLogger("ranker")
 
@@ -205,6 +206,28 @@ class AnswerQuestionStd(Resource):
                 application/json:
                     schema:
                         $ref: '#/definitions/Message'
+                    example:
+                        question_graph:
+                            nodes:
+                              - id: "n00"
+                                type: "disease"
+                                curie: "MONDO:0005737"
+                              - id: "n01"
+                                type: "gene"
+                                set: true
+                              - id: "n02"
+                                type: genetic_condition
+                            edges:
+                              - id: "e00"
+                                source_id: "n00"
+                                target_id: "n01"
+                              - id: "e01"
+                                source_id: "n01"
+                                target_id: "n02"
+                        knowledge_graph:
+                            nodes: []
+                            edges: []
+                        answers: []
             required: true
         parameters:
           - in: query
@@ -212,7 +235,7 @@ class AnswerQuestionStd(Resource):
             description: Maximum number of results to return. Provide -1 to indicate no maximum.
             schema:
                 type: integer
-            default: 250
+            default: -1
           - in: query
             name: output_format
             description: Requested output format. DENSE, MESSAGE, CSV or ANSWERS
@@ -224,7 +247,13 @@ class AnswerQuestionStd(Resource):
             description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
             schema:
                 type: integer
-            default: 0
+            default: -1
+          - in: query
+            name: use_novelty
+            description: Novelty weighting helps prevent over-weighting answers with popular nodes
+            schema:
+                type: boolean
+            default: false
         responses:
             200:
                 description: A message with knowledge graph and answers.
@@ -233,35 +262,41 @@ class AnswerQuestionStd(Resource):
                         schema:
                             $ref: '#/definitions/Message'
         """
-        max_results = parse_args_max_results(request.args)
-        output_format = parse_args_output_format(request.args)
-        max_connectivity = parse_args_max_connectivity(request.args)
+        max_results = int(request.args.get('max_results', -1))
+        output_format = request.args.get('output_format', 'MESSAGE')
+        max_connectivity = int(request.args.get('max_connectivity', -1))
+        use_novelty = request.args.get('use_novelty', 'false').lower() == 'true'
 
-        message = std2message(request.json)
+        message_json = {
+            'knowledge_graph': {
+                'url': f'bolt://{os.environ["NEO4J_HOST"]}:{os.environ["NEO4J_BOLT_PORT"]}',
+                'credentials': {
+                    'username': 'neo4j',
+                    'password': os.environ["NEO4J_PASSWORD"],
+                },
+            },
+            'query_graph': request.json['question_graph'],
+            'results': [],
+        }
+        message_json = run(
+            message_json,
+            max_results=max_results,
+            max_connectivity=max_connectivity,
+            use_novelty=use_novelty,
+        )
 
-        try:
-            logger.debug(f'Answering question now.')
-            result = answer_question.apply(
-                args=[message],
-                kwargs={'max_results': max_results, 'output_format': output_format, 'max_connectivity': max_connectivity}
-            )
-            result = result.get()
-        except:
-            # Celery tasks log errors internally. Just return.
-            return "Error answering question.", 500
+        # convert output format
+        if output_format.upper() == 'DENSE':
+            output = dense(message_json)
+        elif output_format.upper() == 'ANSWERS':
+            output = to_robokop(strip_kg(message_json))
+        elif output_format.upper() == 'MESSAGE':
+            output = to_robokop(message_json)
+        elif output_format.upper() == 'CSV':
+            output = csv(message_json)
+        else:
+            raise ValueError(f'Unrecognized output format "{output_format}"')
 
-        if result is None:
-            message = request.json
-            message['knowledge_graph'] = []
-            message['answers'] = []
-            return message, 200
-
-        logger.debug(f'Fetching answerset file: {result}')
-        filename = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', result)
-        with open(filename, 'r') as f:
-            output = json.load(f)
-        os.remove(filename)
-        output = message2std(output)
         return output, 200
 
 api.add_resource(AnswerQuestionStd, '/query/')
@@ -273,11 +308,33 @@ class AnswerQuestion(Resource):
         ---
         tags: [answer]
         requestBody:
-            description: A message with a machine-readable question graph.
+            description: A message with question graph.
             content:
                 application/json:
                     schema:
                         $ref: '#/definitions/Message'
+                    example:
+                        question_graph:
+                            nodes:
+                              - id: "n00"
+                                type: "disease"
+                                curie: "MONDO:0005737"
+                              - id: "n01"
+                                type: "gene"
+                                set: true
+                              - id: "n02"
+                                type: genetic_condition
+                            edges:
+                              - id: "e00"
+                                source_id: "n00"
+                                target_id: "n01"
+                              - id: "e01"
+                                source_id: "n01"
+                                target_id: "n02"
+                        knowledge_graph:
+                            nodes: []
+                            edges: []
+                        answers: []
             required: true
         parameters:
           - in: query
@@ -285,35 +342,48 @@ class AnswerQuestion(Resource):
             description: Maximum number of results to return. Provide -1 to indicate no maximum.
             schema:
                 type: integer
-            default: 250
+            default: -1
           - in: query
             name: output_format
-            description: Requested output format. APIStandard, Message, Answers
+            description: Requested output format. DENSE, MESSAGE, CSV or ANSWERS
             schema:
                 type: string
-            default: Message
+            default: MESSAGE
           - in: query
             name: max_connectivity
             description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
             schema:
                 type: integer
-            default: 0
+            default: -1
+          - in: query
+            name: use_novelty
+            description: Novelty weighting helps prevent over-weighting answers with popular nodes
+            schema:
+                type: boolean
+            default: false
         responses:
             200:
                 description: Successfull queued a task
                 content:
-                    application/json:
+                    text/plain:
+                        schema:
+                            type: string
         """
-
-        max_results = parse_args_max_results(request.args)
-        output_format = parse_args_output_format(request.args)
-        max_connectivity = parse_args_max_connectivity(request.args)
+        max_results = int(request.args.get('max_results', -1))
+        output_format = request.args.get('output_format', 'MESSAGE')
+        max_connectivity = int(request.args.get('max_connectivity', -1))
+        use_novelty = request.args.get('use_novelty', 'false').lower() == 'true'
 
         task = answer_question.apply_async(
             args=[request.json],
-            kwargs={'max_results': max_results, 'output_format': output_format, 'max_connectivity': max_connectivity}
+            kwargs={
+                'max_results': max_results,
+                'output_format': output_format,
+                'max_connectivity': max_connectivity,
+                'use_novelty': use_novelty,
+            }
         )
-        return {'task_id':task.id}, 202
+        return {'task_id': task.id}, 202
 
 api.add_resource(AnswerQuestion, '/')
 
