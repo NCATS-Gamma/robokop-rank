@@ -205,29 +205,29 @@ class AnswerQuestionStd(Resource):
             content:
                 application/json:
                     schema:
-                        $ref: '#/definitions/Message'
+                        type: object
+                        properties:
+                            message:
+                                $ref: '#/definitions/Message'
                     example:
-                        question_graph:
-                            nodes:
-                              - id: "n00"
-                                type: "disease"
-                                curie: "MONDO:0005737"
-                              - id: "n01"
-                                type: "gene"
-                                set: true
-                              - id: "n02"
-                                type: genetic_condition
-                            edges:
-                              - id: "e00"
-                                source_id: "n00"
-                                target_id: "n01"
-                              - id: "e01"
-                                source_id: "n01"
-                                target_id: "n02"
-                        knowledge_graph:
-                            nodes: []
-                            edges: []
-                        answers: []
+                        message:
+                            query_graph:
+                                nodes:
+                                  - id: "n00"
+                                    type: "disease"
+                                    curie: "MONDO:0005737"
+                                  - id: "n01"
+                                    type: "gene"
+                                    set: true
+                                  - id: "n02"
+                                    type: genetic_condition
+                                edges:
+                                  - id: "e00"
+                                    source_id: "n00"
+                                    target_id: "n01"
+                                  - id: "e01"
+                                    source_id: "n01"
+                                    target_id: "n02"
             required: true
         parameters:
           - in: query
@@ -275,7 +275,7 @@ class AnswerQuestionStd(Resource):
                     'password': os.environ["NEO4J_PASSWORD"],
                 },
             },
-            'query_graph': request.json['question_graph'],
+            'query_graph': request.json['message']['query_graph'],
             'results': [],
         }
         message_json = run(
