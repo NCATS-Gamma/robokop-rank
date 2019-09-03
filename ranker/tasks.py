@@ -5,10 +5,12 @@ import logging
 import json
 import uuid
 import redis
+import requests
 from celery import Celery, signals
 from kombu import Queue
 from ranker.message import Message, output_formats
 from ranker.api.logging_config import setup_main_logger, add_task_id_based_handler, clear_log_handlers
+from ranker.core import run, dense, to_robokop, strip_kg, csv
 
 # set up Celery
 celery = Celery('ranker.api.setup')
@@ -74,59 +76,64 @@ def tear_down_task_logging(**kwargs):
 
 
 @celery.task(bind=True, queue='ranker', task_acks_late=True, track_started=True, worker_prefetch_multiplier=1)
-def answer_question(self, message_json, max_results=250, output_format=output_formats[1], max_connectivity=0):
+def answer_question(self, request_json, max_results=-1, output_format=output_formats[1], max_connectivity=-1, use_novelty=False):
     """Generate a message from the input json for a question."""
 
     self.update_state(state='ANSWERING')
     logger.info("Answering Question")
+
+    message_json = {
+        'knowledge_graph': {
+            'url': f'bolt://{os.environ["NEO4J_HOST"]}:{os.environ["NEO4J_BOLT_PORT"]}',
+            'credentials': {
+                'username': 'neo4j',
+                'password': os.environ["NEO4J_PASSWORD"],
+            },
+        },
+        'query_graph': request_json['question_graph'],
+        'results': [],
+    }
     logger.info(message_json)
 
     try:
-        message = Message(message_json)
-        
-        try:
-            message.fill(max_connectivity=max_connectivity)
-            message.rank(max_results)
-        except Exception as err:
-            logger.exception(f"Something went wrong with question answering: {err}")
-            raise err
-        
-        if message.answers is None:
-            message.answers = []
-        
-        logger.info(f'{len(message.answers)} answers found.')
-
-        self.update_state(state='SAVING')
-
-        filename = f"{uuid.uuid4()}.json"
-        answers_dir = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers')
-        if not os.path.exists(answers_dir):
-            os.makedirs(answers_dir)
-        result_path = os.path.join(answers_dir, filename)
-
-        if output_format.upper() == output_formats[0]:
-            message_dump = message.dump_dense()
-        elif output_format.upper() == output_formats[1]:
-            message_dump = message.dump()
-        elif output_format.upper() == output_formats[2]:
-            message_dump = message.dump_csv()
-        elif output_format.upper() == output_formats[3]:
-            message_dump = message.dump_answers()
-        else:
-            logger.info('Problem encountered during exporting.')
-            raise Exception('Problem encountered during exporting.') 
-
-        try:
-            with open(result_path, 'w') as f:
-                json.dump(message_dump, f)
-        except Exception as err:
-            logger.exception(err)
-            raise err
-
-        logger.info("Answers saved.")
-    
-        return filename
-
+        message_json = run(
+            message_json,
+            max_results=max_results,
+            max_connectivity=max_connectivity,
+            use_novelty=use_novelty,
+        )
     except Exception as err:
         logger.exception(err)
         raise err
+
+    logger.info('%d answers found.', len(message_json["results"]))
+
+    # convert output format
+    if output_format.upper() == 'DENSE':
+        output = dense(message_json)
+    elif output_format.upper() == 'ANSWERS':
+        output = to_robokop(strip_kg(message_json))
+    elif output_format.upper() == 'MESSAGE':
+        output = to_robokop(message_json)
+    elif output_format.upper() == 'CSV':
+        output = csv(message_json)
+    else:
+        raise ValueError(f'Unrecognized output format "{output_format}"')
+
+    # save output
+    self.update_state(state='SAVING')
+    filename = f"{uuid.uuid4()}.json"
+    answers_dir = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers')
+    if not os.path.exists(answers_dir):
+        os.makedirs(answers_dir)
+    result_path = os.path.join(answers_dir, filename)
+    try:
+        with open(result_path, 'w') as f:
+            json.dump(output, f)
+    except Exception as err:
+        logger.exception(err)
+        raise err
+
+    logger.info("Answers saved.")
+
+    return filename

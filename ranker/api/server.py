@@ -22,6 +22,7 @@ from ranker.api.compliance import message2std, std2message
 from ranker.api.node_lookup import get_nodes_by_name
 import ranker.definitions
 import ranker.api.utilities
+from ranker.core import run, dense, to_robokop, strip_kg, csv
 
 logger = logging.getLogger("ranker")
 
@@ -163,106 +164,6 @@ class NodeLookupFilter(Resource):
 
 api.add_resource(NodeLookupFilter, '/entity_lookup/<node_type>/')
 
-class Support(Resource):
-    def post(self):
-        """
-        Add support to a message
-        ---
-        tags: [answer]
-        requestBody:
-            description: A message with knowledge graph and answers.
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/definitions/Message'
-                    examples:
-                        yanked:
-                            $ref: "#/definitions/ex_yanked"
-            required: true
-        responses:
-            200:
-                description: A message with knowledge graph and answers with literature co-occurrence edges.
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/definitions/Message'
-        """
-
-        message = Message(request.json)
-        message.fetch_knowledge_graph_support()
-        output = message.dump()
-        return output, 200
-
-api.add_resource(Support, '/support/')
-
-
-class RankMessage(Resource):
-    def post(self):
-        """
-        Get answers to a question
-        ---
-        tags: [answer]
-        requestBody:
-            description: A message with answers.
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/definitions/Message'
-                    examples:
-                        yanked:
-                            $ref: "#/definitions/ex_yanked"
-            required: true
-        parameters:
-          - in: query
-            name: max_results
-            description: Maximum number of results to return. Provide -1 to indicate no maximum.
-            schema:
-                type: integer
-            default: 250
-          - in: query
-            name: output_format
-            description: Requested output format. DENSE, MESSAGE, CSV or ANSWERS
-            schema:
-                type: string
-            default: MESSAGE
-          - in: query
-            name: max_connectivity
-            description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
-            schema:
-                type: integer
-            default: 0
-        responses:
-            200:
-                description: A message with answers with scores.
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/definitions/Message'
-        """
-        try:
-            max_results = parse_args_max_results(request.args)
-            output_format = parse_args_output_format(request.args)
-        except InvalidUsage as err:
-            return str(err), 400
-        message = Message(request.json)
-
-        message.rank(max_results)
-
-        if output_format.upper() == output_formats[0]:
-            output = message.dump_dense()
-        elif output_format.upper() == output_formats[1]:
-            output = message.dump()
-        elif output_format.upper() == output_formats[2]:
-            output = message.dump_csv()
-        elif output_format.upper() == output_formats[3]:
-            output = message.dump_answers()
-        else:
-            raise RuntimeError("output_format appears to be unrecognized. This should have been caught earlier.")
-
-        return output, 200
-
-api.add_resource(RankMessage, '/rank/')
-
 
 class AnswerQuestionStd(Resource):
     def post(self):
@@ -275,7 +176,29 @@ class AnswerQuestionStd(Resource):
             content:
                 application/json:
                     schema:
-                        $ref: '#/definitions/Message'
+                        type: object
+                        properties:
+                            message:
+                                $ref: '#/definitions/Message'
+                    example:
+                        message:
+                            query_graph:
+                                nodes:
+                                  - id: "n00"
+                                    type: "disease"
+                                    curie: "MONDO:0005737"
+                                  - id: "n01"
+                                    type: "gene"
+                                    set: true
+                                  - id: "n02"
+                                    type: genetic_condition
+                                edges:
+                                  - id: "e00"
+                                    source_id: "n00"
+                                    target_id: "n01"
+                                  - id: "e01"
+                                    source_id: "n01"
+                                    target_id: "n02"
             required: true
         parameters:
           - in: query
@@ -283,7 +206,7 @@ class AnswerQuestionStd(Resource):
             description: Maximum number of results to return. Provide -1 to indicate no maximum.
             schema:
                 type: integer
-            default: 250
+            default: -1
           - in: query
             name: output_format
             description: Requested output format. DENSE, MESSAGE, CSV or ANSWERS
@@ -295,7 +218,13 @@ class AnswerQuestionStd(Resource):
             description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
             schema:
                 type: integer
-            default: 0
+            default: -1
+          - in: query
+            name: use_novelty
+            description: Novelty weighting helps prevent over-weighting answers with popular nodes
+            schema:
+                type: boolean
+            default: false
         responses:
             200:
                 description: A message with knowledge graph and answers.
@@ -304,41 +233,46 @@ class AnswerQuestionStd(Resource):
                         schema:
                             $ref: '#/definitions/Message'
         """
-        max_results = parse_args_max_results(request.args)
-        output_format = parse_args_output_format(request.args)
-        max_connectivity = parse_args_max_connectivity(request.args)
+        max_results = int(request.args.get('max_results', -1))
+        output_format = request.args.get('output_format', 'MESSAGE')
+        max_connectivity = int(request.args.get('max_connectivity', -1))
+        use_novelty = request.args.get('use_novelty', 'false').lower() == 'true'
 
-        message = std2message(request.json)
+        message_json = {
+            'knowledge_graph': {
+                'url': f'bolt://{os.environ["NEO4J_HOST"]}:{os.environ["NEO4J_BOLT_PORT"]}',
+                'credentials': {
+                    'username': 'neo4j',
+                    'password': os.environ["NEO4J_PASSWORD"],
+                },
+            },
+            'query_graph': request.json['message']['query_graph'],
+            'results': [],
+        }
+        message_json = run(
+            message_json,
+            max_results=max_results,
+            max_connectivity=max_connectivity,
+            use_novelty=use_novelty,
+        )
 
-        try:
-            logger.debug(f'Answering question now.')
-            result = answer_question.apply(
-                args=[message],
-                kwargs={'max_results': max_results, 'output_format': output_format, 'max_connectivity': max_connectivity}
-            )
-            result = result.get()
-        except:
-            # Celery tasks log errors internally. Just return.
-            return "Error answering question.", 500
+        # convert output format
+        if output_format.upper() == 'DENSE':
+            output = dense(message_json)
+        elif output_format.upper() == 'ANSWERS':
+            output = to_robokop(strip_kg(message_json))
+        elif output_format.upper() == 'MESSAGE':
+            output = to_robokop(message_json)
+        elif output_format.upper() == 'CSV':
+            output = csv(message_json)
+        else:
+            raise ValueError(f'Unrecognized output format "{output_format}"')
 
-        if result is None:
-            message = request.json
-            message['knowledge_graph'] = []
-            message['answers'] = []
-            return message, 200
-
-        logger.debug(f'Fetching answerset file: {result}')
-        filename = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', result)
-        with open(filename, 'r') as f:
-            output = json.load(f)
-        os.remove(filename)
-        output = message2std(output)
         return output, 200
 
 api.add_resource(AnswerQuestionStd, '/query/')
 
-
-class AnswerQuestionNow(Resource):
+class AnswerQuestion(Resource):
     def post(self):
         """
         Get answers to a question
@@ -350,6 +284,28 @@ class AnswerQuestionNow(Resource):
                 application/json:
                     schema:
                         $ref: '#/definitions/Message'
+                    example:
+                        question_graph:
+                            nodes:
+                              - id: "n00"
+                                type: "disease"
+                                curie: "MONDO:0005737"
+                              - id: "n01"
+                                type: "gene"
+                                set: true
+                              - id: "n02"
+                                type: genetic_condition
+                            edges:
+                              - id: "e00"
+                                source_id: "n00"
+                                target_id: "n01"
+                              - id: "e01"
+                                source_id: "n01"
+                                target_id: "n02"
+                        knowledge_graph:
+                            nodes: []
+                            edges: []
+                        answers: []
             required: true
         parameters:
           - in: query
@@ -357,7 +313,7 @@ class AnswerQuestionNow(Resource):
             description: Maximum number of results to return. Provide -1 to indicate no maximum.
             schema:
                 type: integer
-            default: 250
+            default: -1
           - in: query
             name: output_format
             description: Requested output format. DENSE, MESSAGE, CSV or ANSWERS
@@ -369,93 +325,36 @@ class AnswerQuestionNow(Resource):
             description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
             schema:
                 type: integer
-            default: 0
-        responses:
-            200:
-                description: A message with knowledge graph and answers.
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/definitions/Message'
-        """
-        max_results = parse_args_max_results(request.args)
-        output_format = parse_args_output_format(request.args)
-        max_connectivity = parse_args_max_connectivity(request.args)
-
-        try:
-            logger.debug(f'Answering question now.')
-            result = answer_question.apply(
-                args=[request.json],
-                kwargs={'max_results': max_results, 'output_format': output_format, 'max_connectivity': max_connectivity}
-            )
-            result = result.get()
-        except:
-            # Celery tasks log errors internally. Just return.
-            return "Error answering question.", 500
-        
-        if result is None:
-            message = request.json
-            message['knowledge_graph'] = []
-            message['answers'] = []
-            return message, 200
-
-        logger.debug(f'Fetching answerset file: {result}')
-        filename = os.path.join(os.environ['ROBOKOP_HOME'], 'robokop-rank', 'answers', result)
-        with open(filename, 'r') as f:
-            output = json.load(f)
-        os.remove(filename)
-        return output, 200
-
-api.add_resource(AnswerQuestionNow, '/now/')
-
-class AnswerQuestion(Resource):
-    def post(self):
-        """
-        Get answers to a question
-        ---
-        tags: [answer]
-        requestBody:
-            description: A message with a machine-readable question graph.
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/definitions/Message'
-            required: true
-        parameters:
+            default: -1
           - in: query
-            name: max_results
-            description: Maximum number of results to return. Provide -1 to indicate no maximum.
+            name: use_novelty
+            description: Novelty weighting helps prevent over-weighting answers with popular nodes
             schema:
-                type: integer
-            default: 250
-          - in: query
-            name: output_format
-            description: Requested output format. APIStandard, Message, Answers
-            schema:
-                type: string
-            default: Message
-          - in: query
-            name: max_connectivity
-            description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
-            schema:
-                type: integer
-            default: 0
+                type: boolean
+            default: false
         responses:
             200:
                 description: Successfull queued a task
                 content:
-                    application/json:
+                    text/plain:
+                        schema:
+                            type: string
         """
-
-        max_results = parse_args_max_results(request.args)
-        output_format = parse_args_output_format(request.args)
-        max_connectivity = parse_args_max_connectivity(request.args)
+        max_results = int(request.args.get('max_results', -1))
+        output_format = request.args.get('output_format', 'MESSAGE')
+        max_connectivity = int(request.args.get('max_connectivity', -1))
+        use_novelty = request.args.get('use_novelty', 'false').lower() == 'true'
 
         task = answer_question.apply_async(
             args=[request.json],
-            kwargs={'max_results': max_results, 'output_format': output_format, 'max_connectivity': max_connectivity}
+            kwargs={
+                'max_results': max_results,
+                'output_format': output_format,
+                'max_connectivity': max_connectivity,
+                'use_novelty': use_novelty,
+            }
         )
-        return {'task_id':task.id}, 202
+        return {'task_id': task.id}, 202
 
 api.add_resource(AnswerQuestion, '/')
 
