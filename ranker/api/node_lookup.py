@@ -16,10 +16,10 @@ def get_nodes_by_name(name, node_type=None):
     patterns = ["/.*" + re.sub(r'\\', r'\\\\', re.escape(term)) + ".*/" for term in terms]
     statement = f"""CALL db.index.fulltext.queryNodes('node_name_index', '{
         ' AND '.join(patterns)
-    }') YIELD node, score"""
+    }') YIELD node"""
     if node_type:
         statement += f' WHERE "{node_type}" IN labels(node)'
-    statement += " RETURN node.id as curie, node.name as name, labels(node) as type, score as search_score, size( (node)--() ) as degree"
+    statement += " RETURN node.id as curie, node.name as name, labels(node) as type, size( (node)--() ) as degree ORDER BY length(node.name)"
     logger.debug(statement)
     driver = GraphDatabase.driver(
         f"bolt://{os.environ['NEO4J_HOST']}:{os.environ['NEO4J_BOLT_PORT']}",
