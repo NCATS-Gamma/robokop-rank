@@ -14,4 +14,4 @@ redis
 psycopg2
 requests
 scipy
--e git+https://github.com/Supervisor/supervisor@master#egg=supervisor
+-e git+https://github.com/Supervisor/supervisor@dbff619f79c48da0776178e627221da6e40a3261#egg=supervisor
