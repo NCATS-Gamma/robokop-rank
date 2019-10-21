@@ -31,6 +31,7 @@ class OmniCorp():
             'SO',
             'CHEBI',
             'HGNC',
+            'EFO',
             'MESH'])
         logger.info("Opening Connection to ROBOKOPDB Postgres")
         self.conn = psycopg2.connect(
