@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: omnicorp-deployment
+  labels:
+    app: robokop-omnicorp
+    service: robokop-omnicorp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: robokop-omnicorp
+  template:
+    metadata:
+      labels:
+        app: robokop-omnicorp
+    spec:
+      containers:
+        - name: omnicorp-container
+          image: postgres:latest
+          envFrom:
+            - configMapRef:
+                name: robokop-env
+          ports:
+            - containerPort: 5433
+          volumeMounts:
+            - mountPath: /dev/shm
+              name: dshm
+            - mountPath: /var/lib/postgresql/data
+              name: omnicorp-data-volume
+      restartPolicy: Always
+      volumes:
+       # shm config
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 400Mi
+      - name: omnicorp-data-volume
+        persistentVolumeClaim:
+          claimName: robokop-omnicorp-pvc

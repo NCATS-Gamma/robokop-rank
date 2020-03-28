@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rank
+spec:
+  selector:
+    app: robokop-rank
+  type: NodePort
+  ports:
+    # ranker port
+    - name: robokop-rank-port
+      protocol: TCP
+      port: 6011
+      targetPort: 6011
+    # supervisor port
+    - name: robokop-rank-supervisor-port
+      protocol: TCP
+      port: 9003
+      targetPort: 9003

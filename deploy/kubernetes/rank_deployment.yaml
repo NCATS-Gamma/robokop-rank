@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rank-deployment
+  labels:
+    app: robokop-rank
+    service: rank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: robokop-rank
+  template:
+    metadata:
+      labels:
+        app: robokop-rank
+    spec:
+      containers:
+      - name: rank-container
+        image: renciorg/robokop_ranker
+        envFrom:
+          - configMapRef:
+              name: robokop-env
+        ports:
+          # ranker webservice
+          - containerPort: 6011
+          # ranker supervisor
+          - containerPort: 9003
+        volumeMounts:
+          - mountPath: /home/murphy/logs
+            name: logs-volume
+          - mountPath: /home/murphy/shared
+            name: shared-volume
+      restartPolicy: Always
+      volumes:
+        - name: logs-volume
+          persistentVolumeClaim:
+            claimName: robokop-logs-pvc
+        - name: shared-volume
+          persistentVolumeClaim:
+            claimName: robokop-shared-pvc
