@@ -25,7 +25,7 @@ spec:
             - name: POSTGRES_USER
               value: $(OMNICORP_USER)
             - name: POSTGRES_DB
-              value: $(OMNICORP_PASSWORD)
+              value: $(OMNICORP_DB)
             - name: POSTGRES_PASSWORD
               value: $(OMNICORP_PASSWORD)
           ports:
