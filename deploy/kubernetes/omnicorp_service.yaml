@@ -11,4 +11,4 @@ spec:
     - name: robokop-omnicorp-port
       protocol: TCP
       port: 5433
-      targetPort: 5433
+      targetPort: 5432

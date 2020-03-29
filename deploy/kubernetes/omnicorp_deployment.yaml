@@ -28,13 +28,8 @@ spec:
               value: $(OMNICORP_PASSWORD)
             - name: POSTGRES_PASSWORD
               value: $(OMNICORP_PASSWORD)
-          command:
-            - "postgres"
-          args:
-            - "-p"
-            - "$(OMNICORP_PORT)"
           ports:
-            - containerPort: 5433
+            - containerPort: 5432
           volumeMounts:
             - mountPath: /dev/shm
               name: dshm
