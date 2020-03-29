@@ -21,6 +21,13 @@ spec:
           envFrom:
             - configMapRef:
                 name: robokop-env
+          env:
+            - name: POSTGRES_USER
+              value: $(OMNICORP_USER)
+            - name: POSTGRES_DB
+              value: $(OMNICORP_PASSWORD)
+            - name: POSTGRES_PASSWORD
+              value: $(OMNICORP_PASSWORD)
           ports:
             - containerPort: 5433
           volumeMounts:
