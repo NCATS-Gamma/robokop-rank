@@ -209,10 +209,10 @@ class AnswerQuestionStd(Resource):
             default: -1
           - in: query
             name: output_format
-            description: Requested output format. DENSE, MESSAGE, CSV or ANSWERS
+            description: Requested output format. DENSE, MESSAGE, CSV, ANSWERS, or STD
             schema:
                 type: string
-            default: MESSAGE
+            default: STD
           - in: query
             name: max_connectivity
             description: Max connectivity of nodes considered in the answers, Use 0 for no restriction
@@ -234,7 +234,7 @@ class AnswerQuestionStd(Resource):
                             $ref: '#/definitions/Message'
         """
         max_results = int(request.args.get('max_results', -1))
-        output_format = request.args.get('output_format', 'MESSAGE')
+        output_format = request.args.get('output_format', 'STD')
         max_connectivity = int(request.args.get('max_connectivity', -1))
         use_novelty = request.args.get('use_novelty', 'false').lower() == 'true'
 
@@ -263,6 +263,8 @@ class AnswerQuestionStd(Resource):
             output = to_robokop(strip_kg(message_json))
         elif output_format.upper() == 'MESSAGE':
             output = to_robokop(message_json)
+        elif output_format.upper() == 'STD':
+            output = message_json
         elif output_format.upper() == 'CSV':
             output = csv(message_json)
         else:
