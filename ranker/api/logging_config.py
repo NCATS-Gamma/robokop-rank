@@ -48,7 +48,7 @@ def setup_main_logger():
                 'handlers': [
                     'console',
                     'file',
-                    'smtp'
+                    # 'smtp'
                 ]
             }
         },
