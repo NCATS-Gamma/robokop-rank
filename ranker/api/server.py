@@ -188,17 +188,11 @@ class AnswerQuestionStd(Resource):
                                     type: "disease"
                                     curie: "MONDO:0005737"
                                   - id: "n01"
-                                    type: "gene"
-                                    set: true
-                                  - id: "n02"
-                                    type: genetic_condition
+                                    type: "phenotypic_feature"
                                 edges:
                                   - id: "e00"
                                     source_id: "n00"
                                     target_id: "n01"
-                                  - id: "e01"
-                                    source_id: "n01"
-                                    target_id: "n02"
             required: true
         parameters:
           - in: query
