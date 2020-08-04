@@ -97,7 +97,7 @@ def to_robokop(message_json):
         answers.append({
             'node_bindings': node_bindings,
             'edge_bindings': edge_bindings,
-            'score': result['score'],
+            'score': result.get('score', 0),
         })
     output = {
         'question_graph': message_json['query_graph'],
