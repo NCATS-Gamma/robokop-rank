@@ -83,15 +83,7 @@ def answer_question(self, request_json, max_results=-1, output_format=output_for
     logger.info("Answering Question")
 
     message_json = {
-        'knowledge_graph': {
-            'url': f'bolt://{os.environ["NEO4J_HOST"]}:{os.environ["NEO4J_BOLT_PORT"]}',
-            'credentials': {
-                'username': 'neo4j',
-                'password': os.environ["NEO4J_PASSWORD"],
-            },
-        },
         'query_graph': request_json['question_graph'],
-        'results': [],
     }
     logger.info(message_json)
 

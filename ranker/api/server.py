@@ -233,15 +233,7 @@ class AnswerQuestionStd(Resource):
         use_novelty = request.args.get('use_novelty', 'false').lower() == 'true'
 
         message_json = {
-            'knowledge_graph': {
-                'url': f'bolt://{os.environ["NEO4J_HOST"]}:{os.environ["NEO4J_BOLT_PORT"]}',
-                'credentials': {
-                    'username': 'neo4j',
-                    'password': os.environ["NEO4J_PASSWORD"],
-                },
-            },
             'query_graph': request.json['message']['query_graph'],
-            'results': [],
         }
         message_json = run(
             message_json,
