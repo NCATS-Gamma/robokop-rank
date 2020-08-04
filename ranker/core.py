@@ -14,7 +14,6 @@ def run(message_json, max_connectivity=-1, max_results=-1, use_novelty=True):
         ('answer', {
             'max_connectivity': max_connectivity,
         }),
-        ('yank', {}),
     ]
     if use_novelty:
         plan += [
@@ -32,9 +31,9 @@ def run(message_json, max_connectivity=-1, max_results=-1, use_novelty=True):
         logger.debug('Calling /%s...', action)
         response = requests.post(
             f"http://{os.environ['MESSENGER_HOST']}:{os.environ['MESSENGER_PORT']}/{action}",
+            params=options,
             json={
                 'message': message_json,
-                'options': options
             }
         )
         if response.status_code != 200:
