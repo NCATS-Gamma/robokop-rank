@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 def node_cypher(node_spec):
     """Generate cypher for node specification."""
     statements = []
-    statements.append(':' + node_spec.pop('type', 'named_thing'))
+    statements.append(':`' + node_spec.pop('type', 'named_thing') + '`')
     if node_spec:
         statements.append('{' + ', '.join([f'{key}: "{value}"' for key, value in node_spec.items()]) + '}')
     return '(' + ' '.join(statements) + ')'
