@@ -371,10 +371,10 @@ class QuestionSubgraph(Resource):
         message = request.json
         if not message.get('answers', []):
             message_obj = Message(request.json)
-
+            
             message_obj.fetch_knowledge_graph()
             kg = message_obj.knowledge_graph
-
+            
             return kg, 200
 
         # get nodes and edge ids from message answers
@@ -386,9 +386,12 @@ class QuestionSubgraph(Resource):
         # unique over node and edge ids
         node_ids = list(set(node_ids))
         edge_ids = list(set(edge_ids))
-
+        logger.info("getting node properties")
         nodes = get_node_properties(node_ids)
+        logger.info("finished node properties")
+        logger.info("getting edge properties")
         edges = get_edge_properties(edge_ids)
+        logger.info("finished edge properties")
 
         kg = {
             'nodes': nodes,
